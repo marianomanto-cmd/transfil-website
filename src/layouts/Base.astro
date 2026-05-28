@@ -1,0 +1,128 @@
+---
+import '../styles/global.css';
+import type { Content, Lang } from '../i18n/content';
+
+interface Props {
+  lang: Lang;
+  content: Content;
+  pathname: string;
+}
+
+const { lang, content, pathname } = Astro.props;
+const site = 'https://www.trans-fil.com.ar';
+const canonical = `${site}${pathname}`;
+
+const orgJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Trans-Fil S.R.L.',
+  alternateName: 'Trans-Fil',
+  url: `${site}/`,
+  logo: `${site}/favicon.svg`,
+  description: content.meta.description,
+  foundingDate: '1989',
+  founders: [{ '@type': 'Person', name: 'Mantovani' }],
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: 'Francisco de Arteaga 3043',
+    addressLocality: 'Córdoba',
+    addressRegion: 'Córdoba',
+    addressCountry: 'AR',
+  },
+  contactPoint: [
+    {
+      '@type': 'ContactPoint',
+      telephone: '+54-351-465-0687',
+      contactType: 'sales',
+      email: 'mantovanimariano@transfil.com.ar',
+      areaServed: ['AR', 'BR', 'CL', 'PE', 'MX'],
+      availableLanguage: ['Spanish', 'English'],
+    },
+  ],
+  industry: 'Industrial Machinery Manufacturing',
+  makesOffer: content.tech.map((t) => ({
+    '@type': 'Offer',
+    itemOffered: { '@type': 'Product', name: t.title },
+  })),
+};
+---
+<!doctype html>
+<html lang={content.htmlLang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>{content.meta.title}</title>
+    <meta name="description" content={content.meta.description} />
+    <meta name="keywords" content={content.meta.keywords} />
+    <meta name="author" content="Trans-Fil S.R.L." />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#0e0e10" />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="es-AR" href={`${site}/`} />
+    <link rel="alternate" hreflang="en-US" href={`${site}/en/`} />
+    <link rel="alternate" hreflang="x-default" href={`${site}/`} />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Trans-Fil" />
+    <meta property="og:title" content={content.meta.ogTitle} />
+    <meta property="og:description" content={content.meta.ogDescription} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={`${site}/img/hf-welder.png`} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="HF welder on tube line with cooling system" />
+    <meta property="og:locale" content={content.ogLocale} />
+    <meta property="og:locale:alternate" content={content.altLocale} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={content.meta.ogTitle} />
+    <meta name="twitter:description" content={content.meta.twitterDescription} />
+    <meta name="twitter:image" content={`${site}/img/hf-welder.png`} />
+
+    <script type="application/ld+json" set:html={JSON.stringify(orgJsonLd)} />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <slot />
+    <script>
+      // Section reveal-on-scroll: adds .is-visible when a section enters view.
+      // One observer for all sections — disconnects per element after first reveal.
+      const sections = document.querySelectorAll('.tf-section');
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              io.unobserve(entry.target);
+            }
+          }
+        },
+        { threshold: 0.1 }
+      );
+      sections.forEach((s) => io.observe(s));
+
+      // Smooth scroll for in-page anchors
+      document.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement;
+        const a = target.closest('a[href^="#"]') as HTMLAnchorElement | null;
+        if (!a) return;
+        const href = a.getAttribute('href');
+        if (!href || href === '#') return;
+        const el = document.querySelector(href);
+        if (!el) return;
+        e.preventDefault();
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    </script>
+  </body>
+</html>

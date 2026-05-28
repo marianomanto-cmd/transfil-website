@@ -1,0 +1,32 @@
+---
+import Base from '../../layouts/Base.astro';
+import { CONTENT } from '../../i18n/content';
+import { Header } from '../../components/Header';
+import { Hero } from '../../components/Hero';
+import { TechSection } from '../../components/TechSection';
+import CatalogsSection from '../../components/CatalogsSection.astro';
+import { ProcessSection } from '../../components/ProcessSection';
+import ServicesSection from '../../components/ServicesSection.astro';
+import { IndustriesSection } from '../../components/IndustriesSection';
+import HistorySection from '../../components/HistorySection.astro';
+import { ContactSection } from '../../components/ContactSection';
+import Footer from '../../components/Footer.astro';
+import { WhatsAppFAB } from '../../components/WhatsAppFAB';
+
+const content = CONTENT.en;
+---
+<Base lang="en" content={content} pathname="/en/">
+  <Header lang="en" content={content} client:load />
+  <main>
+    <Hero content={content} client:load />
+    <TechSection content={content} client:visible />
+    <CatalogsSection content={content} />
+    <ProcessSection content={content} client:visible />
+    <ServicesSection content={content} />
+    <IndustriesSection content={content} client:visible />
+    <HistorySection content={content} />
+    <ContactSection content={content} client:visible />
+  </main>
+  <Footer content={content} />
+  <WhatsAppFAB message={content.whatsappMessage} client:idle />
+</Base>

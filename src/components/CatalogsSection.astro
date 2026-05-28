@@ -1,0 +1,55 @@
+---
+import type { Content } from '../i18n/content';
+import Section from './Section.astro';
+
+interface Props { content: Content }
+const { content } = Astro.props;
+const c = content.catalogs;
+---
+<Section id="catalogs" eyebrow={c.eyebrow} title={c.title} sub={c.sub} screenLabel="03 Catalogs">
+  <div class="tf-catalogs">
+    {c.items.map((it, i) => (
+      <a
+        class="tf-catalog-card"
+        href={it.file}
+        download
+        style={`--cat-c: ${it.color}`}
+        aria-label={`${c.cta} — ${it.title}`}
+      >
+        <div class="tf-catalog-cover" aria-hidden="true">
+          <div class="tf-catalog-cover-grid" />
+          <div class="tf-catalog-cover-tag">
+            <span class="tf-mono">{`C0${i + 1}`}</span>
+            <span class="tf-mono">{it.pages}p · {it.size}</span>
+          </div>
+          <div class="tf-catalog-cover-brand">
+            <span class="tf-catalog-cover-mark">
+              <svg viewBox="0 0 32 32" width="36" height="36">
+                <rect x="1" y="1" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1" />
+                <path d="M6 16 L16 6 L26 16 L16 26 Z" fill="none" stroke="currentColor" stroke-width="1" />
+                <circle cx="16" cy="16" r="2.4" fill="currentColor" />
+              </svg>
+            </span>
+            <span class="tf-catalog-cover-title">{it.title}</span>
+            <span class="tf-catalog-cover-sub">TRANS·FIL / 2026</span>
+          </div>
+          <div class="tf-catalog-cover-stripe" />
+        </div>
+        <div class="tf-catalog-body">
+          <div class="tf-catalog-meta">
+            <span class="tf-mono tf-catalog-num">{`/0${i + 1}`}</span>
+            <h3 class="tf-catalog-title">{it.title}</h3>
+          </div>
+          <p class="tf-catalog-desc">{it.desc}</p>
+          <span class="tf-catalog-cta">
+            <span>{c.cta}</span>
+            <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+              <path d="M8 2 V12 M4 8 L8 12 L12 8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M3 14 H13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+            </svg>
+          </span>
+        </div>
+      </a>
+    ))}
+  </div>
+</Section>

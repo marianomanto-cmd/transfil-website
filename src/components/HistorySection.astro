@@ -1,0 +1,25 @@
+---
+import type { Content } from '../i18n/content';
+import Section from './Section.astro';
+
+interface Props { content: Content }
+const { content } = Astro.props;
+const c = content.history;
+---
+<Section id="history" eyebrow={c.eyebrow} title={c.title} screenLabel="06 History">
+  <div class="tf-history">
+    <p class="tf-history-body">{c.body}</p>
+    <ol class="tf-timeline">
+      {c.milestones.map((m, i) => (
+        <li class="tf-tl-item" style={`--i: ${i}`}>
+          <div class="tf-tl-year">{m.y}</div>
+          <div class="tf-tl-dot" aria-hidden="true" />
+          <div class="tf-tl-card">
+            <h4>{m.t}</h4>
+            <p>{m.d}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </div>
+</Section>

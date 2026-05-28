@@ -1,0 +1,31 @@
+---
+import type { Content } from '../i18n/content';
+import Section from './Section.astro';
+
+interface Props { content: Content }
+const { content } = Astro.props;
+const c = content.services;
+---
+<Section id="services" eyebrow={c.eyebrow} title={c.title} sub={c.sub} dark={true} screenLabel="04 Services">
+  <div class="tf-services is-rows">
+    {c.items.map((s, i) => (
+      <article
+        class="tf-service"
+        data-has-bg="true"
+        data-row-flip={i % 2 === 1 ? 'true' : undefined}
+        style={`--svc-bg: url("${s.img}")`}
+      >
+        <div class="tf-service-row-img" aria-hidden="true" style={`background-image: url("${s.img}")`} />
+        <div class="tf-service-bg" aria-hidden="true" />
+        <div class="tf-service-content">
+          <div class="tf-service-hd">
+            <span class="tf-mono">{s.code}</span>
+            <span class="tf-service-rule" aria-hidden="true" />
+          </div>
+          <h3 class="tf-service-title">{s.title}</h3>
+          <p class="tf-service-desc">{s.desc}</p>
+        </div>
+      </article>
+    ))}
+  </div>
+</Section>
