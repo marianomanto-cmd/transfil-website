@@ -13,7 +13,6 @@ import { ContactSection } from '../../components/ContactSection';
 import Footer from '../../components/Footer.astro';
 import { WhatsAppFAB } from '../../components/WhatsAppFAB';
 import { BackToTop } from '../../components/BackToTop';
-import { SectionMarker } from '../../components/SectionMarker';
 
 const content = CONTENT.en;
 ---
@@ -32,5 +31,4 @@ const content = CONTENT.en;
   <Footer content={content} />
   <WhatsAppFAB message={content.whatsappMessage} client:idle />
   <BackToTop label={content.backToTop} client:idle />
-  <SectionMarker client:idle />
 </Base>
