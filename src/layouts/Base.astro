@@ -93,10 +93,10 @@ const orgJsonLd = {
     />
   </head>
   <body>
+    <div class="tf-spotlight" aria-hidden="true"></div>
     <slot />
     <script>
       // Section reveal-on-scroll: adds .is-visible when a section enters view.
-      // One observer for all sections — disconnects per element after first reveal.
       const sections = document.querySelectorAll('.tf-section');
       const io = new IntersectionObserver(
         (entries) => {
@@ -123,6 +123,54 @@ const orgJsonLd = {
         e.preventDefault();
         el.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
+
+      // Cursor spotlight — only on fine pointers
+      const spotlight = document.querySelector('.tf-spotlight') as HTMLElement | null;
+      if (spotlight && window.matchMedia('(pointer: fine)').matches) {
+        let raf = 0;
+        const onMove = (e: MouseEvent) => {
+          if (raf) return;
+          raf = requestAnimationFrame(() => {
+            raf = 0;
+            spotlight.style.setProperty('--cx', `${e.clientX}px`);
+            spotlight.style.setProperty('--cy', `${e.clientY}px`);
+            spotlight.classList.add('is-active');
+          });
+        };
+        const onLeave = () => spotlight.classList.remove('is-active');
+        window.addEventListener('mousemove', onMove, { passive: true });
+        document.addEventListener('mouseleave', onLeave);
+      }
+
+      // Magnetic primary buttons — subtle attraction to cursor (fine pointers only)
+      if (window.matchMedia('(pointer: fine)').matches) {
+        const bind = (btn: HTMLElement) => {
+          let raf = 0;
+          const reset = () => {
+            btn.style.transform = '';
+          };
+          btn.addEventListener('mousemove', (e: MouseEvent) => {
+            if (raf) return;
+            raf = requestAnimationFrame(() => {
+              raf = 0;
+              const r = btn.getBoundingClientRect();
+              const dx = (e.clientX - (r.left + r.width / 2)) * 0.25;
+              const dy = (e.clientY - (r.top + r.height / 2)) * 0.25;
+              btn.style.transform = `translate(${dx}px, ${dy}px)`;
+            });
+          });
+          btn.addEventListener('mouseleave', reset);
+        };
+        // Re-scan because some buttons live inside React islands that mount later
+        const scan = () => document.querySelectorAll('.tf-btn-magnetic').forEach((b) => {
+          if (!(b as HTMLElement).dataset.magnetic) {
+            (b as HTMLElement).dataset.magnetic = '1';
+            bind(b as HTMLElement);
+          }
+        });
+        scan();
+        new MutationObserver(scan).observe(document.body, { childList: true, subtree: true });
+      }
     </script>
   </body>
 </html>

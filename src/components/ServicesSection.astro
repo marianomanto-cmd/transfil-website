@@ -6,7 +6,7 @@ interface Props { content: Content }
 const { content } = Astro.props;
 const c = content.services;
 ---
-<Section id="services" eyebrow={c.eyebrow} title={c.title} sub={c.sub} dark={true} screenLabel="04 Services">
+<Section id="services" eyebrow={c.eyebrow} title={c.title} sub={c.sub} dark={true} screenLabel="04 Services" num="04">
   <div class="tf-services is-rows">
     {c.items.map((s, i) => (
       <article

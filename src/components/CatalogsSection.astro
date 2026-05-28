@@ -6,7 +6,7 @@ interface Props { content: Content }
 const { content } = Astro.props;
 const c = content.catalogs;
 ---
-<Section id="catalogs" eyebrow={c.eyebrow} title={c.title} sub={c.sub} screenLabel="03 Catalogs">
+<Section id="catalogs" eyebrow={c.eyebrow} title={c.title} sub={c.sub} screenLabel="03 Catalogs" num="03">
   <div class="tf-catalogs">
     {c.items.map((it, i) => (
       <a
@@ -16,6 +16,7 @@ const c = content.catalogs;
         style={`--cat-c: ${it.color}`}
         aria-label={`${c.cta} — ${it.title}`}
       >
+        <span class="tf-catalog-spine" aria-hidden="true">TRANS·FIL · {it.title.toUpperCase()}</span>
         <div class="tf-catalog-cover" aria-hidden="true">
           <div class="tf-catalog-cover-grid" />
           <div class="tf-catalog-cover-tag">

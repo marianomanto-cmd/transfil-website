@@ -29,7 +29,7 @@ export function ProcessSection({ content }: { content: Content }) {
       className={cx('tf-section', vis && 'is-visible')}
       data-screen-label="03 Process"
     >
-      <header className="tf-section-head">
+      <header className="tf-section-head" data-num="03">
         <div className="tf-eyebrow">{c.eyebrow}</div>
         <h2 className="tf-h2">{c.title}</h2>
       </header>

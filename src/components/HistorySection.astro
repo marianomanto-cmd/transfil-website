@@ -6,7 +6,7 @@ interface Props { content: Content }
 const { content } = Astro.props;
 const c = content.history;
 ---
-<Section id="history" eyebrow={c.eyebrow} title={c.title} screenLabel="06 History">
+<Section id="history" eyebrow={c.eyebrow} title={c.title} screenLabel="06 History" num="06">
   <span class="tf-history-watermark" aria-hidden="true">EST. 1989</span>
   <div class="tf-history">
     <p class="tf-history-body">{c.body}</p>

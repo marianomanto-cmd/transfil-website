@@ -43,7 +43,7 @@ export function TechSection({ content }: { content: Content }) {
       className={cx('tf-section', vis && 'is-visible')}
       data-screen-label="02 Technologies"
     >
-      <header className="tf-section-head">
+      <header className="tf-section-head" data-num="02">
         <div className="tf-eyebrow">{c.eyebrow}</div>
         <h2 className="tf-h2">{c.title}</h2>
         <p className="tf-section-sub">{c.sub}</p>

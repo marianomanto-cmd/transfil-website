@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { cx } from '../lib/cx';
 import { useReveal } from '../lib/hooks';
 import { TF_CLIENTS, type Content } from '../i18n/content';
+import { CoverageRadar } from './CoverageRadar';
 
 function Marquee({ items, speed = 60 }: { items: readonly string[]; speed?: number }) {
   const doubled = [...items, ...items];
@@ -31,13 +32,14 @@ export function IndustriesSection({ content }: { content: Content }) {
       className={cx('tf-section', vis && 'is-visible')}
       data-screen-label="05 Industries"
     >
-      <header className="tf-section-head">
+      <header className="tf-section-head" data-num="05">
         <div className="tf-eyebrow">{c.eyebrow}</div>
         <h2 className="tf-h2">
           <span>{c.title}</span> <span className="tf-h2-accent">{c.title2}</span>
         </h2>
         <p className="tf-section-sub">{c.sub}</p>
       </header>
+      <CoverageRadar lang={content.htmlLang.startsWith('es') ? 'es' : 'en'} />
       <div className="tf-tabs" role="tablist">
         {c.tabs.map((t) => {
           const on = t.id === tab;

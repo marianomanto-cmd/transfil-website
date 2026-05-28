@@ -68,7 +68,7 @@ export function ContactSection({ content }: { content: Content }) {
       className={cx('tf-section', 'is-dark', vis && 'is-visible')}
       data-screen-label="07 Contact"
     >
-      <header className="tf-section-head">
+      <header className="tf-section-head" data-num="07">
         <div className="tf-eyebrow">{c.eyebrow}</div>
         <h2 className="tf-h2">{c.title}</h2>
         <p className="tf-section-sub">{c.sub}</p>
