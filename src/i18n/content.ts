@@ -90,6 +90,7 @@ export type Content = {
   workshopActive: string;
   whatsappMessage: string;
   langSwitch: { es: string; en: string };
+  backToTop: string;
 };
 
 export const TF_CLIENTS = {
@@ -259,6 +260,7 @@ export const CONTENT: Record<Lang, Content> = {
     workshopActive: 'Taller · Activo',
     whatsappMessage: 'Hola, los contacto desde el sitio web de Trans-Fil.',
     langSwitch: { es: 'ES', en: 'EN' },
+    backToTop: 'Volver arriba',
   },
   en: {
     htmlLang: 'en-US',
@@ -411,5 +413,6 @@ export const CONTENT: Record<Lang, Content> = {
     workshopActive: 'Workshop · Active',
     whatsappMessage: 'Hi, I\'m contacting you from the Trans-Fil website.',
     langSwitch: { es: 'ES', en: 'EN' },
+    backToTop: 'Back to top',
   },
 };

@@ -2050,3 +2050,444 @@ button { font-family: inherit; }
 }
 .tf-lang a[data-on="true"] { color: var(--fg); }
 .tf-lang a:hover { color: var(--fg); }
+
+/* ╔══════════════════════════════════════════════════════════════════╗
+   ║  Cosmetic enhancements                                           ║
+   ╚══════════════════════════════════════════════════════════════════╝ */
+
+/* ── Selection & scrollbar (dark + accent) ───────────────────────── */
+::selection {
+  background: var(--accent);
+  color: #fff;
+}
+html { scrollbar-color: var(--line-strong) var(--bg); scrollbar-width: thin; }
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-track { background: var(--bg); }
+*::-webkit-scrollbar-thumb {
+  background: var(--line-strong);
+  border: 2px solid var(--bg);
+  border-radius: 999px;
+  transition: background 0.2s;
+}
+*::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+/* ── Focus rings — accent, square, accessible ───────────────────── */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.tf-btn:focus-visible,
+.tf-cta-mini:focus-visible,
+.tf-tab:focus-visible,
+.tf-tech-row:focus-visible { outline-offset: -2px; }
+.tf-lang a:focus-visible { outline-offset: 4px; }
+
+/* ── Eyebrow leading bracket — small accent dash that draws in ──── */
+.tf-section .tf-eyebrow {
+  position: relative;
+  padding-left: 24px;
+}
+.tf-section .tf-eyebrow::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 0;
+  height: 1px;
+  background: var(--accent);
+  transition: width 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) 0.2s;
+}
+.tf-section.is-visible .tf-eyebrow::before { width: 16px; }
+
+/* ── Header — active section nav indicator ──────────────────────── */
+.tf-nav a[data-active="true"] { color: var(--fg); }
+.tf-nav a[data-active="true"]::after {
+  transform: scaleX(1);
+}
+
+/* ── Header — logo subtle hover ──────────────────────────────────── */
+.tf-logo .tf-logo-mark svg {
+  transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.tf-logo:hover .tf-logo-mark svg {
+  transform: rotate(45deg);
+}
+.tf-logo:hover .tf-logo-mark circle { fill: var(--accent); transition: fill 0.3s; }
+
+/* ── Hero — scroll discovery indicator at bottom ─────────────────── */
+.tf-hero-scroll {
+  position: absolute;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  color: var(--fg-3);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  pointer-events: none;
+  opacity: 0;
+  animation: tf-hero-scroll-in 1s cubic-bezier(0.2, 0.7, 0.2, 1) 1.2s forwards;
+}
+.tf-hero-scroll-line {
+  width: 1px;
+  height: 32px;
+  background: linear-gradient(to bottom, transparent, var(--accent), transparent);
+  background-size: 100% 200%;
+  animation: tf-hero-scroll-line 2.4s ease-in-out infinite;
+}
+@keyframes tf-hero-scroll-in {
+  to { opacity: 0.8; }
+}
+@keyframes tf-hero-scroll-line {
+  0% { background-position: 0% -100%; }
+  100% { background-position: 0% 100%; }
+}
+@media (max-width: 640px) { .tf-hero-scroll { display: none; } }
+
+/* ── Buttons — refined glow on primary hover ─────────────────────── */
+.tf-btn-primary {
+  box-shadow: 0 0 0 0 transparent;
+  transition: all 0.25s cubic-bezier(0.2, 0.7, 0.2, 1),
+              box-shadow 0.4s ease;
+}
+.tf-btn-primary:hover {
+  box-shadow: 0 8px 28px -10px rgba(58, 134, 255, 0.6),
+              0 0 0 1px rgba(94, 155, 255, 0.4);
+}
+.tf-btn-ghost {
+  position: relative;
+  overflow: hidden;
+}
+.tf-btn-ghost::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--accent-soft);
+  transform: translateX(-100%);
+  transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.tf-btn-ghost:hover::before { transform: translateX(0); }
+.tf-btn-ghost > * { position: relative; z-index: 1; }
+
+/* ── Tech list — sliding accent bar via active row ───────────────── */
+.tf-tech-row {
+  position: relative;
+}
+.tf-tech-row::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 2px;
+  height: 0;
+  background: var(--accent);
+  transform: translateY(-50%);
+  transition: height 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.tf-tech-row[data-on="true"]::before { height: 70%; }
+.tf-tech-row[data-on="true"] { padding-left: 20px; }
+
+/* ── Catalogs — bouncing download icon + cover shimmer ───────────── */
+.tf-catalog-cta svg {
+  transition: transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.tf-catalog-card:hover .tf-catalog-cta svg {
+  animation: tf-bounce-down 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) infinite;
+}
+@keyframes tf-bounce-down {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(3px); }
+}
+
+.tf-catalog-cover {
+  position: relative;
+  overflow: hidden;
+}
+.tf-catalog-cover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.12) 50%, transparent 70%);
+  transform: translateX(-120%);
+  transition: transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+  pointer-events: none;
+  z-index: 3;
+}
+.tf-catalog-card:hover .tf-catalog-cover::after { transform: translateX(120%); }
+
+.tf-catalog-card:hover {
+  transform: translateY(-5px);
+  box-shadow:
+    0 24px 48px -20px rgba(0, 0, 0, 0.65),
+    0 0 0 1px color-mix(in oklab, var(--cat-c) 30%, transparent);
+}
+
+/* ── Process hotspots — SVG dashed connectors ────────────────────── */
+.tf-hotspots-connectors {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 1.2s ease 0.8s;
+}
+.tf-section.is-visible .tf-hotspots-connectors { opacity: 0.45; }
+.tf-hotspots-connectors path {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1;
+  stroke-dasharray: 4 6;
+  stroke-linecap: round;
+  stroke-dashoffset: 600;
+  animation: tf-connector-draw 2.4s cubic-bezier(0.2, 0.7, 0.2, 1) 1.2s forwards;
+}
+.tf-section.is-visible .tf-hotspots-connectors path {
+  stroke-dashoffset: 0;
+}
+@keyframes tf-connector-draw {
+  to { stroke-dashoffset: 0; }
+}
+
+/* Stronger hotspot dot — double rim when active */
+.tf-hotspot-dot {
+  box-shadow: inset 0 0 0 0 transparent;
+  transition:
+    transform 0.2s cubic-bezier(0.2, 0.7, 0.2, 1),
+    background 0.2s,
+    box-shadow 0.3s;
+}
+.tf-hotspot.is-on .tf-hotspot-dot {
+  box-shadow:
+    inset 0 0 0 2px rgba(14, 14, 16, 0.6),
+    0 0 0 1px var(--accent),
+    0 0 24px -4px var(--accent);
+}
+
+/* ── Services rows — corner brackets reveal on hover ─────────────── */
+.tf-services.is-rows .tf-service { position: relative; }
+.tf-services.is-rows .tf-service::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  top: 16px;
+  left: 16px;
+  width: 18px;
+  height: 18px;
+  border-top: 1px solid var(--accent);
+  border-left: 1px solid var(--accent);
+  opacity: 0;
+  transform: translate(-6px, -6px);
+  transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+  z-index: 2;
+}
+.tf-services.is-rows .tf-service::before {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  bottom: 16px;
+  right: 16px;
+  width: 18px;
+  height: 18px;
+  border-bottom: 1px solid var(--accent);
+  border-right: 1px solid var(--accent);
+  opacity: 0;
+  transform: translate(6px, 6px);
+  transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+  z-index: 2;
+  /* Reset the data-has-bg background-image so brackets don't conflict */
+  background: none !important;
+}
+.tf-services.is-rows .tf-service:hover::after,
+.tf-services.is-rows .tf-service:hover::before {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+.tf-services.is-rows .tf-service-title {
+  transition: color 0.3s, letter-spacing 0.3s;
+}
+.tf-services.is-rows .tf-service:hover .tf-service-title { color: var(--fg); }
+.tf-services.is-rows .tf-service-rule { transition: background 0.3s; }
+.tf-services.is-rows .tf-service:hover .tf-service-rule { background: var(--accent); }
+
+/* ── Industries tab — accent dot indicator ───────────────────────── */
+.tf-tab {
+  position: relative;
+}
+.tf-tab[data-on="true"]::before {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--accent);
+  transform: translateY(-50%);
+}
+.tf-tab[data-on="true"] { padding-left: 22px; }
+
+/* Industries marquee — better fade + slower hover transition */
+.tf-marquee-track { transition: animation-play-state 0.3s; }
+
+/* ── History timeline — year pulse on entry ──────────────────────── */
+.tf-tl-year {
+  display: inline-block;
+  position: relative;
+}
+.tf-tl-year::after {
+  content: "";
+  position: absolute;
+  left: -8px;
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--accent);
+  transform: translateY(-50%) scale(0);
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition-delay: calc(var(--i, 0) * 0.12s + 0.9s);
+}
+.tf-section.is-visible .tf-tl-year::after { transform: translateY(-50%) scale(1); }
+
+.tf-tl-dot {
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.tf-tl-item:hover .tf-tl-dot { transform: scale(1.3); background: var(--accent); }
+
+/* ── Contact — focus polish on form fields ───────────────────────── */
+.tf-field-label { transition: color 0.2s; }
+.tf-field:focus-within .tf-field-label { color: var(--accent); }
+.tf-field {
+  position: relative;
+}
+.tf-field input,
+.tf-field select,
+.tf-field textarea {
+  position: relative;
+}
+.tf-field::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+  pointer-events: none;
+}
+.tf-field:focus-within::after { transform: scaleX(1); }
+
+.tf-form-sent {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  animation: tf-fade-in 0.4s ease;
+}
+
+/* ── Footer — logo hover + back-to-top button ────────────────────── */
+.tf-footer-brand .tf-logo-mark svg {
+  transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.tf-footer-brand:hover .tf-logo-mark svg { transform: rotate(180deg); }
+
+.tf-backtop {
+  position: fixed;
+  right: clamp(16px, 3vw, 32px);
+  bottom: calc(clamp(16px, 3vw, 32px) + 64px);
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(14, 14, 16, 0.85);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--line-strong);
+  color: var(--fg);
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(16px);
+  pointer-events: none;
+  transition: opacity 0.3s cubic-bezier(0.2, 0.7, 0.2, 1),
+              transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1),
+              border-color 0.2s,
+              color 0.2s;
+  z-index: 89;
+}
+.tf-backtop.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.tf-backtop:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+@media (max-width: 640px) {
+  .tf-backtop {
+    bottom: calc(clamp(16px, 3vw, 32px) + 60px);
+  }
+}
+
+/* ── Hero — subtle tick marks under meta bar (decorative) ────────── */
+.tf-hero-meta {
+  position: relative;
+}
+.tf-hero-meta::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -12px;
+  height: 6px;
+  background-image: linear-gradient(to right, var(--line-strong) 1px, transparent 1px);
+  background-size: 24px 100%;
+  mask-image: linear-gradient(to right, var(--fg) 0%, transparent 60%);
+  -webkit-mask-image: linear-gradient(to right, var(--fg) 0%, transparent 60%);
+  opacity: 0.5;
+}
+
+/* ── Inputs — slight inner highlight ─────────────────────────────── */
+.tf-field input,
+.tf-field select,
+.tf-field textarea {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+/* ── Section ambient: faint accent glow behind dark sections ─────── */
+.tf-section.is-dark { position: relative; }
+.tf-section.is-dark::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse 60% 50% at 50% 100%, rgba(58, 134, 255, 0.06), transparent 70%);
+  z-index: 0;
+}
+.tf-section.is-dark > * { position: relative; z-index: 1; }
+
+/* ── Skip link for keyboard navigation ───────────────────────────── */
+.tf-skip {
+  position: absolute;
+  left: 12px;
+  top: -100px;
+  background: var(--accent);
+  color: #fff;
+  padding: 8px 14px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  z-index: 200;
+  transition: top 0.2s;
+}
+.tf-skip:focus { top: 12px; }

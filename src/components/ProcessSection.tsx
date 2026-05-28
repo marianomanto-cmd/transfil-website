@@ -37,6 +37,18 @@ export function ProcessSection({ content }: { content: Content }) {
         <div className="tf-hotspots-frame">
           <img src={img} alt="" className="tf-hotspots-img" loading="lazy" />
           <div className="tf-hotspots-overlay" aria-hidden="true" />
+          <svg
+            className="tf-hotspots-connectors"
+            viewBox="0 0 100 100"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+          >
+            <path
+              d={steps
+                .map((s, i) => `${i === 0 ? 'M' : 'L'} ${s.pos.x} ${s.pos.y}`)
+                .join(' ')}
+            />
+          </svg>
           {steps.map((s) => {
             const on = active === s.n;
             return (

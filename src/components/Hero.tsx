@@ -87,6 +87,10 @@ export function Hero({ content, bgUrl = '/img/hf-welder.png' }: Props) {
           ))}
         </dl>
       </div>
+      <div className="tf-hero-scroll" aria-hidden="true">
+        <span>SCROLL</span>
+        <span className="tf-hero-scroll-line" />
+      </div>
     </section>
   );
 }

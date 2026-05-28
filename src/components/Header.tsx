@@ -11,6 +11,7 @@ export function Header({ lang, content }: Props) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [activeId, setActiveId] = useState<string | null>(null);
 
   useEffect(() => {
     const onScroll = () => {
@@ -21,6 +22,23 @@ export function Header({ lang, content }: Props) {
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  useEffect(() => {
+    const ids = ['tech', 'catalogs', 'process', 'services', 'industries', 'history', 'contact'];
+    const nodes = ids.map((id) => document.getElementById(id)).filter(Boolean) as HTMLElement[];
+    if (!nodes.length) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+        if (visible[0]) setActiveId(visible[0].target.id);
+      },
+      { rootMargin: '-40% 0px -50% 0px', threshold: [0, 0.25, 0.5, 1] }
+    );
+    nodes.forEach((n) => io.observe(n));
+    return () => io.disconnect();
   }, []);
 
   const items = [
@@ -60,11 +78,19 @@ export function Header({ lang, content }: Props) {
           </span>
         </a>
         <nav className="tf-nav" aria-label="Primary">
-          {items.map((it) => (
-            <a key={it.href} href={it.href} onClick={(e) => onNav(e, it.href)}>
-              {it.label}
-            </a>
-          ))}
+          {items.map((it) => {
+            const id = it.href.slice(1);
+            return (
+              <a
+                key={it.href}
+                href={it.href}
+                data-active={activeId === id}
+                onClick={(e) => onNav(e, it.href)}
+              >
+                {it.label}
+              </a>
+            );
+          })}
         </nav>
         <div className="tf-header-aside">
           <div className="tf-lang" role="group" aria-label="Language">

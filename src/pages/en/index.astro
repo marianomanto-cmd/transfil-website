@@ -12,12 +12,13 @@ import HistorySection from '../../components/HistorySection.astro';
 import { ContactSection } from '../../components/ContactSection';
 import Footer from '../../components/Footer.astro';
 import { WhatsAppFAB } from '../../components/WhatsAppFAB';
+import { BackToTop } from '../../components/BackToTop';
 
 const content = CONTENT.en;
 ---
 <Base lang="en" content={content} pathname="/en/">
   <Header lang="en" content={content} client:load />
-  <main>
+  <main id="main">
     <Hero content={content} client:load />
     <TechSection content={content} client:visible />
     <CatalogsSection content={content} />
@@ -29,4 +30,5 @@ const content = CONTENT.en;
   </main>
   <Footer content={content} />
   <WhatsAppFAB message={content.whatsappMessage} client:idle />
+  <BackToTop label={content.backToTop} client:idle />
 </Base>
