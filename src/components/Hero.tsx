@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { useScrollY, useCountUp } from '../lib/hooks';
 import type { Content } from '../i18n/content';
 
@@ -62,64 +61,6 @@ function HeroCTAs({ ctaPrimary, ctaSecondary }: { ctaPrimary: string; ctaSeconda
   );
 }
 
-function HUD({ lang }: { lang: 'es' | 'en' }) {
-  // Live Córdoba (UTC-3) time. Format hh:mm:ss + DDMMM.
-  const [now, setNow] = useState<Date | null>(null);
-  useEffect(() => {
-    setNow(new Date());
-    const t = setInterval(() => setNow(new Date()), 1000);
-    return () => clearInterval(t);
-  }, []);
-  const tz = 'America/Argentina/Cordoba';
-  const time = now
-    ? new Intl.DateTimeFormat(lang === 'es' ? 'es-AR' : 'en-US', {
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: false,
-        timeZone: tz,
-      }).format(now)
-    : '--:--:--';
-  const date = now
-    ? new Intl.DateTimeFormat(lang === 'es' ? 'es-AR' : 'en-US', {
-        day: '2-digit',
-        month: 'short',
-        timeZone: tz,
-      })
-        .format(now)
-        .replace('.', '')
-        .toUpperCase()
-    : '— —';
-  return (
-    <aside className="tf-hero-hud" aria-hidden="true">
-      <div className="tf-hero-hud-row">
-        <span>{lang === 'es' ? 'TURNO' : 'SHIFT'}</span>
-        <span className="tf-hero-hud-tick">
-          <i /> <b>{lang === 'es' ? 'ACTIVO' : 'LIVE'}</b>
-        </span>
-      </div>
-      <div className="tf-hero-hud-rule" />
-      <div className="tf-hero-hud-row is-accent">
-        <span>CRD · UTC−3</span>
-        <b>{time}</b>
-      </div>
-      <div className="tf-hero-hud-row">
-        <span>{lang === 'es' ? 'FECHA' : 'DATE'}</span>
-        <b>{date}</b>
-      </div>
-      <div className="tf-hero-hud-rule" />
-      <div className="tf-hero-hud-row">
-        <span>{lang === 'es' ? 'PROYECTOS' : 'PROJECTS'}</span>
-        <b>120+</b>
-      </div>
-      <div className="tf-hero-hud-row">
-        <span>{lang === 'es' ? 'EXPORT' : 'EXPORT'}</span>
-        <b>9 ISO</b>
-      </div>
-    </aside>
-  );
-}
-
 export function Hero({ content, bgUrl = '/img/hf-welder.png' }: Props) {
   const c = content.hero;
   const scrollY = useScrollY();
@@ -129,7 +70,6 @@ export function Hero({ content, bgUrl = '/img/hf-welder.png' }: Props) {
     window.matchMedia('(min-width: 900px) and (pointer: fine)').matches;
   const parallax = enableParallax ? Math.min(scrollY * 0.18, 160) : 0;
   const stats = [c.stat1, c.stat2, c.stat3, c.stat4];
-  const lang = content.htmlLang.startsWith('es') ? 'es' : 'en';
 
   return (
     <section id="top" className="tf-hero" data-variant="type" data-screen-label="01 Hero">
@@ -142,19 +82,6 @@ export function Hero({ content, bgUrl = '/img/hf-welder.png' }: Props) {
           <img src={bgUrl} alt="" fetchPriority="high" />
         </div>
       )}
-      <div className="tf-hero-ruler" aria-hidden="true">
-        <span className="tf-hero-ruler-tick is-major"><span>00</span><i /></span>
-        <span className="tf-hero-ruler-tick"><span>10</span><i /></span>
-        <span className="tf-hero-ruler-tick"><span>20</span><i /></span>
-        <span className="tf-hero-ruler-tick is-major"><span>30</span><i /></span>
-        <span className="tf-hero-ruler-tick"><span>40</span><i /></span>
-        <span className="tf-hero-ruler-tick"><span>50</span><i /></span>
-        <span className="tf-hero-ruler-tick is-major"><span>60</span><i /></span>
-        <span className="tf-hero-ruler-tick"><span>70</span><i /></span>
-        <span className="tf-hero-ruler-tick"><span>80</span><i /></span>
-        <span className="tf-hero-ruler-tick is-major"><span>90</span><i /></span>
-      </div>
-      <HUD lang={lang} />
       <div className="tf-hero-meta">
         <span className="tf-mono">
           [ 01 — {content.chips.established} · {content.chips.argentina} ]
