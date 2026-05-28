@@ -57,6 +57,14 @@ export function IndustriesSection({ content }: { content: Content }) {
           );
         })}
       </div>
+      <div className="tf-industries-meta">
+        <span className="tf-industries-count">
+          <b>{String(items.length).padStart(2, '0')}</b> · {c.tabs.find((t) => t.id === tab)?.label}
+        </span>
+        <span className="tf-mono" style={{ color: 'var(--fg-4)' }}>
+          ← HOVER TO PAUSE →
+        </span>
+      </div>
       <Marquee items={items} speed={60} />
     </section>
   );

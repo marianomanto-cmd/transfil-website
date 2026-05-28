@@ -60,6 +60,18 @@ export function Hero({ content, bgUrl = '/img/hf-welder.png' }: Props) {
           <img src={bgUrl} alt="" fetchPriority="high" />
         </div>
       )}
+      <div className="tf-hero-ruler" aria-hidden="true">
+        <span className="tf-hero-ruler-tick is-major"><span>00</span><i /></span>
+        <span className="tf-hero-ruler-tick"><span>10</span><i /></span>
+        <span className="tf-hero-ruler-tick"><span>20</span><i /></span>
+        <span className="tf-hero-ruler-tick is-major"><span>30</span><i /></span>
+        <span className="tf-hero-ruler-tick"><span>40</span><i /></span>
+        <span className="tf-hero-ruler-tick"><span>50</span><i /></span>
+        <span className="tf-hero-ruler-tick is-major"><span>60</span><i /></span>
+        <span className="tf-hero-ruler-tick"><span>70</span><i /></span>
+        <span className="tf-hero-ruler-tick"><span>80</span><i /></span>
+        <span className="tf-hero-ruler-tick is-major"><span>90</span><i /></span>
+      </div>
       <div className="tf-hero-meta">
         <span className="tf-mono">
           [ 01 — {content.chips.established} · {content.chips.argentina} ]

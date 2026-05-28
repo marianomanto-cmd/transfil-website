@@ -2491,3 +2491,385 @@ html { scrollbar-color: var(--line-strong) var(--bg); scrollbar-width: thin; }
   transition: top 0.2s;
 }
 .tf-skip:focus { top: 12px; }
+
+/* ╔══════════════════════════════════════════════════════════════════╗
+   ║  Round 2 cosmetics — depth, density, micro-interactions          ║
+   ╚══════════════════════════════════════════════════════════════════╝ */
+
+/* ── Body: slow ambient gradient drift ───────────────────────────── */
+body {
+  background-image:
+    radial-gradient(1200px 800px at 80% -10%, rgba(58, 134, 255, 0.06), transparent 60%),
+    radial-gradient(1000px 600px at -10% 30%, rgba(255, 255, 255, 0.02), transparent 60%);
+  background-attachment: fixed;
+}
+@media (prefers-reduced-motion: no-preference) {
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(800px 600px at 10% 80%, rgba(58, 134, 255, 0.03), transparent 65%),
+      radial-gradient(700px 500px at 90% 60%, rgba(255, 107, 26, 0.025), transparent 65%);
+    animation: tf-ambient 24s ease-in-out infinite alternate;
+  }
+}
+@keyframes tf-ambient {
+  0%   { transform: translate3d(0, 0, 0); opacity: 0.85; }
+  100% { transform: translate3d(-2%, 1%, 0); opacity: 1; }
+}
+
+/* ── Hero: side ruler on the right edge (desktop only) ───────────── */
+.tf-hero-ruler {
+  position: absolute;
+  right: 20px;
+  top: calc(var(--header-h) + 80px);
+  bottom: 80px;
+  width: 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  pointer-events: none;
+  color: var(--fg-4);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  opacity: 0;
+  animation: tf-fade-in 1.2s cubic-bezier(0.2, 0.7, 0.2, 1) 0.8s forwards;
+  z-index: 1;
+}
+.tf-hero-ruler-tick {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.tf-hero-ruler-tick i {
+  display: block;
+  width: 8px;
+  height: 1px;
+  background: var(--line-strong);
+}
+.tf-hero-ruler-tick.is-major i { width: 14px; background: var(--accent); }
+.tf-hero-ruler-tick.is-major { color: var(--accent); }
+@media (max-width: 1080px) { .tf-hero-ruler { display: none; } }
+
+/* ── Hero: status pulse + faint flicker on the dot label ─────────── */
+.tf-hero-status {
+  position: relative;
+}
+.tf-hero-status::after {
+  content: "";
+  position: absolute;
+  inset: -4px -8px;
+  border: 1px solid transparent;
+  pointer-events: none;
+  transition: border-color 0.3s;
+}
+.tf-hero-status:hover::after { border-color: var(--line-strong); }
+
+/* ── Hero stats: subtle scale + accent on hover ──────────────────── */
+.tf-stat {
+  transition: background 0.3s ease;
+}
+.tf-stat:hover { background: rgba(58, 134, 255, 0.025); }
+.tf-stat-v {
+  transition: color 0.3s, transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transform-origin: left center;
+  display: inline-block;
+}
+.tf-stat:hover .tf-stat-v {
+  color: var(--accent);
+  transform: scale(1.04);
+}
+
+/* ── Stronger section H2: per-segment reveal stays, add slight ──── 
+   character shift for visual interest                              */
+.tf-h2-accent { font-style: italic; }
+
+/* ── Tech list rows: subtle bg gradient on hover (non-active) ─── */
+.tf-tech-row:hover:not([data-on="true"]) {
+  background: linear-gradient(to right, rgba(58, 134, 255, 0.04), transparent 60%);
+}
+.tf-tech-row .tf-tech-title {
+  transition: letter-spacing 0.3s;
+}
+.tf-tech-row[data-on="true"] .tf-tech-title { letter-spacing: 0.005em; }
+
+/* Tech detail media: corner brackets like the CAD overlay aesthetic */
+.tf-tech-detail-media { position: relative; }
+.tf-tech-detail-media::before,
+.tf-tech-detail-media::after {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-color: var(--accent);
+  border-style: solid;
+  border-width: 0;
+  pointer-events: none;
+  z-index: 3;
+  opacity: 0;
+  transition: opacity 0.4s ease 0.2s;
+}
+.tf-tech-detail-media::before { top: 8px; left: 8px; border-top-width: 1px; border-left-width: 1px; }
+.tf-tech-detail-media::after  { bottom: 8px; right: 8px; border-bottom-width: 1px; border-right-width: 1px; }
+.tf-section.is-visible .tf-tech-detail-media::before,
+.tf-section.is-visible .tf-tech-detail-media::after { opacity: 1; }
+
+/* ── Catalogs: subtle perspective lift on hover (CSS-only tilt) ─── */
+.tf-catalogs { perspective: 1400px; }
+.tf-catalog-card {
+  transform-style: preserve-3d;
+}
+.tf-catalog-card:hover {
+  transform: translateY(-6px) rotateX(2deg);
+}
+
+/* Catalog cover mark: scales subtly on hover */
+.tf-catalog-cover-mark svg {
+  transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.tf-catalog-card:hover .tf-catalog-cover-mark svg {
+  transform: scale(1.08) rotate(-6deg);
+}
+.tf-catalog-cover-title {
+  transition: letter-spacing 0.3s;
+}
+.tf-catalog-card:hover .tf-catalog-cover-title { letter-spacing: 0.01em; }
+
+/* ── Process: legend item leading bracket gets accent on hover ──── */
+.tf-hotspots-legend-item {
+  position: relative;
+  transition: background 0.25s, color 0.25s, padding-left 0.3s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.tf-hotspots-legend-item:hover { padding-left: 24px; }
+.tf-hotspots-legend-item.is-on { padding-left: 24px; }
+.tf-hotspots-legend-item .tf-mono { transition: color 0.2s; }
+.tf-hotspots-legend-item:hover .tf-mono { color: var(--accent); }
+
+/* Hotspot dot number: subtle character flicker on activate */
+@keyframes tf-flicker {
+  0%, 100% { opacity: 1; }
+  20% { opacity: 0.4; }
+  30% { opacity: 1; }
+  35% { opacity: 0.6; }
+  40% { opacity: 1; }
+}
+.tf-hotspot.is-on .tf-hotspot-num {
+  animation: tf-flicker 0.5s steps(1);
+}
+
+/* ── Industries marquee: vertical dividers between client names ── */
+.tf-marquee-item {
+  position: relative;
+}
+.tf-marquee-item::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  width: 1px;
+  height: 14px;
+  background: var(--line-strong);
+  transform: translateY(-50%);
+}
+.tf-marquee-item:last-child::after { display: none; }
+
+/* Tab description placeholder (handled inline in JSX) */
+.tf-tab-desc {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--fg-4);
+  letter-spacing: 0.06em;
+  margin-bottom: 24px;
+  padding-left: 6px;
+  border-left: 2px solid var(--accent);
+}
+
+/* ── History: massive faint year watermark in the section ──────── */
+.tf-history-watermark {
+  position: absolute;
+  top: clamp(40px, 6vw, 80px);
+  right: var(--pad-x);
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(120px, 18vw, 280px);
+  line-height: 0.85;
+  letter-spacing: -0.04em;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--line-strong);
+  user-select: none;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 1.2s ease 0.4s, transform 1.2s cubic-bezier(0.2, 0.7, 0.2, 1) 0.4s;
+  z-index: 0;
+}
+.tf-section.is-visible .tf-history-watermark {
+  opacity: 1;
+  transform: translateY(0);
+}
+#history { position: relative; overflow: hidden; }
+#history > * { position: relative; z-index: 1; }
+
+@media (max-width: 640px) {
+  .tf-history-watermark {
+    top: auto;
+    bottom: 24px;
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: clamp(120px, 32vw, 200px);
+  }
+  .tf-section.is-visible .tf-history-watermark {
+    transform: translateX(-50%);
+  }
+}
+
+/* ── Contact: WhatsApp inline link styling + status row ──────── */
+.tf-contact-wa {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  padding: 8px 12px;
+  border: 1px solid #25d366;
+  color: #25d366;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  width: fit-content;
+  transition: background 0.2s, color 0.2s;
+}
+.tf-contact-wa:hover {
+  background: #25d366;
+  color: #fff;
+}
+.tf-contact-hours {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--fg-3);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding-top: 12px;
+  margin-top: 4px;
+  border-top: 1px solid var(--line);
+}
+.tf-contact-hours i {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #4ade80;
+  box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.2);
+}
+
+/* ── Footer: Instagram + build info ──────────────────────────── */
+.tf-footer-social {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+.tf-footer-social a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--line-strong);
+  color: var(--fg-2);
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+.tf-footer-social a:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+.tf-footer-build {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--fg-4);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  flex-wrap: wrap;
+}
+.tf-footer-build i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  display: inline-block;
+}
+
+/* ── Process step: small leading accent bracket on each step ───── */
+.tf-process-step {
+  position: relative;
+}
+
+/* ── Better text-balance / pretty wrapping ───────────────────── */
+h1, h2, h3, h4 { text-wrap: balance; }
+p { text-wrap: pretty; }
+
+/* ── Sticky-hover lift for the contact side card ─────────────── */
+.tf-contact-side {
+  transition: border-color 0.3s, background 0.3s;
+}
+.tf-contact-side:hover {
+  border-color: var(--line-strong);
+}
+
+/* ── More dramatic display headline shadow on hover (subtle) ─── */
+.tf-display-accent {
+  text-shadow: 0 0 0 transparent;
+  transition: text-shadow 0.6s ease;
+}
+.tf-hero:hover .tf-display-accent {
+  text-shadow: 0 6px 24px rgba(58, 134, 255, 0.4);
+}
+
+/* ── Hero meta tick refinements ───────────────────────────────── */
+.tf-hero-meta .tf-mono:first-child {
+  position: relative;
+  padding-left: 16px;
+}
+.tf-hero-meta .tf-mono:first-child::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  border: 1px solid var(--accent);
+  transform: translateY(-50%) rotate(45deg);
+}
+
+/* ── Tab — small description row below tabs ──────────────────── */
+.tf-industries-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.tf-industries-count {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--fg-3);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.tf-industries-count b {
+  color: var(--accent);
+  font-weight: 500;
+}

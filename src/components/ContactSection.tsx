@@ -117,6 +117,21 @@ export function ContactSection({ content }: { content: Content }) {
             </a>
             <a href="tel:+543514650687" className="tf-contact-link">+54 (351) 465 0687</a>
             <a href="tel:+5493513115838" className="tf-contact-link">+54 9 3513 11-5838</a>
+            <a
+              className="tf-contact-wa"
+              href={`https://wa.me/5493513115838?text=${encodeURIComponent(content.whatsappMessage)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <svg viewBox="0 0 16 16" width="13" height="13" aria-hidden="true">
+                <path d="M2 14 3 11 A6 6 0 1 1 5.3 13L2 14Z" fill="none" stroke="currentColor" strokeWidth="1.3" />
+              </svg>
+              <span>WhatsApp</span>
+            </a>
+            <div className="tf-contact-hours" aria-hidden="true">
+              <i />
+              <span>24/7 · Workshop Active</span>
+            </div>
           </div>
           <div className="tf-contact-block">
             <div className="tf-mono tf-contact-h">{c.addressLabel}</div>
