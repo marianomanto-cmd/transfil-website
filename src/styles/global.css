@@ -27,8 +27,8 @@
   --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
 
-  --maxw: 1440px;
-  --pad-x: clamp(20px, 4vw, 64px);
+  --maxw: 100%;
+  --pad-x: clamp(20px, 4vw, 96px);
   --gap: 24px;
 
   --header-h: 72px;
