@@ -2878,25 +2878,8 @@ p { text-wrap: pretty; }
    ║  Round 3 — HUD, spotlight, radar, magnetics                      ║
    ╚══════════════════════════════════════════════════════════════════╝ */
 
-/* ── Global cursor spotlight (subtle ambient glow) ───────────────── */
-.tf-spotlight {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 1;
-  background: radial-gradient(
-    420px circle at var(--cx, 50%) var(--cy, 50%),
-    rgba(58, 134, 255, 0.07),
-    transparent 60%
-  );
-  mix-blend-mode: screen;
-  opacity: 0;
-  transition: opacity 0.4s ease;
-}
-.tf-spotlight.is-active { opacity: 1; }
-@media (pointer: coarse), (prefers-reduced-motion: reduce) {
-  .tf-spotlight { display: none; }
-}
+/* ── Global cursor spotlight (removed) ───────────────────────────── */
+.tf-spotlight { display: none; }
 
 /* ── Section progress chip (fixed right gutter) ──────────────────── */
 .tf-section-chip {
@@ -2996,22 +2979,8 @@ p { text-wrap: pretty; }
 }
 @media (max-width: 1080px) { .tf-hero-hud { display: none; } }
 
-/* ── Stat sparkline (mini bar chart below each number) ───────────── */
-.tf-stat-spark {
-  display: flex;
-  align-items: end;
-  gap: 2px;
-  height: 12px;
-  margin-top: 6px;
-  width: 64px;
-}
-.tf-stat-spark i {
-  display: block;
-  flex: 1;
-  background: var(--line-strong);
-  transition: background 0.3s, height 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-.tf-stat:hover .tf-stat-spark i { background: var(--accent); }
+/* ── Stat sparkline (removed) ───────────────────────────────────── */
+.tf-stat-spark { display: none; }
 
 /* ── Magnetic buttons (subtle attraction to cursor) ──────────────── */
 .tf-btn-magnetic {
@@ -3056,17 +3025,15 @@ p { text-wrap: pretty; }
     linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
 }
 
-/* ── Industries — radar map ──────────────────────────────────────── */
+/* ── Industries — sober coverage diagram (no animations) ─────────── */
 .tf-radar {
   position: relative;
   width: 100%;
   aspect-ratio: 2 / 1;
-  max-height: 360px;
+  max-height: 320px;
   margin-bottom: 32px;
   border: 1px solid var(--line);
-  background:
-    radial-gradient(ellipse 60% 70% at 30% 60%, rgba(58, 134, 255, 0.04), transparent 70%),
-    var(--bg-2);
+  background: var(--bg-2);
   overflow: hidden;
 }
 .tf-radar svg { display: block; width: 100%; height: 100%; }
@@ -3074,35 +3041,6 @@ p { text-wrap: pretty; }
   stroke: var(--line);
   stroke-width: 0.4;
   fill: none;
-}
-.tf-radar-grid path.is-major {
-  stroke: var(--line-strong);
-}
-.tf-radar-dot { transform-box: fill-box; transform-origin: center; }
-.tf-radar-dot.is-hq {
-  fill: var(--accent);
-  animation: tf-radar-pulse 2s ease-in-out infinite;
-}
-.tf-radar-ring {
-  fill: none;
-  stroke: var(--accent);
-  stroke-width: 0.6;
-  animation: tf-radar-ring 3s ease-out infinite;
-  transform-origin: var(--rx, 0) var(--ry, 0);
-}
-@keyframes tf-radar-ring {
-  0% { r: 1.5; opacity: 0.8; }
-  100% { r: 12; opacity: 0; }
-}
-@keyframes tf-radar-pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.4); }
-}
-.tf-radar-line {
-  stroke: var(--accent);
-  stroke-width: 0.4;
-  opacity: 0.4;
-  stroke-dasharray: 1.5 1.5;
 }
 .tf-radar-label {
   fill: var(--fg-3);
@@ -3138,39 +3076,7 @@ p { text-wrap: pretty; }
   text-transform: uppercase;
 }
 
-/* ── Section number ornament on left side (massive faint number) ─ */
-.tf-section[id]:not(#top) > .tf-section-head {
-  position: relative;
-}
-.tf-section[id]:not(#top) > .tf-section-head::after {
-  content: attr(data-num);
-  position: absolute;
-  right: -10px;
-  top: -40px;
-  font-family: var(--font-display);
-  font-weight: 500;
-  font-size: clamp(80px, 12vw, 180px);
-  line-height: 1;
-  color: transparent;
-  -webkit-text-stroke: 1px var(--line);
-  pointer-events: none;
-  user-select: none;
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.8s ease 0.4s, transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) 0.4s;
-  z-index: -1;
-}
-.tf-section.is-visible[id]:not(#top) > .tf-section-head::after {
-  opacity: 1;
-  transform: translateY(0);
-}
-@media (max-width: 640px) {
-  .tf-section[id]:not(#top) > .tf-section-head::after {
-    right: 0;
-    top: -20px;
-    font-size: clamp(80px, 22vw, 140px);
-  }
-}
+/* ── Section number ornament (removed — was visually competing with eyebrows) ─ */
 
 /* ── Pinned header — subtle dotted divider when scrolled ─────── */
 .tf-header.is-scrolled .tf-header-inner::after {
@@ -3213,4 +3119,163 @@ body { opacity: 0; animation: tf-body-in 0.6s ease 0.05s forwards; }
 .tf-marquee {
   mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
   -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+}
+
+/* ╔══════════════════════════════════════════════════════════════════╗
+   ║  Round 4: tnum, word-cascade H2, print stylesheet                ║
+   ╚══════════════════════════════════════════════════════════════════╝ */
+
+/* ── Tabular numerals + slashed zero where numbers matter ────────── */
+.tf-mono,
+.tf-stat-v,
+.tf-display,
+.tf-h2,
+.tf-h3,
+.tf-tl-year,
+.tf-catalog-cover-title,
+.tf-catalog-cover-sub,
+.tf-tab-count,
+.tf-section-chip-num,
+.tf-radar-label,
+.tf-form-foot,
+input[type="email"],
+input[type="tel"],
+input[type="number"] {
+  font-feature-settings: "tnum" 1, "zero" 1, "ss01" 1;
+  font-variant-numeric: tabular-nums slashed-zero;
+}
+
+/* ── H2 word-by-word cascade ─────────────────────────────────────── */
+/* The JS splitter wraps each word in a <span> with style="--i: N".
+   Existing handoff CSS already animates <span>/<em> children of .tf-h2;
+   we just stagger them by --i for a word-by-word reveal. */
+.tf-section .tf-h2 > span,
+.tf-section .tf-h2 > em {
+  transition-delay: calc(var(--i, 0) * 0.06s + 0.18s) !important;
+}
+
+/* ── Print stylesheet — clean B&W catalog page ───────────────────── */
+@media print {
+  :root {
+    --bg: #ffffff;
+    --bg-2: #ffffff;
+    --bg-3: #ffffff;
+    --fg: #000000;
+    --fg-2: #1f1f1f;
+    --fg-3: #4d4d4d;
+    --fg-4: #888888;
+    --line: #d8d4cc;
+    --line-strong: #b8b4ac;
+    --accent: #000000;
+    --accent-2: #000000;
+    --accent-soft: transparent;
+  }
+  html, body {
+    background: #fff !important;
+    color: #000 !important;
+    font-size: 11pt;
+  }
+  body::before, body::after { display: none !important; }
+
+  /* Hide chrome that doesn't belong on paper */
+  .tf-header,
+  .tf-mobile-nav,
+  .tf-wa-fab,
+  .tf-backtop,
+  .tf-hero-scroll,
+  .tf-hotspots-overlay,
+  .tf-hotspots-connectors,
+  .tf-radar,
+  .tf-industries-meta,
+  .tf-marquee,
+  .tf-history-watermark,
+  .tf-contact-map,
+  .tf-form,
+  .tf-hero-bg,
+  .tf-process-banner,
+  .tf-hero-meta,
+  .tf-footer-social,
+  .tf-footer-build {
+    display: none !important;
+  }
+
+  /* No animations on paper */
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+
+  .tf-section {
+    padding: 24pt 0;
+    border-top: 0.5pt solid #000;
+    page-break-inside: avoid;
+  }
+  .tf-section.is-dark { background: #fff !important; }
+  .tf-section.is-dark::before,
+  .tf-section.is-dark::after { display: none !important; }
+
+  .tf-hero {
+    min-height: 0;
+    padding: 0 0 24pt;
+    border-bottom: 1pt solid #000;
+  }
+  .tf-display {
+    font-size: 28pt !important;
+    color: #000 !important;
+    margin-bottom: 12pt;
+  }
+  .tf-display-mid, .tf-display-accent {
+    color: #000 !important;
+    padding-left: 0 !important;
+    font-style: normal !important;
+  }
+  .tf-hero-stats {
+    grid-template-columns: repeat(4, 1fr) !important;
+    border-top: 0.5pt solid #000;
+  }
+  .tf-hero-ctas { display: none !important; }
+
+  /* Catalogs flatten to a simple list of titles + URLs */
+  .tf-catalogs { display: block; }
+  .tf-catalog-card {
+    display: block;
+    border: 0.5pt solid #000;
+    margin-bottom: 8pt;
+    padding: 8pt;
+    transform: none !important;
+  }
+  .tf-catalog-cover,
+  .tf-catalog-spine,
+  .tf-catalog-cta { display: none !important; }
+  .tf-catalog-body { margin-left: 0; padding: 0; }
+
+  /* Expand anchor URLs after their text */
+  a[href^="http"]::after,
+  a[href^="mailto"]::after,
+  a[href^="tel"]::after {
+    content: " (" attr(href) ")";
+    font-size: 9pt;
+    color: #555;
+  }
+  a[href^="#"]::after { content: ""; }
+
+  .tf-contact-side {
+    border: 0.5pt solid #000;
+    background: #fff !important;
+    padding: 12pt;
+  }
+
+  .tf-footer {
+    background: #fff !important;
+    border-top: 0.5pt solid #000;
+    padding: 12pt 0;
+  }
+  .tf-footer-grid { grid-template-columns: 1fr 1fr; gap: 12pt; }
+
+  /* Page break hints */
+  h2, h3 { page-break-after: avoid; }
+  .tf-tl-item, .tf-service, .tf-catalog-card { page-break-inside: avoid; }
 }

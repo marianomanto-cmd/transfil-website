@@ -1,8 +1,8 @@
 type Country = { code: string; label: string; x: number; y: number; hq?: boolean };
 
-// Roughly placed on a 200x100 cartesian field (purely decorative — not a
-// real Mercator projection). Argentina is the HQ pulse; the others are
-// "operations reached" markers per the hero stat (9 countries reached).
+// Sober coverage diagram — country dots on a faint reference grid. Positions
+// are stylized (not a real projection); the intent is to read as "9 markets",
+// not as a geo-accurate map.
 const COUNTRIES: Country[] = [
   { code: 'AR', label: 'ARG', x: 64, y: 75, hq: true },
   { code: 'BR', label: 'BRA', x: 78, y: 68 },
@@ -20,7 +20,6 @@ type Props = {
 };
 
 export function CoverageRadar({ lang }: Props) {
-  const hq = COUNTRIES.find((c) => c.hq)!;
   return (
     <div className="tf-radar" aria-hidden="true">
       <div className="tf-radar-meta">
@@ -29,21 +28,11 @@ export function CoverageRadar({ lang }: Props) {
       </div>
       <svg viewBox="0 0 200 100" preserveAspectRatio="none">
         <g className="tf-radar-grid">
-          {/* horizontal lat lines */}
-          {[10, 20, 30, 40, 50, 60, 70, 80, 90].map((y) => (
-            <path key={`h${y}`} d={`M0 ${y} H200`} className={y % 30 === 0 ? 'is-major' : ''} />
+          {[20, 40, 60, 80].map((y) => (
+            <path key={`h${y}`} d={`M0 ${y} H200`} />
           ))}
-          {/* vertical lon lines */}
-          {[10, 25, 40, 55, 70, 85, 100, 115, 130, 145, 160, 175, 190].map((x) => (
-            <path key={`v${x}`} d={`M${x} 0 V100`} className={x % 30 === 10 ? 'is-major' : ''} />
-          ))}
-          {/* diagonal radar sweep lines from HQ */}
-          {COUNTRIES.filter((c) => !c.hq).map((c) => (
-            <path
-              key={`line-${c.code}`}
-              className="tf-radar-line"
-              d={`M${hq.x} ${hq.y} L${c.x} ${c.y}`}
-            />
+          {[25, 50, 75, 100, 125, 150, 175].map((x) => (
+            <path key={`v${x}`} d={`M${x} 0 V100`} />
           ))}
         </g>
         {COUNTRIES.map((c) => (
@@ -52,18 +41,8 @@ export function CoverageRadar({ lang }: Props) {
               cx={c.x}
               cy={c.y}
               r={c.hq ? 2.2 : 1.4}
-              className={c.hq ? 'tf-radar-dot is-hq' : 'tf-radar-dot'}
               fill={c.hq ? 'var(--accent)' : 'var(--fg-2)'}
             />
-            {c.hq && (
-              <circle
-                cx={c.x}
-                cy={c.y}
-                r="1.5"
-                className="tf-radar-ring"
-                style={{ ['--rx' as never]: c.x, ['--ry' as never]: c.y }}
-              />
-            )}
             <text
               x={c.x + 3}
               y={c.y + 1.2}
@@ -74,7 +53,7 @@ export function CoverageRadar({ lang }: Props) {
           </g>
         ))}
       </svg>
-      <span className="tf-radar-stamp">RADAR · OPS 2026</span>
+      <span className="tf-radar-stamp">{lang === 'es' ? 'COBERTURA' : 'COVERAGE'} · 2026</span>
     </div>
   );
 }

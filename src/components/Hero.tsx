@@ -6,32 +6,14 @@ type Props = {
   bgUrl?: string;
 };
 
-// Deterministic pseudo-random bar heights so SSR + client match.
-function sparkHeights(seed: number, count = 12) {
-  const out: number[] = [];
-  let x = seed * 9301 + 49297;
-  for (let i = 0; i < count; i++) {
-    x = (x * 9301 + 49297) % 233280;
-    const v = 0.35 + (x / 233280) * 0.65;
-    out.push(Math.round(v * 100));
-  }
-  return out;
-}
-
 function Stat({ idx, v, l }: { idx: number; v: string; l: string }) {
   const [ref, display] = useCountUp(v, { duration: 1300 + idx * 120 });
-  const bars = sparkHeights(idx + 1);
   return (
     <div className="tf-stat" ref={ref as React.RefObject<HTMLDivElement>}>
       <dt className="tf-mono">{`0${idx + 1}`}</dt>
       <dd>
         <span className="tf-stat-v">{display}</span>
         <span className="tf-stat-l">{l}</span>
-        <span className="tf-stat-spark" aria-hidden="true">
-          {bars.map((h, i) => (
-            <i key={i} style={{ height: `${h}%` }} />
-          ))}
-        </span>
       </dd>
     </div>
   );
