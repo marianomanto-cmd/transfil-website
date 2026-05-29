@@ -3049,57 +3049,153 @@ p { text-wrap: pretty; }
     linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
 }
 
-/* ── Industries — coverage map (Google Maps embed, dark-themed) ──── */
+/* ── Industries — custom coverage map (SVG + arcs) ─────────────── */
 .tf-radar {
   position: relative;
   width: 100%;
-  aspect-ratio: 100 / 115;
-  max-height: 520px;
-  max-width: 440px;
+  aspect-ratio: 140 / 105;
+  max-height: 460px;
+  max-width: 620px;
   margin: 0 auto 32px;
   border: 1px solid var(--line);
-  background: var(--bg-2);
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 100%, rgba(58, 134, 255, 0.05), transparent 70%),
+    var(--bg-2);
   overflow: hidden;
 }
-.tf-radar-base {
+.tf-radar svg {
   display: block;
   width: 100%;
   height: 100%;
-  border: 0;
-  pointer-events: none;
-  /* Same recipe as the contact map — invert, hue-rotate to restore
-     real colours, then pull saturation/contrast down to integrate
-     with the site's industrial-dark palette. */
-  filter:
-    invert(0.92)
-    hue-rotate(180deg)
-    brightness(0.92)
-    contrast(0.85)
-    saturate(0.55);
 }
-.tf-radar-overlay {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 2;
+
+/* Background grid: very faint */
+.tf-radar-grid path {
+  stroke: var(--line);
+  stroke-width: 0.15;
+  fill: none;
+  opacity: 0.55;
 }
-/* Subtle accent ambient tint on top of the map */
-.tf-radar-overlay::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(58, 134, 255, 0.06), transparent 45%);
-  pointer-events: none;
+
+/* Equator + tropics: subtly stronger than the grid */
+.tf-radar-parallels line {
+  stroke: var(--line-strong);
+  stroke-width: 0.2;
+  opacity: 0.55;
 }
+
+/* Landmasses: faint blue-tinted fill + slightly stronger outline */
+.tf-radar-land path {
+  fill: url(#tf-land-grad);
+  stroke: var(--line-strong);
+  stroke-width: 0.4;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+/* Central America connector — narrow stroke that bridges MX and SA */
+.tf-radar-isthmus {
+  fill: none;
+  stroke: var(--line-strong);
+  stroke-width: 0.5;
+  stroke-linecap: round;
+}
+
+/* Offshore islands */
+.tf-radar-islands ellipse {
+  fill: url(#tf-land-grad);
+  stroke: var(--line-strong);
+  stroke-width: 0.3;
+}
+
+/* Connector arcs — drawn-in animation + gradient stroke */
+.tf-radar-links path {
+  stroke-width: 0.55;
+  stroke-linecap: round;
+  fill: none;
+  stroke-dasharray: 200;
+  stroke-dashoffset: 200;
+  animation: tf-radar-arc-draw 2.4s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+}
+@keyframes tf-radar-arc-draw {
+  to { stroke-dashoffset: 0; }
+}
+
+/* Compass rose top-left */
+.tf-radar-compass circle {
+  fill: var(--bg-2);
+  stroke: var(--line-strong);
+  stroke-width: 0.3;
+}
+.tf-radar-compass line {
+  stroke: var(--line-strong);
+  stroke-width: 0.25;
+}
+.tf-radar-compass polygon { fill: var(--accent); }
+.tf-radar-compass text {
+  fill: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 2.2px;
+  letter-spacing: 0.2px;
+}
+
+/* Scale bar bottom-left */
+.tf-radar-scale line {
+  stroke: var(--fg-3);
+  stroke-width: 0.3;
+  stroke-linecap: butt;
+}
+.tf-radar-scale text {
+  fill: var(--fg-3);
+  font-family: var(--font-mono);
+  font-size: 2.4px;
+  letter-spacing: 0.2px;
+}
+
+/* Markers */
+.tf-radar-dot {
+  fill: var(--fg);
+}
+.tf-radar-dot.is-hq {
+  fill: var(--accent);
+}
+.tf-radar-hq-pulse {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 0.35;
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: tf-radar-hq-ring 2.6s ease-out infinite;
+}
+@keyframes tf-radar-hq-ring {
+  0% { transform: scale(0.7); opacity: 0.85; }
+  100% { transform: scale(3); opacity: 0; }
+}
+
+/* Labels */
+.tf-radar-label {
+  fill: var(--fg-2);
+  font-family: var(--font-mono);
+  font-size: 2.4px;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+.tf-radar-label.is-hq {
+  fill: var(--accent);
+  font-weight: 500;
+}
+
+/* Meta panel + stamp — backdrop-blur on dark so they read over the map */
 .tf-radar-meta {
   position: absolute;
   top: 12px;
-  left: 12px;
+  right: 12px;
   display: flex;
   flex-direction: column;
   gap: 6px;
   padding: 8px 10px;
-  background: rgba(14, 14, 16, 0.6);
+  background: rgba(14, 14, 16, 0.55);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   border: 1px solid var(--line);
@@ -3108,54 +3204,15 @@ p { text-wrap: pretty; }
   color: var(--fg-2);
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  pointer-events: none;
 }
 .tf-radar-meta b { color: var(--accent); font-weight: 500; }
-.tf-radar-markers {
-  position: absolute;
-  inset: 0;
-}
-.tf-radar-marker {
-  position: absolute;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--fg);
-  transform: translate(-50%, -50%);
-  box-shadow:
-    0 0 0 1.5px rgba(14, 14, 16, 0.85),
-    0 0 8px rgba(14, 14, 16, 0.6);
-}
-.tf-radar-marker.is-hq {
-  width: 14px;
-  height: 14px;
-  background: var(--accent);
-  box-shadow:
-    0 0 0 2px rgba(14, 14, 16, 0.9),
-    0 0 0 3px var(--accent),
-    0 0 18px rgba(58, 134, 255, 0.55);
-}
-.tf-radar-marker.is-hq::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  border: 1.5px solid var(--accent);
-  transform: translate(-50%, -50%);
-  animation: tf-radar-marker-pulse 2.4s ease-out infinite;
-}
-@keyframes tf-radar-marker-pulse {
-  0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.8; }
-  100% { transform: translate(-50%, -50%) scale(3); opacity: 0; }
-}
 .tf-radar-stamp {
   position: absolute;
   bottom: 10px;
   right: 12px;
   padding: 4px 8px;
-  background: rgba(14, 14, 16, 0.6);
+  background: rgba(14, 14, 16, 0.55);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   border: 1px solid var(--line);

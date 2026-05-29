@@ -130,7 +130,7 @@ export const CONTENT: Record<Lang, Content> = {
       ctaPrimary: 'Ver tecnologías', ctaSecondary: 'Contáctenos',
       stat1: { v: '36', l: 'Años de operación' },
       stat2: { v: '120+', l: 'Clientes industriales' },
-      stat3: { v: '9', l: 'Países alcanzados' },
+      stat3: { v: '12', l: 'Países alcanzados' },
       stat4: { v: '24/7', l: 'Soporte de planta' },
     },
     capabilities: {
@@ -283,7 +283,7 @@ export const CONTENT: Record<Lang, Content> = {
       ctaPrimary: 'Explore technologies', ctaSecondary: 'Get in touch',
       stat1: { v: '36', l: 'Years of operation' },
       stat2: { v: '120+', l: 'Industrial clients' },
-      stat3: { v: '9', l: 'Countries reached' },
+      stat3: { v: '12', l: 'Countries reached' },
       stat4: { v: '24/7', l: 'Plant support' },
     },
     capabilities: {
