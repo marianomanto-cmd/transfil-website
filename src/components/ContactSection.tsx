@@ -142,29 +142,78 @@ export function ContactSection({ content }: { content: Content }) {
             <svg viewBox="0 0 200 120" width="100%" height="100%" preserveAspectRatio="xMidYMid meet">
               <defs>
                 <pattern id="map-grid" width="10" height="10" patternUnits="userSpaceOnUse">
-                  <path d="M10 0H0v10" fill="none" stroke="currentColor" strokeWidth="0.3" opacity="0.35" />
+                  <path d="M10 0H0v10" fill="none" stroke="currentColor" strokeWidth="0.3" opacity="0.25" />
                 </pattern>
               </defs>
               <rect width="200" height="120" fill="url(#map-grid)" />
-              {/* Av. Circunvalación — the ring road that wraps Córdoba */}
-              <ellipse cx="100" cy="60" rx="58" ry="38" fill="none" stroke="currentColor" strokeWidth="0.8" opacity="0.65" />
-              {/* Suquía river crossing the city east-west, roughly */}
-              <path d="M30 55 Q60 62 100 58 T172 64" fill="none" stroke="currentColor" strokeWidth="0.5" opacity="0.4" />
-              {/* Cardinal markers on the ring */}
-              <text x="100" y="20" textAnchor="middle" fontSize="5" fill="currentColor" opacity="0.5" fontFamily="monospace">N</text>
-              <text x="100" y="106" textAnchor="middle" fontSize="5" fill="currentColor" opacity="0.5" fontFamily="monospace">S</text>
-              <text x="36" y="62" textAnchor="middle" fontSize="5" fill="currentColor" opacity="0.5" fontFamily="monospace">O</text>
-              <text x="164" y="62" textAnchor="middle" fontSize="5" fill="currentColor" opacity="0.5" fontFamily="monospace">E</text>
-              {/* Pin at the workshop location — NW of city centre, just outside the ring on Fco. de Arteaga */}
-              <line x1="70" y1="42" x2="100" y2="60" stroke="currentColor" strokeWidth="0.4" opacity="0.5" strokeDasharray="1.5 1.5" />
-              <circle cx="70" cy="42" r="2.6" fill="currentColor" />
-              <circle cx="70" cy="42" r="6" fill="none" stroke="currentColor" strokeWidth="0.6">
-                <animate attributeName="r" from="2.8" to="12" dur="2.4s" repeatCount="indefinite" />
-                <animate attributeName="opacity" from="0.7" to="0" dur="2.4s" repeatCount="indefinite" />
+
+              {/* Major avenues — Vélez Sarsfield (N-S), Colón / Sabattini (E-W),
+                  Costanera following the river. Thin hairlines, faded. */}
+              <g stroke="currentColor" strokeWidth="0.3" opacity="0.3" fill="none">
+                <line x1="100" y1="22" x2="100" y2="98" />
+                <line x1="42" y1="60" x2="158" y2="60" />
+                <line x1="62" y1="30" x2="138" y2="90" />
+                <line x1="62" y1="90" x2="138" y2="30" />
+              </g>
+
+              {/* Av. Circunvalación — irregular polygon (the ring isn't a true
+                  ellipse: flatter east side, bulges N and S, slight indentations). */}
+              <path
+                d="M 100 20 L 124 23 L 144 32 L 156 46 L 160 60 L 156 76 L 148 88 L 130 95 L 108 98 L 88 96 L 68 90 L 52 78 L 44 64 L 42 50 L 48 38 L 60 28 L 80 22 Z"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="0.85"
+                opacity="0.7"
+              />
+
+              {/* Suquía river — meanders E-W through the city with realistic curves */}
+              <path
+                d="M 36 56 C 50 53, 60 60, 72 58 S 92 54, 100 58 S 122 64, 134 62 S 158 58, 172 64"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="0.6"
+                opacity="0.5"
+              />
+
+              {/* Centre marker — faint diamond + CENTRO label */}
+              <rect x="98" y="58" width="4" height="4" transform="rotate(45 100 60)"
+                    fill="none" stroke="currentColor" strokeWidth="0.4" opacity="0.55" />
+              <text x="100" y="68" textAnchor="middle" fontSize="3.2" fill="currentColor" opacity="0.5" fontFamily="monospace">CENTRO</text>
+
+              {/* Cardinal markers placed inside the ring corners */}
+              <text x="100" y="16" textAnchor="middle" fontSize="4.5" fill="currentColor" opacity="0.5" fontFamily="monospace">N</text>
+              <text x="100" y="108" textAnchor="middle" fontSize="4.5" fill="currentColor" opacity="0.5" fontFamily="monospace">S</text>
+              <text x="34" y="62" textAnchor="middle" fontSize="4.5" fill="currentColor" opacity="0.5" fontFamily="monospace">O</text>
+              <text x="168" y="62" textAnchor="middle" fontSize="4.5" fill="currentColor" opacity="0.5" fontFamily="monospace">E</text>
+
+              {/* Compass rose top-right corner */}
+              <g transform="translate(186 14)">
+                <circle cx="0" cy="0" r="6" fill="currentColor" fillOpacity="0.08" stroke="currentColor" strokeWidth="0.35" />
+                <line x1="0" y1="-6" x2="0" y2="6" stroke="currentColor" strokeWidth="0.3" opacity="0.4" />
+                <line x1="-6" y1="0" x2="6" y2="0" stroke="currentColor" strokeWidth="0.3" opacity="0.4" />
+                <polygon points="0,-6 -1.6,-2.2 1.6,-2.2" fill="currentColor" />
+                <text x="0" y="-7.5" textAnchor="middle" fontSize="2.2" fill="currentColor" fontFamily="monospace">N</text>
+              </g>
+
+              {/* Pin at the workshop location — NW quadrant, outside the ring */}
+              <line x1="68" y1="38" x2="100" y2="60" stroke="currentColor" strokeWidth="0.4" opacity="0.5" strokeDasharray="1.5 1.5" />
+              <circle cx="68" cy="38" r="2.8" fill="currentColor" />
+              <circle cx="68" cy="38" r="6" fill="none" stroke="currentColor" strokeWidth="0.6">
+                <animate attributeName="r" from="3" to="12" dur="2.4s" repeatCount="indefinite" />
+                <animate attributeName="opacity" from="0.75" to="0" dur="2.4s" repeatCount="indefinite" />
               </circle>
-              <text x="76" y="44" fontSize="5" fill="currentColor" fontFamily="monospace">TRANS·FIL</text>
-              <text x="76" y="50" fontSize="3.6" fill="currentColor" opacity="0.55" fontFamily="monospace">F. ARTEAGA 3043</text>
-              <text x="100" y="115" textAnchor="middle" fontSize="3.6" fill="currentColor" opacity="0.45" fontFamily="monospace">CÓRDOBA · AV. CIRCUNVALACIÓN</text>
+              <text x="74" y="38" fontSize="4.8" fill="currentColor" fontFamily="monospace" fontWeight="500">TRANS·FIL</text>
+              <text x="74" y="44" fontSize="3.4" fill="currentColor" opacity="0.55" fontFamily="monospace">F. DE ARTEAGA 3043</text>
+
+              {/* Scale + city stamp at bottom */}
+              <g transform="translate(8 112)">
+                <line x1="0" y1="0" x2="18" y2="0" stroke="currentColor" strokeWidth="0.4" />
+                <line x1="0" y1="-1.5" x2="0" y2="1.5" stroke="currentColor" strokeWidth="0.4" />
+                <line x1="9" y1="-1" x2="9" y2="1" stroke="currentColor" strokeWidth="0.3" />
+                <line x1="18" y1="-1.5" x2="18" y2="1.5" stroke="currentColor" strokeWidth="0.4" />
+                <text x="9" y="5.5" textAnchor="middle" fontSize="2.6" fill="currentColor" opacity="0.6" fontFamily="monospace">≈ 5 km</text>
+              </g>
+              <text x="192" y="116" textAnchor="end" fontSize="3" fill="currentColor" opacity="0.5" fontFamily="monospace">CÓRDOBA · AR · 31°24′S · 64°11′W</text>
             </svg>
           </div>
         </aside>
