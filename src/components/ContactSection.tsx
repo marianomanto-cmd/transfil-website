@@ -139,21 +139,32 @@ export function ContactSection({ content }: { content: Content }) {
             <p className="tf-contact-coord tf-mono">31°24′17″S · 64°11′31″W</p>
           </div>
           <div className="tf-contact-map" aria-hidden="true">
-            <svg viewBox="0 0 200 120" width="100%" height="100%" preserveAspectRatio="none">
+            <svg viewBox="0 0 200 120" width="100%" height="100%" preserveAspectRatio="xMidYMid meet">
               <defs>
                 <pattern id="map-grid" width="10" height="10" patternUnits="userSpaceOnUse">
-                  <path d="M10 0H0v10" fill="none" stroke="currentColor" strokeWidth="0.4" opacity="0.5" />
+                  <path d="M10 0H0v10" fill="none" stroke="currentColor" strokeWidth="0.3" opacity="0.35" />
                 </pattern>
               </defs>
               <rect width="200" height="120" fill="url(#map-grid)" />
-              <path d="M0 60 Q40 40 80 55 T160 50 L200 60" fill="none" stroke="currentColor" strokeWidth="0.8" opacity="0.6" />
-              <path d="M0 80 L60 70 L120 85 L200 75" fill="none" stroke="currentColor" strokeWidth="0.8" opacity="0.4" />
-              <circle cx="92" cy="62" r="3" fill="currentColor" />
-              <circle cx="92" cy="62" r="8" fill="none" stroke="currentColor" strokeWidth="0.6">
-                <animate attributeName="r" from="3" to="14" dur="2s" repeatCount="indefinite" />
-                <animate attributeName="opacity" from="0.7" to="0" dur="2s" repeatCount="indefinite" />
+              {/* Av. Circunvalación — the ring road that wraps Córdoba */}
+              <ellipse cx="100" cy="60" rx="58" ry="38" fill="none" stroke="currentColor" strokeWidth="0.8" opacity="0.65" />
+              {/* Suquía river crossing the city east-west, roughly */}
+              <path d="M30 55 Q60 62 100 58 T172 64" fill="none" stroke="currentColor" strokeWidth="0.5" opacity="0.4" />
+              {/* Cardinal markers on the ring */}
+              <text x="100" y="20" textAnchor="middle" fontSize="5" fill="currentColor" opacity="0.5" fontFamily="monospace">N</text>
+              <text x="100" y="106" textAnchor="middle" fontSize="5" fill="currentColor" opacity="0.5" fontFamily="monospace">S</text>
+              <text x="36" y="62" textAnchor="middle" fontSize="5" fill="currentColor" opacity="0.5" fontFamily="monospace">O</text>
+              <text x="164" y="62" textAnchor="middle" fontSize="5" fill="currentColor" opacity="0.5" fontFamily="monospace">E</text>
+              {/* Pin at the workshop location — NW of city centre, just outside the ring on Fco. de Arteaga */}
+              <line x1="70" y1="42" x2="100" y2="60" stroke="currentColor" strokeWidth="0.4" opacity="0.5" strokeDasharray="1.5 1.5" />
+              <circle cx="70" cy="42" r="2.6" fill="currentColor" />
+              <circle cx="70" cy="42" r="6" fill="none" stroke="currentColor" strokeWidth="0.6">
+                <animate attributeName="r" from="2.8" to="12" dur="2.4s" repeatCount="indefinite" />
+                <animate attributeName="opacity" from="0.7" to="0" dur="2.4s" repeatCount="indefinite" />
               </circle>
-              <text x="98" y="65" fontSize="6" fill="currentColor" fontFamily="monospace">CÓRDOBA</text>
+              <text x="76" y="44" fontSize="5" fill="currentColor" fontFamily="monospace">TRANS·FIL</text>
+              <text x="76" y="50" fontSize="3.6" fill="currentColor" opacity="0.55" fontFamily="monospace">F. ARTEAGA 3043</text>
+              <text x="100" y="115" textAnchor="middle" fontSize="3.6" fill="currentColor" opacity="0.45" fontFamily="monospace">CÓRDOBA · AV. CIRCUNVALACIÓN</text>
             </svg>
           </div>
         </aside>
