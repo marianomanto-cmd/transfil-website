@@ -32,14 +32,27 @@ export function IndustriesSection({ content }: { content: Content }) {
       className={cx('tf-section', vis && 'is-visible')}
       data-screen-label="05 Industries"
     >
-      <header className="tf-section-head" data-num="05">
-        <div className="tf-eyebrow">{c.eyebrow}</div>
-        <h2 className="tf-h2">
-          <span>{c.title}</span> <span className="tf-h2-accent">{c.title2}</span>
-        </h2>
-        <p className="tf-section-sub">{c.sub}</p>
-      </header>
-      <CoverageRadar lang={content.htmlLang.startsWith('es') ? 'es' : 'en'} />
+      <div className="tf-industries-top">
+        <header className="tf-section-head" data-num="05">
+          <div className="tf-eyebrow">{c.eyebrow}</div>
+          <h2 className="tf-h2">
+            <span>{c.title}</span> <span className="tf-h2-accent">{c.title2}</span>
+          </h2>
+          <p className="tf-section-sub">{c.sub}</p>
+          <ul className="tf-coverage-list" aria-hidden="true">
+            {[
+              'Argentina', 'Brasil', 'Chile', 'Perú',
+              'Bolivia', 'Uruguay', 'Colombia', 'Ecuador',
+              'México', 'Estados Unidos', 'R. Dominicana', 'España',
+            ].map((name) => (
+              <li key={name} className="tf-coverage-list-item">
+                <span className="tf-mono">→</span> {name}
+              </li>
+            ))}
+          </ul>
+        </header>
+        <CoverageRadar lang={content.htmlLang.startsWith('es') ? 'es' : 'en'} />
+      </div>
       <div className="tf-tabs" role="tablist">
         {c.tabs.map((t) => {
           const on = t.id === tab;
