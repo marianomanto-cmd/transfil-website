@@ -139,8 +139,8 @@ export const CONTENT: Record<Lang, Content> = {
     },
     tech: [
       {
-        id: 'conveyors', code: 'T01', title: 'Transportadores de viruta', sub: 'Conveyors',
-        img: '/img/conveyor-blue.avif',
+        id: 'conveyors', code: 'T01', title: 'Transportadores', sub: 'Conveyors',
+        img: '/img/t01-conveyors.jpg',
         desc: 'Sistemas de evacuación de viruta metálica para celdas de mecanizado, líneas transfer y centros CNC. Configurables en bisagra, raspador, magnéticos o combinados.',
         bullets: [
           { name: 'Bisagra y raspador', img: '/img/conveyor-blue.avif', desc: 'Cadena articulada con paletas raspadoras. Ideal para virutas largas, mixtas y húmedas. Construcción robusta para operación continua 24/7.', kind: 'photo' },
@@ -292,8 +292,8 @@ export const CONTENT: Record<Lang, Content> = {
     },
     tech: [
       {
-        id: 'conveyors', code: 'T01', title: 'Chip conveyors', sub: 'Transportadores',
-        img: '/img/conveyor-blue.avif',
+        id: 'conveyors', code: 'T01', title: 'Conveyors', sub: 'Transportadores',
+        img: '/img/t01-conveyors.jpg',
         desc: 'Metal chip evacuation systems for machining cells, transfer lines and CNC centers. Configurable as hinge, scraper, magnetic or combined.',
         bullets: [
           { name: 'Hinge & scraper', img: '/img/conveyor-blue.avif', desc: 'Articulated chain with scraper paddles. Ideal for long, mixed and wet chips. Heavy-duty build for 24/7 operation.', kind: 'photo' },
