@@ -3323,3 +3323,47 @@ input[type="number"] {
     animation: none !important;
   }
 }
+
+/* ── Catalog cover image (real catalog cover photo behind diamond+title) ── */
+.tf-catalog-cover-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  filter: saturate(0.45) contrast(1.05) brightness(0.55);
+  z-index: 0;
+  transition: filter 0.4s ease, transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.tf-catalog-card:hover .tf-catalog-cover-img {
+  filter: saturate(0.7) contrast(1.05) brightness(0.7);
+  transform: scale(1.03);
+}
+/* Brand-colour wash overlaying the photo, keeps the cards visually
+   differentiated and gives the diamond+title a strong contrast base. */
+.tf-catalog-cover::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg,
+      color-mix(in oklab, var(--cat-c) 55%, transparent) 0%,
+      color-mix(in oklab, var(--cat-c) 25%, transparent) 55%,
+      rgba(14, 14, 16, 0.55) 100%);
+  z-index: 1;
+  pointer-events: none;
+  transition: background 0.4s ease;
+}
+.tf-catalog-card:hover .tf-catalog-cover::before {
+  background:
+    linear-gradient(180deg,
+      color-mix(in oklab, var(--cat-c) 65%, transparent) 0%,
+      color-mix(in oklab, var(--cat-c) 35%, transparent) 55%,
+      rgba(14, 14, 16, 0.55) 100%);
+}
+/* Push the rest of the cover layers above image + brand-wash */
+.tf-catalog-cover-grid,
+.tf-catalog-cover-stripe { z-index: 2; }
+.tf-catalog-cover-tag,
+.tf-catalog-cover-brand { z-index: 3; }
