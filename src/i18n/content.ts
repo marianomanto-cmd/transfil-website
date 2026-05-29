@@ -135,7 +135,7 @@ export const CONTENT: Record<Lang, Content> = {
     capabilities: {
       eyebrow: '[ 02 — Capacidades ]',
       title: 'Cuatro líneas. Una misma ingeniería.',
-      sub: 'Cada máquina es diseñada a medida del proceso productivo. No vendemos catálogo: integramos al flujo existente.',
+      sub: 'Cada equipo se diseña sobre el proceso productivo real e integra al flujo existente.',
     },
     tech: [
       {
@@ -288,7 +288,7 @@ export const CONTENT: Record<Lang, Content> = {
     capabilities: {
       eyebrow: '[ 02 — Capabilities ]',
       title: 'Four product lines. One engineering team.',
-      sub: 'Every machine is engineered around your process. We don\'t sell catalog: we integrate into the existing flow.',
+      sub: 'Each unit is engineered around the actual production process and integrates with the existing line flow.',
     },
     tech: [
       {
