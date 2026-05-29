@@ -67,9 +67,8 @@ export function Header({ lang, content }: Props) {
         >
           <span className="tf-logo-mark" aria-hidden="true">
             <svg viewBox="0 0 32 32" width="28" height="28">
-              <path d="M16 4 L28 28 L4 28 Z M16 14 L23 25 L9 25 Z"
-                    fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="miter" />
-              <circle cx="16" cy="11" r="2" fill="currentColor" />
+              <path d="M 16 4 L 28 28 L 4 28 Z M 19 13 a 3 3 0 0 0 -6 0 a 3 3 0 0 0 6 0 Z M 16 18 L 24 27 L 8 27 Z"
+                    fill="currentColor" fillRule="evenodd" />
             </svg>
           </span>
           <span className="tf-logo-text">
