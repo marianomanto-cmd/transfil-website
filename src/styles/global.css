@@ -3279,3 +3279,47 @@ input[type="number"] {
   h2, h3 { page-break-after: avoid; }
   .tf-tl-item, .tf-service, .tf-catalog-card { page-break-inside: avoid; }
 }
+
+/* ╔══════════════════════════════════════════════════════════════════╗
+   ║  Hero video (replaces background photo)                          ║
+   ╚══════════════════════════════════════════════════════════════════╝ */
+
+/* Cover the hero exactly like the handoff img did, but at full opacity —
+   the clip is already color-graded; no further filter/desaturation. */
+.tf-hero-bg video.tf-hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  z-index: 0;
+  animation: tf-fade-in-video 0.6s ease backwards 0.05s;
+}
+@keyframes tf-fade-in-video {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Adjusted overlay: keep the handoff's headline-area side-fade (radial +
+   left-edge ramp) for headline legibility, AND layer a top→bottom darkening
+   (0.25 → 0.65) on top so the video reads under the meta bar and stats.
+   Stacks above the video because pseudos paint after children. */
+.tf-hero-bg::after {
+  background:
+    linear-gradient(180deg, rgba(14, 14, 16, 0.25) 0%, rgba(14, 14, 16, 0.65) 100%),
+    radial-gradient(ellipse 90% 80% at 20% 30%, var(--bg) 0%, rgba(14, 14, 16, 0.6) 40%, transparent 70%),
+    linear-gradient(to right, var(--bg) 0%, rgba(14, 14, 16, 0.55) 40%, rgba(14, 14, 16, 0.35) 100%),
+    linear-gradient(to bottom, rgba(14, 14, 16, 0.4) 0%, transparent 30%, transparent 70%, var(--bg) 100%);
+}
+
+/* Reduced motion: don't play (or download metadata for) the video — fall
+   back to the poster as a static background on the hero-bg container. */
+@media (prefers-reduced-motion: reduce) {
+  .tf-hero-bg video.tf-hero-video { display: none; }
+  .tf-hero-bg {
+    background: url('/img/hero-poster.webp') center/cover no-repeat !important;
+    animation: none !important;
+  }
+}

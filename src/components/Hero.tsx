@@ -3,7 +3,6 @@ import type { Content } from '../i18n/content';
 
 type Props = {
   content: Content;
-  bgUrl?: string;
 };
 
 function Stat({ idx, v, l }: { idx: number; v: string; l: string }) {
@@ -43,7 +42,7 @@ function HeroCTAs({ ctaPrimary, ctaSecondary }: { ctaPrimary: string; ctaSeconda
   );
 }
 
-export function Hero({ content, bgUrl = '/img/hf-welder.png' }: Props) {
+export function Hero({ content }: Props) {
   const c = content.hero;
   const scrollY = useScrollY();
   const enableParallax =
@@ -55,15 +54,25 @@ export function Hero({ content, bgUrl = '/img/hf-welder.png' }: Props) {
 
   return (
     <section id="top" className="tf-hero" data-variant="type" data-screen-label="01 Hero">
-      {bgUrl && (
-        <div
-          className="tf-hero-bg"
+      <div
+        className="tf-hero-bg"
+        aria-hidden="true"
+        style={{ transform: `translate3d(0, ${parallax}px, 0)` }}
+      >
+        <video
+          className="tf-hero-video"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          poster="/img/hero-poster.webp"
           aria-hidden="true"
-          style={{ transform: `translate3d(0, ${parallax}px, 0)` }}
         >
-          <img src={bgUrl} alt="" fetchPriority="high" />
-        </div>
-      )}
+          <source src="/video/hero-mobile.mp4" media="(max-width: 768px)" type="video/mp4" />
+          <source src="/video/hero-desktop.mp4" type="video/mp4" />
+        </video>
+      </div>
       <div className="tf-hero-meta">
         <span className="tf-mono">
           [ 01 — {content.chips.established} · {content.chips.argentina} ]
@@ -98,3 +107,4 @@ export function Hero({ content, bgUrl = '/img/hf-welder.png' }: Props) {
     </section>
   );
 }
+
