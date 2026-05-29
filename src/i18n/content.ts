@@ -143,7 +143,7 @@ export const CONTENT: Record<Lang, Content> = {
         img: '/img/t01-conveyors.jpg',
         desc: 'Sistemas de evacuación de viruta metálica para celdas de mecanizado, líneas transfer y centros CNC. Configurables en bisagra, raspador, magnéticos o combinados.',
         bullets: [
-          { name: 'Bisagra y raspador', img: '/img/conveyor-blue.avif', desc: 'Cadena articulada con paletas raspadoras. Ideal para virutas largas, mixtas y húmedas. Construcción robusta para operación continua 24/7.', kind: 'photo' },
+          { name: 'Bisagra y raspador', img: '/img/t01-hinge-scraper.jpg', desc: 'Cadena articulada con paletas raspadoras. Ideal para virutas largas, mixtas y húmedas. Construcción robusta para operación continua 24/7.', kind: 'photo' },
           { name: 'Magnéticos permanentes', img: '/img/gearbox-detail.avif', desc: 'Tambor con imanes permanentes para virutas ferrosas finas y polvo de rectificado. Sin consumo eléctrico para magnetización.', kind: 'video' },
           { name: 'Líneas centralizadas', img: '/img/welding-line.avif', desc: 'Sistemas multi-máquina que evacúan viruta de toda una nave hacia un punto único de descarga. Reduce manipulación manual.', kind: 'photo' },
           { name: 'Diseño a medida', img: '/img/control-cabinet.avif', desc: 'Geometría, ancho de banda y altura de descarga adaptados al layout de planta y a la máquina-herramienta de origen.', kind: 'photo' },
@@ -296,7 +296,7 @@ export const CONTENT: Record<Lang, Content> = {
         img: '/img/t01-conveyors.jpg',
         desc: 'Metal chip evacuation systems for machining cells, transfer lines and CNC centers. Configurable as hinge, scraper, magnetic or combined.',
         bullets: [
-          { name: 'Hinge & scraper', img: '/img/conveyor-blue.avif', desc: 'Articulated chain with scraper paddles. Ideal for long, mixed and wet chips. Heavy-duty build for 24/7 operation.', kind: 'photo' },
+          { name: 'Hinge & scraper', img: '/img/t01-hinge-scraper.jpg', desc: 'Articulated chain with scraper paddles. Ideal for long, mixed and wet chips. Heavy-duty build for 24/7 operation.', kind: 'photo' },
           { name: 'Permanent magnetic', img: '/img/gearbox-detail.avif', desc: 'Drum with permanent magnets for fine ferrous chips and grinding swarf. No electrical consumption for magnetization.', kind: 'video' },
           { name: 'Centralized lines', img: '/img/welding-line.avif', desc: 'Multi-machine systems that evacuate chips from a whole shop floor to a single discharge point. Reduces manual handling.', kind: 'photo' },
           { name: 'Custom design', img: '/img/control-cabinet.avif', desc: 'Geometry, belt width and discharge height tailored to plant layout and the source machine tool.', kind: 'photo' },
