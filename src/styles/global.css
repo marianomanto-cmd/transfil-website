@@ -406,7 +406,7 @@ button { font-family: inherit; }
 .tf-display {
   font-family: var(--font-display);
   font-weight: 500;
-  font-size: clamp(44px, 11vw, 180px);
+  font-size: clamp(40px, 9vw, 144px);
   line-height: 0.92;
   letter-spacing: -0.035em;
   margin: 0 0 clamp(32px, 4vw, 56px);
