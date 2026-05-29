@@ -1626,12 +1626,36 @@ button { font-family: inherit; }
 .tf-contact-addr { font-size: 14px; color: var(--fg-2); margin: 0; line-height: 1.5; }
 .tf-contact-coord { font-size: 11px; color: var(--fg-4); margin: 0; }
 .tf-contact-map {
+  position: relative;
   margin-top: 8px;
   aspect-ratio: 5 / 3;
   border: 1px solid var(--line);
   background: var(--bg-2);
-  color: var(--accent);
   overflow: hidden;
+}
+.tf-contact-map iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  /* Re-grade the embed to match the site's industrial-dark palette:
+     invert flips light → dark, hue-rotate restores hue, the rest
+     pulls saturation down and tames contrast. */
+  filter:
+    invert(0.92)
+    hue-rotate(180deg)
+    brightness(0.92)
+    contrast(0.85)
+    saturate(0.55);
+}
+/* Subtle accent tint over the map for cohesion with the rest of the
+   site's blue ambient lighting. */
+.tf-contact-map::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(58, 134, 255, 0.06), transparent 50%);
+  pointer-events: none;
 }
 
 /* ── Footer ──────────────────────────────────────────────────────── */
