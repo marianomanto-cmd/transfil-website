@@ -3049,102 +3049,47 @@ p { text-wrap: pretty; }
     linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
 }
 
-/* ── Industries — sober coverage diagram (no animations) ─────────── */
+/* ── Industries — coverage map (Google Maps embed, dark-themed) ──── */
 .tf-radar {
   position: relative;
   width: 100%;
   aspect-ratio: 100 / 115;
-  max-height: 460px;
-  max-width: 400px;
+  max-height: 520px;
+  max-width: 440px;
   margin: 0 auto 32px;
   border: 1px solid var(--line);
   background: var(--bg-2);
   overflow: hidden;
 }
-.tf-radar svg { display: block; width: 100%; height: 100%; }
-.tf-radar-grid path {
-  stroke: var(--line);
-  stroke-width: 0.2;
-  fill: none;
-  opacity: 0.6;
+.tf-radar-base {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  pointer-events: none;
+  /* Same recipe as the contact map — invert, hue-rotate to restore
+     real colours, then pull saturation/contrast down to integrate
+     with the site's industrial-dark palette. */
+  filter:
+    invert(0.92)
+    hue-rotate(180deg)
+    brightness(0.92)
+    contrast(0.85)
+    saturate(0.55);
 }
-.tf-radar-parallels line {
-  stroke: var(--line-strong);
-  stroke-width: 0.3;
-  opacity: 0.7;
+.tf-radar-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
 }
-.tf-radar-parallel-label {
-  fill: var(--fg-4);
-  font-family: var(--font-mono);
-  font-size: 1.8px;
-  letter-spacing: 0.3px;
-  text-transform: uppercase;
-}
-.tf-radar-land path {
-  fill: rgba(58, 134, 255, 0.05);
-  stroke: var(--line-strong);
-  stroke-width: 0.45;
-  stroke-linejoin: round;
-  stroke-linecap: round;
-}
-.tf-radar-isthmus {
-  fill: none;
-  stroke: var(--line-strong);
-  stroke-width: 0.45;
-  stroke-linecap: round;
-}
-.tf-radar-islands circle {
-  fill: rgba(58, 134, 255, 0.05);
-  stroke: var(--line-strong);
-  stroke-width: 0.3;
-}
-.tf-radar-links line {
-  stroke: var(--accent);
-  stroke-width: 0.25;
-  stroke-dasharray: 1.2 1.2;
-  opacity: 0.4;
-}
-.tf-radar-hq-ring {
-  fill: none;
-  stroke: var(--accent);
-  stroke-width: 0.4;
-  opacity: 0.55;
-  animation: tf-radar-hq-pulse 2.6s ease-out infinite;
-  transform-origin: center;
-  transform-box: fill-box;
-}
-@keyframes tf-radar-hq-pulse {
-  0% { r: 1.6; opacity: 0.7; }
-  100% { r: 5.5; opacity: 0; }
-}
-.tf-radar-label {
-  fill: var(--fg);
-  font-family: var(--font-mono);
-  font-size: 2.4px;
-  letter-spacing: 0.3px;
-  text-transform: uppercase;
-}
-.tf-radar-label.is-hq {
-  fill: var(--accent);
-  font-weight: 500;
-}
-.tf-radar-compass circle {
-  fill: var(--bg-2);
-  stroke: var(--line-strong);
-  stroke-width: 0.3;
-}
-.tf-radar-compass line {
-  stroke: var(--line-strong);
-  stroke-width: 0.25;
-}
-.tf-radar-compass polygon {
-  fill: var(--accent);
-}
-.tf-radar-compass text {
-  fill: var(--accent);
-  font-family: var(--font-mono);
-  font-size: 1.8px;
-  letter-spacing: 0.2px;
+/* Subtle accent ambient tint on top of the map */
+.tf-radar-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(58, 134, 255, 0.06), transparent 45%);
+  pointer-events: none;
 }
 .tf-radar-meta {
   position: absolute;
@@ -3153,21 +3098,70 @@ p { text-wrap: pretty; }
   display: flex;
   flex-direction: column;
   gap: 6px;
+  padding: 8px 10px;
+  background: rgba(14, 14, 16, 0.6);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid var(--line);
   font-family: var(--font-mono);
   font-size: 9.5px;
-  color: var(--fg-3);
+  color: var(--fg-2);
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  pointer-events: none;
 }
 .tf-radar-meta b { color: var(--accent); font-weight: 500; }
+.tf-radar-markers {
+  position: absolute;
+  inset: 0;
+}
+.tf-radar-marker {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--fg);
+  transform: translate(-50%, -50%);
+  box-shadow:
+    0 0 0 1.5px rgba(14, 14, 16, 0.85),
+    0 0 8px rgba(14, 14, 16, 0.6);
+}
+.tf-radar-marker.is-hq {
+  width: 14px;
+  height: 14px;
+  background: var(--accent);
+  box-shadow:
+    0 0 0 2px rgba(14, 14, 16, 0.9),
+    0 0 0 3px var(--accent),
+    0 0 18px rgba(58, 134, 255, 0.55);
+}
+.tf-radar-marker.is-hq::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1.5px solid var(--accent);
+  transform: translate(-50%, -50%);
+  animation: tf-radar-marker-pulse 2.4s ease-out infinite;
+}
+@keyframes tf-radar-marker-pulse {
+  0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.8; }
+  100% { transform: translate(-50%, -50%) scale(3); opacity: 0; }
+}
 .tf-radar-stamp {
   position: absolute;
-  bottom: 12px;
-  right: 16px;
+  bottom: 10px;
+  right: 12px;
+  padding: 4px 8px;
+  background: rgba(14, 14, 16, 0.6);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid var(--line);
   font-family: var(--font-mono);
   font-size: 9px;
-  color: var(--fg-4);
+  color: var(--fg-3);
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
