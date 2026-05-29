@@ -152,7 +152,7 @@ export const CONTENT: Record<Lang, Content> = {
       },
       {
         id: 'washing', code: 'T02', title: 'Lavado industrial', sub: 'Washing machinery',
-        img: '/img/washing-line.avif',
+        img: '/img/t02-washing.webp',
         desc: 'Lavadoras automáticas para piezas mecanizadas, fundición y forja. Desde celdas individuales hasta líneas continuas con secado y soplado.',
         bullets: [
           { name: 'Pasante y rotativas', img: '/img/washing-line.avif', desc: 'Cabinas de paso continuo con cinta o mesa rotativa para producción seriada. Ciclo configurable: lavado, enjuague, secado.', kind: 'video' },
@@ -305,7 +305,7 @@ export const CONTENT: Record<Lang, Content> = {
       },
       {
         id: 'washing', code: 'T02', title: 'Industrial washing', sub: 'Lavado',
-        img: '/img/washing-line.avif',
+        img: '/img/t02-washing.webp',
         desc: 'Automatic washers for machined parts, casting and forging. From single cells to continuous lines with drying and air-knife.',
         bullets: [
           { name: 'Pass-through & rotary', img: '/img/washing-line.avif', desc: 'Continuous pass-through cabins with belt or rotary table for serial production. Configurable cycle: wash, rinse, dry.', kind: 'video' },
