@@ -191,8 +191,8 @@ export const CONTENT: Record<Lang, Content> = {
       title: 'Diseñamos, fabricamos y acompañamos cada equipo.',
       lead: 'De la primera visita a tu planta al soporte continuo después de la puesta en marcha. Un solo equipo, un solo responsable.',
       steps: [
-        { n: '01', t: 'Estudio de proceso', d: 'Visitamos tu planta. Relevamos volumen de viruta, tipo de refrigerante, layout y condiciones de operación.' },
-        { n: '02', t: 'Ingeniería', d: 'Cálculo hidráulico, mecánico y eléctrico. Plano 3D para tu aprobación antes de cortar un solo metal.' },
+        { n: '01', t: 'Estudio de proceso', d: 'Relevamos su proceso productivo y su necesidad específica para diseñar una solución a medida.' },
+        { n: '02', t: 'Ingeniería', d: 'Diseño customizado estructural, mecánico, eléctrico, hidráulico y de seguridad.' },
         { n: '03', t: 'Fabricación', d: 'Construcción íntegra en nuestro taller de Córdoba. Materiales trazables y pruebas en seco antes del despacho.' },
         { n: '04', t: 'Puesta en marcha', d: 'Instalación en sitio, ajuste de parámetros y capacitación del personal de operación y mantenimiento.' },
         { n: '05', t: 'Soporte', d: 'Repuestos, asistencia técnica y mejoras continuas. Las máquinas Trans-Fil de los \'90 todavía operan.' },
@@ -345,8 +345,8 @@ export const CONTENT: Record<Lang, Content> = {
       title: 'We design, build and support every machine.',
       lead: 'From the first plant visit to continuous support after commissioning. One team, one point of accountability.',
       steps: [
-        { n: '01', t: 'Process study', d: 'We visit your plant. We assess chip volume, coolant type, layout and operating conditions.' },
-        { n: '02', t: 'Engineering', d: 'Hydraulic, mechanical and electrical calculations. 3D drawings for your approval before cutting any metal.' },
+        { n: '01', t: 'Process study', d: 'We assess your production process and specific needs to design a custom solution.' },
+        { n: '02', t: 'Engineering', d: 'Custom structural, mechanical, electrical, hydraulic and safety engineering.' },
         { n: '03', t: 'Manufacturing', d: 'Full build in our Córdoba workshop. Traceable materials and dry-run testing before dispatch.' },
         { n: '04', t: 'Commissioning', d: 'On-site installation, parameter tuning and training for operations and maintenance staff.' },
         { n: '05', t: 'Support', d: 'Spare parts, technical assistance and continuous improvements. Trans-Fil machines from the \'90s are still running.' },
