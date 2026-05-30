@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { cx } from '../lib/cx';
 import { useReveal } from '../lib/hooks';
 import { Media } from './Media';
@@ -8,38 +8,18 @@ export function TechSection({ content }: { content: Content }) {
   const c = content.capabilities;
   const items = content.tech;
   const [active, setActive] = useState(items[0].id);
-  const [hoverBullet, setHoverBullet] = useState<TechBullet | null>(null);
-  const bulletsRef = useRef<HTMLUListElement | null>(null);
-  const [cardTop, setCardTop] = useState(0);
+  const [activeBullet, setActiveBullet] = useState<TechBullet | null>(null);
   const [sectionRef, vis] = useReveal(0.1);
 
+  // Reset the selected bullet whenever the user switches the tech line.
   useEffect(() => {
-    if (!hoverBullet || !bulletsRef.current) return;
-    const techEl = bulletsRef.current.closest('.tf-tech') as HTMLElement | null;
-    if (!techEl) return;
-    const techRect = techEl.getBoundingClientRect();
-    const listRect = bulletsRef.current.getBoundingClientRect();
-    setCardTop(listRect.top - techRect.top);
-  }, [hoverBullet]);
-
-  useEffect(() => {
-    if (!hoverBullet) return;
-    const onDoc = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      if (
-        !target.closest('.tf-tech-bullet') &&
-        !target.closest('.tf-bullet-card') &&
-        !target.closest('.tf-bullet-backdrop')
-      ) {
-        setHoverBullet(null);
-      }
-    };
-    document.addEventListener('click', onDoc);
-    return () => document.removeEventListener('click', onDoc);
-  }, [hoverBullet]);
+    setActiveBullet(null);
+  }, [active]);
 
   const activeItem = items.find((i) => i.id === active) || items[0];
-  const close = () => setHoverBullet(null);
+  const displayImg = activeBullet?.img || activeItem.img;
+  const displayLabel = activeBullet?.name || activeItem.title;
+  const mediaKey = `${active}-${activeBullet?.name ?? 'overview'}`;
 
   return (
     <section
@@ -80,9 +60,9 @@ export function TechSection({ content }: { content: Content }) {
             );
           })}
         </div>
-        <div className="tf-tech-detail" key={activeItem.id}>
-          <div className="tf-tech-detail-media">
-            <Media kind="photo" src={activeItem.img} label={activeItem.title} ratio="4/3" />
+        <div className="tf-tech-detail">
+          <div className="tf-tech-detail-media" key={mediaKey}>
+            <Media kind="photo" src={displayImg} label={displayLabel} ratio="4/3" />
           </div>
           <div className="tf-tech-detail-body">
             <div className="tf-mono tf-tech-detail-code">
@@ -90,129 +70,43 @@ export function TechSection({ content }: { content: Content }) {
             </div>
             <h3 className="tf-h3">{activeItem.title}</h3>
             <p className="tf-tech-desc">{activeItem.desc}</p>
-            <ul
-              className="tf-tech-bullets"
-              ref={bulletsRef}
-              onMouseLeave={() => setHoverBullet(null)}
-            >
-              {activeItem.bullets.map((b, i) => {
-                const on = !!hoverBullet && hoverBullet.name === b.name;
+            <ul className="tf-tech-bullets" role="tablist" aria-label={activeItem.title}>
+              {activeItem.bullets.map((b) => {
+                const on = !!activeBullet && activeBullet.name === b.name;
                 return (
-                  <li
-                    key={i}
-                    className={cx('tf-tech-bullet', on && 'is-on')}
-                    role="button"
-                    tabIndex={0}
-                    onMouseEnter={() => setHoverBullet(b)}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setHoverBullet(on ? null : b);
-                    }}
-                  >
-                    <span className="tf-mono">→</span> {b.name}
+                  <li key={b.name}>
+                    <button
+                      type="button"
+                      role="tab"
+                      aria-selected={on}
+                      className={cx('tf-tech-bullet', on && 'is-on')}
+                      onClick={() => setActiveBullet(on ? null : b)}
+                    >
+                      <span className="tf-mono">→</span>
+                      <span>{b.name}</span>
+                    </button>
                   </li>
                 );
               })}
             </ul>
+            <div
+              className={cx('tf-bullet-detail', activeBullet && 'is-open')}
+              aria-hidden={!activeBullet}
+            >
+              <div className="tf-bullet-detail-inner">
+                {activeBullet && (
+                  <>
+                    <div className="tf-mono tf-bullet-detail-eyebrow">
+                      → {activeBullet.name}
+                    </div>
+                    <p className="tf-bullet-detail-caption">{activeBullet.desc}</p>
+                  </>
+                )}
+              </div>
+            </div>
           </div>
         </div>
-        <BulletCard bullet={hoverBullet} top={cardTop} onClose={close} />
       </div>
     </section>
-  );
-}
-
-function BulletCard({
-  bullet,
-  top,
-  onClose,
-}: {
-  bullet: TechBullet | null;
-  top: number;
-  onClose: () => void;
-}) {
-  const [last, setLast] = useState<TechBullet | null>(null);
-  const sheetRef = useRef<HTMLDivElement | null>(null);
-  const dragStart = useRef(0);
-  const isDragging = useRef(false);
-
-  useEffect(() => {
-    if (bullet) setLast(bullet);
-  }, [bullet]);
-
-  // Lock body scroll on mobile while the sheet is open.
-  useEffect(() => {
-    if (!bullet) return;
-    if (typeof window === 'undefined') return;
-    if (!window.matchMedia('(max-width: 1080px)').matches) return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = prev;
-    };
-  }, [bullet]);
-
-  // Swipe-down on the drag handle to dismiss (mobile only).
-  const onTouchStart = (e: React.TouchEvent) => {
-    dragStart.current = e.touches[0].clientY;
-    isDragging.current = true;
-    if (sheetRef.current) sheetRef.current.style.transition = 'none';
-  };
-  const onTouchMove = (e: React.TouchEvent) => {
-    if (!isDragging.current || !sheetRef.current) return;
-    const delta = e.touches[0].clientY - dragStart.current;
-    if (delta > 0) sheetRef.current.style.transform = `translateY(${delta}px)`;
-  };
-  const onTouchEnd = (e: React.TouchEvent) => {
-    if (!isDragging.current || !sheetRef.current) return;
-    isDragging.current = false;
-    const delta = e.changedTouches[0].clientY - dragStart.current;
-    sheetRef.current.style.transition = '';
-    sheetRef.current.style.transform = '';
-    if (delta > 100) onClose();
-  };
-
-  const b = bullet || last;
-  return (
-    <>
-      <div
-        className={cx('tf-bullet-backdrop', bullet && 'is-visible')}
-        onClick={onClose}
-        aria-hidden="true"
-      />
-      <aside
-        ref={sheetRef}
-        className={cx('tf-bullet-card', bullet && 'is-visible')}
-        style={{ ['--bullet-top' as never]: `${top}px` }}
-        aria-hidden={!bullet}
-      >
-        <div
-          className="tf-bullet-drag-handle"
-          onTouchStart={onTouchStart}
-          onTouchMove={onTouchMove}
-          onTouchEnd={onTouchEnd}
-          aria-hidden="true"
-        />
-        <button
-          type="button"
-          className="tf-bullet-close"
-          onClick={onClose}
-          aria-label="Cerrar"
-        >
-          ×
-        </button>
-        {b && (
-          <>
-            <div className="tf-bullet-card-media">
-              <Media kind={b.kind} src={b.img} label={b.name} ratio="4/3" />
-            </div>
-            <div className="tf-bullet-card-body">
-              <div className="tf-mono tf-bullet-card-eyebrow">→ {b.name}</div>
-              <p>{b.desc}</p>
-            </div>
-          </>
-        )}
-      </aside>
-    </>
   );
 }
