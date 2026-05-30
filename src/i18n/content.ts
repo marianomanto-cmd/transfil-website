@@ -156,7 +156,7 @@ export const CONTENT: Record<Lang, Content> = {
         desc: 'Lavadoras automáticas para piezas mecanizadas, fundición y forja. Desde celdas individuales hasta líneas continuas con secado y soplado.',
         bullets: [
           { name: 'Pasante y rotativas', img: '/img/t02-pass-through.webp', desc: 'Cabinas de paso continuo con cinta o mesa rotativa para producción seriada. Ciclo configurable: lavado, enjuague, secado.', kind: 'photo' },
-          { name: 'Spray y inmersión', img: '/img/hydraulic-station-2.avif', desc: 'Combinación de boquillas de alta presión y baño por inmersión para piezas con geometrías complejas y huecos ciegos.', kind: 'photo' },
+          { name: 'Lavadora de cabina individual', img: '/img/t02-cabin.webp', desc: 'Sistemas de lavado especiales para carga y descarga manual de uso múltiple.', kind: 'photo' },
           { name: 'Filtración integrada', img: '/img/t02-filtration.webp', desc: 'Filtros de banda, ciclones y skimmers de aceite que mantienen el baño limpio y prolongan la vida del fluido.', kind: 'photo' },
           { name: 'Control PLC', img: '/img/t02-plc.webp', desc: 'Tableros con HMI táctil. Software integrado a la línea de producción y sistema de seguridad adaptado para Industria 4.0.', kind: 'photo' },
         ],
@@ -309,7 +309,7 @@ export const CONTENT: Record<Lang, Content> = {
         desc: 'Automatic washers for machined parts, casting and forging. From single cells to continuous lines with drying and air-knife.',
         bullets: [
           { name: 'Pass-through & rotary', img: '/img/t02-pass-through.webp', desc: 'Continuous pass-through cabins with belt or rotary table for serial production. Configurable cycle: wash, rinse, dry.', kind: 'photo' },
-          { name: 'Spray & immersion', img: '/img/hydraulic-station-2.avif', desc: 'Combination of high-pressure nozzles and immersion bath for parts with complex geometries and blind holes.', kind: 'photo' },
+          { name: 'Single-cabin washer', img: '/img/t02-cabin.webp', desc: 'Special washing systems for multi-purpose manual loading and unloading.', kind: 'photo' },
           { name: 'Built-in filtration', img: '/img/t02-filtration.webp', desc: 'Belt filters, cyclones and oil skimmers that keep the bath clean and extend the working fluid\'s life.', kind: 'photo' },
           { name: 'PLC control', img: '/img/t02-plc.webp', desc: 'Cabinets with touch HMI. Software integrated into the production line and safety system tailored for Industry 4.0.', kind: 'photo' },
         ],
