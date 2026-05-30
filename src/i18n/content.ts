@@ -155,9 +155,9 @@ export const CONTENT: Record<Lang, Content> = {
         img: '/img/t02-washing.webp',
         desc: 'Lavadoras automáticas para piezas mecanizadas, fundición y forja. Desde celdas individuales hasta líneas continuas con secado y soplado.',
         bullets: [
-          { name: 'Pasante y rotativas', img: '/img/washing-line.avif', desc: 'Cabinas de paso continuo con cinta o mesa rotativa para producción seriada. Ciclo configurable: lavado, enjuague, secado.', kind: 'video' },
+          { name: 'Pasante y rotativas', img: '/img/t02-pass-through.webp', desc: 'Cabinas de paso continuo con cinta o mesa rotativa para producción seriada. Ciclo configurable: lavado, enjuague, secado.', kind: 'photo' },
           { name: 'Spray y inmersión', img: '/img/hydraulic-station-2.avif', desc: 'Combinación de boquillas de alta presión y baño por inmersión para piezas con geometrías complejas y huecos ciegos.', kind: 'photo' },
-          { name: 'Filtración integrada', img: '/img/hydraulic-station.avif', desc: 'Filtros de banda, ciclones y skimmers de aceite que mantienen el baño limpio y prolongan la vida del fluido.', kind: 'photo' },
+          { name: 'Filtración integrada', img: '/img/t02-filtration.webp', desc: 'Filtros de banda, ciclones y skimmers de aceite que mantienen el baño limpio y prolongan la vida del fluido.', kind: 'photo' },
           { name: 'Control PLC', img: '/img/control-cabinet.avif', desc: 'Tableros con HMI táctil, recetas por código de pieza y trazabilidad. Integrables a SCADA y MES de planta.', kind: 'photo' },
         ],
       },
@@ -308,9 +308,9 @@ export const CONTENT: Record<Lang, Content> = {
         img: '/img/t02-washing.webp',
         desc: 'Automatic washers for machined parts, casting and forging. From single cells to continuous lines with drying and air-knife.',
         bullets: [
-          { name: 'Pass-through & rotary', img: '/img/washing-line.avif', desc: 'Continuous pass-through cabins with belt or rotary table for serial production. Configurable cycle: wash, rinse, dry.', kind: 'video' },
+          { name: 'Pass-through & rotary', img: '/img/t02-pass-through.webp', desc: 'Continuous pass-through cabins with belt or rotary table for serial production. Configurable cycle: wash, rinse, dry.', kind: 'photo' },
           { name: 'Spray & immersion', img: '/img/hydraulic-station-2.avif', desc: 'Combination of high-pressure nozzles and immersion bath for parts with complex geometries and blind holes.', kind: 'photo' },
-          { name: 'Built-in filtration', img: '/img/hydraulic-station.avif', desc: 'Belt filters, cyclones and oil skimmers that keep the bath clean and extend the working fluid\'s life.', kind: 'photo' },
+          { name: 'Built-in filtration', img: '/img/t02-filtration.webp', desc: 'Belt filters, cyclones and oil skimmers that keep the bath clean and extend the working fluid\'s life.', kind: 'photo' },
           { name: 'PLC control', img: '/img/control-cabinet.avif', desc: 'Cabinets with touch HMI, recipes by part code and traceability. Integrable into plant SCADA and MES.', kind: 'photo' },
         ],
       },
