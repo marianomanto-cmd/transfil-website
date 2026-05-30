@@ -46,6 +46,7 @@ html, body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  overflow-x: clip;
 }
 
 body {
@@ -127,7 +128,7 @@ button { font-family: inherit; }
 .tf-section.is-dark::before {
   content: "";
   position: absolute;
-  inset: 0 calc(var(--pad-x) * -1);
+  inset: 0;
   background: var(--bg-2);
   z-index: -1;
 }
