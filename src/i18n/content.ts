@@ -66,8 +66,8 @@ export type Content = {
     cta: string;
   };
   process: {
-    eyebrow: string; title: string;
-    steps: { n: string; t: string; d: string; img: string; pos: { x: number; y: number } }[];
+    eyebrow: string; title: string; lead: string;
+    steps: { n: string; t: string; d: string }[];
   };
   services: { eyebrow: string; title: string; sub: string; items: ServiceItem[] };
   industries: {
@@ -99,15 +99,6 @@ export const TF_CLIENTS = {
   auto: ['RENAULT', 'VOLKSWAGEN', 'IVECO', 'FIAT', 'TOYOTA', 'CHRYSLER', 'CORVEN', 'BREMBO', 'SACHS', 'MWM', 'PERTRAK', 'WEG', 'WEATHERFORD', 'DANA', 'ALLADIO'],
   tools: ['MEPROMAES', 'COMAU', 'EMAG', 'MORI SEIKI', 'OKUMA', 'MAZAK', 'DOOSAN', 'HAAS'],
 } as const;
-
-const COMMON_PROCESS_POS = [
-  { x: 18, y: 28 }, { x: 42, y: 22 }, { x: 58, y: 52 }, { x: 78, y: 38 }, { x: 35, y: 70 },
-] as const;
-
-const COMMON_PROCESS_IMG = [
-  '/img/hf-welder.png', '/img/control-cabinet.avif', '/img/welding-line.avif',
-  '/img/conveyor-blue.avif', '/img/gearbox-detail.avif',
-] as const;
 
 export const CONTENT: Record<Lang, Content> = {
   es: {
@@ -196,14 +187,15 @@ export const CONTENT: Record<Lang, Content> = {
       cta: 'Ver catálogo',
     },
     process: {
-      eyebrow: '[ 03 — Cómo trabajamos ]',
-      title: 'De la planta a la planta.',
+      eyebrow: 'PROCESO',
+      title: 'Diseñamos, fabricamos y acompañamos cada equipo.',
+      lead: 'De la primera visita a tu planta al soporte continuo después de la puesta en marcha. Un solo equipo, un solo responsable.',
       steps: [
-        { n: '01', t: 'Estudio de proceso', d: 'Visita a planta y relevamiento del flujo.', img: COMMON_PROCESS_IMG[0], pos: COMMON_PROCESS_POS[0] },
-        { n: '02', t: 'Ingeniería', d: 'Diseño mecánico, eléctrico y simulación.', img: COMMON_PROCESS_IMG[1], pos: COMMON_PROCESS_POS[1] },
-        { n: '03', t: 'Fabricación', d: 'Construcción en taller propio en Córdoba.', img: COMMON_PROCESS_IMG[2], pos: COMMON_PROCESS_POS[2] },
-        { n: '04', t: 'Puesta en marcha', d: 'Instalación, integración y entrenamiento.', img: COMMON_PROCESS_IMG[3], pos: COMMON_PROCESS_POS[3] },
-        { n: '05', t: 'Soporte', d: 'Mantenimiento y retrofitting durante toda su vida útil.', img: COMMON_PROCESS_IMG[4], pos: COMMON_PROCESS_POS[4] },
+        { n: '01', t: 'Estudio de proceso', d: 'Visitamos tu planta. Relevamos volumen de viruta, tipo de refrigerante, layout y condiciones de operación.' },
+        { n: '02', t: 'Ingeniería', d: 'Cálculo hidráulico, mecánico y eléctrico. Plano 3D para tu aprobación antes de cortar un solo metal.' },
+        { n: '03', t: 'Fabricación', d: 'Construcción íntegra en nuestro taller de Córdoba. Materiales trazables y pruebas en seco antes del despacho.' },
+        { n: '04', t: 'Puesta en marcha', d: 'Instalación en sitio, ajuste de parámetros y capacitación del personal de operación y mantenimiento.' },
+        { n: '05', t: 'Soporte', d: 'Repuestos, asistencia técnica y mejoras continuas. Las máquinas Trans-Fil de los \'90 todavía operan.' },
       ],
     },
     services: {
@@ -349,14 +341,15 @@ export const CONTENT: Record<Lang, Content> = {
       cta: 'View catalog',
     },
     process: {
-      eyebrow: '[ 03 — How we work ]',
-      title: 'Plant floor to plant floor.',
+      eyebrow: 'PROCESS',
+      title: 'We design, build and support every machine.',
+      lead: 'From the first plant visit to continuous support after commissioning. One team, one point of accountability.',
       steps: [
-        { n: '01', t: 'Process study', d: 'Plant visit and flow assessment.', img: COMMON_PROCESS_IMG[0], pos: COMMON_PROCESS_POS[0] },
-        { n: '02', t: 'Engineering', d: 'Mechanical, electrical design and simulation.', img: COMMON_PROCESS_IMG[1], pos: COMMON_PROCESS_POS[1] },
-        { n: '03', t: 'Manufacturing', d: 'Built in our own Córdoba workshop.', img: COMMON_PROCESS_IMG[2], pos: COMMON_PROCESS_POS[2] },
-        { n: '04', t: 'Commissioning', d: 'Installation, integration and training.', img: COMMON_PROCESS_IMG[3], pos: COMMON_PROCESS_POS[3] },
-        { n: '05', t: 'Support', d: 'Maintenance and retrofit throughout its working life.', img: COMMON_PROCESS_IMG[4], pos: COMMON_PROCESS_POS[4] },
+        { n: '01', t: 'Process study', d: 'We visit your plant. We assess chip volume, coolant type, layout and operating conditions.' },
+        { n: '02', t: 'Engineering', d: 'Hydraulic, mechanical and electrical calculations. 3D drawings for your approval before cutting any metal.' },
+        { n: '03', t: 'Manufacturing', d: 'Full build in our Córdoba workshop. Traceable materials and dry-run testing before dispatch.' },
+        { n: '04', t: 'Commissioning', d: 'On-site installation, parameter tuning and training for operations and maintenance staff.' },
+        { n: '05', t: 'Support', d: 'Spare parts, technical assistance and continuous improvements. Trans-Fil machines from the \'90s are still running.' },
       ],
     },
     services: {

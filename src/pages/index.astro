@@ -5,7 +5,7 @@ import { Header } from '../components/Header';
 import { Hero } from '../components/Hero';
 import { TechSection } from '../components/TechSection';
 import { CatalogsSection } from '../components/CatalogsSection';
-import { ProcessSection } from '../components/ProcessSection';
+import ProcessSection from '../components/ProcessSection.astro';
 import ServicesSection from '../components/ServicesSection.astro';
 import { IndustriesSection } from '../components/IndustriesSection';
 import HistorySection from '../components/HistorySection.astro';
@@ -22,7 +22,7 @@ const content = CONTENT.es;
     <Hero content={content} client:load />
     <TechSection content={content} client:visible />
     <CatalogsSection content={content} client:visible />
-    <ProcessSection content={content} client:visible />
+    <ProcessSection content={content} />
     <ServicesSection content={content} />
     <IndustriesSection content={content} client:visible />
     <HistorySection content={content} />
