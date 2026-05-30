@@ -8,22 +8,11 @@ export function TechSection({ content }: { content: Content }) {
   const c = content.capabilities;
   const items = content.tech;
   const [active, setActive] = useState(items[0].id);
-  const [hoverBullet, setHoverBullet] = useState<TechBullet | null>(null);
-  const bulletsRef = useRef<HTMLUListElement | null>(null);
-  const [cardTop, setCardTop] = useState(0);
+  const [activeBullet, setActiveBullet] = useState<TechBullet | null>(null);
   const [sectionRef, vis] = useReveal(0.1);
 
   useEffect(() => {
-    if (!hoverBullet || !bulletsRef.current) return;
-    const techEl = bulletsRef.current.closest('.tf-tech') as HTMLElement | null;
-    if (!techEl) return;
-    const techRect = techEl.getBoundingClientRect();
-    const listRect = bulletsRef.current.getBoundingClientRect();
-    setCardTop(listRect.top - techRect.top);
-  }, [hoverBullet]);
-
-  useEffect(() => {
-    if (!hoverBullet) return;
+    if (!activeBullet) return;
     const onDoc = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       if (
@@ -31,15 +20,15 @@ export function TechSection({ content }: { content: Content }) {
         !target.closest('.tf-bullet-card') &&
         !target.closest('.tf-bullet-backdrop')
       ) {
-        setHoverBullet(null);
+        setActiveBullet(null);
       }
     };
     document.addEventListener('click', onDoc);
     return () => document.removeEventListener('click', onDoc);
-  }, [hoverBullet]);
+  }, [activeBullet]);
 
   const activeItem = items.find((i) => i.id === active) || items[0];
-  const close = () => setHoverBullet(null);
+  const close = () => setActiveBullet(null);
 
   return (
     <section
@@ -90,23 +79,18 @@ export function TechSection({ content }: { content: Content }) {
             </div>
             <h3 className="tf-h3">{activeItem.title}</h3>
             <p className="tf-tech-desc">{activeItem.desc}</p>
-            <ul
-              className="tf-tech-bullets"
-              ref={bulletsRef}
-              onMouseLeave={() => setHoverBullet(null)}
-            >
+            <ul className="tf-tech-bullets">
               {activeItem.bullets.map((b, i) => {
-                const on = !!hoverBullet && hoverBullet.name === b.name;
+                const on = !!activeBullet && activeBullet.name === b.name;
                 return (
                   <li
                     key={i}
                     className={cx('tf-tech-bullet', on && 'is-on')}
                     role="button"
                     tabIndex={0}
-                    onMouseEnter={() => setHoverBullet(b)}
                     onClick={(e) => {
                       e.stopPropagation();
-                      setHoverBullet(on ? null : b);
+                      setActiveBullet(on ? null : b);
                     }}
                   >
                     <span className="tf-mono">→</span> {b.name}
@@ -116,19 +100,17 @@ export function TechSection({ content }: { content: Content }) {
             </ul>
           </div>
         </div>
-        <BulletCard bullet={hoverBullet} top={cardTop} onClose={close} />
+        <BulletSheet bullet={activeBullet} onClose={close} />
       </div>
     </section>
   );
 }
 
-function BulletCard({
+function BulletSheet({
   bullet,
-  top,
   onClose,
 }: {
   bullet: TechBullet | null;
-  top: number;
   onClose: () => void;
 }) {
   const [last, setLast] = useState<TechBullet | null>(null);
@@ -140,19 +122,23 @@ function BulletCard({
     if (bullet) setLast(bullet);
   }, [bullet]);
 
-  // Lock body scroll on mobile while the sheet is open.
+  // Esc to close (all viewports) + body scroll lock while the sheet is open.
   useEffect(() => {
     if (!bullet) return;
-    if (typeof window === 'undefined') return;
-    if (!window.matchMedia('(max-width: 1080px)').matches) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', onKey);
     const prev = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     return () => {
+      document.removeEventListener('keydown', onKey);
       document.body.style.overflow = prev;
     };
-  }, [bullet]);
+  }, [bullet, onClose]);
 
-  // Swipe-down on the drag handle to dismiss (mobile only).
+  // Swipe-down on the drag handle to dismiss (mobile only, but harmless
+  // on desktop since the drag handle is display:none there).
   const onTouchStart = (e: React.TouchEvent) => {
     dragStart.current = e.touches[0].clientY;
     isDragging.current = true;
@@ -183,7 +169,8 @@ function BulletCard({
       <aside
         ref={sheetRef}
         className={cx('tf-bullet-card', bullet && 'is-visible')}
-        style={{ ['--bullet-top' as never]: `${top}px` }}
+        role="dialog"
+        aria-modal="true"
         aria-hidden={!bullet}
       >
         <div
