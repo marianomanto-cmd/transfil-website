@@ -780,99 +780,33 @@ button { font-family: inherit; }
   color: var(--accent);
 }
 
-/* Bullet card → bottom sheet on all viewports. Mobile gets full-width
-   + drag-to-dismiss handle; desktop gets a centred sheet capped at
-   ~900px so it reads as a sheet, not a full-bleed modal. */
+/* Floating bullet card — appears top-left of tech section on bullet hover */
 .tf-tech { position: relative; }
-.tf-bullet-backdrop {
-  display: block;
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.7);
-  -webkit-backdrop-filter: blur(6px);
-  backdrop-filter: blur(6px);
-  z-index: 200;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-}
-.tf-bullet-backdrop.is-visible {
-  opacity: 1;
-  pointer-events: auto;
-}
 .tf-bullet-card {
-  position: fixed;
+  position: absolute;
+  top: var(--bullet-top, 0);
   left: 0;
-  right: 0;
-  bottom: 0;
-  margin: 0 auto;
-  width: 100%;
-  max-width: 900px;
-  max-height: 80vh;
-  padding: 0;
-  border: 1px solid var(--line-strong);
-  border-bottom: 0;
-  border-radius: 0;
+  width: clamp(400px, 44%, 560px);
   background: var(--bg-2, #18181b);
+  border: 1px solid var(--line-strong);
+  border-radius: 0;
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 0;
-  opacity: 1;
-  transform: translateY(100%);
+  gap: 16px;
+  opacity: 0;
+  transform: translateY(-100%) translateY(-14px) translateY(8px);
   pointer-events: none;
-  transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
-  z-index: 201;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  box-shadow: 0 -24px 64px -24px rgba(0, 0, 0, 0.8);
+  transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.2, 0.7, 0.2, 1);
+  z-index: 5;
+  box-shadow: 0 24px 48px -16px rgba(0, 0, 0, 0.6);
 }
 .tf-bullet-card.is-visible {
-  transform: translateY(0);
-  pointer-events: auto;
+  opacity: 1;
+  transform: translateY(-100%) translateY(-14px);
 }
-
-/* Drag handle: mobile-only (no swipe on desktop pointers) */
-.tf-bullet-drag-handle { display: none; }
-
-/* Close button: always visible, top-right of the sheet */
-.tf-bullet-close {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 40px;
-  height: 40px;
-  border: 0;
-  background: transparent;
-  color: var(--fg-2);
-  font-family: var(--font-display);
-  font-size: 28px;
-  font-weight: 300;
-  line-height: 1;
-  cursor: pointer;
-  padding: 0;
-  z-index: 1;
-  transition: color 0.2s;
-}
-.tf-bullet-close:hover,
-.tf-bullet-close:focus-visible { color: var(--accent); }
-
-/* Content layout inside the sheet (same on all viewports) */
-.tf-bullet-card-media,
-.tf-bullet-card-body {
-  padding-left: 24px;
-  padding-right: 24px;
-}
-.tf-bullet-card-media { width: 100%; padding-top: 28px; }
-.tf-bullet-card-body {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding-top: 16px;
-  padding-bottom: max(28px, env(safe-area-inset-bottom));
-}
+.tf-bullet-card-media { width: 100%; }
+.tf-bullet-card-body { display: flex; flex-direction: column; gap: 10px; }
 .tf-bullet-card-eyebrow {
   color: var(--accent);
   font-size: 12px;
@@ -885,9 +819,56 @@ button { font-family: inherit; }
   text-wrap: pretty;
 }
 
+/* Backdrop + drag handle + close button: hidden on desktop, shown on mobile */
+.tf-bullet-backdrop,
+.tf-bullet-drag-handle,
+.tf-bullet-close { display: none; }
+
 @media (max-width: 1080px) {
-  .tf-bullet-card { max-width: none; max-height: 85vh; }
-  /* Show drag handle on touch viewports */
+  /* Backdrop covering the rest of the screen */
+  .tf-bullet-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+    z-index: 200;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  .tf-bullet-backdrop.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Bullet card → bottom sheet */
+  .tf-bullet-card {
+    position: fixed;
+    inset: auto 0 0 0;
+    top: auto;
+    width: auto;
+    max-width: none;
+    max-height: 85vh;
+    padding: 0;
+    border: 1px solid var(--line-strong);
+    border-bottom: 0;
+    background: var(--bg-2);
+    opacity: 1;
+    transform: translateY(100%);
+    transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+    z-index: 201;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    box-shadow: 0 -24px 64px -24px rgba(0, 0, 0, 0.8);
+    gap: 0;
+  }
+  .tf-bullet-card.is-visible {
+    transform: translateY(0);
+  }
+
+  /* Drag handle bar at the top of the sheet */
   .tf-bullet-drag-handle {
     display: block;
     flex-shrink: 0;
@@ -895,15 +876,49 @@ button { font-family: inherit; }
     height: 4px;
     background: var(--line-strong);
     border-radius: 2px;
-    margin: 12px auto 4px;
+    margin: 12px auto 14px;
     cursor: grab;
     touch-action: none;
   }
-  /* Pull the media padding back since the handle already creates the
-     top breathing room */
-  .tf-bullet-card-media { padding-top: 14px; }
+
+  /* Close button top-right */
+  .tf-bullet-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 40px;
+    height: 40px;
+    border: 0;
+    background: transparent;
+    color: var(--fg-2);
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 300;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1;
+    transition: color 0.2s;
+  }
+  .tf-bullet-close:hover,
+  .tf-bullet-close:focus-visible { color: var(--accent); }
+
+  /* Content layout inside the sheet */
   .tf-bullet-card-media,
-  .tf-bullet-card-body { padding-left: 20px; padding-right: 20px; }
+  .tf-bullet-card-body {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  .tf-bullet-card-body {
+    padding-top: 16px;
+    padding-bottom: max(28px, env(safe-area-inset-bottom));
+    gap: 12px;
+  }
+  .tf-bullet-card-body p { font-size: 15px; line-height: 1.6; }
+  .tf-bullet-card-eyebrow { font-size: 12px; }
 }
 
 @keyframes tf-fade-in {
