@@ -805,21 +805,6 @@ button { font-family: inherit; }
   opacity: 1;
   transform: translateY(-100%) translateY(-14px);
 }
-/* Thin accent connector line from the bottom of the card down to the
-   bullets list. Sits in the 14px gap created by the translate above. */
-.tf-bullet-card::after {
-  content: "";
-  position: absolute;
-  left: 28px;
-  top: 100%;
-  width: 1px;
-  height: 14px;
-  background: var(--accent);
-  opacity: 0;
-  transition: opacity 0.2s ease 0.1s;
-}
-.tf-bullet-card.is-visible::after { opacity: 1; }
-
 .tf-bullet-card-media { width: 100%; }
 .tf-bullet-card-body { display: flex; flex-direction: column; gap: 10px; }
 .tf-bullet-card-eyebrow {
@@ -882,8 +867,6 @@ button { font-family: inherit; }
   .tf-bullet-card.is-visible {
     transform: translateY(0);
   }
-  /* Hide the desktop accent connector */
-  .tf-bullet-card::after { display: none; }
 
   /* Drag handle bar at the top of the sheet */
   .tf-bullet-drag-handle {
