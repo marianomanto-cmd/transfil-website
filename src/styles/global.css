@@ -485,7 +485,6 @@ button { font-family: inherit; }
 
 
 /* Variant C: video */
-.tf-hero-video { flex: 1; display: flex; flex-direction: column; gap: 32px; }
 
 
 
@@ -1052,6 +1051,19 @@ button { font-family: inherit; }
 .tf-services.is-rows .tf-service[data-has-bg]::before { display: none; }
 .tf-services.is-rows .tf-service-title { font-size: clamp(28px, 2.2vw, 36px); }
 .tf-services.is-rows .tf-service-desc { font-size: 16px; max-width: 48ch; }
+
+/* Mobile: row becomes image-on-top + text-below stack */
+@media (max-width: 720px) {
+  .tf-services.is-rows .tf-service {
+    grid-template-columns: 1fr;
+    grid-template-rows: 200px 1fr;
+    min-height: 0;
+  }
+  .tf-services.is-rows .tf-service[data-row-flip] { direction: ltr; }
+  .tf-services.is-rows .tf-service-row-img { min-height: 200px; }
+  .tf-services.is-rows .tf-service-content { padding: clamp(20px, 5vw, 32px); }
+  .tf-services.is-rows .tf-service-title { font-size: 22px; }
+}
 
 /* Clean variant: no images at all */
 .tf-services.is-clean .tf-service-bg,
@@ -1679,21 +1691,23 @@ button { font-family: inherit; }
 @media (max-width: 640px) {
   .tf-display-mid{ padding-left: 0; }
   .tf-form-grid { grid-template-columns: 1fr; }
-  
-  
   .tf-services { grid-template-columns: 1fr; }
-  
-  
-  
-  
-  
-  .tf-tech-bullets { grid-template-columns: 1fr; }
   .tf-footer-grid { grid-template-columns: 1fr; }
   .tf-hero-stats { grid-template-columns: 1fr 1fr; }
-  
   .tf-tech-sub { display: none; }
-  /* On phones, bullets need a roomy tap target and full width */
-  .tf-tech-bullet { padding: 8px 0; min-height: 44px; display: flex; align-items: center; gap: 8px; }
+  /* Bullets stack as full-width rows with proper inner padding so text
+     doesn't touch the border, plus a 44px tap target. */
+  .tf-tech-bullets { flex-direction: column; align-items: stretch; gap: 8px; }
+  .tf-tech-bullet { padding: 12px 14px; min-height: 44px; width: 100%; justify-content: flex-start; }
+  /* Phones drop catalog grid to 1-col so cards aren't squished */
+  .tf-catalogs { grid-template-columns: 1fr; }
+  /* Coverage list: 2-col stays more compact than 12 rows in 1-col */
+  .tf-coverage-list { grid-template-columns: 1fr 1fr; column-gap: 16px; }
+  /* History timeline: tighter year column to give room to the card text */
+  .tf-timeline::before { left: 60px; }
+  .tf-tl-item { grid-template-columns: 60px 20px 1fr; gap: 12px; }
+  /* Industry tabs: snugger so all 3 fit a row */
+  .tf-tab { padding: 12px 14px; font-size: 13px; gap: 8px; }
 }
 
 /* Extra-small phones: stats stack to one big column instead of cramped 2 */
@@ -3138,9 +3152,6 @@ input[type="number"] {
     margin: 0 auto;
   }
 }
-@media (max-width: 640px) {
-  .tf-coverage-list { grid-template-columns: 1fr; }
-}
 
 /* ── Fix: prevent grid items + media from forcing tracks wider than parent.
    CSS Grid items default to min-width: auto (== min-content). For items
@@ -3258,8 +3269,8 @@ button.tf-catalog-card {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  height: 38px;
-  padding: 0 12px;
+  height: 44px;
+  padding: 0 14px;
   border: 1px solid var(--line-strong);
   background: transparent;
   color: var(--fg);
@@ -3278,7 +3289,7 @@ button.tf-catalog-card {
   background: color-mix(in oklab, var(--cat-c) 8%, transparent);
 }
 .tf-catalog-viewer-close {
-  width: 38px;
+  width: 44px;
   padding: 0;
   color: var(--fg-2);
 }
@@ -3308,6 +3319,6 @@ button.tf-catalog-card {
   .tf-catalog-viewer-head { padding: 12px; }
   .tf-catalog-viewer-meta { display: none; }
   .tf-catalog-viewer-btn-text { display: none; }
-  .tf-catalog-viewer-btn { width: 38px; padding: 0; }
+  .tf-catalog-viewer-btn { width: 44px; padding: 0; }
   .tf-catalog-viewer-title { font-size: 14px; }
 }
