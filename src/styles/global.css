@@ -3689,3 +3689,24 @@ input[type="number"] {
 @media (max-width: 640px) {
   .tf-coverage-list { grid-template-columns: 1fr; }
 }
+
+/* ── Fix: prevent grid items + media from forcing tracks wider than parent.
+   CSS Grid items default to min-width: auto (== min-content). For items
+   containing <img>, that min-content equals the image's natural size,
+   which can be 2000px+ even when the IMG has width:100%. Setting
+   min-width: 0 lets the column shrink to its fr unit. Combined with
+   max-width: 100% on the media wrappers, this caps everything at the
+   available column width. */
+.tf-tech,
+.tf-tech-list,
+.tf-tech-detail,
+.tf-tech-detail-media,
+.tf-tech-detail-body,
+.tf-tech-bullets > * { min-width: 0; }
+.tf-tech-detail-media,
+.tf-tech-detail-body,
+.tf-tech-detail-media .tf-media { max-width: 100%; }
+/* Bullet card: clamp(400…560) was forcing 400px min even on small
+   viewports, contributing to the same overflow. Cap at the containing
+   block so the card can never escape it. */
+.tf-bullet-card { max-width: 100%; }
