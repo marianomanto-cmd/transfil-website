@@ -144,7 +144,7 @@ export const CONTENT: Record<Lang, Content> = {
         img: '/img/t01-conveyors.webp',
         desc: 'Sistemas de evacuación de viruta metálica, piezas y residuos para líneas de producción, celdas de mecanizado, líneas transfer y centros CNC. Configurables en bisagra, raspador, magnéticos, cintas, cadenas plásticas o combinados.',
         bullets: [
-          { name: 'Bisagra y raspador', img: '/img/t01-hinge-scraper.webp', desc: 'Cadena articulada con paletas raspadoras. Ideal para virutas largas, mixtas y húmedas. Construcción robusta para operación continua 24/7.', kind: 'photo' },
+          { name: 'Transporte de viruta', img: '/img/t01-chip-transport.webp', desc: 'Sistemas de transporte para todo tipo de viruta y procesos de mecanizado individuales y de gran porte.', kind: 'photo' },
           { name: 'Líneas de secado continuo', img: '/img/t01-drying.webp', desc: 'Nuestras líneas de secado continuo utilizan cintas de transporte especiales con eslabones microperforados para separar partes sólidas y líquidas durante el secado, garantizando la reducción de humedad requerida por procesos como tratamiento de residuos, piezas, etc.', kind: 'photo' },
           { name: 'Líneas centralizadas', img: '/img/t01-centralized-lines.jpg', desc: 'Sistemas multi-máquina que evacúan viruta de toda una nave hacia un punto único de descarga. Reduce manipulación manual.', kind: 'photo' },
           { name: 'Diseño a medida', img: '/img/t01-custom.webp', desc: 'Geometría, ancho, altura, velocidades y otras características diseñadas y adaptadas a cada proceso y layout.', kind: 'photo' },
@@ -297,7 +297,7 @@ export const CONTENT: Record<Lang, Content> = {
         img: '/img/t01-conveyors.webp',
         desc: 'Evacuation systems for metal chips, parts and waste from production lines, machining cells, transfer lines and CNC centers. Configurable as hinge, scraper, magnetic, belt, plastic chain or combined.',
         bullets: [
-          { name: 'Hinge & scraper', img: '/img/t01-hinge-scraper.webp', desc: 'Articulated chain with scraper paddles. Ideal for long, mixed and wet chips. Heavy-duty build for 24/7 operation.', kind: 'photo' },
+          { name: 'Chip transport', img: '/img/t01-chip-transport.webp', desc: 'Transport systems for all types of chips and machining processes, both individual and large-scale.', kind: 'photo' },
           { name: 'Continuous drying lines', img: '/img/t01-drying.webp', desc: 'Our continuous drying lines use special conveyor belts with micro-perforated links to separate solid and liquid parts during drying, guaranteeing the moisture reduction required by processes such as waste and parts treatment.', kind: 'photo' },
           { name: 'Centralized lines', img: '/img/t01-centralized-lines.jpg', desc: 'Multi-machine systems that evacuate chips from a whole shop floor to a single discharge point. Reduces manual handling.', kind: 'photo' },
           { name: 'Custom design', img: '/img/t01-custom.webp', desc: 'Geometry, width, height, speeds and other features designed and adapted to each process and layout.', kind: 'photo' },
