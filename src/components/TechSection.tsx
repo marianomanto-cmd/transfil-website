@@ -35,7 +35,7 @@ export function TechSection({ content }: { content: Content }) {
       </header>
 
       <div className="tf-tech">
-        <div className="tf-tech-list" role="tablist">
+        <nav className="tf-tech-tabs" role="tablist" aria-label={c.title}>
           {items.map((it) => {
             const on = it.id === active;
             return (
@@ -43,24 +43,23 @@ export function TechSection({ content }: { content: Content }) {
                 key={it.id}
                 role="tab"
                 aria-selected={on}
-                data-on={on}
-                className="tf-tech-row"
+                aria-controls={`tech-panel-${it.id}`}
+                className={cx('tf-tech-tab', on && 'is-on')}
                 onClick={() => setActive(it.id)}
-                onMouseEnter={() => setActive(it.id)}
               >
-                <span className="tf-mono tf-tech-code">{it.code}</span>
-                <span className="tf-tech-title">{it.title}</span>
-                <span className="tf-tech-sub tf-mono">{it.sub}</span>
-                <span className="tf-tech-arrow" aria-hidden="true">
-                  <svg viewBox="0 0 16 16" width="14" height="14">
-                    <path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.4" />
-                  </svg>
-                </span>
+                <span className="tf-mono tf-tech-tab-code">{it.code}</span>
+                <span className="tf-tech-tab-title">{it.title}</span>
               </button>
             );
           })}
-        </div>
-        <div className="tf-tech-detail">
+        </nav>
+
+        <div
+          id={`tech-panel-${activeItem.id}`}
+          role="tabpanel"
+          aria-labelledby={`tech-tab-${activeItem.id}`}
+          className="tf-tech-content"
+        >
           <div className="tf-tech-detail-media" key={mediaKey}>
             <Media kind="photo" src={displayImg} label={displayLabel} ratio="4/3" />
           </div>
