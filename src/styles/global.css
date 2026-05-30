@@ -785,39 +785,61 @@ button { font-family: inherit; }
   position: absolute;
   top: 0;
   left: 0;
-  width: clamp(280px, 32%, 380px);
-  transform: translateY(-100%);
-  margin-top: -16px;
+  width: clamp(400px, 44%, 560px);
   background: var(--bg-2, #18181b);
-  border: 1px solid var(--line);
-  border-radius: 6px;
-  padding: 16px;
+  border: 1px solid var(--line-strong);
+  border-radius: 0;
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
   opacity: 0;
-  transform: translateY(8px);
+  transform: translateY(-100%) translateY(-14px) translateY(8px);
   pointer-events: none;
   transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.2, 0.7, 0.2, 1);
   z-index: 5;
-  box-shadow: 0 24px 48px -16px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 24px 48px -16px rgba(0, 0, 0, 0.6);
 }
 .tf-bullet-card.is-visible {
   opacity: 1;
-  transform: translateY(calc(-100% + 8px));
+  transform: translateY(-100%) translateY(-14px);
 }
+/* Thin accent connector line from the bottom of the card down to the
+   bullets list. Sits in the 14px gap created by the translate above. */
+.tf-bullet-card::after {
+  content: "";
+  position: absolute;
+  left: 28px;
+  top: 100%;
+  width: 1px;
+  height: 14px;
+  background: var(--accent);
+  opacity: 0;
+  transition: opacity 0.2s ease 0.1s;
+}
+.tf-bullet-card.is-visible::after { opacity: 1; }
+
 .tf-bullet-card-media { width: 100%; }
-.tf-bullet-card-body { display: flex; flex-direction: column; gap: 8px; }
+.tf-bullet-card-body { display: flex; flex-direction: column; gap: 10px; }
 .tf-bullet-card-eyebrow {
   color: var(--accent);
-  font-size: 11px;
+  font-size: 12px;
 }
 .tf-bullet-card-body p {
-  font-size: 13px;
-  line-height: 1.55;
-  color: var(--fg-2);
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--fg);
   margin: 0;
   text-wrap: pretty;
+}
+
+@media (max-width: 1080px) {
+  .tf-bullet-card { width: clamp(320px, 60%, 460px); padding: 16px; }
+  .tf-bullet-card-body p { font-size: 14px; }
+}
+@media (max-width: 640px) {
+  .tf-bullet-card { width: calc(100vw - var(--pad-x) * 2 - 8px); max-width: 340px; padding: 14px; }
+  .tf-bullet-card::after { left: 20px; }
 }
 
 @keyframes tf-fade-in {
