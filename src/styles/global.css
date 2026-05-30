@@ -267,8 +267,8 @@ button { font-family: inherit; }
   display: none;
   flex-direction: column;
   gap: 4px;
-  width: 32px;
-  height: 32px;
+  width: 44px;
+  height: 44px;
   align-items: center;
   justify-content: center;
   background: transparent;
@@ -471,88 +471,30 @@ button { font-family: inherit; }
 }
 
 /* Variant B: split */
-.tf-hero-split {
-  flex: 1;
-  display: grid;
-  grid-template-columns: 1.2fr 1fr;
-  gap: clamp(32px, 5vw, 80px);
-  align-items: end;
-  margin-bottom: clamp(48px, 6vw, 80px);
-}
-.tf-display-split {
-  font-size: clamp(48px, 8vw, 120px);
-  margin-bottom: 32px;
-}
-.tf-display-split span:nth-child(2) { padding-left: clamp(40px, 6vw, 100px); }
-.tf-hero-split-text { display: flex; flex-direction: column; gap: 24px; }
-.tf-hero-split-media {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-.tf-hero-spec {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px 24px;
-  padding: 16px;
-  border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.02);
-}
-.tf-hero-spec > div {
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
-  font-size: 11px;
-}
-.tf-hero-spec span { color: var(--fg-3); }
-.tf-hero-spec b { color: var(--fg); font-weight: 500; }
 
-.tf-hero-chips { display: flex; flex-wrap: wrap; gap: 8px; }
-.tf-chip {
-  display: inline-block;
-  padding: 6px 12px;
-  border: 1px solid var(--line-strong);
-  border-radius: 999px;
-  font-family: var(--font-mono);
-  font-size: 10.5px;
-  letter-spacing: 0.1em;
-  color: var(--fg-3);
-}
+
+
+
+
+
+
+
+
+
+
+
 
 /* Variant C: video */
 .tf-hero-video { flex: 1; display: flex; flex-direction: column; gap: 32px; }
-.tf-hero-video-frame {
-  position: relative;
-  border: 1px solid var(--line);
-  overflow: hidden;
-}
-.tf-hero-video-overlay {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: clamp(24px, 4vw, 56px);
-  gap: 24px;
-  background: linear-gradient(to top, rgba(14, 14, 16, 0.95) 0%, rgba(14, 14, 16, 0.4) 50%, transparent 100%);
-}
-.tf-display-overlay {
-  font-size: clamp(40px, 7vw, 96px);
-  margin: 0;
-}
-.tf-hero-sub-overlay { color: var(--fg); max-width: 600px; }
-.tf-hero-video-corners i {
-  position: absolute;
-  width: 16px; height: 16px;
-  border-color: var(--accent);
-  border-style: solid;
-  border-width: 0;
-}
-.tf-hero-video-corners i:nth-child(1) { top: 12px; left: 12px; border-top-width: 1px; border-left-width: 1px; }
-.tf-hero-video-corners i:nth-child(2) { top: 12px; right: 12px; border-top-width: 1px; border-right-width: 1px; }
-.tf-hero-video-corners i:nth-child(3) { bottom: 12px; left: 12px; border-bottom-width: 1px; border-left-width: 1px; }
-.tf-hero-video-corners i:nth-child(4) { bottom: 12px; right: 12px; border-bottom-width: 1px; border-right-width: 1px; }
+
+
+
+
+
+
+
+
+
 
 /* CTAs */
 .tf-hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
@@ -1015,247 +957,54 @@ button { font-family: inherit; }
 /* ── Process strip ───────────────────────────────────────────────── */
 /* Banner variant: a wide photo strip above the steps, with masthead-style
    side-to-side fade so the section title above stays readable. */
-.tf-process-banner {
-  position: relative;
-  height: clamp(220px, 28vw, 360px);
-  margin-bottom: 56px;
-  background-size: cover;
-  background-position: center 35%;
-  filter: saturate(0.75) contrast(1.05) brightness(0.9);
-  border: 1px solid var(--line);
-  overflow: hidden;
-}
-.tf-process-banner::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(to right, var(--bg) 0%, rgba(14,14,16,0.4) 35%, rgba(14,14,16,0.2) 100%),
-    linear-gradient(to bottom, rgba(14,14,16,0.3) 0%, transparent 40%, rgba(14,14,16,0.4) 100%);
-}
-.tf-process-banner-meta {
-  position: absolute;
-  inset: auto 24px 16px;
-  display: flex;
-  justify-content: space-between;
-  z-index: 1;
-  color: var(--fg-2);
-  font-size: 10px;
-}
 
-.tf-process {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 0;
-  border-top: 1px solid var(--line);
-}
-.tf-process-step {
-  position: relative;
-  padding: 32px 24px 32px 0;
-  border-right: 1px solid var(--line);
-}
-.tf-process-step:last-child { border-right: 0; }
-.tf-process-num {
-  font-size: 13px;
-  color: var(--accent);
-  margin-bottom: 32px;
-  display: block;
-}
-.tf-process-line {
-  position: absolute;
-  top: 50px;
-  left: -24px;
-  right: 24px;
-  height: 1px;
-  background: var(--line-strong);
-}
-.tf-process-step:first-child .tf-process-line { left: 0; }
+
+
+
+
+
+
+
+
+
 
 /* Per-step variant: each step has a small darkened image above the number. */
-.tf-process.is-perStep .tf-process-step {
-  padding-top: 0;
-}
-.tf-process-img {
-  width: calc(100% - 24px);
-  aspect-ratio: 16 / 11;
-  background-size: cover;
-  background-position: center;
-  border: 1px solid var(--line);
-  margin-bottom: 24px;
-  filter: saturate(0.7) contrast(1.05) brightness(0.85);
-  position: relative;
-}
-.tf-process-img::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom, transparent 40%, rgba(14,14,16,0.5) 100%);
-}
-.tf-process.is-perStep .tf-process-line { top: auto; bottom: -1px; }
+
+
+
+
 
 /* ── Hotspots variant ──────────────────────────────────────────────
    One large industrial photo with 5 numbered markers; hovering a marker
    lifts a small card with the step copy. */
-.tf-hotspots {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 32px;
-}
-.tf-hotspots-frame {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  border: 1px solid var(--line);
-  overflow: hidden;
-  background: var(--bg-2);
-}
-.tf-hotspots-img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: saturate(0.7) contrast(1.05) brightness(0.85);
-}
-.tf-hotspots-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom, rgba(14,14,16,0.25) 0%, transparent 30%, transparent 70%, rgba(14,14,16,0.35) 100%);
-  pointer-events: none;
-}
-.tf-hotspot {
-  position: absolute;
-  width: 0;
-  height: 0;
-  z-index: 2;
-}
-.tf-hotspot-dot {
-  position: absolute;
-  top: -16px;
-  left: -16px;
-  width: 32px; height: 32px;
-  border-radius: 50%;
-  border: 1px solid var(--accent);
-  background: rgba(14, 14, 16, 0.7);
-  -webkit-backdrop-filter: blur(4px);
-  backdrop-filter: blur(4px);
-  color: var(--fg);
-  font-family: var(--font-mono);
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.2s cubic-bezier(0.2, 0.7, 0.2, 1), background 0.2s;
-}
-.tf-hotspot.is-on .tf-hotspot-dot {
-  transform: scale(1.15);
-  background: var(--accent);
-  color: #fff;
-}
-.tf-hotspot-num { position: relative; z-index: 1; }
-.tf-hotspot-pulse {
-  position: absolute;
-  inset: -4px;
-  border-radius: 50%;
-  border: 1px solid var(--accent);
-  animation: tf-hotspot-pulse 2.4s ease-out infinite;
-  pointer-events: none;
-}
-@keyframes tf-hotspot-pulse {
-  0% { transform: scale(0.85); opacity: 0.9; }
-  100% { transform: scale(2); opacity: 0; }
-}
-.tf-hotspot-card {
-  position: absolute;
-  width: 260px;
-  background: rgba(14, 14, 16, 0.92);
-  -webkit-backdrop-filter: blur(20px);
-  backdrop-filter: blur(20px);
-  border: 1px solid var(--line-strong);
-  padding: 16px 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  opacity: 0;
-  transform: translateY(6px);
-  transition: opacity 0.2s ease, transform 0.2s cubic-bezier(0.2,0.7,0.2,1);
-  pointer-events: none;
-  box-shadow: 0 16px 40px -16px rgba(0,0,0,0.5);
-}
-.tf-hotspot-card[data-side="right"] { left: 24px; }
-.tf-hotspot-card[data-side="left"] { right: 24px; }
-.tf-hotspot-card[data-vside="bottom"] { top: -8px; }
-.tf-hotspot-card[data-vside="top"] { bottom: -8px; }
-.tf-hotspot.is-on .tf-hotspot-card {
-  opacity: 1;
-  transform: translateY(0);
-}
-.tf-hotspot-card-eyebrow { color: var(--accent); font-size: 10.5px; }
-.tf-hotspot-card h4 {
-  font-family: var(--font-display);
-  font-weight: 500;
-  font-size: 17px;
-  margin: 0;
-  letter-spacing: -0.005em;
-  color: var(--fg);
-}
-.tf-hotspot-card p {
-  font-size: 13px;
-  line-height: 1.5;
-  color: var(--fg-2);
-  margin: 0;
-  text-wrap: pretty;
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* Legend below — clickable / hoverable list mirrors the markers */
-.tf-hotspots-legend {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 1px;
-  background: var(--line);
-  border: 1px solid var(--line);
-}
-.tf-hotspots-legend-item {
-  background: var(--bg);
-  padding: 16px 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  font-size: 14px;
-  color: var(--fg-2);
-  cursor: default;
-  transition: background 0.2s, color 0.2s;
-}
-.tf-hotspots-legend-item.is-on {
-  background: var(--bg-3);
-  color: var(--fg);
-}
-.tf-hotspots-legend-item .tf-mono {
-  font-size: 11px;
-}
-.tf-hotspots-legend-item.is-on .tf-mono { color: var(--accent); }
-.tf-process-body h4 {
-  font-family: var(--font-display);
-  font-weight: 500;
-  font-size: 18px;
-  margin: 0 0 8px;
-  letter-spacing: -0.005em;
-}
-.tf-process-body p {
-  font-size: 13px;
-  line-height: 1.5;
-  color: var(--fg-3);
-  margin: 0;
-}
+
+
+
+
+
+
+
 
 /* ── Services ────────────────────────────────────────────────────── */
 .tf-services {
@@ -1454,25 +1203,10 @@ button { font-family: inherit; }
 }
 
 /* Client list (alt) */
-.tf-client-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0;
-  border-top: 1px solid var(--line);
-}
-.tf-client-list li {
-  display: grid;
-  grid-template-columns: 56px 1fr;
-  align-items: center;
-  gap: 16px;
-  padding: 18px 4px;
-  border-bottom: 1px solid var(--line);
-}
-.tf-client-list li:nth-child(odd) { border-right: 1px solid var(--line); padding-right: 24px; }
-.tf-client-list li:nth-child(even) { padding-left: 24px; }
+
+
+
+
 .tf-client-num {
   font-family: var(--font-mono);
   font-size: 11px;
@@ -1815,10 +1549,7 @@ button { font-family: inherit; }
 
 /* Ken Burns on the hotspot photo — very slow scale + drift, alternates
    so it never feels mechanical. */
-.tf-hotspots-img {
-  animation: tf-kenburns 24s ease-in-out infinite alternate;
-  transform-origin: 60% 50%;
-}
+
 @keyframes tf-kenburns {
   0% { transform: scale(1.02) translate(0, 0); }
   100% { transform: scale(1.12) translate(-2%, -1%); }
@@ -1888,20 +1619,13 @@ button { font-family: inherit; }
 .tf-services.is-rows .tf-service:nth-child(4) { transition-delay: 0.4s; }
 
 /* Hotspot dots: ripple-style entrance staggered after photo is visible */
-.tf-hotspot {
-  opacity: 0;
-  transform: scale(0.6);
-  transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-.tf-section.is-visible .tf-hotspot {
-  opacity: 1;
-  transform: scale(1);
-}
-.tf-section.is-visible .tf-hotspot:nth-child(2) { transition-delay: 0.5s; }
-.tf-section.is-visible .tf-hotspot:nth-child(3) { transition-delay: 0.65s; }
-.tf-section.is-visible .tf-hotspot:nth-child(4) { transition-delay: 0.8s; }
-.tf-section.is-visible .tf-hotspot:nth-child(5) { transition-delay: 0.95s; }
-.tf-section.is-visible .tf-hotspot:nth-child(6) { transition-delay: 1.1s; }
+
+
+
+
+
+
+
 
 /* Reduced motion override — kill all motion for users who opted out. */
 @media (prefers-reduced-motion: reduce) {
@@ -1913,8 +1637,6 @@ button { font-family: inherit; }
   .tf-timeline::before,
   .tf-tl-item,
   .tf-services.is-rows .tf-service,
-  .tf-hotspot,
-  .tf-hotspots-img,
   .tf-hero-bg {
     animation: none !important;
     transition: none !important;
@@ -1926,13 +1648,13 @@ button { font-family: inherit; }
 @media (max-width: 1080px) {
   .tf-nav { display: none; }
   .tf-burger { display: flex; }
-  .tf-hotspots-frame { aspect-ratio: 4 / 3; }
-  .tf-hotspot-card { width: 220px; }
-  .tf-hotspots-legend { grid-template-columns: 1fr 1fr; }
+  
+  
+  
   .tf-cta-mini { display: none; }
 
   .tf-hero-bot { grid-template-columns: 1fr; }
-  .tf-hero-split { grid-template-columns: 1fr; }
+  
   .tf-hero-stats { grid-template-columns: repeat(2, 1fr); }
   .tf-stat:nth-child(2) { border-right: 0; }
   .tf-stat { padding-top: 24px; }
@@ -1942,9 +1664,9 @@ button { font-family: inherit; }
   .tf-tech-tab { padding: 14px 16px; }
   .tf-tech-tab-title { font-size: 14px; }
 
-  .tf-process { grid-template-columns: repeat(2, 1fr); }
-  .tf-process-step:nth-child(2n) { border-right: 0; }
-  .tf-process-step { border-bottom: 1px solid var(--line); }
+  
+  
+  
 
   .tf-services { grid-template-columns: repeat(2, 1fr); }
 
@@ -1955,20 +1677,20 @@ button { font-family: inherit; }
 }
 
 @media (max-width: 640px) {
-  .tf-display-mid, .tf-display-split span:nth-child(2) { padding-left: 0; }
+  .tf-display-mid{ padding-left: 0; }
   .tf-form-grid { grid-template-columns: 1fr; }
-  .tf-hotspot-card { width: 180px; padding: 12px; }
-  .tf-hotspots-legend { grid-template-columns: 1fr; }
+  
+  
   .tf-services { grid-template-columns: 1fr; }
-  .tf-process { grid-template-columns: 1fr; }
-  .tf-process-step { border-right: 0; border-bottom: 1px solid var(--line); }
-  .tf-client-list { grid-template-columns: 1fr; }
-  .tf-client-list li:nth-child(odd) { border-right: 0; padding-right: 4px; }
-  .tf-client-list li:nth-child(even) { padding-left: 4px; }
+  
+  
+  
+  
+  
   .tf-tech-bullets { grid-template-columns: 1fr; }
   .tf-footer-grid { grid-template-columns: 1fr; }
   .tf-hero-stats { grid-template-columns: 1fr 1fr; }
-  .tf-tech-row { grid-template-columns: 44px 1fr 24px; }
+  
   .tf-tech-sub { display: none; }
   /* On phones, bullets need a roomy tap target and full width */
   .tf-tech-bullet { padding: 8px 0; min-height: 44px; display: flex; align-items: center; gap: 8px; }
@@ -2121,8 +1843,7 @@ html { scrollbar-color: var(--line-strong) var(--bg); scrollbar-width: thin; }
 }
 .tf-btn:focus-visible,
 .tf-cta-mini:focus-visible,
-.tf-tab:focus-visible,
-.tf-tech-row:focus-visible { outline-offset: -2px; }
+.tf-tab:focus-visible{ outline-offset: -2px; }
 .tf-lang a:focus-visible { outline-offset: 4px; }
 
 /* ── Eyebrow leading bracket — small accent dash that draws in ──── */
@@ -2218,22 +1939,10 @@ html { scrollbar-color: var(--line-strong) var(--bg); scrollbar-width: thin; }
 .tf-btn-ghost > * { position: relative; z-index: 1; }
 
 /* ── Tech list — sliding accent bar via active row ───────────────── */
-.tf-tech-row {
-  position: relative;
-}
-.tf-tech-row::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 50%;
-  width: 2px;
-  height: 0;
-  background: var(--accent);
-  transform: translateY(-50%);
-  transition: height 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
-}
-.tf-tech-row[data-on="true"]::before { height: 70%; }
-.tf-tech-row[data-on="true"] { padding-left: 20px; }
+
+
+
+
 
 /* ── Catalogs — bouncing download icon + cover shimmer ───────────── */
 .tf-catalog-cta svg {
@@ -2271,47 +1980,17 @@ html { scrollbar-color: var(--line-strong) var(--bg); scrollbar-width: thin; }
 }
 
 /* ── Process hotspots — SVG dashed connectors ────────────────────── */
-.tf-hotspots-connectors {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 1;
-  opacity: 0;
-  transition: opacity 1.2s ease 0.8s;
-}
-.tf-section.is-visible .tf-hotspots-connectors { opacity: 0.45; }
-.tf-hotspots-connectors path {
-  fill: none;
-  stroke: var(--accent);
-  stroke-width: 1;
-  stroke-dasharray: 4 6;
-  stroke-linecap: round;
-  stroke-dashoffset: 600;
-  animation: tf-connector-draw 2.4s cubic-bezier(0.2, 0.7, 0.2, 1) 1.2s forwards;
-}
-.tf-section.is-visible .tf-hotspots-connectors path {
-  stroke-dashoffset: 0;
-}
+
+
+
+
 @keyframes tf-connector-draw {
   to { stroke-dashoffset: 0; }
 }
 
 /* Stronger hotspot dot — double rim when active */
-.tf-hotspot-dot {
-  box-shadow: inset 0 0 0 0 transparent;
-  transition:
-    transform 0.2s cubic-bezier(0.2, 0.7, 0.2, 1),
-    background 0.2s,
-    box-shadow 0.3s;
-}
-.tf-hotspot.is-on .tf-hotspot-dot {
-  box-shadow:
-    inset 0 0 0 2px rgba(14, 14, 16, 0.6),
-    0 0 0 1px var(--accent),
-    0 0 24px -4px var(--accent);
-}
+
+
 
 /* ── Services rows — corner brackets reveal on hover ─────────────── */
 .tf-services.is-rows .tf-service { position: relative; }
@@ -2520,20 +2199,8 @@ html { scrollbar-color: var(--line-strong) var(--bg); scrollbar-width: thin; }
 .tf-section.is-dark > * { position: relative; z-index: 1; }
 
 /* ── Skip link for keyboard navigation ───────────────────────────── */
-.tf-skip {
-  position: absolute;
-  left: 12px;
-  top: -100px;
-  background: var(--accent);
-  color: #fff;
-  padding: 8px 14px;
-  font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: 0.04em;
-  z-index: 200;
-  transition: top 0.2s;
-}
-.tf-skip:focus { top: 12px; }
+
+
 
 /* ╔══════════════════════════════════════════════════════════════════╗
    ║  Round 2 cosmetics — depth, density, micro-interactions          ║
@@ -2565,39 +2232,12 @@ body {
 }
 
 /* ── Hero: side ruler on the right edge (desktop only) ───────────── */
-.tf-hero .tf-hero-ruler {
-  position: absolute;
-  right: 20px;
-  top: calc(var(--header-h) + 80px);
-  bottom: 80px;
-  width: 28px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-end;
-  pointer-events: none;
-  color: var(--fg-4);
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.1em;
-  opacity: 0;
-  animation: tf-fade-in 1.2s cubic-bezier(0.2, 0.7, 0.2, 1) 0.8s forwards;
-  z-index: 1;
-}
-.tf-hero-ruler-tick {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.tf-hero-ruler-tick i {
-  display: block;
-  width: 8px;
-  height: 1px;
-  background: var(--line-strong);
-}
-.tf-hero-ruler-tick.is-major i { width: 14px; background: var(--accent); }
-.tf-hero-ruler-tick.is-major { color: var(--accent); }
-@media (max-width: 1080px) { .tf-hero-ruler { display: none; } }
+
+
+
+
+
+
 
 /* ── Hero: status pulse + faint flicker on the dot label ─────────── */
 .tf-hero-status {
@@ -2633,13 +2273,9 @@ body {
 .tf-h2-accent { font-style: italic; }
 
 /* ── Tech list rows: subtle bg gradient on hover (non-active) ─── */
-.tf-tech-row:hover:not([data-on="true"]) {
-  background: linear-gradient(to right, rgba(58, 134, 255, 0.04), transparent 60%);
-}
-.tf-tech-row .tf-tech-title {
-  transition: letter-spacing 0.3s;
-}
-.tf-tech-row[data-on="true"] .tf-tech-title { letter-spacing: 0.005em; }
+
+
+
 
 /* Tech detail media: corner brackets like the CAD overlay aesthetic */
 .tf-tech-detail-media { position: relative; }
@@ -2689,14 +2325,11 @@ body {
 .tf-catalog-card:hover .tf-catalog-cover-title { letter-spacing: 0.01em; }
 
 /* ── Process: legend item leading bracket gets accent on hover ──── */
-.tf-hotspots-legend-item {
-  position: relative;
-  transition: background 0.25s, color 0.25s, padding-left 0.3s cubic-bezier(0.2, 0.7, 0.2, 1);
-}
-.tf-hotspots-legend-item:hover { padding-left: 24px; }
-.tf-hotspots-legend-item.is-on { padding-left: 24px; }
-.tf-hotspots-legend-item .tf-mono { transition: color 0.2s; }
-.tf-hotspots-legend-item:hover .tf-mono { color: var(--accent); }
+
+
+
+
+
 
 /* Hotspot dot number: subtle character flicker on activate */
 @keyframes tf-flicker {
@@ -2706,9 +2339,7 @@ body {
   35% { opacity: 0.6; }
   40% { opacity: 1; }
 }
-.tf-hotspot.is-on .tf-hotspot-num {
-  animation: tf-flicker 0.5s steps(1);
-}
+
 
 /* ── Industries marquee: vertical dividers between client names ── */
 .tf-marquee-item {
@@ -2860,9 +2491,7 @@ body {
 }
 
 /* ── Process step: small leading accent bracket on each step ───── */
-.tf-process-step {
-  position: relative;
-}
+
 
 /* ── Better text-balance / pretty wrapping ───────────────────── */
 h1, h2, h3, h4 { text-wrap: balance; }
@@ -2927,108 +2556,29 @@ p { text-wrap: pretty; }
    ╚══════════════════════════════════════════════════════════════════╝ */
 
 /* ── Global cursor spotlight (removed) ───────────────────────────── */
-.tf-spotlight { display: none; }
+
 
 /* ── Section progress chip (fixed right gutter) ──────────────────── */
-.tf-section-chip {
-  position: fixed;
-  right: 14px;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 80;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 14px;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  color: var(--fg-3);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.4s ease;
-}
-.tf-section-chip.is-visible { opacity: 1; }
-.tf-section-chip-num {
-  font-family: var(--font-display);
-  font-size: 14px;
-  color: var(--accent);
-  letter-spacing: 0.04em;
-  font-weight: 500;
-}
-.tf-section-chip-bar {
-  width: 1px;
-  height: 120px;
-  background: var(--line-strong);
-  position: relative;
-  overflow: hidden;
-}
-.tf-section-chip-bar::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: var(--accent);
-  transform-origin: top center;
-  transform: scaleY(var(--progress, 0));
-  transition: transform 0.2s ease;
-}
-.tf-section-chip-label { writing-mode: vertical-rl; transform: rotate(180deg); }
-@media (max-width: 1080px) { .tf-section-chip { display: none; } }
+
+
+
+
+
+
+
 
 /* ── Hero HUD panel (top-right of hero, decorative spec block) ──── */
-.tf-hero .tf-hero-hud {
-  position: absolute;
-  top: calc(var(--header-h) + 24px);
-  right: clamp(60px, 6vw, 96px);
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 240px;
-  padding: 14px 16px;
-  border: 1px solid var(--line);
-  background: rgba(14, 14, 16, 0.55);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-  font-family: var(--font-mono);
-  font-size: 10px;
-  color: var(--fg-3);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  opacity: 0;
-  transform: translateY(-8px);
-  animation: tf-fade-in 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) 1s forwards;
-}
-.tf-hero-hud-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-}
-.tf-hero-hud-row b {
-  color: var(--fg);
-  font-weight: 500;
-}
-.tf-hero-hud-row.is-accent b { color: var(--accent); }
-.tf-hero-hud-rule { height: 1px; background: var(--line); }
-.tf-hero-hud-tick {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-.tf-hero-hud-tick i {
-  display: inline-block;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #4ade80;
-  box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.15);
-  animation: tf-pulse 2s ease-in-out infinite;
-}
-@media (max-width: 1080px) { .tf-hero-hud { display: none; } }
+
+
+
+
+
+
+
+
 
 /* ── Stat sparkline (removed) ───────────────────────────────────── */
-.tf-stat-spark { display: none; }
+
 
 /* ── Magnetic buttons (subtle attraction to cursor) ──────────────── */
 .tf-btn-magnetic {
@@ -3306,7 +2856,6 @@ body { opacity: 0; animation: tf-body-in 0.6s ease 0.05s forwards; }
 .tf-catalog-cover-title,
 .tf-catalog-cover-sub,
 .tf-tab-count,
-.tf-section-chip-num,
 .tf-radar-label,
 .tf-form-foot,
 input[type="email"],
@@ -3354,8 +2903,6 @@ input[type="number"] {
   .tf-wa-fab,
   .tf-backtop,
   .tf-hero-scroll,
-  .tf-hotspots-overlay,
-  .tf-hotspots-connectors,
   .tf-radar,
   .tf-industries-meta,
   .tf-marquee,
@@ -3363,7 +2910,6 @@ input[type="number"] {
   .tf-contact-map,
   .tf-form,
   .tf-hero-bg,
-  .tf-process-banner,
   .tf-hero-meta,
   .tf-footer-social,
   .tf-footer-build {

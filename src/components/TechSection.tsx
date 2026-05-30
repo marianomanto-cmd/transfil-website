@@ -43,9 +43,11 @@ export function TechSection({ content }: { content: Content }) {
             return (
               <button
                 key={it.id}
+                type="button"
                 role="tab"
+                id={`tech-tab-${it.id}`}
                 aria-selected={on}
-                aria-controls={`tech-panel-${it.id}`}
+                aria-controls="tech-panel"
                 className={cx('tf-tech-tab', on && 'is-on')}
                 onClick={() => setActive(it.id)}
               >
@@ -57,7 +59,7 @@ export function TechSection({ content }: { content: Content }) {
         </nav>
 
         <div
-          id={`tech-panel-${activeItem.id}`}
+          id="tech-panel"
           role="tabpanel"
           aria-labelledby={`tech-tab-${activeItem.id}`}
           className="tf-tech-content"
@@ -71,25 +73,24 @@ export function TechSection({ content }: { content: Content }) {
             </div>
             <h3 className="tf-h3">{activeItem.title}</h3>
             <p className="tf-tech-desc">{activeItem.desc}</p>
-            <ul className="tf-tech-bullets" role="tablist" aria-label={activeItem.title}>
+            <div className="tf-tech-bullets" role="tablist" aria-label={activeItem.title}>
               {activeItem.bullets.map((b) => {
                 const on = !!activeBullet && activeBullet.name === b.name;
                 return (
-                  <li key={b.name}>
-                    <button
-                      type="button"
-                      role="tab"
-                      aria-selected={on}
-                      className={cx('tf-tech-bullet', on && 'is-on')}
-                      onClick={() => setActiveBullet(on ? null : b)}
-                    >
-                      <span className="tf-mono">→</span>
-                      <span>{b.name}</span>
-                    </button>
-                  </li>
+                  <button
+                    key={b.name}
+                    type="button"
+                    role="tab"
+                    aria-selected={on}
+                    className={cx('tf-tech-bullet', on && 'is-on')}
+                    onClick={() => setActiveBullet(on ? null : b)}
+                  >
+                    <span className="tf-mono">→</span>
+                    <span>{b.name}</span>
+                  </button>
                 );
               })}
-            </ul>
+            </div>
             <div
               className={cx('tf-bullet-detail', activeBullet && 'is-open')}
               aria-hidden={!activeBullet}

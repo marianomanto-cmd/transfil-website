@@ -130,7 +130,7 @@ export function ContactSection({ content }: { content: Content }) {
             </a>
             <div className="tf-contact-hours" aria-hidden="true">
               <i />
-              <span>24/7 · Workshop Active</span>
+              <span>24/7 · {content.workshopActive}</span>
             </div>
           </div>
           <div className="tf-contact-block">

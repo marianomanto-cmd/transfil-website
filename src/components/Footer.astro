@@ -22,11 +22,11 @@ const year = new Date().getFullYear();
     </div>
     <div class="tf-footer-col">
       <div class="tf-footer-h">{content.nav.tech}</div>
-      {content.tech.map((t) => <a href="#tech">{t.title}</a>)}
+      {content.tech.map((t) => <a href="#tech" aria-label={`${content.nav.tech}: ${t.title}`}>{t.title}</a>)}
     </div>
     <div class="tf-footer-col">
       <div class="tf-footer-h">{content.nav.services}</div>
-      {content.services.items.map((s) => <a href="#services">{s.title}</a>)}
+      {content.services.items.map((s) => <a href="#services" aria-label={`${content.nav.services}: ${s.title}`}>{s.title}</a>)}
     </div>
     <div class="tf-footer-col">
       <div class="tf-footer-h">{content.nav.contact}</div>

@@ -40,11 +40,7 @@ export function IndustriesSection({ content }: { content: Content }) {
           </h2>
           <p className="tf-section-sub">{c.sub}</p>
           <ul className="tf-coverage-list" aria-hidden="true">
-            {[
-              'Argentina', 'Brasil', 'Chile', 'Perú',
-              'Bolivia', 'Uruguay', 'Colombia', 'Ecuador',
-              'México', 'Estados Unidos', 'R. Dominicana', 'España',
-            ].map((name) => (
+            {c.coverage.map((name) => (
               <li key={name} className="tf-coverage-list-item">
                 <span className="tf-mono">→</span> {name}
               </li>
@@ -77,7 +73,7 @@ export function IndustriesSection({ content }: { content: Content }) {
           <b>{String(items.length).padStart(2, '0')}</b> · {c.tabs.find((t) => t.id === tab)?.label}
         </span>
         <span className="tf-mono" style={{ color: 'var(--fg-4)' }}>
-          ← HOVER TO PAUSE →
+          {c.hoverPause}
         </span>
       </div>
       <Marquee items={items} speed={60} />

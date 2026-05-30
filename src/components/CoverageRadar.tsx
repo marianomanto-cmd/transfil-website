@@ -1,6 +1,7 @@
 type Country = {
   code: string;
   label: string;
+  labelEn?: string;
   x: number;
   y: number;
   hq?: boolean;
@@ -13,17 +14,17 @@ type Country = {
 // Dots placed on capital cities (or HQ city for AR).
 const COUNTRIES: Country[] = [
   { code: 'AR', label: 'CÓRDOBA',         x: 66, y: 81, hq: true, lx: 3.2, ly: 0.4, anchor: 'start' },
-  { code: 'BR', label: 'BRASIL',          x: 83, y: 66, lx: 3.2, ly: 0.4, anchor: 'start' },
+  { code: 'BR', label: 'BRASIL',          labelEn: 'BRAZIL',        x: 83, y: 66, lx: 3.2, ly: 0.4, anchor: 'start' },
   { code: 'CL', label: 'CHILE',           x: 59, y: 83, lx: -3.2, ly: 0.4, anchor: 'end' },
-  { code: 'PE', label: 'PERÚ',            x: 53, y: 62, lx: -3.2, ly: 0.4, anchor: 'end' },
+  { code: 'PE', label: 'PERÚ',            labelEn: 'PERU',          x: 53, y: 62, lx: -3.2, ly: 0.4, anchor: 'end' },
   { code: 'BO', label: 'BOLIVIA',         x: 62, y: 67, lx: 3.2, ly: 0.4, anchor: 'start' },
   { code: 'UY', label: 'URUGUAY',         x: 74, y: 85, lx: 3.2, ly: 0.4, anchor: 'start' },
   { code: 'CO', label: 'COLOMBIA',        x: 56, y: 45, lx: -3.2, ly: 0.4, anchor: 'end' },
   { code: 'EC', label: 'ECUADOR',         x: 52, y: 50, lx: -3.2, ly: 0.4, anchor: 'end' },
-  { code: 'MX', label: 'MÉXICO',          x: 31, y: 31, lx: -3.2, ly: 0.4, anchor: 'end' },
-  { code: 'US', label: 'ESTADOS UNIDOS',  x: 53, y: 11, lx: 3.2, ly: 0.4, anchor: 'start' },
-  { code: 'DO', label: 'R. DOMINICANA',   x: 60, y: 32, lx: 3.2, ly: 0.4, anchor: 'start' },
-  { code: 'ES', label: 'ESPAÑA',          x: 125, y: 10, lx: -3.2, ly: 0.4, anchor: 'end' },
+  { code: 'MX', label: 'MÉXICO',          labelEn: 'MEXICO',        x: 31, y: 31, lx: -3.2, ly: 0.4, anchor: 'end' },
+  { code: 'US', label: 'ESTADOS UNIDOS',  labelEn: 'UNITED STATES', x: 53, y: 11, lx: 3.2, ly: 0.4, anchor: 'start' },
+  { code: 'DO', label: 'R. DOMINICANA',   labelEn: 'DOMINICAN REP.', x: 60, y: 32, lx: 3.2, ly: 0.4, anchor: 'start' },
+  { code: 'ES', label: 'ESPAÑA',          labelEn: 'SPAIN',         x: 125, y: 10, lx: -3.2, ly: 0.4, anchor: 'end' },
 ];
 
 // Simplified continent silhouettes ---------------------------------------------------
@@ -197,7 +198,7 @@ export function CoverageRadar({ lang }: Props) {
                 textAnchor={c.anchor ?? 'start'}
                 className={c.hq ? 'tf-radar-label is-hq' : 'tf-radar-label'}
               >
-                {c.label}
+                {lang === 'en' && c.labelEn ? c.labelEn : c.label}
               </text>
             </g>
           ))}
