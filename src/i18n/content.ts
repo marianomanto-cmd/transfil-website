@@ -158,7 +158,7 @@ export const CONTENT: Record<Lang, Content> = {
         img: '/img/hydraulic-station.avif',
         desc: 'Filtración de refrigerantes, separación magnética y centralización de fluidos. Recuperación de aceites y manejo responsable de residuos.',
         bullets: [
-          { name: 'Filtros de banda', img: '/img/hydraulic-station.avif', desc: 'Filtración por gravedad con tela de papel o textil. Bajo costo operativo, ideal para refrigerantes solubles en mecanizado.', kind: 'photo' },
+          { name: 'Filtros de banda', img: '/img/t02-band-filters.webp', desc: 'Filtración por gravedad con tela de papel o textil. Bajo costo operativo, ideal para refrigerantes solubles en mecanizado.', kind: 'photo' },
           { name: 'Separadores magnéticos', img: '/video/t02-magnetic-separator.mp4', poster: '/img/t02-magnetic-separator-poster.webp', desc: 'Tambores y barras imantadas que retiran partículas ferrosas finas antes del filtro principal. Aumenta la vida del consumible.', kind: 'video' },
           { name: 'Centrales hidráulicas', img: '/img/hydraulic-station-2.avif', desc: 'Estaciones de bombeo, presurización y temperado del refrigerante para múltiples máquinas en paralelo.', kind: 'video' },
           { name: 'Recuperación de aceite', img: '/img/conveyor-blue.avif', desc: 'Skimmers de banda y separadores coalescentes que retiran el aceite tramposo del refrigerante para reusar el fluido.', kind: 'photo' },
@@ -312,7 +312,7 @@ export const CONTENT: Record<Lang, Content> = {
         img: '/img/hydraulic-station.avif',
         desc: 'Coolant filtration, magnetic separation and fluid centralization. Oil recovery and responsible waste handling.',
         bullets: [
-          { name: 'Belt filters', img: '/img/hydraulic-station.avif', desc: 'Gravity filtration with paper or textile cloth. Low operating cost, ideal for water-soluble coolants in machining.', kind: 'photo' },
+          { name: 'Belt filters', img: '/img/t02-band-filters.webp', desc: 'Gravity filtration with paper or textile cloth. Low operating cost, ideal for water-soluble coolants in machining.', kind: 'photo' },
           { name: 'Magnetic separators', img: '/video/t02-magnetic-separator.mp4', poster: '/img/t02-magnetic-separator-poster.webp', desc: 'Drums and magnetic bars that remove fine ferrous particles before the main filter. Extends consumable life.', kind: 'video' },
           { name: 'Hydraulic stations', img: '/img/hydraulic-station-2.avif', desc: 'Pumping, pressurization and tempering stations for coolant feeding multiple machines in parallel.', kind: 'video' },
           { name: 'Oil recovery', img: '/img/conveyor-blue.avif', desc: 'Belt skimmers and coalescing separators that remove tramp oil from coolant to reuse the fluid.', kind: 'photo' },

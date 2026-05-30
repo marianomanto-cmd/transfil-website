@@ -2661,6 +2661,9 @@ body {
    accent the frame without stepping on the photo. */
 .tf-tech-detail-media::before { top: -6px; left: -6px; border-top-width: 1px; border-left-width: 1px; }
 .tf-tech-detail-media::after  { bottom: -6px; right: -6px; border-bottom-width: 1px; border-right-width: 1px; }
+/* Outer brackets handle the framing — hide the inner Media corners so they
+   don't double up and sit inside the photo. */
+.tf-tech-detail-media .tf-media-corners { display: none; }
 .tf-section.is-visible .tf-tech-detail-media::before,
 .tf-section.is-visible .tf-tech-detail-media::after { opacity: 1; }
 
