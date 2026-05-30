@@ -2657,8 +2657,10 @@ body {
   opacity: 0;
   transition: opacity 0.4s ease 0.2s;
 }
-.tf-tech-detail-media::before { top: 8px; left: 8px; border-top-width: 1px; border-left-width: 1px; }
-.tf-tech-detail-media::after  { bottom: 8px; right: 8px; border-bottom-width: 1px; border-right-width: 1px; }
+/* Brackets sit OUTSIDE the image corners (negative inset) so they
+   accent the frame without stepping on the photo. */
+.tf-tech-detail-media::before { top: -6px; left: -6px; border-top-width: 1px; border-left-width: 1px; }
+.tf-tech-detail-media::after  { bottom: -6px; right: -6px; border-bottom-width: 1px; border-right-width: 1px; }
 .tf-section.is-visible .tf-tech-detail-media::before,
 .tf-section.is-visible .tf-tech-detail-media::after { opacity: 1; }
 
