@@ -8,9 +8,12 @@ type Props = {
   caption?: ReactNode;
   accent?: boolean;
   src?: string;
+  poster?: string;
   objectPosition?: string;
   loading?: 'eager' | 'lazy';
 };
+
+const VIDEO_EXT_RE = /\.(mp4|webm|mov)(\?|$)/i;
 
 let stripeId = 0;
 
@@ -21,18 +24,33 @@ export function Media({
   caption,
   accent = false,
   src,
+  poster,
   objectPosition,
   loading = 'lazy',
 }: Props) {
   const id = `stripe-${kind}-${++stripeId}`;
   const figureStyle: CSSProperties = { aspectRatio: ratio };
+  const isVideoSrc = !!src && VIDEO_EXT_RE.test(src);
   return (
     <figure
       className={cx('tf-media', accent && 'is-accent', src && 'has-src')}
       style={figureStyle}
     >
       <div className="tf-media-inner" data-kind={kind}>
-        {src ? (
+        {src && isVideoSrc ? (
+          <video
+            className="tf-media-img"
+            src={src}
+            poster={poster}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            aria-label={label || ''}
+            style={objectPosition ? { objectPosition } : undefined}
+          />
+        ) : src ? (
           <img
             className="tf-media-img"
             src={src}
@@ -64,7 +82,7 @@ export function Media({
             <span className="tf-media-text">{label}</span>
           </div>
         )}
-        {src && kind === 'video' && (
+        {src && kind === 'video' && !isVideoSrc && (
           <div className="tf-media-play" aria-hidden="true">
             <svg viewBox="0 0 48 48" width="48" height="48">
               <circle cx="24" cy="24" r="22" fill="rgba(0,0,0,0.55)" stroke="rgba(255,255,255,0.9)" strokeWidth="1" />

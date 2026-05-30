@@ -19,6 +19,8 @@ export function TechSection({ content }: { content: Content }) {
   const activeItem = items.find((i) => i.id === active) || items[0];
   const displayImg = activeBullet?.img || activeItem.img;
   const displayLabel = activeBullet?.name || activeItem.title;
+  const displayKind = activeBullet?.kind ?? 'photo';
+  const displayPoster = activeBullet?.poster;
   const mediaKey = `${active}-${activeBullet?.name ?? 'overview'}`;
 
   return (
@@ -61,7 +63,7 @@ export function TechSection({ content }: { content: Content }) {
           className="tf-tech-content"
         >
           <div className="tf-tech-detail-media" key={mediaKey}>
-            <Media kind="photo" src={displayImg} label={displayLabel} ratio="4/3" />
+            <Media kind={displayKind} src={displayImg} poster={displayPoster} label={displayLabel} ratio="4/3" />
           </div>
           <div className="tf-tech-detail-body">
             <div className="tf-mono tf-tech-detail-code">

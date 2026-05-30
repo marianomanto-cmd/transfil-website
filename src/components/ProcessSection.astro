@@ -130,7 +130,7 @@ const c = content.process;
     padding: 0;
     display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 8px;
+    gap: 36px;
     align-items: stretch;
   }
 
@@ -175,14 +175,14 @@ const c = content.process;
     margin: 0;
   }
 
-  /* Chevron arrows between adjacent nodes (desktop) */
+  /* Chevron arrows centered in the gap between adjacent nodes (desktop) */
   .section-proceso .node + .node::before {
     content: '';
     position: absolute;
-    left: -16px;
+    left: -23px;
     top: 50%;
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 10px;
     border-top: 1.5px solid var(--tf-accent);
     border-right: 1.5px solid var(--tf-accent);
     transform: translateY(-50%) rotate(45deg);
