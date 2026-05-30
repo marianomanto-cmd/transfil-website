@@ -269,8 +269,11 @@ const c = content.process;
 </style>
 
 <script>
-  const sections = document.querySelectorAll<HTMLElement>('.section-proceso');
-  if (sections.length) {
+  // Rebind on both initial load and after each Astro view transition,
+  // since module scripts don't re-execute on transitions.
+  const initProceso = () => {
+    const sections = document.querySelectorAll<HTMLElement>('.section-proceso');
+    if (!sections.length) return;
     if ('IntersectionObserver' in window) {
       const io = new IntersectionObserver(
         (entries) => {
@@ -287,5 +290,6 @@ const c = content.process;
     } else {
       sections.forEach((s) => s.classList.add('is-visible'));
     }
-  }
+  };
+  document.addEventListener('astro:page-load', initProceso);
 </script>
