@@ -141,7 +141,7 @@ export const CONTENT: Record<Lang, Content> = {
     tech: [
       {
         id: 'conveyors', code: 'T01', title: 'Transportadores', sub: 'Conveyors',
-        img: '/img/t01-conveyors.jpg',
+        img: '/img/t01-conveyors.webp',
         desc: 'Sistemas de evacuación de viruta metálica, piezas y residuos para líneas de producción, celdas de mecanizado, líneas transfer y centros CNC. Configurables en bisagra, raspador, magnéticos, cintas, cadenas plásticas o combinados.',
         bullets: [
           { name: 'Bisagra y raspador', img: '/img/t01-hinge-scraper.jpg', desc: 'Cadena articulada con paletas raspadoras. Ideal para virutas largas, mixtas y húmedas. Construcción robusta para operación continua 24/7.', kind: 'photo' },
@@ -294,7 +294,7 @@ export const CONTENT: Record<Lang, Content> = {
     tech: [
       {
         id: 'conveyors', code: 'T01', title: 'Conveyors', sub: 'Transportadores',
-        img: '/img/t01-conveyors.jpg',
+        img: '/img/t01-conveyors.webp',
         desc: 'Evacuation systems for metal chips, parts and waste from production lines, machining cells, transfer lines and CNC centers. Configurable as hinge, scraper, magnetic, belt, plastic chain or combined.',
         bullets: [
           { name: 'Hinge & scraper', img: '/img/t01-hinge-scraper.jpg', desc: 'Articulated chain with scraper paddles. Ideal for long, mixed and wet chips. Heavy-duty build for 24/7 operation.', kind: 'photo' },
