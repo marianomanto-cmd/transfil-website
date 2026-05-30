@@ -3710,3 +3710,152 @@ input[type="number"] {
    viewports, contributing to the same overflow. Cap at the containing
    block so the card can never escape it. */
 .tf-bullet-card { max-width: 100%; }
+
+/* ── Catalog card as <button> — reset native button styles ──────── */
+button.tf-catalog-card {
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  /* Inherit existing .tf-catalog-card surface — make sure native UA
+     button defaults don't override our card styling. */
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+/* ── Catalog viewer modal ──────────────────────────────────────── */
+.tf-catalog-viewer {
+  position: fixed;
+  inset: 0;
+  z-index: 250;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(12px, 3vw, 32px);
+  background: rgba(8, 8, 10, 0.85);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  opacity: 0;
+  animation: tf-fade-in 0.2s ease forwards;
+}
+.tf-catalog-viewer-panel {
+  --cat-c: var(--accent);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1100px;
+  height: 100%;
+  max-height: 94vh;
+  background: var(--bg-2);
+  border: 1px solid var(--line-strong);
+  border-top: 3px solid var(--cat-c);
+  box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.7);
+  transform: translateY(12px);
+  animation: tf-catalog-viewer-in 0.3s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+}
+@keyframes tf-catalog-viewer-in {
+  to { transform: translateY(0); }
+}
+.tf-catalog-viewer-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--line);
+  background: var(--bg-2);
+  flex-shrink: 0;
+}
+.tf-catalog-viewer-id {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  min-width: 0;
+}
+.tf-catalog-viewer-id .tf-mono {
+  color: var(--cat-c);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+}
+.tf-catalog-viewer-title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(15px, 2vw, 18px);
+  letter-spacing: -0.005em;
+  color: var(--fg);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tf-catalog-viewer-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.tf-catalog-viewer-meta {
+  color: var(--fg-3);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  padding-right: 8px;
+  border-right: 1px solid var(--line);
+}
+.tf-catalog-viewer-btn,
+.tf-catalog-viewer-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 38px;
+  padding: 0 12px;
+  border: 1px solid var(--line-strong);
+  background: transparent;
+  color: var(--fg);
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, color 0.2s;
+  text-decoration: none;
+}
+.tf-catalog-viewer-btn:hover,
+.tf-catalog-viewer-btn:focus-visible {
+  border-color: var(--cat-c);
+  color: var(--cat-c);
+  background: color-mix(in oklab, var(--cat-c) 8%, transparent);
+}
+.tf-catalog-viewer-close {
+  width: 38px;
+  padding: 0;
+  color: var(--fg-2);
+}
+.tf-catalog-viewer-close:hover,
+.tf-catalog-viewer-close:focus-visible {
+  border-color: var(--fg);
+  color: var(--fg);
+  background: rgba(255, 255, 255, 0.04);
+}
+.tf-catalog-viewer-frame {
+  flex: 1;
+  width: 100%;
+  border: 0;
+  background: var(--bg-3);
+  display: block;
+  min-height: 0;
+}
+
+@media (max-width: 640px) {
+  .tf-catalog-viewer { padding: 0; }
+  .tf-catalog-viewer-panel {
+    max-height: 100vh;
+    max-height: 100dvh;
+    border: 0;
+    border-top: 3px solid var(--cat-c);
+  }
+  .tf-catalog-viewer-head { padding: 12px; }
+  .tf-catalog-viewer-meta { display: none; }
+  .tf-catalog-viewer-btn-text { display: none; }
+  .tf-catalog-viewer-btn { width: 38px; padding: 0; }
+  .tf-catalog-viewer-title { font-size: 14px; }
+}

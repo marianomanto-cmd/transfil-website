@@ -193,7 +193,7 @@ export const CONTENT: Record<Lang, Content> = {
         { id: 'filtration', title: 'Filtración', desc: 'Sistemas centralizados de tratamiento y filtración de líquidos refrigerantes.', pages: 8, size: '3 MB', file: '/catalogs/Trans-Fil-Catalogo-Filtracion-ES.pdf', color: '#ff6b1a', img: '/img/catalog-filtration.webp' },
         { id: 'washing', title: 'Lavado', desc: 'Líneas automatizadas de lavado y secado de piezas. Túnel, torre, cabina y especiales.', pages: 6, size: '3 MB', file: '/catalogs/Trans-Fil-Catalogo-Lavado-ES.pdf', color: '#4ade80', img: '/img/catalog-washing.webp' },
       ],
-      cta: 'Descargar PDF',
+      cta: 'Ver catálogo',
     },
     process: {
       eyebrow: '[ 03 — Cómo trabajamos ]',
@@ -346,7 +346,7 @@ export const CONTENT: Record<Lang, Content> = {
         { id: 'filtration', title: 'Filtration', desc: 'Centralized coolant treatment and filtration systems.', pages: 8, size: '3 MB', file: '/catalogs/Trans-Fil-Catalog-Filtration-EN.pdf', color: '#ff6b1a', img: '/img/catalog-filtration.webp' },
         { id: 'washing', title: 'Washing', desc: 'Automated washing and drying lines. Tunnel, tower, cabinet and special types.', pages: 6, size: '5 MB', file: '/catalogs/Trans-Fil-Catalog-Washing-EN.pdf', color: '#4ade80', img: '/img/catalog-washing.webp' },
       ],
-      cta: 'Download PDF',
+      cta: 'View catalog',
     },
     process: {
       eyebrow: '[ 03 — How we work ]',

@@ -4,7 +4,7 @@ import { CONTENT } from '../../i18n/content';
 import { Header } from '../../components/Header';
 import { Hero } from '../../components/Hero';
 import { TechSection } from '../../components/TechSection';
-import CatalogsSection from '../../components/CatalogsSection.astro';
+import { CatalogsSection } from '../../components/CatalogsSection';
 import { ProcessSection } from '../../components/ProcessSection';
 import ServicesSection from '../../components/ServicesSection.astro';
 import { IndustriesSection } from '../../components/IndustriesSection';
@@ -21,7 +21,7 @@ const content = CONTENT.en;
   <main id="main">
     <Hero content={content} client:load />
     <TechSection content={content} client:visible />
-    <CatalogsSection content={content} />
+    <CatalogsSection content={content} client:visible />
     <ProcessSection content={content} client:visible />
     <ServicesSection content={content} />
     <IndustriesSection content={content} client:visible />
