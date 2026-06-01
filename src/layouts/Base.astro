@@ -89,6 +89,27 @@ const orgJsonLd = {
 
     <script type="application/ld+json" set:html={JSON.stringify(orgJsonLd)} />
 
+    <!-- Google tag (gtag.js) — GA4. Fires a manual page_view after each
+         astro:page-load except the first (the 'config' line above already
+         counts the initial pageview). -->
+    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-Y6H3JFZNNM"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-Y6H3JFZNNM');
+      let __gtagFirst = true;
+      document.addEventListener('astro:page-load', function () {
+        if (__gtagFirst) { __gtagFirst = false; return; }
+        if (typeof gtag !== 'function') return;
+        gtag('event', 'page_view', {
+          page_path: location.pathname + location.search,
+          page_title: document.title,
+          page_location: location.href,
+        });
+      });
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
