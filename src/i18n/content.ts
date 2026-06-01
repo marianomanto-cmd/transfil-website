@@ -134,7 +134,7 @@ export const CONTENT: Record<Lang, Content> = {
     },
     tech: [
       {
-        id: 'conveyors', code: 'T01', title: 'Transportadores', sub: 'Conveyors',
+        id: 'conveyors', code: 'T01', title: 'Transporte', sub: 'Conveyors',
         img: '/img/t01-conveyors.webp',
         desc: 'Sistemas de evacuación de viruta metálica, piezas y residuos para líneas de producción, celdas de mecanizado, líneas transfer y centros CNC. Configurables en bisagra, raspador, magnéticos, cintas, cadenas plásticas o combinados.',
         bullets: [
@@ -295,7 +295,7 @@ export const CONTENT: Record<Lang, Content> = {
     },
     tech: [
       {
-        id: 'conveyors', code: 'T01', title: 'Conveyors', sub: 'Transportadores',
+        id: 'conveyors', code: 'T01', title: 'Conveyors', sub: 'Transporte',
         img: '/img/t01-conveyors.webp',
         desc: 'Evacuation systems for metal chips, parts and waste from production lines, machining cells, transfer lines and CNC centers. Configurable as hinge, scraper, magnetic, belt, plastic chain or combined.',
         bullets: [
