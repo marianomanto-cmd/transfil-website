@@ -49,10 +49,30 @@ export function Hero({ content }: Props) {
   // Detect parallax-eligible environment on mount so SSR + first hydration
   // render are identical (was reading window during render → hydration warn).
   const [enableParallax, setEnableParallax] = useState(false);
+  // Hero video src is deferred to after idle so the poster image becomes
+  // the LCP element and the (multi-MB) video doesn't compete for the
+  // critical path. <source media> isn't reliably honored by Safari/FF;
+  // pick the right file in JS instead.
+  const [videoSrc, setVideoSrc] = useState<string | null>(null);
   useEffect(() => {
     if (typeof window !== 'undefined' && window.matchMedia) {
       setEnableParallax(window.matchMedia('(min-width: 900px) and (pointer: fine)').matches);
     }
+    if (typeof window === 'undefined') return;
+    const pick = () => {
+      const isMobile = window.matchMedia('(max-width: 768px)').matches;
+      setVideoSrc(isMobile ? '/video/hero-mobile.mp4' : '/video/hero-desktop.mp4');
+    };
+    const ric = (window as unknown as { requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number }).requestIdleCallback;
+    if (ric) {
+      const id = ric(pick, { timeout: 1500 });
+      return () => {
+        const cic = (window as unknown as { cancelIdleCallback?: (id: number) => void }).cancelIdleCallback;
+        cic?.(id);
+      };
+    }
+    const id = window.setTimeout(pick, 600);
+    return () => window.clearTimeout(id);
   }, []);
   const parallax = enableParallax ? Math.min(scrollY * 0.18, 160) : 0;
   const stats = [c.stat1, c.stat2, c.stat3, c.stat4];
@@ -70,13 +90,11 @@ export function Hero({ content }: Props) {
           muted
           loop
           playsInline
-          preload="metadata"
+          preload="none"
           poster="/img/hero-poster.webp"
           aria-hidden="true"
-        >
-          <source src="/video/hero-mobile.mp4" media="(max-width: 768px)" type="video/mp4" />
-          <source src="/video/hero-desktop.mp4" type="video/mp4" />
-        </video>
+          {...(videoSrc ? { src: videoSrc } : {})}
+        />
       </div>
       <div className="tf-hero-meta">
         <span className="tf-mono tf-hero-meta-line">

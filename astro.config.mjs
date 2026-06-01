@@ -11,6 +11,11 @@ export default defineConfig({
         defaultLocale: 'es',
         locales: { es: 'es-AR', en: 'en-US' },
       },
+      // Stamp every entry with build time so search engines can prioritise
+      // re-crawling when the site changes.
+      serialize(item) {
+        return { ...item, lastmod: new Date().toISOString() };
+      },
     }),
   ],
   i18n: {

@@ -10,10 +10,11 @@ const c = content.services;
   <div class="tf-services is-rows">
     {c.items.map((s, i) => (
       <article
+        id={`service-${s.code.toLowerCase()}`}
         class="tf-service"
         data-has-bg="true"
         data-row-flip={i % 2 === 1 ? 'true' : undefined}
-        style={`--svc-bg: url("${s.img}")`}
+        style={`--svc-bg: url("${s.img}"); scroll-margin-top: calc(var(--header-h) + 24px);`}
       >
         <div class="tf-service-row-img" aria-hidden="true" style={`background-image: url("${s.img}")`} />
         <div class="tf-service-bg" aria-hidden="true" />

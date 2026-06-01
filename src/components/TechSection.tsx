@@ -6,7 +6,7 @@ import type { Content } from '../i18n/content';
 const TILE_POS = ['hero', 'a', 'b', 'c'] as const;
 const VIDEO_EXT_RE = /\.(mp4|webm|mov)(\?|$)/i;
 
-function TileMedia({ src, poster, kind }: { src: string; poster?: string; kind: 'photo' | 'video' }) {
+function TileMedia({ src, poster, kind, label }: { src: string; poster?: string; kind: 'photo' | 'video'; label: string }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const isVideo = kind === 'video' && VIDEO_EXT_RE.test(src);
 
@@ -40,10 +40,11 @@ function TileMedia({ src, poster, kind }: { src: string; poster?: string; kind: 
         loop
         playsInline
         preload="none"
+        aria-label={label}
       />
     );
   }
-  return <img src={src} alt="" loading="lazy" decoding="async" />;
+  return <img src={src} alt={label} loading="lazy" decoding="async" />;
 }
 
 export function TechSection({ content }: { content: Content }) {
@@ -96,9 +97,11 @@ export function TechSection({ content }: { content: Content }) {
 
           return (
             <section
+              id={`tech-${t.id}`}
               className="tf-tech-bento-group"
               key={t.id}
               aria-labelledby={`tech-bento-${t.id}`}
+              style={{ scrollMarginTop: 'calc(var(--header-h) + 24px)' }}
             >
               <header className="tf-tech-bento-head">
                 <span className="tf-mono tf-tech-bento-code">{t.code}</span>
@@ -120,7 +123,7 @@ export function TechSection({ content }: { content: Content }) {
                       key={b.name}
                     >
                       <div className="tf-tech-tile-media" aria-hidden="true">
-                        <TileMedia src={b.img} poster={b.poster} kind={b.kind} />
+                        <TileMedia src={b.img} poster={b.poster} kind={b.kind} label={b.name} />
                       </div>
                       <div className="tf-tech-tile-overlay" aria-hidden="true" />
                       <div className="tf-tech-tile-body">
@@ -145,7 +148,7 @@ export function TechSection({ content }: { content: Content }) {
                   onClick={() => toggleTech(ti)}
                 >
                   <div className="tf-tech-acc-head-media" aria-hidden="true">
-                    <TileMedia src={headerImg} poster={headerPoster} kind={headerKind} />
+                    <TileMedia src={headerImg} poster={headerPoster} kind={headerKind} label={headerName} />
                   </div>
                   <div className="tf-tech-acc-head-body">
                     <span className="tf-mono tf-tech-acc-head-code">{headerCode}</span>
@@ -178,7 +181,7 @@ export function TechSection({ content }: { content: Content }) {
                           onClick={() => pickBullet(ti, bi)}
                         >
                           <div className="tf-tech-acc-bullet-media" aria-hidden="true">
-                            <TileMedia src={b.img} poster={b.poster} kind={b.kind} />
+                            <TileMedia src={b.img} poster={b.poster} kind={b.kind} label={b.name} />
                           </div>
                           <div className="tf-tech-acc-bullet-body">
                             <span className="tf-mono">

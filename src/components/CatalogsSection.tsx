@@ -40,7 +40,7 @@ export function CatalogsSection({ content }: { content: Content }) {
               TRANS·FIL · {it.title.toUpperCase()}
             </span>
             <div className="tf-catalog-cover" aria-hidden="true">
-              <img className="tf-catalog-cover-img" src={it.img} alt="" loading="lazy" />
+              <img className="tf-catalog-cover-img" src={it.img} alt={`${it.title} — Trans-Fil`} width="800" height="1131" loading="lazy" decoding="async" />
               <div className="tf-catalog-cover-grid" />
               <div className="tf-catalog-cover-tag">
                 <span className="tf-mono">{`C0${i + 1}`}</span>
