@@ -39,7 +39,6 @@ export function TechSection({ content }: { content: Content }) {
             <div className="tf-tech-bento-row">
               {t.bullets.map((b, bi) => {
                 const pos = TILE_POS[bi] ?? 'a';
-                const showDesc = pos === 'hero' || pos === 'c';
                 const isVideo = b.kind === 'video' && /\.(mp4|webm|mov)(\?|$)/i.test(b.img);
                 return (
                   <article
@@ -69,9 +68,7 @@ export function TechSection({ content }: { content: Content }) {
                         {t.code} · {String(bi + 1).padStart(2, '0')}
                       </span>
                       <h4 className="tf-tech-tile-name">{b.name}</h4>
-                      {showDesc && (
-                        <p className="tf-tech-tile-desc">{b.desc}</p>
-                      )}
+                      <p className="tf-tech-tile-desc">{b.desc}</p>
                     </div>
                   </article>
                 );
