@@ -1,0 +1,16 @@
+{
+  "name": "Trans-Fil",
+  "short_name": "Trans-Fil",
+  "description": "Maquinaria industrial especializada · Córdoba, Argentina",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0e0e10",
+  "theme_color": "#0e0e10",
+  "icons": [
+    { "src": "/favicon.svg", "type": "image/svg+xml", "sizes": "any", "purpose": "any" },
+    { "src": "/favicon-16.png", "type": "image/png", "sizes": "16x16" },
+    { "src": "/favicon-32.png", "type": "image/png", "sizes": "32x32" },
+    { "src": "/apple-touch-icon.png", "type": "image/png", "sizes": "180x180" }
+  ]
+}

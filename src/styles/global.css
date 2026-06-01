@@ -36,6 +36,12 @@
 
 * { box-sizing: border-box; }
 
+html {
+  scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
 html, body {
   margin: 0;
   background: var(--bg);
@@ -1348,6 +1354,9 @@ button { font-family: inherit; }
   transition: border-color 0.2s, background 0.2s;
 }
 .tf-field textarea { resize: vertical; min-height: 120px; }
+.tf-field input:hover, .tf-field select:hover, .tf-field textarea:hover {
+  border-color: var(--line-strong);
+}
 .tf-field input:focus, .tf-field select:focus, .tf-field textarea:focus {
   border-color: var(--accent);
   background: rgba(58, 134, 255, 0.04);
@@ -1854,12 +1863,36 @@ html { scrollbar-color: var(--line-strong) var(--bg); scrollbar-width: thin; }
 /* ── Focus rings — accent, square, accessible ───────────────────── */
 :focus-visible {
   outline: 2px solid var(--accent);
-  outline-offset: 2px;
+  outline-offset: 3px;
 }
 .tf-btn:focus-visible,
 .tf-cta-mini:focus-visible,
 .tf-tab:focus-visible{ outline-offset: -2px; }
 .tf-lang a:focus-visible { outline-offset: 4px; }
+
+/* ── Skip-to-content — visible only on keyboard focus ───────────── */
+.tf-skip-link {
+  position: fixed;
+  top: -100px;
+  left: 12px;
+  z-index: 200;
+  padding: 10px 16px;
+  background: var(--accent);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  border: 0;
+  border-radius: 2px;
+  transition: top 0.2s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.tf-skip-link:focus-visible { top: 12px; outline-offset: 2px; }
+
+/* ── Nav scroll-spy — active link gets the accent underline ─────── */
+.tf-nav a[data-active="true"] { color: var(--fg); }
+.tf-nav a[data-active="true"]::after { transform: scaleX(1); }
 
 /* ── Eyebrow leading bracket — small accent dash that draws in ──── */
 .tf-section .tf-eyebrow {
@@ -2875,7 +2908,17 @@ body { opacity: 0; animation: tf-body-in 0.6s ease 0.05s forwards; }
 .tf-form-foot,
 input[type="email"],
 input[type="tel"],
-input[type="number"] {
+input[type="number"],
+.tf-mono,
+.tf-stat-v,
+.tf-tl-year,
+.tf-contact-coord,
+.tf-catalog-num,
+.tf-catalog-cover-tag,
+.tf-tech-tab-code,
+.tf-tech-detail-code,
+.tf-bullet-detail-eyebrow,
+.tf-tab-count {
   font-feature-settings: "tnum" 1, "zero" 1, "ss01" 1;
   font-variant-numeric: tabular-nums slashed-zero;
 }
