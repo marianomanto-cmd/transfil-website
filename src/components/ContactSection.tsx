@@ -50,8 +50,22 @@ export function ContactSection({ content }: { content: Content }) {
     if (!data.message) errs.message = c.form.required;
     setErrors(errs);
     if (Object.keys(errs).length === 0) {
-      // TODO: wire up real submission endpoint (mailto/Formspree/API) — to be defined with client.
-      console.log('contact form submission', data);
+      const isEs = content.htmlLang.startsWith('es');
+      const subject = `[Web${data.company ? ` · ${data.company}` : ''}] ${data.name}`;
+      const lines = [
+        `${c.form.name}: ${data.name}`,
+        data.company ? `${c.form.company}: ${data.company}` : null,
+        `${c.form.email}: ${data.email}`,
+        data.phone ? `${c.form.phone}: ${data.phone}` : null,
+        `${c.form.industry}: ${data.industry}`,
+        '',
+        `${c.form.message}:`,
+        data.message,
+        '',
+        isEs ? '— Enviado desde transfil.com.ar' : '— Sent from transfil.com.ar',
+      ].filter(Boolean) as string[];
+      const href = `mailto:ventas@transfil.com.ar?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join('\n'))}`;
+      window.location.href = href;
       setSent(true);
       setTimeout(() => setSent(false), 5000);
       setData({
@@ -112,14 +126,13 @@ export function ContactSection({ content }: { content: Content }) {
         <aside className="tf-contact-side">
           <div className="tf-contact-block">
             <div className="tf-mono tf-contact-h">{c.direct}</div>
-            <a href="mailto:mantovanimariano@transfil.com.ar" className="tf-contact-link">
-              mantovanimariano@transfil.com.ar
+            <a href="mailto:ventas@transfil.com.ar" className="tf-contact-link">
+              ventas@transfil.com.ar
             </a>
-            <a href="tel:+543514650687" className="tf-contact-link">+54 (351) 465 0687</a>
-            <a href="tel:+5493513115838" className="tf-contact-link">+54 9 3513 11-5838</a>
+            <a href="tel:+5493513820321" className="tf-contact-link">+54 9 3513 82-0321</a>
             <a
               className="tf-contact-wa"
-              href={`https://wa.me/5493513115838?text=${encodeURIComponent(content.whatsappMessage)}`}
+              href={`https://wa.me/5493513820321?text=${encodeURIComponent(content.whatsappMessage)}`}
               target="_blank"
               rel="noopener noreferrer"
             >

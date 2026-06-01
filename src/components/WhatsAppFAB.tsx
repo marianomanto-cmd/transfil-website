@@ -6,7 +6,7 @@ type Props = {
   message: string;
 };
 
-export function WhatsAppFAB({ phone = '5493513115838', message }: Props) {
+export function WhatsAppFAB({ phone = '5493513820321', message }: Props) {
   const [show, setShow] = useState(false);
   useEffect(() => {
     const onScroll = () => setShow(window.scrollY > 120);
