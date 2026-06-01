@@ -209,7 +209,7 @@ export const CONTENT: Record<Lang, Content> = {
         { code: 'S01', title: 'Reparaciones', desc: 'Diagnóstico, repuestos y reacondicionamiento de equipos propios y de terceros.', img: '/img/s01-repairs.webp' },
         { code: 'S02', title: 'Retrofitting', desc: 'Modernización de máquinas existentes: PLC, automatización, eficiencia energética.', img: '/img/s02-retrofitting.webp' },
         { code: 'S03', title: 'Mantenimiento', desc: 'Planes preventivos y predictivos. Visitas programadas y soporte remoto continuo.', img: '/img/s03-maintenance.webp' },
-        { code: 'S04', title: 'Ingeniería a medida', desc: 'Estudio de proceso, layout, simulación y diseño mecánico desde cero.', img: '/img/welding-line.avif' },
+        { code: 'S04', title: 'Ingeniería a medida', desc: 'Estudio de proceso, layout, simulación y diseño mecánico desde cero.', img: '/img/s04-engineering.webp' },
       ],
     },
     industries: {
@@ -369,7 +369,7 @@ export const CONTENT: Record<Lang, Content> = {
         { code: 'S01', title: 'Repairs', desc: 'Diagnostics, spare parts and refurbishment of our own and third-party equipment.', img: '/img/s01-repairs.webp' },
         { code: 'S02', title: 'Retrofitting', desc: 'Modernization of existing machines: PLC, automation, energy efficiency.', img: '/img/s02-retrofitting.webp' },
         { code: 'S03', title: 'Maintenance', desc: 'Preventive and predictive plans. Scheduled visits and ongoing remote support.', img: '/img/s03-maintenance.webp' },
-        { code: 'S04', title: 'Custom engineering', desc: 'Process study, layout, simulation and mechanical design from scratch.', img: '/img/welding-line.avif' },
+        { code: 'S04', title: 'Custom engineering', desc: 'Process study, layout, simulation and mechanical design from scratch.', img: '/img/s04-engineering.webp' },
       ],
     },
     industries: {
