@@ -700,7 +700,10 @@ button { font-family: inherit; }
 .tf-tech-bento-row {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  grid-auto-rows: clamp(180px, 18vw, 240px);
+  /* Row 1 is fixed-height for the A/B small tiles; row 2 grows to fit
+     the C tile's full caption so it never gets truncated. HERO spans
+     both rows and stretches with whatever row 2 becomes. */
+  grid-template-rows: clamp(180px, 18vw, 240px) auto;
   gap: clamp(10px, 1.2vw, 16px);
 }
 
@@ -710,13 +713,11 @@ button { font-family: inherit; }
   border: 1px solid var(--line);
   background: var(--bg-2);
   isolation: isolate;
-  will-change: transform;
-  transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
   min-width: 0;
 }
-.tf-tech-tile:hover {
-  transform: translateY(-2px);
-}
+/* Hover keeps the image-scale + overlay-deepen signals (defined below);
+   no tile-lift transform because the 2px translate kept producing a
+   1px shimmer below the frame on every paint. */
 
 .tf-tech-tile[data-pos="hero"] { grid-column: span 6; grid-row: span 2; }
 .tf-tech-tile[data-pos="a"]    { grid-column: span 3; grid-row: span 1; }
@@ -835,17 +836,11 @@ button { font-family: inherit; }
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
-/* C is a wide 6×1 banner — it has room for the full caption rather
-   than a 2-line teaser. Slightly smaller font + 7-line clamp so the
-   longest desc (Producción en serie, ~370 chars) fits without an
-   ellipsis at the standard desktop viewports. */
+/* C is a wide 6-col banner. Row 2 is now auto-sized in the grid so
+   the tile grows to fit the full caption — no line-clamp, no ellipsis. */
 .tf-tech-tile[data-pos="c"] .tf-tech-tile-desc {
-  font-size: 13.5px;
-  line-height: 1.5;
-  -webkit-line-clamp: 7;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  font-size: 14px;
+  line-height: 1.55;
 }
 
 /* Tablet: bento collapses to a simpler 2-col grid with hero and C
