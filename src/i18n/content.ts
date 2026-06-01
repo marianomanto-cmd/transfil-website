@@ -157,7 +157,7 @@ export const CONTENT: Record<Lang, Content> = {
       },
       {
         id: 'filtration', code: 'T03', title: 'Tratamiento de fluidos', sub: 'Fluids treatment',
-        img: '/img/hydraulic-station.avif',
+        img: '/img/t03-fluids-cover.webp',
         desc: 'Filtración de refrigerantes, separación magnética y centralización de fluidos. Recuperación de aceites y manejo responsable de residuos.',
         bullets: [
           { name: 'Filtros de banda', img: '/img/t02-band-filters.webp', desc: 'Filtración por gravedad con tela de papel o textil. Bajo costo operativo, ideal para refrigerantes solubles en mecanizado.', kind: 'photo' },
@@ -317,7 +317,7 @@ export const CONTENT: Record<Lang, Content> = {
       },
       {
         id: 'filtration', code: 'T03', title: 'Fluids treatment', sub: 'Filtración',
-        img: '/img/hydraulic-station.avif',
+        img: '/img/t03-fluids-cover.webp',
         desc: 'Coolant filtration, magnetic separation and fluid centralization. Oil recovery and responsible waste handling.',
         bullets: [
           { name: 'Belt filters', img: '/img/t02-band-filters.webp', desc: 'Gravity filtration with paper or textile cloth. Low operating cost, ideal for water-soluble coolants in machining.', kind: 'photo' },
