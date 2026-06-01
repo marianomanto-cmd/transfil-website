@@ -1,27 +1,30 @@
-import { useEffect, useState } from 'react';
+import { useRef, useState } from 'react';
 import { cx } from '../lib/cx';
 import { useReveal } from '../lib/hooks';
 import { Media } from './Media';
-import type { Content, TechBullet } from '../i18n/content';
+import type { Content } from '../i18n/content';
 
 export function TechSection({ content }: { content: Content }) {
   const c = content.capabilities;
   const items = content.tech;
-  const [active, setActive] = useState(items[0].id);
-  const [activeBullet, setActiveBullet] = useState<TechBullet | null>(null);
+  const [active, setActive] = useState<{ techIdx: number; bulletIdx: number }>({ techIdx: 0, bulletIdx: 0 });
   const [sectionRef, vis] = useReveal(0.1);
+  const detailRef = useRef<HTMLDivElement>(null);
 
-  // Reset the selected bullet whenever the user switches the tech line.
-  useEffect(() => {
-    setActiveBullet(null);
-  }, [active]);
+  const activeTech = items[active.techIdx];
+  const activeBullet = activeTech.bullets[active.bulletIdx];
+  const mediaKey = `${activeTech.id}-${active.bulletIdx}`;
 
-  const activeItem = items.find((i) => i.id === active) || items[0];
-  const displayImg = activeBullet?.img || activeItem.img;
-  const displayLabel = activeBullet?.name || activeItem.title;
-  const displayKind = activeBullet?.kind ?? 'photo';
-  const displayPoster = activeBullet?.poster;
-  const mediaKey = `${active}-${activeBullet?.name ?? 'overview'}`;
+  const onPick = (techIdx: number, bulletIdx: number) => {
+    setActive({ techIdx, bulletIdx });
+    // On phones the rail sits below the detail; smooth-scroll up so the
+    // user sees the new selection rather than the same rail they just tapped.
+    if (typeof window !== 'undefined' && window.matchMedia('(max-width: 880px)').matches) {
+      requestAnimationFrame(() => {
+        detailRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    }
+  };
 
   return (
     <section
@@ -36,77 +39,54 @@ export function TechSection({ content }: { content: Content }) {
         <p className="tf-section-sub">{c.sub}</p>
       </header>
 
-      <div className="tf-tech">
-        <nav className="tf-tech-tabs" role="tablist" aria-label={c.title}>
-          {items.map((it) => {
-            const on = it.id === active;
+      <div className="tf-tech-md">
+        <nav className="tf-tech-rail" aria-label={c.title}>
+          {items.map((t, ti) => {
+            const groupActive = ti === active.techIdx;
             return (
-              <button
-                key={it.id}
-                type="button"
-                role="tab"
-                id={`tech-tab-${it.id}`}
-                aria-selected={on}
-                aria-controls="tech-panel"
-                className={cx('tf-tech-tab', on && 'is-on')}
-                onClick={() => setActive(it.id)}
-              >
-                <span className="tf-mono tf-tech-tab-code">{it.code}</span>
-                <span className="tf-tech-tab-title">{it.title}</span>
-              </button>
+              <div className={cx('tf-tech-rail-group', groupActive && 'is-active')} key={t.id}>
+                <div className="tf-tech-rail-head">
+                  <span className="tf-mono tf-tech-rail-code">{t.code}</span>
+                  <span className="tf-tech-rail-title">{t.title}</span>
+                </div>
+                <ul className="tf-tech-rail-bullets" role="list">
+                  {t.bullets.map((b, bi) => {
+                    const on = groupActive && bi === active.bulletIdx;
+                    return (
+                      <li key={b.name}>
+                        <button
+                          type="button"
+                          className={cx('tf-tech-rail-bullet', on && 'is-on')}
+                          aria-current={on ? 'true' : undefined}
+                          onClick={() => onPick(ti, bi)}
+                        >
+                          <span className="tf-mono" aria-hidden="true">→</span>
+                          <span>{b.name}</span>
+                        </button>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
             );
           })}
         </nav>
 
-        <div
-          id="tech-panel"
-          role="tabpanel"
-          aria-labelledby={`tech-tab-${activeItem.id}`}
-          className="tf-tech-content"
-        >
+        <div className="tf-tech-detail" ref={detailRef}>
+          <div className="tf-mono tf-tech-detail-meta">
+            {activeTech.code} / {activeTech.sub}
+          </div>
           <div className="tf-tech-detail-media" key={mediaKey}>
-            <Media kind={displayKind} src={displayImg} poster={displayPoster} label={displayLabel} ratio="4/3" />
+            <Media
+              kind={activeBullet.kind}
+              src={activeBullet.img}
+              poster={activeBullet.poster}
+              label={activeBullet.name}
+              ratio="4/3"
+            />
           </div>
-          <div className="tf-tech-detail-body">
-            <div className="tf-mono tf-tech-detail-code">
-              {activeItem.code} / {activeItem.sub}
-            </div>
-            <h3 className="tf-h3">{activeItem.title}</h3>
-            <p className="tf-tech-desc">{activeItem.desc}</p>
-            <div className="tf-tech-bullets" role="tablist" aria-label={activeItem.title}>
-              {activeItem.bullets.map((b) => {
-                const on = !!activeBullet && activeBullet.name === b.name;
-                return (
-                  <button
-                    key={b.name}
-                    type="button"
-                    role="tab"
-                    aria-selected={on}
-                    className={cx('tf-tech-bullet', on && 'is-on')}
-                    onClick={() => setActiveBullet(on ? null : b)}
-                  >
-                    <span className="tf-mono">→</span>
-                    <span>{b.name}</span>
-                  </button>
-                );
-              })}
-            </div>
-            <div
-              className={cx('tf-bullet-detail', activeBullet && 'is-open')}
-              aria-hidden={!activeBullet}
-            >
-              <div className="tf-bullet-detail-inner">
-                {activeBullet && (
-                  <>
-                    <div className="tf-mono tf-bullet-detail-eyebrow">
-                      → {activeBullet.name}
-                    </div>
-                    <p className="tf-bullet-detail-caption">{activeBullet.desc}</p>
-                  </>
-                )}
-              </div>
-            </div>
-          </div>
+          <h3 className="tf-h3 tf-tech-detail-name">{activeBullet.name}</h3>
+          <p className="tf-tech-detail-desc">{activeBullet.desc}</p>
         </div>
       </div>
     </section>

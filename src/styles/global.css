@@ -654,175 +654,144 @@ button { font-family: inherit; }
 }
 
 /* ── Tech section ────────────────────────────────────────────────── */
-.tf-tech {
-  display: block;
-}
-/* Horizontal tab bar (T01..T04) above the content */
-.tf-tech-tabs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0;
-  border-bottom: 1px solid var(--line);
-  margin-bottom: clamp(28px, 4vw, 48px);
-}
-.tf-tech-tab {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 12px;
-  padding: 16px 22px;
-  border: 0;
-  background: transparent;
-  cursor: pointer;
-  color: var(--fg-3);
-  border-bottom: 2px solid transparent;
-  margin-bottom: -1px;
-  transition: color 0.2s, border-color 0.2s;
-}
-.tf-tech-tab:hover { color: var(--fg-2); }
-.tf-tech-tab.is-on {
-  color: var(--fg);
-  border-bottom-color: var(--accent);
-}
-.tf-tech-tab-code {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.08em;
-  color: var(--fg-4);
-  transition: color 0.2s;
-}
-.tf-tech-tab.is-on .tf-tech-tab-code { color: var(--accent); }
-.tf-tech-tab-title {
-  font-family: var(--font-display);
-  font-size: clamp(15px, 1.3vw, 18px);
-  font-weight: 500;
-  letter-spacing: -0.005em;
+/* ── Tech section: master-detail layout ─────────────────────────────
+   Left rail with all four tech groups and their bullets nested; right
+   detail panel showing the active bullet's image, name and description.
+   Detail is sticky on desktop so it stays in view while the user
+   browses the rail. */
+.tf-tech-md {
+  display: grid;
+  grid-template-columns: minmax(260px, 320px) 1fr;
+  gap: clamp(40px, 5vw, 80px);
+  align-items: start;
 }
 
-/* Active tech panel: image | body in a 2-col grid below the tabs */
-.tf-tech-content {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: clamp(24px, 4vw, 56px);
-  align-items: start;
-  animation: tf-tech-content-in 0.42s cubic-bezier(0.2, 0.7, 0.2, 1);
+.tf-tech-rail {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  min-width: 0;
 }
-@keyframes tf-tech-content-in {
-  from { opacity: 0; transform: translateX(18px); }
+.tf-tech-rail-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.tf-tech-rail-head {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 6px;
+}
+.tf-tech-rail-code {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--fg-4);
+  transition: color 0.25s;
+}
+.tf-tech-rail-title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 15px;
+  letter-spacing: -0.005em;
+  color: var(--fg-2);
+  transition: color 0.25s;
+}
+.tf-tech-rail-group.is-active .tf-tech-rail-code { color: var(--accent); }
+.tf-tech-rail-group.is-active .tf-tech-rail-title { color: var(--fg); }
+
+.tf-tech-rail-bullets {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.tf-tech-rail-bullet {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 14px;
+  border: 0;
+  background: transparent;
+  color: var(--fg-3);
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  text-align: left;
+  cursor: pointer;
+  border-left: 2px solid transparent;
+  transition: color 0.2s, border-color 0.2s, background 0.2s, padding-left 0.2s;
+}
+.tf-tech-rail-bullet:hover {
+  color: var(--fg-2);
+  padding-left: 18px;
+}
+.tf-tech-rail-bullet .tf-mono {
+  color: var(--fg-4);
+  font-size: 11px;
+  transition: color 0.2s;
+}
+.tf-tech-rail-bullet:hover .tf-mono { color: var(--fg-3); }
+.tf-tech-rail-bullet.is-on {
+  color: var(--fg);
+  border-left-color: var(--accent);
+  background: var(--accent-soft);
+  padding-left: 18px;
+}
+.tf-tech-rail-bullet.is-on .tf-mono { color: var(--accent); }
+
+/* Right detail — sticky on desktop, swaps content on rail click */
+.tf-tech-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-width: 0;
+  position: sticky;
+  top: calc(var(--header-h) + 24px);
+  animation: tf-tech-detail-in 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.tf-tech-detail-meta {
+  color: var(--accent);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+}
+.tf-tech-detail-name {
+  margin: 0;
+}
+.tf-tech-detail-desc {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--fg-2);
+  margin: 0;
+  text-wrap: pretty;
+  max-width: 56ch;
+}
+@keyframes tf-tech-detail-in {
+  from { opacity: 0; transform: translateX(14px); }
   to { opacity: 1; transform: none; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .tf-tech-content { animation: none; }
-}
-.tf-tech-detail-body {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding: 24px;
-  border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.02);
-}
-.tf-tech-detail-code {
-  color: var(--accent);
-  margin-bottom: 4px;
-}
-.tf-tech-desc {
-  font-size: 16px;
-  line-height: 1.55;
-  color: var(--fg-2);
-  margin: 0;
-  text-wrap: pretty;
-}
-/* Tech section bullets — horizontal chip row + inline expansion below */
-.tf-tech { position: relative; }
-.tf-tech-bullets {
-  list-style: none;
-  margin: 0;
-  padding: 16px 0 0;
-  border-top: 1px solid var(--line);
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.tf-tech-bullet {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 9px 13px;
-  border: 1px solid var(--line-strong);
-  background: transparent;
-  color: var(--fg-2);
-  font-family: var(--font-body);
-  font-size: 13px;
-  letter-spacing: 0.01em;
-  line-height: 1.2;
-  cursor: pointer;
-  text-align: left;
-  transition: border-color 0.2s, background 0.2s, color 0.2s;
-}
-.tf-tech-bullet .tf-mono { color: var(--accent); font-size: 11px; }
-.tf-tech-bullet:hover {
-  color: var(--fg);
-  border-color: var(--fg-3);
-}
-.tf-tech-bullet.is-on {
-  color: var(--accent);
-  border-color: var(--accent);
-  background: var(--accent-soft);
-}
-.tf-tech-bullet.is-on .tf-mono { color: var(--accent); }
-
-/* Inline expansion that appears below the chip row when one is active.
-   Uses the grid-template-rows 0fr → 1fr trick for a height transition
-   that works on arbitrary content. Inner wrapper has overflow:hidden
-   so the animation is clean. */
-.tf-bullet-detail {
-  display: grid;
-  grid-template-rows: 0fr;
-  transition: grid-template-rows 0.35s cubic-bezier(0.2, 0.7, 0.2, 1),
-              margin-top 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
-  margin-top: 0;
-}
-.tf-bullet-detail.is-open {
-  grid-template-rows: 1fr;
-  margin-top: 16px;
-}
-.tf-bullet-detail-inner {
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  border-top: 1px solid var(--line);
-  padding-top: 16px;
-}
-.tf-bullet-detail.is-open .tf-bullet-detail-inner > * {
-  opacity: 0;
-  animation: tf-bullet-detail-in 0.3s cubic-bezier(0.2, 0.7, 0.2, 1) 0.1s forwards;
-}
-.tf-bullet-detail.is-open .tf-bullet-detail-inner > *:nth-child(2) {
-  animation-delay: 0.18s;
-}
-@keyframes tf-bullet-detail-in {
-  from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-.tf-bullet-detail-eyebrow {
-  color: var(--accent);
-  font-size: 11px;
-  font-family: var(--font-mono);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-.tf-bullet-detail-caption {
-  font-size: 15px;
-  line-height: 1.6;
-  color: var(--fg);
-  margin: 0;
-  text-wrap: pretty;
+  .tf-tech-detail { animation: none; }
 }
 
-@media (max-width: 640px) {
-  .tf-tech-bullet { font-size: 12.5px; padding: 8px 12px; }
-  .tf-bullet-detail-caption { font-size: 14px; }
+/* Mobile: stack with detail on top, rail below.
+   Detail unsticks; tapping a rail item smooth-scrolls back up. */
+@media (max-width: 880px) {
+  .tf-tech-md {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+  .tf-tech-detail {
+    position: static;
+    order: 0;
+    scroll-margin-top: calc(var(--header-h) + 16px);
+  }
+  .tf-tech-rail { order: 1; gap: 24px; }
+  .tf-tech-rail-bullet { padding: 12px 14px; min-height: 44px; }
 }
 
 @keyframes tf-fade-in {
