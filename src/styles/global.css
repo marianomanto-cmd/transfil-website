@@ -1933,8 +1933,60 @@ button { font-family: inherit; }
   .tf-services { grid-template-columns: 1fr; }
   .tf-footer-grid { grid-template-columns: 1fr; }
   .tf-hero-stats { grid-template-columns: 1fr 1fr; }
-  /* Phones drop catalog grid to 1-col so cards aren't squished */
-  .tf-catalogs { grid-template-columns: 1fr; }
+  /* Phones: catalogs go from tall portrait cards to a compact horizontal
+     list — small cover thumbnail on the left, title + meta + CTA stacked
+     on the right. ~110px tall per card instead of ~500px. */
+  .tf-catalogs { grid-template-columns: 1fr; gap: 12px; }
+  .tf-catalog-card {
+    flex-direction: row;
+    align-items: stretch;
+    min-height: 108px;
+  }
+  .tf-catalog-card:hover { transform: none; }
+  .tf-catalog-spine {
+    width: 8px;
+    font-size: 7.5px;
+    letter-spacing: 0.12em;
+  }
+  .tf-catalog-cover {
+    aspect-ratio: auto;
+    width: 88px;
+    flex-shrink: 0;
+    margin-left: 8px;
+    border-bottom: none;
+    border-right: 1px solid var(--line);
+  }
+  .tf-catalog-cover-brand,
+  .tf-catalog-cover-tag,
+  .tf-catalog-cover-stripe,
+  .tf-catalog-cover-grid { display: none; }
+  .tf-catalog-cover-img { filter: saturate(0.65) contrast(1.05) brightness(0.85); }
+  .tf-catalog-body {
+    flex: 1;
+    margin-left: 0;
+    padding: 12px 14px;
+    gap: 6px;
+    min-width: 0;
+  }
+  .tf-catalog-meta { align-items: center; gap: 8px; }
+  .tf-catalog-num { font-size: 10px; }
+  .tf-catalog-title { font-size: 15px; line-height: 1.2; }
+  .tf-catalog-desc {
+    font-size: 12.5px;
+    line-height: 1.4;
+    margin: 2px 0 0;
+    min-height: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .tf-catalog-cta {
+    padding: 6px 10px;
+    font-size: 11px;
+    margin-top: auto;
+    align-self: flex-start;
+  }
   /* Coverage list: 2-col stays more compact than 12 rows in 1-col */
   .tf-coverage-list { grid-template-columns: 1fr 1fr; column-gap: 16px; }
   /* History timeline: tighter year column to give room to the card text */
