@@ -40,9 +40,9 @@ export type Content = {
   meta: {
     title: string;
     description: string;
-    keywords: string;
     ogTitle: string;
     ogDescription: string;
+    ogImageAlt: string;
     twitterDescription: string;
   };
   nav: {
@@ -110,10 +110,10 @@ export const CONTENT: Record<Lang, Content> = {
     altLocale: 'en_US',
     meta: {
       title: 'Trans-Fil | Maquinaria Industrial Especializada · Córdoba, Argentina',
-      description: 'Diseñamos, fabricamos y mantenemos maquinaria industrial para la metalurgia, automotriz y máquinas-herramienta: transportadores de viruta, lavado industrial, filtración de fluidos y maquinaria de corte. Desde 1989, en Córdoba.',
-      keywords: 'maquinaria industrial, transportadores de viruta, filtración de refrigerantes, lavado industrial, briquetadoras, retrofitting, Córdoba Argentina, Trans-Fil',
-      ogTitle: 'Trans-Fil | Maquinaria Industrial Especializada',
-      ogDescription: '36 años diseñando, fabricando y manteniendo maquinaria industrial en Córdoba, Argentina. Transportadores, lavado, filtración y corte para metalurgia y automotriz.',
+      description: 'Maquinaria industrial especializada en Córdoba desde 1989: transporte de viruta, lavado industrial, filtración de fluidos y maquinaria de corte.',
+      ogTitle: 'Trans-Fil — Maquinaria industrial · Córdoba',
+      ogDescription: 'Diseñamos, fabricamos y mantenemos maquinaria industrial desde 1989: transporte de viruta, lavado, filtración de fluidos y corte para metalurgia y automotriz.',
+      ogImageAlt: 'Estación de transporte de viruta TRANS-FIL en taller industrial',
       twitterDescription: '36 años diseñando maquinaria industrial en Córdoba, Argentina. Procesos que no se detienen.',
     },
     nav: { home: 'Inicio', tech: 'Tecnologías', catalogs: 'Catálogos', services: 'Servicios', industries: 'Industrias', history: 'Historia', contact: 'Contacto' },
@@ -271,10 +271,10 @@ export const CONTENT: Record<Lang, Content> = {
     altLocale: 'es_AR',
     meta: {
       title: 'Trans-Fil | Specialized Industrial Machinery · Córdoba, Argentina',
-      description: 'We design, build and maintain industrial machinery for metallurgic, automotive and machine-tool industries: chip conveyors, industrial washing, fluid filtration and cutting machinery. Since 1989, in Córdoba.',
-      keywords: 'industrial machinery, chip conveyors, coolant filtration, industrial washing, briquetters, retrofitting, Córdoba Argentina, Trans-Fil',
-      ogTitle: 'Trans-Fil | Specialized Industrial Machinery',
-      ogDescription: '36 years designing, building and maintaining industrial machinery in Córdoba, Argentina. Conveyors, washing, filtration and cutting for metallurgic and automotive.',
+      description: 'Specialized industrial machinery in Córdoba since 1989: chip conveyors, industrial washing, fluid filtration and cutting machinery.',
+      ogTitle: 'Trans-Fil — Specialized industrial machinery',
+      ogDescription: 'We design, build and maintain industrial machinery since 1989: chip conveyors, washing, fluid filtration and cutting for metallurgy and automotive.',
+      ogImageAlt: 'TRANS-FIL chip conveyor station in industrial workshop',
       twitterDescription: '36 years designing industrial machinery in Córdoba, Argentina. Processes that don\'t stop.',
     },
     nav: { home: 'Home', tech: 'Technologies', catalogs: 'Catalogs', services: 'Services', industries: 'Industries', history: 'History', contact: 'Contact' },

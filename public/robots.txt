@@ -1,5 +1,5 @@
-# https://www.trans-fil.com.ar/robots.txt
+# https://www.transfil.com.ar/robots.txt
 User-agent: *
 Allow: /
 
-Sitemap: https://www.trans-fil.com.ar/sitemap.xml
+Sitemap: https://www.transfil.com.ar/sitemap-index.xml

@@ -3,7 +3,7 @@ import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://www.trans-fil.com.ar',
+  site: 'https://www.transfil.com.ar',
   integrations: [
     react(),
     sitemap({

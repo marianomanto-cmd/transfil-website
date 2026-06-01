@@ -7,22 +7,27 @@ interface Props {
   lang: Lang;
   content: Content;
   pathname: string;
+  noindex?: boolean;
 }
 
-const { lang, content, pathname } = Astro.props;
-const site = 'https://www.trans-fil.com.ar';
+const { lang, content, pathname, noindex = false } = Astro.props;
+const site = 'https://www.transfil.com.ar';
 const canonical = `${site}${pathname}`;
+const ogImage = `${site}/img/og-image.jpg`;
 
 const orgJsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'Organization',
+  '@type': ['Organization', 'LocalBusiness'],
+  '@id': `${site}/#organization`,
   name: 'Trans-Fil S.R.L.',
   alternateName: 'Trans-Fil',
   url: `${site}/`,
   logo: `${site}/favicon.svg`,
+  image: ogImage,
   description: content.meta.description,
   foundingDate: '1989',
   founders: [{ '@type': 'Person', name: 'Mantovani' }],
+  inLanguage: content.htmlLang,
   address: {
     '@type': 'PostalAddress',
     streetAddress: 'Francisco de Arteaga 3043',
@@ -30,13 +35,33 @@ const orgJsonLd = {
     addressRegion: 'Córdoba',
     addressCountry: 'AR',
   },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: -31.4036,
+    longitude: -64.1924,
+  },
   contactPoint: [
     {
       '@type': 'ContactPoint',
-      telephone: '+54-9-3513-82-0321',
+      telephone: '+5493513820321',
       contactType: 'sales',
       email: 'ventas@transfil.com.ar',
-      areaServed: ['AR', 'BR', 'CL', 'PE', 'BO', 'PY', 'UY', 'CO', 'EC', 'MX', 'US', 'DO', 'PR', 'ES'],
+      areaServed: [
+        { '@type': 'Country', name: 'Argentina' },
+        { '@type': 'Country', name: 'Brazil' },
+        { '@type': 'Country', name: 'Chile' },
+        { '@type': 'Country', name: 'Peru' },
+        { '@type': 'Country', name: 'Bolivia' },
+        { '@type': 'Country', name: 'Paraguay' },
+        { '@type': 'Country', name: 'Uruguay' },
+        { '@type': 'Country', name: 'Colombia' },
+        { '@type': 'Country', name: 'Ecuador' },
+        { '@type': 'Country', name: 'Mexico' },
+        { '@type': 'Country', name: 'United States' },
+        { '@type': 'Country', name: 'Dominican Republic' },
+        { '@type': 'Country', name: 'Puerto Rico' },
+        { '@type': 'Country', name: 'Spain' },
+      ],
       availableLanguage: ['Spanish', 'English'],
     },
   ],
@@ -55,9 +80,7 @@ const orgJsonLd = {
 
     <title>{content.meta.title}</title>
     <meta name="description" content={content.meta.description} />
-    <meta name="keywords" content={content.meta.keywords} />
-    <meta name="author" content="Trans-Fil S.R.L." />
-    <meta name="robots" content="index, follow" />
+    {noindex && <meta name="robots" content="noindex, follow" />}
     <meta name="theme-color" content="#0e0e10" />
     <link rel="canonical" href={canonical} />
     <link rel="alternate" hreflang="es-AR" href={`${site}/`} />
@@ -75,17 +98,20 @@ const orgJsonLd = {
     <meta property="og:title" content={content.meta.ogTitle} />
     <meta property="og:description" content={content.meta.ogDescription} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:image" content={`${site}/img/hf-welder.png`} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:secure_url" content={ogImage} />
+    <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="HF welder on tube line with cooling system" />
+    <meta property="og:image:alt" content={content.meta.ogImageAlt} />
     <meta property="og:locale" content={content.ogLocale} />
     <meta property="og:locale:alternate" content={content.altLocale} />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={content.meta.ogTitle} />
     <meta name="twitter:description" content={content.meta.twitterDescription} />
-    <meta name="twitter:image" content={`${site}/img/hf-welder.png`} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={content.meta.ogImageAlt} />
 
     <script type="application/ld+json" set:html={JSON.stringify(orgJsonLd)} />
 
