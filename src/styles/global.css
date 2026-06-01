@@ -789,11 +789,44 @@ button { font-family: inherit; }
   max-width: 52ch;
   text-shadow: 0 1px 10px rgba(0, 0, 0, 0.45);
 }
-/* Desktop+tablet: hide description on the small tiles (A, B) so the
-   overlay text doesn't crowd the image. Restored in the mobile
-   stacked-card layout below. */
+/* Desktop+tablet: small tiles (A, B) keep just the title at rest and
+   slide their description up from below on hover or keyboard focus.
+   Mobile layout below restores them to always-visible. */
 .tf-tech-tile[data-pos="a"] .tf-tech-tile-desc,
-.tf-tech-tile[data-pos="b"] .tf-tech-tile-desc { display: none; }
+.tf-tech-tile[data-pos="b"] .tf-tech-tile-desc {
+  max-height: 0;
+  opacity: 0;
+  margin-top: 0;
+  overflow: hidden;
+  -webkit-line-clamp: 4;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  transition: max-height 0.4s cubic-bezier(0.2, 0.7, 0.2, 1),
+              opacity 0.25s ease 0.05s,
+              margin-top 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.tf-tech-tile[data-pos="a"]:hover .tf-tech-tile-desc,
+.tf-tech-tile[data-pos="b"]:hover .tf-tech-tile-desc,
+.tf-tech-tile[data-pos="a"]:focus-within .tf-tech-tile-desc,
+.tf-tech-tile[data-pos="b"]:focus-within .tf-tech-tile-desc {
+  max-height: 200px;
+  opacity: 1;
+  margin-top: 4px;
+}
+/* Intensify the dark gradient on hover so the revealed text reads
+   cleanly even over busier photos. */
+.tf-tech-tile[data-pos="a"] .tf-tech-tile-overlay,
+.tf-tech-tile[data-pos="b"] .tf-tech-tile-overlay {
+  transition: background 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.tf-tech-tile[data-pos="a"]:hover .tf-tech-tile-overlay,
+.tf-tech-tile[data-pos="b"]:hover .tf-tech-tile-overlay,
+.tf-tech-tile[data-pos="a"]:focus-within .tf-tech-tile-overlay,
+.tf-tech-tile[data-pos="b"]:focus-within .tf-tech-tile-overlay {
+  background:
+    linear-gradient(180deg, rgba(14, 14, 16, 0.2) 0%, rgba(14, 14, 16, 0.1) 25%, rgba(14, 14, 16, 0.95) 75%),
+    linear-gradient(90deg, rgba(14, 14, 16, 0.4) 0%, rgba(14, 14, 16, 0) 40%);
+}
 
 .tf-tech-tile[data-pos="hero"] .tf-tech-tile-desc {
   font-size: 14.5px;
@@ -875,11 +908,17 @@ button { font-family: inherit; }
     display: block;
     overflow: visible;
   }
-  /* A and B keep their description visible on mobile (it was hidden in
-     the desktop bento to avoid clutter over the small images). */
+  /* A and B keep their description visible on mobile — cancel the
+     desktop hover-reveal hide so all 16 captions read at once. */
   .tf-tech-tile[data-pos="a"] .tf-tech-tile-desc,
   .tf-tech-tile[data-pos="b"] .tf-tech-tile-desc {
+    max-height: none;
+    opacity: 1;
+    margin-top: 0;
+    overflow: visible;
+    -webkit-line-clamp: unset;
     display: block;
+    transition: none;
   }
 }
 
