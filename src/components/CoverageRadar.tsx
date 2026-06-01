@@ -18,12 +18,14 @@ const COUNTRIES: Country[] = [
   { code: 'CL', label: 'CHILE',           x: 59, y: 83, lx: -3.2, ly: 0.4, anchor: 'end' },
   { code: 'PE', label: 'PERÚ',            labelEn: 'PERU',          x: 53, y: 62, lx: -3.2, ly: 0.4, anchor: 'end' },
   { code: 'BO', label: 'BOLIVIA',         x: 62, y: 67, lx: 3.2, ly: 0.4, anchor: 'start' },
+  { code: 'PY', label: 'PARAGUAY',        x: 73, y: 75, lx: 3.2, ly: 0.4, anchor: 'start' },
   { code: 'UY', label: 'URUGUAY',         x: 74, y: 85, lx: 3.2, ly: 0.4, anchor: 'start' },
   { code: 'CO', label: 'COLOMBIA',        x: 56, y: 45, lx: -3.2, ly: 0.4, anchor: 'end' },
   { code: 'EC', label: 'ECUADOR',         x: 52, y: 50, lx: -3.2, ly: 0.4, anchor: 'end' },
   { code: 'MX', label: 'MÉXICO',          labelEn: 'MEXICO',        x: 31, y: 31, lx: -3.2, ly: 0.4, anchor: 'end' },
   { code: 'US', label: 'ESTADOS UNIDOS',  labelEn: 'UNITED STATES', x: 53, y: 11, lx: 3.2, ly: 0.4, anchor: 'start' },
   { code: 'DO', label: 'R. DOMINICANA',   labelEn: 'DOMINICAN REP.', x: 60, y: 32, lx: 3.2, ly: 0.4, anchor: 'start' },
+  { code: 'PR', label: 'PUERTO RICO',     x: 66, y: 31, lx: 0, ly: 3.2, anchor: 'middle' },
   { code: 'ES', label: 'ESPAÑA',          labelEn: 'SPAIN',         x: 125, y: 10, lx: -3.2, ly: 0.4, anchor: 'end' },
 ];
 
@@ -206,7 +208,7 @@ export function CoverageRadar({ lang }: Props) {
       </svg>
 
       <div className="tf-radar-meta">
-        <span><b>12</b> · {lang === 'es' ? 'Países alcanzados' : 'Countries reached'}</span>
+        <span><b>14</b> · {lang === 'es' ? 'Países alcanzados' : 'Countries reached'}</span>
         <span>HQ · CÓRDOBA · AR</span>
       </div>
       <span className="tf-radar-stamp">

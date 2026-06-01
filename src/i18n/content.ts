@@ -124,7 +124,7 @@ export const CONTENT: Record<Lang, Content> = {
       ctaPrimary: 'Ver tecnologías', ctaSecondary: 'Contáctenos',
       stat1: { v: '36', l: 'Años de operación' },
       stat2: { v: '120+', l: 'Clientes industriales' },
-      stat3: { v: '12', l: 'Países alcanzados' },
+      stat3: { v: '14', l: 'Países alcanzados' },
       stat4: { v: '24/7', l: 'Soporte de planta' },
     },
     capabilities: {
@@ -223,8 +223,9 @@ export const CONTENT: Record<Lang, Content> = {
       ],
       coverage: [
         'Argentina', 'Brasil', 'Chile', 'Perú',
-        'Bolivia', 'Uruguay', 'Colombia', 'Ecuador',
-        'México', 'Estados Unidos', 'R. Dominicana', 'España',
+        'Bolivia', 'Paraguay', 'Uruguay', 'Colombia',
+        'Ecuador', 'México', 'Estados Unidos', 'R. Dominicana',
+        'Puerto Rico', 'España',
       ],
       hoverPause: '← HOVER PARA PAUSAR →',
     },
@@ -284,7 +285,7 @@ export const CONTENT: Record<Lang, Content> = {
       ctaPrimary: 'Explore technologies', ctaSecondary: 'Get in touch',
       stat1: { v: '36', l: 'Years of operation' },
       stat2: { v: '120+', l: 'Industrial clients' },
-      stat3: { v: '12', l: 'Countries reached' },
+      stat3: { v: '14', l: 'Countries reached' },
       stat4: { v: '24/7', l: 'Plant support' },
     },
     capabilities: {
@@ -383,8 +384,9 @@ export const CONTENT: Record<Lang, Content> = {
       ],
       coverage: [
         'Argentina', 'Brazil', 'Chile', 'Peru',
-        'Bolivia', 'Uruguay', 'Colombia', 'Ecuador',
-        'Mexico', 'United States', 'Dominican Rep.', 'Spain',
+        'Bolivia', 'Paraguay', 'Uruguay', 'Colombia',
+        'Ecuador', 'Mexico', 'United States', 'Dominican Rep.',
+        'Puerto Rico', 'Spain',
       ],
       hoverPause: '← HOVER TO PAUSE →',
     },
