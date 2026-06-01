@@ -711,13 +711,11 @@ button { font-family: inherit; }
   background: var(--bg-2);
   isolation: isolate;
   will-change: transform;
-  transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1),
-              border-color 0.4s ease;
+  transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
   min-width: 0;
 }
 .tf-tech-tile:hover {
   transform: translateY(-2px);
-  border-color: color-mix(in oklab, var(--accent) 70%, var(--line));
 }
 
 .tf-tech-tile[data-pos="hero"] { grid-column: span 6; grid-row: span 2; }
