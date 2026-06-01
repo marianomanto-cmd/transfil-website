@@ -153,7 +153,7 @@ export function ContactSection({ content }: { content: Content }) {
           </div>
           <div className="tf-contact-map">
             <iframe
-              title="Trans-Fil · Francisco de Arteaga 3043, Córdoba"
+              title={`Trans-Fil · ${c.addr}`}
               src="https://maps.google.com/maps?q=Francisco+de+Arteaga+3043,+C%C3%B3rdoba,+Argentina&z=15&output=embed"
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"

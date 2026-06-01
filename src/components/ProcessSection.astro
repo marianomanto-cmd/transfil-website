@@ -270,8 +270,16 @@ const c = content.process;
 
 <script>
   // Rebind on both initial load and after each Astro view transition,
-  // since module scripts don't re-execute on transitions.
+  // since module scripts don't re-execute on transitions. Store the IO
+  // on window so a new transition disconnects the previous observer
+  // instead of stacking new ones each navigation.
+  type ProcWin = typeof window & { __procesoIo?: IntersectionObserver };
   const initProceso = () => {
+    const w = window as ProcWin;
+    if (w.__procesoIo) {
+      w.__procesoIo.disconnect();
+      w.__procesoIo = undefined;
+    }
     const sections = document.querySelectorAll<HTMLElement>('.section-proceso');
     if (!sections.length) return;
     if ('IntersectionObserver' in window) {
@@ -287,6 +295,7 @@ const c = content.process;
         { threshold: 0.18 }
       );
       sections.forEach((s) => io.observe(s));
+      w.__procesoIo = io;
     } else {
       sections.forEach((s) => s.classList.add('is-visible'));
     }

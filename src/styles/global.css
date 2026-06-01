@@ -130,7 +130,7 @@ button { font-family: inherit; }
   transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 .tf-section.is-visible { opacity: 1; transform: none; }
-.tf-section.is-dark { background: var(--bg-2); border-radius: 0; }
+.tf-section.is-dark { background: var(--bg-2); }
 .tf-section.is-dark::before {
   content: "";
   position: absolute;
@@ -389,6 +389,7 @@ button { font-family: inherit; }
 /* Hero meta — composed chips with elevated section number + accent divider */
 .tf-hero-meta-line {
   display: inline-flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 12px;
   color: var(--fg-3);
@@ -808,6 +809,24 @@ button { font-family: inherit; }
   max-height: 220px;
   opacity: 1;
   margin-top: 4px;
+}
+
+/* Touch tablets (641-1080px) can't hover — show the A/B description
+   permanently there. The phone breakpoint below 640px swaps in the
+   accordion layout so this doesn't apply there. */
+@media (hover: none) and (min-width: 641px) {
+  .tf-tech-tile[data-pos="a"] .tf-tech-tile-desc,
+  .tf-tech-tile[data-pos="b"] .tf-tech-tile-desc {
+    max-height: 220px;
+    opacity: 1;
+    margin-top: 4px;
+    transition: none;
+  }
+}
+
+/* Touch users can't hover the marquee — hide the 'hover to pause' hint. */
+@media (hover: none) {
+  .tf-marquee-hint { display: none; }
 }
 /* Keep keyboard-focus parity for the A/B reveal (general :hover already
    covers pointer users via the .tf-tech-tile:hover rule above). */
@@ -2691,7 +2710,7 @@ body {
   box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.2);
 }
 
-/* ── Footer: Instagram + build info ──────────────────────────── */
+/* ── Footer: WhatsApp + build info ──────────────────────────── */
 .tf-footer-social {
   display: flex;
   gap: 8px;

@@ -73,7 +73,7 @@ export function IndustriesSection({ content }: { content: Content }) {
         <span className="tf-industries-count">
           <b>{String(items.length).padStart(2, '0')}</b> · {c.tabs.find((t) => t.id === tab)?.label}
         </span>
-        <span className="tf-mono" style={{ color: 'var(--fg-4)' }}>
+        <span className="tf-mono tf-marquee-hint" style={{ color: 'var(--fg-4)' }}>
           {c.hoverPause}
         </span>
       </div>
