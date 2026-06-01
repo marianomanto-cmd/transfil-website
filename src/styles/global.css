@@ -242,17 +242,6 @@ button { font-family: inherit; }
   letter-spacing: 0.08em;
   color: var(--fg-3);
 }
-.tf-lang button {
-  background: none;
-  border: 0;
-  color: inherit;
-  padding: 4px 2px;
-  cursor: pointer;
-  letter-spacing: inherit;
-  font-family: inherit;
-  font-size: inherit;
-}
-.tf-lang button[data-on="true"] { color: var(--fg); }
 .tf-cta-mini {
   display: inline-flex;
   align-items: center;
@@ -1476,18 +1465,6 @@ button { font-family: inherit; }
 
 
 
-.tf-client-num {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--fg-4);
-  letter-spacing: 0.08em;
-}
-.tf-client-name {
-  font-family: var(--font-display);
-  font-weight: 500;
-  font-size: clamp(16px, 1.4vw, 20px);
-  letter-spacing: 0.04em;
-}
 
 /* ── History ─────────────────────────────────────────────────────── */
 .tf-history {
@@ -1861,15 +1838,6 @@ button { font-family: inherit; }
   transform: translateX(0);
 }
 
-/* Tech detail media — softly crossfades when the active category changes,
-   thanks to React's `key` change forcing a re-mount. */
-.tf-tech-detail .tf-media {
-  animation: tf-soft-fade 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
-}
-@keyframes tf-soft-fade {
-  from { opacity: 0; transform: scale(1.03); }
-  to { opacity: 1; transform: scale(1); }
-}
 
 /* Service rows stagger in from the side */
 .tf-services.is-rows .tf-service {
@@ -1932,14 +1900,6 @@ button { font-family: inherit; }
   .tf-stat { padding-top: 24px; }
   .tf-stat:nth-child(n+3) { padding-top: 24px; border-top: 1px solid var(--line); margin-top: 24px; }
 
-  .tf-tech-content { grid-template-columns: 1fr; gap: 24px; }
-  .tf-tech-tab { padding: 14px 16px; }
-  .tf-tech-tab-title { font-size: 14px; }
-
-  
-  
-  
-
   .tf-services { grid-template-columns: repeat(2, 1fr); }
 
   .tf-history { grid-template-columns: 1fr; }
@@ -1954,11 +1914,6 @@ button { font-family: inherit; }
   .tf-services { grid-template-columns: 1fr; }
   .tf-footer-grid { grid-template-columns: 1fr; }
   .tf-hero-stats { grid-template-columns: 1fr 1fr; }
-  .tf-tech-sub { display: none; }
-  /* Bullets stack as full-width rows with proper inner padding so text
-     doesn't touch the border, plus a 44px tap target. */
-  .tf-tech-bullets { flex-direction: column; align-items: stretch; gap: 8px; }
-  .tf-tech-bullet { padding: 12px 14px; min-height: 44px; width: 100%; justify-content: flex-start; }
   /* Phones drop catalog grid to 1-col so cards aren't squished */
   .tf-catalogs { grid-template-columns: 1fr; }
   /* Coverage list: 2-col stays more compact than 12 rows in 1-col */
@@ -2074,8 +2029,6 @@ button { font-family: inherit; }
   .tf-hero-side { align-items: flex-start; }
 }
 
-/* ── Tech detail media wrapper ───────────────────────────────────── */
-.tf-tech-detail-media { width: 100%; }
 
 /* Language toggle anchors share button styling */
 .tf-lang a {
@@ -2160,12 +2113,6 @@ html { scrollbar-color: var(--line-strong) var(--bg); scrollbar-width: thin; }
   transition: width 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) 0.2s;
 }
 .tf-section.is-visible .tf-eyebrow::before { width: 16px; }
-
-/* ── Header — active section nav indicator ──────────────────────── */
-.tf-nav a[data-active="true"] { color: var(--fg); }
-.tf-nav a[data-active="true"]::after {
-  transform: scaleX(1);
-}
 
 /* ── Header — logo subtle hover ──────────────────────────────────── */
 .tf-logo .tf-logo-mark svg {
@@ -2570,37 +2517,6 @@ body {
    character shift for visual interest                              */
 .tf-h2-accent { font-style: italic; }
 
-/* ── Tech list rows: subtle bg gradient on hover (non-active) ─── */
-
-
-
-
-/* Tech detail media: corner brackets like the CAD overlay aesthetic */
-.tf-tech-detail-media { position: relative; }
-.tf-tech-detail-media::before,
-.tf-tech-detail-media::after {
-  content: "";
-  position: absolute;
-  width: 14px;
-  height: 14px;
-  border-color: var(--accent);
-  border-style: solid;
-  border-width: 0;
-  pointer-events: none;
-  z-index: 3;
-  opacity: 0;
-  transition: opacity 0.4s ease 0.2s;
-}
-/* Brackets sit OUTSIDE the image corners (negative inset) so they
-   accent the frame without stepping on the photo. */
-.tf-tech-detail-media::before { top: -6px; left: -6px; border-top-width: 1px; border-left-width: 1px; }
-.tf-tech-detail-media::after  { bottom: -6px; right: -6px; border-bottom-width: 1px; border-right-width: 1px; }
-/* Outer brackets handle the framing — hide the inner Media corners so they
-   don't double up and sit inside the photo. */
-.tf-tech-detail-media .tf-media-corners { display: none; }
-.tf-section.is-visible .tf-tech-detail-media::before,
-.tf-section.is-visible .tf-tech-detail-media::after { opacity: 1; }
-
 /* ── Catalogs: subtle perspective lift on hover (CSS-only tilt) ─── */
 .tf-catalogs { perspective: 1400px; }
 .tf-catalog-card {
@@ -2654,17 +2570,6 @@ body {
   transform: translateY(-50%);
 }
 .tf-marquee-item:last-child::after { display: none; }
-
-/* Tab description placeholder (handled inline in JSX) */
-.tf-tab-desc {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--fg-4);
-  letter-spacing: 0.06em;
-  margin-bottom: 24px;
-  padding-left: 6px;
-  border-left: 2px solid var(--accent);
-}
 
 /* ── History: massive faint year watermark in the section ──────── */
 .tf-history-watermark {
@@ -3156,22 +3061,6 @@ p { text-wrap: pretty; }
 body { opacity: 0; animation: tf-body-in 0.6s ease 0.05s forwards; }
 @keyframes tf-body-in { to { opacity: 1; } }
 
-/* ── Tech detail body: small "view full line" arrow ───────── */
-.tf-tech-detail-body { position: relative; }
-.tf-tech-detail-body::after {
-  content: "";
-  position: absolute;
-  top: -1px;
-  left: -1px;
-  right: -1px;
-  height: 2px;
-  background: linear-gradient(to right, var(--accent), transparent 80%);
-  transform-origin: left center;
-  transform: scaleX(0);
-  transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
-}
-.tf-section.is-visible .tf-tech-detail-body::after { transform: scaleX(1); }
-
 /* ── Industries marquee — extra fade on edges (deeper feel) ── */
 .tf-marquee {
   mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
@@ -3197,16 +3086,9 @@ body { opacity: 0; animation: tf-body-in 0.6s ease 0.05s forwards; }
 input[type="email"],
 input[type="tel"],
 input[type="number"],
-.tf-mono,
-.tf-stat-v,
-.tf-tl-year,
 .tf-contact-coord,
 .tf-catalog-num,
-.tf-catalog-cover-tag,
-.tf-tech-tab-code,
-.tf-tech-detail-code,
-.tf-bullet-detail-eyebrow,
-.tf-tab-count {
+.tf-catalog-cover-tag {
   font-feature-settings: "tnum" 1, "zero" 1, "ss01" 1;
   font-variant-numeric: tabular-nums slashed-zero;
 }
@@ -3485,26 +3367,14 @@ input[type="number"],
   }
 }
 
-/* ── Fix: prevent grid items + media from forcing tracks wider than parent.
-   CSS Grid items default to min-width: auto (== min-content). For items
-   containing <img>, that min-content equals the image's natural size,
-   which can be 2000px+ even when the IMG has width:100%. Setting
-   min-width: 0 lets the column shrink to its fr unit. Combined with
-   max-width: 100% on the media wrappers, this caps everything at the
-   available column width. */
-.tf-tech,
-.tf-tech-list,
-.tf-tech-detail,
-.tf-tech-detail-media,
-.tf-tech-detail-body,
-.tf-tech-bullets > * { min-width: 0; }
-.tf-tech-detail-media,
-.tf-tech-detail-body,
-.tf-tech-detail-media .tf-media { max-width: 100%; }
-/* Bullet card: clamp(400…560) was forcing 400px min even on small
-   viewports, contributing to the same overflow. Cap at the containing
-   block so the card can never escape it. */
-.tf-bullet-card { max-width: 100%; }
+/* ── Grid overflow guard: image natural width was forcing tracks
+   wider than the container. min-width: 0 + max-width: 100% caps. */
+.tf-tech-bento,
+.tf-tech-bento-row,
+.tf-tech-tile { min-width: 0; }
+.tf-tech-tile,
+.tf-tech-tile .tf-tech-tile-media,
+.tf-tech-tile .tf-tech-tile-media > * { max-width: 100%; }
 
 /* ── Catalog card as <button> — reset native button styles ──────── */
 button.tf-catalog-card {
