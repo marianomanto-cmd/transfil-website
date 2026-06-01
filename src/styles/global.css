@@ -710,15 +710,14 @@ button { font-family: inherit; }
   border: 1px solid var(--line);
   background: var(--bg-2);
   isolation: isolate;
+  will-change: transform;
   transition: transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1),
-              border-color 0.3s,
-              box-shadow 0.3s;
+              border-color 0.25s ease;
   min-width: 0;
 }
 .tf-tech-tile:hover {
   transform: translateY(-3px);
   border-color: var(--accent);
-  box-shadow: 0 18px 40px -22px rgba(0, 0, 0, 0.6);
 }
 
 .tf-tech-tile[data-pos="hero"] { grid-column: span 6; grid-row: span 2; }
@@ -748,6 +747,14 @@ button { font-family: inherit; }
     linear-gradient(180deg, rgba(14, 14, 16, 0.15) 0%, rgba(14, 14, 16, 0) 35%, rgba(14, 14, 16, 0.85) 100%),
     linear-gradient(90deg, rgba(14, 14, 16, 0.35) 0%, rgba(14, 14, 16, 0) 40%);
   pointer-events: none;
+  transition: background 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+/* On hover, deepen the bottom gradient so the title block + revealed
+   description always read cleanly regardless of the underlying photo. */
+.tf-tech-tile:hover .tf-tech-tile-overlay {
+  background:
+    linear-gradient(180deg, rgba(14, 14, 16, 0.22) 0%, rgba(14, 14, 16, 0.08) 28%, rgba(14, 14, 16, 0.95) 80%),
+    linear-gradient(90deg, rgba(14, 14, 16, 0.4) 0%, rgba(14, 14, 16, 0) 40%);
 }
 
 .tf-tech-tile-body {
@@ -791,16 +798,16 @@ button { font-family: inherit; }
 }
 /* Desktop+tablet: small tiles (A, B) keep just the title at rest and
    slide their description up from below on hover or keyboard focus.
-   Mobile layout below restores them to always-visible. */
+   The desc element stays in flow but with max-height 0; we use plain
+   block + overflow:hidden so the max-height transition runs cleanly
+   (the line-clamp + webkit-box combo wouldn't animate reliably). */
 .tf-tech-tile[data-pos="a"] .tf-tech-tile-desc,
 .tf-tech-tile[data-pos="b"] .tf-tech-tile-desc {
+  display: block;
   max-height: 0;
   opacity: 0;
   margin-top: 0;
   overflow: hidden;
-  -webkit-line-clamp: 4;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
   transition: max-height 0.4s cubic-bezier(0.2, 0.7, 0.2, 1),
               opacity 0.25s ease 0.05s,
               margin-top 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
@@ -809,34 +816,30 @@ button { font-family: inherit; }
 .tf-tech-tile[data-pos="b"]:hover .tf-tech-tile-desc,
 .tf-tech-tile[data-pos="a"]:focus-within .tf-tech-tile-desc,
 .tf-tech-tile[data-pos="b"]:focus-within .tf-tech-tile-desc {
-  max-height: 200px;
+  max-height: 220px;
   opacity: 1;
   margin-top: 4px;
 }
-/* Intensify the dark gradient on hover so the revealed text reads
-   cleanly even over busier photos. */
-.tf-tech-tile[data-pos="a"] .tf-tech-tile-overlay,
-.tf-tech-tile[data-pos="b"] .tf-tech-tile-overlay {
-  transition: background 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
-}
-.tf-tech-tile[data-pos="a"]:hover .tf-tech-tile-overlay,
-.tf-tech-tile[data-pos="b"]:hover .tf-tech-tile-overlay,
+/* Keep keyboard-focus parity for the A/B reveal (general :hover already
+   covers pointer users via the .tf-tech-tile:hover rule above). */
 .tf-tech-tile[data-pos="a"]:focus-within .tf-tech-tile-overlay,
 .tf-tech-tile[data-pos="b"]:focus-within .tf-tech-tile-overlay {
   background:
-    linear-gradient(180deg, rgba(14, 14, 16, 0.2) 0%, rgba(14, 14, 16, 0.1) 25%, rgba(14, 14, 16, 0.95) 75%),
+    linear-gradient(180deg, rgba(14, 14, 16, 0.22) 0%, rgba(14, 14, 16, 0.08) 28%, rgba(14, 14, 16, 0.95) 80%),
     linear-gradient(90deg, rgba(14, 14, 16, 0.4) 0%, rgba(14, 14, 16, 0) 40%);
 }
 
 .tf-tech-tile[data-pos="hero"] .tf-tech-tile-desc {
   font-size: 14.5px;
-  -webkit-line-clamp: 5;
+  -webkit-line-clamp: 6;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+/* C is a wide 6×1 banner — it has room for the full caption rather
+   than a 2-line teaser. */
 .tf-tech-tile[data-pos="c"] .tf-tech-tile-desc {
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 5;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   overflow: hidden;
@@ -856,70 +859,175 @@ button { font-family: inherit; }
   .tf-tech-tile[data-pos="c"]    { grid-column: span 2; grid-row: auto; aspect-ratio: 21 / 9; }
 }
 
-/* Phones: bento metaphor swapped for stacked cards — image on top
-   (with its own aspect-ratio) and a caption block always visible
-   below it. No overlay, no white-on-image text. Description shows
-   for every bullet, including A and B. */
+/* Mobile accordion (hidden on tablet+) — collapsible cards per tech.
+   At rest the four techs sit as compact preview rows. Tapping a row
+   expands its bullets below; tapping a bullet collapses and updates
+   the preview to show the selection. */
+.tf-tech-acc { display: none; }
+
 @media (max-width: 640px) {
-  .tf-tech-bento-row {
-    grid-template-columns: 1fr;
-    grid-auto-rows: auto;
-    gap: 18px;
+  /* Hide the desktop bento and the section sub-header (the accordion
+     header already shows code + tech title). */
+  .tf-tech-bento-row { display: none; }
+  .tf-tech-bento-head { display: none; }
+  .tf-tech-bento-group { gap: 0; }
+  .tf-tech-bento { gap: 14px; }
+  .tf-tech-acc { display: flex; flex-direction: column; }
+
+  /* Preview row — image thumbnail + body + chevron */
+  .tf-tech-acc-head {
+    display: grid;
+    grid-template-columns: 112px 1fr 44px;
+    align-items: stretch;
+    padding: 0;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    color: var(--fg);
+    text-align: left;
+    cursor: pointer;
+    font: inherit;
+    width: 100%;
+    transition: border-color 0.2s, background 0.2s;
   }
-  .tf-tech-tile[data-pos] {
-    grid-column: 1;
-    grid-row: auto;
-    aspect-ratio: auto;
+  .tf-tech-acc-head:hover { border-color: var(--accent); background: var(--bg-3); }
+  .tf-tech-acc.is-open .tf-tech-acc-head { border-color: var(--accent); }
+  .tf-tech-acc-head-media {
+    overflow: hidden;
+    background: var(--bg);
+  }
+  .tf-tech-acc-head-media > * {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .tf-tech-acc-head-body {
+    padding: 12px 14px;
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    min-width: 0;
   }
-  .tf-tech-tile:hover { transform: none; }
-  .tf-tech-tile-media {
-    position: relative;
-    inset: auto;
-    z-index: auto;
+  .tf-tech-acc-head-code {
+    color: var(--accent);
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+  }
+  .tf-tech-acc-head-name {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 16px;
+    color: var(--fg);
+    letter-spacing: -0.005em;
+    line-height: 1.2;
+  }
+  .tf-tech-acc.has-selection .tf-tech-acc-head-name {
+    font-size: 15px;
+  }
+  .tf-tech-acc-head-desc {
+    font-size: 12.5px;
+    color: var(--fg-3);
+    line-height: 1.45;
+    margin: 2px 0 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .tf-tech-acc-chev {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--fg-3);
+    transition: transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1), color 0.2s;
+  }
+  .tf-tech-acc.is-open .tf-tech-acc-chev {
+    transform: rotate(180deg);
+    color: var(--accent);
+  }
+
+  /* Reveal: grid-rows 0fr → 1fr trick for smooth height animation. */
+  .tf-tech-acc-body {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.4s cubic-bezier(0.2, 0.7, 0.2, 1),
+                margin-top 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+    margin-top: 0;
+  }
+  .tf-tech-acc-body[data-open="true"] {
+    grid-template-rows: 1fr;
+    margin-top: 10px;
+  }
+  .tf-tech-acc-body-inner {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .tf-tech-acc-bullet {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--line);
+    background: var(--bg-2);
+    color: var(--fg);
+    cursor: pointer;
+    text-align: left;
+    font: inherit;
+    overflow: hidden;
+    padding: 0;
+    width: 100%;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .tf-tech-acc-bullet:hover { border-color: var(--accent); }
+  .tf-tech-acc-bullet.is-on {
+    border-color: var(--accent);
+    background: color-mix(in oklab, var(--accent) 10%, var(--bg-2));
+  }
+  .tf-tech-acc-bullet-media {
     width: 100%;
     aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--bg);
   }
-  .tf-tech-tile[data-pos="hero"] .tf-tech-tile-media { aspect-ratio: 4 / 3; }
-  .tf-tech-tile-overlay { display: none; }
-  .tf-tech-tile-body {
-    position: relative;
-    height: auto;
-    padding: 18px 20px 20px;
-    background: var(--bg-2);
-    justify-content: flex-start;
-    gap: 8px;
-    border-top: 1px solid var(--line);
+  .tf-tech-acc-bullet-media > * {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
-  .tf-tech-tile-name {
+  .tf-tech-acc-bullet-body {
+    padding: 14px 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .tf-tech-acc-bullet-body .tf-mono {
+    color: var(--accent);
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+  }
+  .tf-tech-acc-bullet-name {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 17px;
     color: var(--fg);
-    text-shadow: none;
-    font-size: 18px;
+    letter-spacing: -0.005em;
+    line-height: 1.2;
   }
-  .tf-tech-tile[data-pos="hero"] .tf-tech-tile-name { font-size: 22px; }
-  .tf-tech-tile-desc {
+  .tf-tech-acc-bullet-desc {
+    font-size: 13.5px;
     color: var(--fg-2);
-    text-shadow: none;
-    font-size: 14px;
     line-height: 1.55;
-    max-width: none;
-    -webkit-line-clamp: unset;
-    display: block;
-    overflow: visible;
+    margin: 4px 0 0;
   }
-  /* A and B keep their description visible on mobile — cancel the
-     desktop hover-reveal hide so all 16 captions read at once. */
-  .tf-tech-tile[data-pos="a"] .tf-tech-tile-desc,
-  .tf-tech-tile[data-pos="b"] .tf-tech-tile-desc {
-    max-height: none;
-    opacity: 1;
-    margin-top: 0;
-    overflow: visible;
-    -webkit-line-clamp: unset;
-    display: block;
-    transition: none;
-  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tf-tech-acc-body,
+  .tf-tech-acc-chev,
+  .tf-tech-acc-head { transition: none; }
 }
 
 @keyframes tf-fade-in {
