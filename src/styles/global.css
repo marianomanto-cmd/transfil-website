@@ -836,9 +836,13 @@ button { font-family: inherit; }
   overflow: hidden;
 }
 /* C is a wide 6×1 banner — it has room for the full caption rather
-   than a 2-line teaser. */
+   than a 2-line teaser. Slightly smaller font + 7-line clamp so the
+   longest desc (Producción en serie, ~370 chars) fits without an
+   ellipsis at the standard desktop viewports. */
 .tf-tech-tile[data-pos="c"] .tf-tech-tile-desc {
-  -webkit-line-clamp: 5;
+  font-size: 13.5px;
+  line-height: 1.5;
+  -webkit-line-clamp: 7;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   overflow: hidden;
