@@ -396,6 +396,38 @@ button { font-family: inherit; }
   gap: 12px;
 }
 .tf-hero-status { display: inline-flex; align-items: center; gap: 8px; }
+
+/* Hero meta — composed chips with elevated section number + accent divider */
+.tf-hero-meta-line {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--fg-3);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 11px;
+}
+.tf-hero-meta-num {
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+}
+.tf-hero-meta-divider {
+  display: inline-block;
+  width: 22px;
+  height: 1px;
+  background: var(--accent);
+  opacity: 0.7;
+}
+.tf-hero-meta-sep {
+  color: var(--fg-4);
+  opacity: 0.6;
+}
+.tf-hero-meta-chip {
+  color: var(--fg-2);
+  white-space: nowrap;
+}
 .tf-dot {
   display: inline-block;
   width: 6px; height: 6px;
@@ -672,7 +704,14 @@ button { font-family: inherit; }
   grid-template-columns: 1fr 1fr;
   gap: clamp(24px, 4vw, 56px);
   align-items: start;
-  animation: tf-fade-in 0.4s ease;
+  animation: tf-tech-content-in 0.42s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+@keyframes tf-tech-content-in {
+  from { opacity: 0; transform: translateX(18px); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tf-tech-content { animation: none; }
 }
 .tf-tech-detail-body {
   display: flex;
@@ -1201,21 +1240,29 @@ button { font-family: inherit; }
 }
 .tf-marquee-item {
   flex-shrink: 0;
-  padding: 0 clamp(24px, 4vw, 56px);
+  padding: 0 clamp(32px, 5vw, 72px);
   display: flex;
   align-items: center;
 }
 .tf-logo-placeholder {
   font-family: var(--font-display);
-  font-size: clamp(20px, 2vw, 28px);
+  font-size: clamp(24px, 2.4vw, 36px);
   font-weight: 500;
   letter-spacing: 0.06em;
   color: var(--fg-3);
   filter: grayscale(1);
-  opacity: 0.65;
-  transition: opacity 0.25s, color 0.25s;
+  opacity: 0.6;
+  transform: rotate(0deg);
+  transform-origin: center;
+  transition: opacity 0.3s var(--ease, cubic-bezier(0.2, 0.7, 0.2, 1)),
+              color 0.3s var(--ease, cubic-bezier(0.2, 0.7, 0.2, 1)),
+              transform 0.3s var(--ease, cubic-bezier(0.2, 0.7, 0.2, 1));
 }
-.tf-marquee-item:hover .tf-logo-placeholder { opacity: 1; color: var(--fg); }
+.tf-marquee-item:hover .tf-logo-placeholder {
+  opacity: 1;
+  color: var(--fg);
+  transform: rotate(-1.5deg);
+}
 @keyframes tf-scroll {
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
@@ -2441,6 +2488,44 @@ body {
 }
 #history { position: relative; overflow: hidden; }
 #history > * { position: relative; z-index: 1; }
+
+/* Industries watermark — big outlined country count, top-right */
+.tf-industries-watermark {
+  position: absolute;
+  top: clamp(40px, 6vw, 80px);
+  right: var(--pad-x);
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(140px, 22vw, 360px);
+  line-height: 0.85;
+  letter-spacing: -0.04em;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--line-strong);
+  user-select: none;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 1.2s ease 0.4s, transform 1.2s cubic-bezier(0.2, 0.7, 0.2, 1) 0.4s;
+  z-index: 0;
+}
+.tf-section.is-visible .tf-industries-watermark {
+  opacity: 1;
+  transform: translateY(0);
+}
+#industries { position: relative; overflow: hidden; }
+#industries > *:not(.tf-industries-watermark) { position: relative; z-index: 1; }
+
+@media (max-width: 640px) {
+  .tf-industries-watermark {
+    top: auto;
+    bottom: 16px;
+    right: 16px;
+    font-size: clamp(120px, 32vw, 200px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tf-industries-watermark { transition: none; }
+}
 
 @media (max-width: 640px) {
   .tf-history-watermark {

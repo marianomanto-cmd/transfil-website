@@ -32,6 +32,7 @@ export function IndustriesSection({ content }: { content: Content }) {
       className={cx('tf-section', vis && 'is-visible')}
       data-screen-label="05 Industries"
     >
+      <span className="tf-industries-watermark" aria-hidden="true">{c.coverage.length}</span>
       <div className="tf-industries-top">
         <header className="tf-section-head" data-num="05">
           <div className="tf-eyebrow">{c.eyebrow}</div>

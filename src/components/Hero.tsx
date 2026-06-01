@@ -74,8 +74,12 @@ export function Hero({ content }: Props) {
         </video>
       </div>
       <div className="tf-hero-meta">
-        <span className="tf-mono">
-          [ 01 — {content.chips.established} · {content.chips.argentina} ]
+        <span className="tf-mono tf-hero-meta-line">
+          <span className="tf-hero-meta-num">01</span>
+          <span className="tf-hero-meta-divider" aria-hidden="true" />
+          <span className="tf-hero-meta-chip">{content.chips.established}</span>
+          <span className="tf-hero-meta-sep" aria-hidden="true">·</span>
+          <span className="tf-hero-meta-chip">{content.chips.argentina}</span>
         </span>
         <span className="tf-mono tf-hero-status">
           <i className="tf-dot" /> {content.workshopActive}
