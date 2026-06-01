@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { cx } from '../lib/cx';
 import { useReveal } from '../lib/hooks';
 import type { Content } from '../i18n/content';
@@ -7,16 +7,39 @@ const TILE_POS = ['hero', 'a', 'b', 'c'] as const;
 const VIDEO_EXT_RE = /\.(mp4|webm|mov)(\?|$)/i;
 
 function TileMedia({ src, poster, kind }: { src: string; poster?: string; kind: 'photo' | 'video' }) {
-  if (kind === 'video' && VIDEO_EXT_RE.test(src)) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const isVideo = kind === 'video' && VIDEO_EXT_RE.test(src);
+
+  // Only play the video while it's in the viewport — avoids 4 simultaneous
+  // autoplay-loop streams downloading and decoding when the tech section
+  // first becomes visible.
+  useEffect(() => {
+    if (!isVideo || !videoRef.current) return;
+    const el = videoRef.current;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          el.play().catch(() => {});
+        } else {
+          el.pause();
+        }
+      },
+      { threshold: 0.25 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [isVideo]);
+
+  if (isVideo) {
     return (
       <video
+        ref={videoRef}
         src={src}
         poster={poster}
-        autoPlay
         muted
         loop
         playsInline
-        preload="metadata"
+        preload="none"
       />
     );
   }

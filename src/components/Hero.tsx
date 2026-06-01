@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { useScrollY, useCountUp } from '../lib/hooks';
 import type { Content } from '../i18n/content';
 
@@ -45,10 +46,14 @@ function HeroCTAs({ ctaPrimary, ctaSecondary }: { ctaPrimary: string; ctaSeconda
 export function Hero({ content }: Props) {
   const c = content.hero;
   const scrollY = useScrollY();
-  const enableParallax =
-    typeof window !== 'undefined' &&
-    window.matchMedia &&
-    window.matchMedia('(min-width: 900px) and (pointer: fine)').matches;
+  // Detect parallax-eligible environment on mount so SSR + first hydration
+  // render are identical (was reading window during render → hydration warn).
+  const [enableParallax, setEnableParallax] = useState(false);
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.matchMedia) {
+      setEnableParallax(window.matchMedia('(min-width: 900px) and (pointer: fine)').matches);
+    }
+  }, []);
   const parallax = enableParallax ? Math.min(scrollY * 0.18, 160) : 0;
   const stats = [c.stat1, c.stat2, c.stat3, c.stat4];
 

@@ -56,6 +56,10 @@ export function useCountUp(target: string, opts: { duration?: number } = {}) {
   const { duration = 1400 } = opts;
   const [ref, visible] = useReveal(0.4);
   const parsed = useMemo(() => {
+    // Targets like "24/7" are literals (hours/days), not numbers to animate.
+    if (/^\d+\s*\/\s*\d+$/.test(target)) {
+      return { num: null as number | null, suffix: target };
+    }
     const m = String(target).match(/^(\d+)(.*)$/);
     if (!m) return { num: null as number | null, suffix: target };
     return { num: parseInt(m[1], 10), suffix: m[2] };

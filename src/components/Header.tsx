@@ -105,8 +105,11 @@ export function Header({ lang, content }: Props) {
             </svg>
           </a>
           <button
+            type="button"
             className="tf-burger"
             aria-label="Menu"
+            aria-expanded={open}
+            aria-controls="tf-mobile-nav"
             data-open={open}
             onClick={() => setOpen(!open)}
           >
@@ -114,7 +117,7 @@ export function Header({ lang, content }: Props) {
           </button>
         </div>
       </div>
-      <div className="tf-mobile-nav" data-open={open}>
+      <div id="tf-mobile-nav" className="tf-mobile-nav" data-open={open}>
         {items.map((it) => (
           <a key={it.href} href={it.href} onClick={(e) => onNav(e, it.href)}>
             {it.label}

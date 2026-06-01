@@ -2,24 +2,44 @@
 import Base from '../layouts/Base.astro';
 import { CONTENT } from '../i18n/content';
 
-const content = CONTENT.es;
+// Switch on the request path so /en/foo and /en/ deep-links land on
+// the English 404 even though Astro routes everything unknown here.
+const isEn = Astro.url.pathname.startsWith('/en');
+const lang = isEn ? 'en' : 'es';
+const content = isEn ? CONTENT.en : CONTENT.es;
+const copy = isEn
+  ? {
+      tag: '[ 404 — Page not found ]',
+      title: "We couldn't find that page.",
+      sub: 'The page may have moved or the URL may be mistyped. Head back to the home page to keep exploring Trans-Fil.',
+      cta: 'Back to home',
+      altLink: 'Versión en español',
+      altHref: '/',
+      home: '/en/',
+    }
+  : {
+      tag: '[ 404 — Página no encontrada ]',
+      title: 'No encontramos esa ruta.',
+      sub: 'Es posible que la página haya sido movida o que la dirección esté mal escrita. Volvé al inicio para seguir explorando Trans-Fil.',
+      cta: 'Volver al inicio',
+      altLink: 'English version',
+      altHref: '/en/',
+      home: '/',
+    };
 ---
-<Base lang="es" content={content} pathname="/404">
+<Base lang={lang} content={content} pathname="/404">
   <main id="main" class="tf-404">
-    <span class="tf-mono tf-404-code">[ 404 — Página no encontrada ]</span>
-    <h1 class="tf-404-title">No encontramos esa ruta.</h1>
-    <p class="tf-404-sub">
-      Es posible que la página haya sido movida o que la dirección esté mal escrita.
-      Volvé al inicio para seguir explorando Trans-Fil.
-    </p>
+    <span class="tf-mono tf-404-code">{copy.tag}</span>
+    <h1 class="tf-404-title">{copy.title}</h1>
+    <p class="tf-404-sub">{copy.sub}</p>
     <div class="tf-404-actions">
-      <a href="/" class="tf-btn tf-btn-primary">
-        <span>Volver al inicio</span>
+      <a href={copy.home} class="tf-btn tf-btn-primary">
+        <span>{copy.cta}</span>
         <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
           <path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" />
         </svg>
       </a>
-      <a href="/en/" class="tf-btn tf-btn-ghost">English version</a>
+      <a href={copy.altHref} class="tf-btn tf-btn-ghost">{copy.altLink}</a>
     </div>
   </main>
 </Base>
