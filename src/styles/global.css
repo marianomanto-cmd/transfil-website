@@ -711,13 +711,13 @@ button { font-family: inherit; }
   background: var(--bg-2);
   isolation: isolate;
   will-change: transform;
-  transition: transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1),
-              border-color 0.25s ease;
+  transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1),
+              border-color 0.4s ease;
   min-width: 0;
 }
 .tf-tech-tile:hover {
-  transform: translateY(-3px);
-  border-color: var(--accent);
+  transform: translateY(-2px);
+  border-color: color-mix(in oklab, var(--accent) 70%, var(--line));
 }
 
 .tf-tech-tile[data-pos="hero"] { grid-column: span 6; grid-row: span 2; }
@@ -736,9 +736,9 @@ button { font-family: inherit; }
   object-fit: cover;
   display: block;
   filter: saturate(0.92) contrast(1.02);
-  transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition: transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
-.tf-tech-tile:hover .tf-tech-tile-media > * { transform: scale(1.05); }
+.tf-tech-tile:hover .tf-tech-tile-media > * { transform: scale(1.025); }
 
 .tf-tech-tile-overlay {
   position: absolute;
@@ -747,14 +747,15 @@ button { font-family: inherit; }
     linear-gradient(180deg, rgba(14, 14, 16, 0.15) 0%, rgba(14, 14, 16, 0) 35%, rgba(14, 14, 16, 0.85) 100%),
     linear-gradient(90deg, rgba(14, 14, 16, 0.35) 0%, rgba(14, 14, 16, 0) 40%);
   pointer-events: none;
-  transition: background 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition: background 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
-/* On hover, deepen the bottom gradient so the title block + revealed
-   description always read cleanly regardless of the underlying photo. */
+/* Gentle deepening of the bottom gradient on hover — same stops, just
+   a touch more alpha so the title block + revealed description read
+   cleanly regardless of the underlying photo. */
 .tf-tech-tile:hover .tf-tech-tile-overlay {
   background:
-    linear-gradient(180deg, rgba(14, 14, 16, 0.22) 0%, rgba(14, 14, 16, 0.08) 28%, rgba(14, 14, 16, 0.95) 80%),
-    linear-gradient(90deg, rgba(14, 14, 16, 0.4) 0%, rgba(14, 14, 16, 0) 40%);
+    linear-gradient(180deg, rgba(14, 14, 16, 0.18) 0%, rgba(14, 14, 16, 0.02) 35%, rgba(14, 14, 16, 0.92) 100%),
+    linear-gradient(90deg, rgba(14, 14, 16, 0.38) 0%, rgba(14, 14, 16, 0) 40%);
 }
 
 .tf-tech-tile-body {
@@ -808,9 +809,9 @@ button { font-family: inherit; }
   opacity: 0;
   margin-top: 0;
   overflow: hidden;
-  transition: max-height 0.4s cubic-bezier(0.2, 0.7, 0.2, 1),
-              opacity 0.25s ease 0.05s,
-              margin-top 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition: max-height 0.5s cubic-bezier(0.2, 0.7, 0.2, 1),
+              opacity 0.4s ease 0.12s,
+              margin-top 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 .tf-tech-tile[data-pos="a"]:hover .tf-tech-tile-desc,
 .tf-tech-tile[data-pos="b"]:hover .tf-tech-tile-desc,
