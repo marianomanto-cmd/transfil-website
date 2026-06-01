@@ -172,7 +172,7 @@ export const CONTENT: Record<Lang, Content> = {
         desc: 'Servicios metalúrgicos integrales: corte láser y plasma de alta precisión, plegado CNC y producción de piezas en serie con alta capacidad de respuesta.',
         bullets: [
           { name: 'Corte láser', img: '/video/t04-laser-cutting.mp4', poster: '/img/t04-laser-cutting-poster.webp', desc: 'Prestamos servicios de corte por láser de alta precisión para la industria de hasta 12,7 mm (1/2 pulgada).', kind: 'video' },
-          { name: 'Corte plasma', img: '/img/hydraulic-station.avif', desc: 'Prestamos servicios de corte por plasma para la industria de hasta 25,4 mm (1 pulgada).', kind: 'photo' },
+          { name: 'Corte plasma', img: '/img/t04-plasma-cutting.webp', desc: 'Prestamos servicios de corte por plasma para la industria de hasta 25,4 mm (1 pulgada).', kind: 'photo' },
           { name: 'Plegado industrial', img: '/img/hydraulic-station-2.avif', desc: 'Plegadora CNC para plegados de hasta 3 m.', kind: 'photo' },
           { name: 'Producción en serie', img: '/img/gearbox-detail.avif', desc: 'Nuestra capacidad industrial, décadas de experiencia y extensa red de proveedores nos permiten producir piezas para la industria metalúrgica en lotes con alta capacidad de respuesta.', kind: 'photo' },
         ],
@@ -332,7 +332,7 @@ export const CONTENT: Record<Lang, Content> = {
         desc: 'End-to-end metalworking services: high-precision laser and plasma cutting, CNC bending and serial parts production with fast turnaround.',
         bullets: [
           { name: 'Laser cutting', img: '/video/t04-laser-cutting.mp4', poster: '/img/t04-laser-cutting-poster.webp', desc: 'High-precision laser cutting services for industry, up to 12.7 mm (1/2 inch).', kind: 'video' },
-          { name: 'Plasma cutting', img: '/img/hydraulic-station.avif', desc: 'Plasma cutting services for industry, up to 25.4 mm (1 inch).', kind: 'photo' },
+          { name: 'Plasma cutting', img: '/img/t04-plasma-cutting.webp', desc: 'Plasma cutting services for industry, up to 25.4 mm (1 inch).', kind: 'photo' },
           { name: 'Industrial bending', img: '/img/hydraulic-station-2.avif', desc: 'CNC press brake for bends up to 3 m.', kind: 'photo' },
           { name: 'Serial production', img: '/img/gearbox-detail.avif', desc: 'Our industrial capacity, decades of experience and extensive supplier network let us produce metalworking parts in batches with fast turnaround.', kind: 'photo' },
         ],
