@@ -1,30 +1,13 @@
-import { useRef, useState } from 'react';
 import { cx } from '../lib/cx';
 import { useReveal } from '../lib/hooks';
-import { Media } from './Media';
 import type { Content } from '../i18n/content';
+
+const TILE_POS = ['hero', 'a', 'b', 'c'] as const;
 
 export function TechSection({ content }: { content: Content }) {
   const c = content.capabilities;
   const items = content.tech;
-  const [active, setActive] = useState<{ techIdx: number; bulletIdx: number }>({ techIdx: 0, bulletIdx: 0 });
   const [sectionRef, vis] = useReveal(0.1);
-  const detailRef = useRef<HTMLDivElement>(null);
-
-  const activeTech = items[active.techIdx];
-  const activeBullet = activeTech.bullets[active.bulletIdx];
-  const mediaKey = `${activeTech.id}-${active.bulletIdx}`;
-
-  const onPick = (techIdx: number, bulletIdx: number) => {
-    setActive({ techIdx, bulletIdx });
-    // On phones the rail sits below the detail; smooth-scroll up so the
-    // user sees the new selection rather than the same rail they just tapped.
-    if (typeof window !== 'undefined' && window.matchMedia('(max-width: 880px)').matches) {
-      requestAnimationFrame(() => {
-        detailRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      });
-    }
-  };
 
   return (
     <section
@@ -39,55 +22,63 @@ export function TechSection({ content }: { content: Content }) {
         <p className="tf-section-sub">{c.sub}</p>
       </header>
 
-      <div className="tf-tech-md">
-        <nav className="tf-tech-rail" aria-label={c.title}>
-          {items.map((t, ti) => {
-            const groupActive = ti === active.techIdx;
-            return (
-              <div className={cx('tf-tech-rail-group', groupActive && 'is-active')} key={t.id}>
-                <div className="tf-tech-rail-head">
-                  <span className="tf-mono tf-tech-rail-code">{t.code}</span>
-                  <span className="tf-tech-rail-title">{t.title}</span>
-                </div>
-                <ul className="tf-tech-rail-bullets" role="list">
-                  {t.bullets.map((b, bi) => {
-                    const on = groupActive && bi === active.bulletIdx;
-                    return (
-                      <li key={b.name}>
-                        <button
-                          type="button"
-                          className={cx('tf-tech-rail-bullet', on && 'is-on')}
-                          aria-current={on ? 'true' : undefined}
-                          onClick={() => onPick(ti, bi)}
-                        >
-                          <span className="tf-mono" aria-hidden="true">→</span>
-                          <span>{b.name}</span>
-                        </button>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            );
-          })}
-        </nav>
-
-        <div className="tf-tech-detail" ref={detailRef}>
-          <div className="tf-mono tf-tech-detail-meta">
-            {activeTech.code} / {activeTech.sub}
-          </div>
-          <div className="tf-tech-detail-media" key={mediaKey}>
-            <Media
-              kind={activeBullet.kind}
-              src={activeBullet.img}
-              poster={activeBullet.poster}
-              label={activeBullet.name}
-              ratio="4/3"
-            />
-          </div>
-          <h3 className="tf-h3 tf-tech-detail-name">{activeBullet.name}</h3>
-          <p className="tf-tech-detail-desc">{activeBullet.desc}</p>
-        </div>
+      <div className="tf-tech-bento">
+        {items.map((t) => (
+          <section
+            className="tf-tech-bento-group"
+            key={t.id}
+            aria-labelledby={`tech-bento-${t.id}`}
+          >
+            <header className="tf-tech-bento-head">
+              <span className="tf-mono tf-tech-bento-code">{t.code}</span>
+              <h3 className="tf-tech-bento-title" id={`tech-bento-${t.id}`}>
+                {t.title}
+              </h3>
+              <span className="tf-tech-bento-rule" aria-hidden="true" />
+            </header>
+            <div className="tf-tech-bento-row">
+              {t.bullets.map((b, bi) => {
+                const pos = TILE_POS[bi] ?? 'a';
+                const showDesc = pos === 'hero' || pos === 'c';
+                const isVideo = b.kind === 'video' && /\.(mp4|webm|mov)(\?|$)/i.test(b.img);
+                return (
+                  <article
+                    className="tf-tech-tile"
+                    data-pos={pos}
+                    data-kind={b.kind}
+                    key={b.name}
+                  >
+                    <div className="tf-tech-tile-media" aria-hidden="true">
+                      {isVideo ? (
+                        <video
+                          src={b.img}
+                          poster={b.poster}
+                          autoPlay
+                          muted
+                          loop
+                          playsInline
+                          preload="metadata"
+                        />
+                      ) : (
+                        <img src={b.img} alt="" loading="lazy" decoding="async" />
+                      )}
+                    </div>
+                    <div className="tf-tech-tile-overlay" aria-hidden="true" />
+                    <div className="tf-tech-tile-body">
+                      <span className="tf-mono tf-tech-tile-code">
+                        {t.code} · {String(bi + 1).padStart(2, '0')}
+                      </span>
+                      <h4 className="tf-tech-tile-name">{b.name}</h4>
+                      {showDesc && (
+                        <p className="tf-tech-tile-desc">{b.desc}</p>
+                      )}
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          </section>
+        ))}
       </div>
     </section>
   );

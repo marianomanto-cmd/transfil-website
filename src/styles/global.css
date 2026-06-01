@@ -654,144 +654,176 @@ button { font-family: inherit; }
 }
 
 /* ── Tech section ────────────────────────────────────────────────── */
-/* ── Tech section: master-detail layout ─────────────────────────────
-   Left rail with all four tech groups and their bullets nested; right
-   detail panel showing the active bullet's image, name and description.
-   Detail is sticky on desktop so it stays in view while the user
-   browses the rail. */
-.tf-tech-md {
-  display: grid;
-  grid-template-columns: minmax(260px, 320px) 1fr;
-  gap: clamp(40px, 5vw, 80px);
-  align-items: start;
+/* ── Tech section: bento grid ────────────────────────────────────────
+   Per technology, a 12-col × 2-row asymmetric grid:
+     [ HERO (6×2)        ] [ A (3×1) ] [ B (3×1) ]
+     [                   ] [    C (6×1)         ]
+   Each tile shows the bullet's image (or video) as a backdrop; hero
+   and C carry a description, A and B keep just the title. */
+.tf-tech-bento {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(40px, 5vw, 72px);
 }
 
-.tf-tech-rail {
+.tf-tech-bento-group {
   display: flex;
   flex-direction: column;
-  gap: 32px;
-  min-width: 0;
+  gap: 20px;
 }
-.tf-tech-rail-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.tf-tech-rail-head {
+
+.tf-tech-bento-head {
   display: flex;
   align-items: baseline;
-  gap: 12px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid var(--line);
-  margin-bottom: 6px;
+  gap: 16px;
 }
-.tf-tech-rail-code {
-  font-size: 11px;
-  letter-spacing: 0.1em;
-  color: var(--fg-4);
-  transition: color 0.25s;
-}
-.tf-tech-rail-title {
-  font-family: var(--font-display);
-  font-weight: 500;
-  font-size: 15px;
-  letter-spacing: -0.005em;
-  color: var(--fg-2);
-  transition: color 0.25s;
-}
-.tf-tech-rail-group.is-active .tf-tech-rail-code { color: var(--accent); }
-.tf-tech-rail-group.is-active .tf-tech-rail-title { color: var(--fg); }
-
-.tf-tech-rail-bullets {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-.tf-tech-rail-bullet {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  width: 100%;
-  padding: 10px 14px;
-  border: 0;
-  background: transparent;
-  color: var(--fg-3);
-  font-family: var(--font-body);
-  font-size: 13.5px;
-  text-align: left;
-  cursor: pointer;
-  border-left: 2px solid transparent;
-  transition: color 0.2s, border-color 0.2s, background 0.2s, padding-left 0.2s;
-}
-.tf-tech-rail-bullet:hover {
-  color: var(--fg-2);
-  padding-left: 18px;
-}
-.tf-tech-rail-bullet .tf-mono {
-  color: var(--fg-4);
-  font-size: 11px;
-  transition: color 0.2s;
-}
-.tf-tech-rail-bullet:hover .tf-mono { color: var(--fg-3); }
-.tf-tech-rail-bullet.is-on {
-  color: var(--fg);
-  border-left-color: var(--accent);
-  background: var(--accent-soft);
-  padding-left: 18px;
-}
-.tf-tech-rail-bullet.is-on .tf-mono { color: var(--accent); }
-
-/* Right detail — sticky on desktop, swaps content on rail click */
-.tf-tech-detail {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  min-width: 0;
-  position: sticky;
-  top: calc(var(--header-h) + 24px);
-  animation: tf-tech-detail-in 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
-}
-.tf-tech-detail-meta {
+.tf-tech-bento-code {
   color: var(--accent);
   font-size: 11px;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.14em;
 }
-.tf-tech-detail-name {
+.tf-tech-bento-title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(18px, 1.8vw, 24px);
+  letter-spacing: -0.005em;
+  color: var(--fg);
   margin: 0;
 }
-.tf-tech-detail-desc {
-  font-size: 16px;
-  line-height: 1.6;
-  color: var(--fg-2);
-  margin: 0;
-  text-wrap: pretty;
-  max-width: 56ch;
-}
-@keyframes tf-tech-detail-in {
-  from { opacity: 0; transform: translateX(14px); }
-  to { opacity: 1; transform: none; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .tf-tech-detail { animation: none; }
+.tf-tech-bento-rule {
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+  transform: translateY(-2px);
 }
 
-/* Mobile: stack with detail on top, rail below.
-   Detail unsticks; tapping a rail item smooth-scrolls back up. */
-@media (max-width: 880px) {
-  .tf-tech-md {
-    grid-template-columns: 1fr;
-    gap: 36px;
+.tf-tech-bento-row {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-auto-rows: clamp(180px, 18vw, 240px);
+  gap: clamp(10px, 1.2vw, 16px);
+}
+
+.tf-tech-tile {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--bg-2);
+  isolation: isolate;
+  transition: transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1),
+              border-color 0.3s,
+              box-shadow 0.3s;
+  min-width: 0;
+}
+.tf-tech-tile:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent);
+  box-shadow: 0 18px 40px -22px rgba(0, 0, 0, 0.6);
+}
+
+.tf-tech-tile[data-pos="hero"] { grid-column: span 6; grid-row: span 2; }
+.tf-tech-tile[data-pos="a"]    { grid-column: span 3; grid-row: span 1; }
+.tf-tech-tile[data-pos="b"]    { grid-column: span 3; grid-row: span 1; }
+.tf-tech-tile[data-pos="c"]    { grid-column: span 6; grid-row: span 1; }
+
+.tf-tech-tile-media {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+.tf-tech-tile-media > * {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: saturate(0.92) contrast(1.02);
+  transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.tf-tech-tile:hover .tf-tech-tile-media > * { transform: scale(1.05); }
+
+.tf-tech-tile-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(14, 14, 16, 0.15) 0%, rgba(14, 14, 16, 0) 35%, rgba(14, 14, 16, 0.85) 100%),
+    linear-gradient(90deg, rgba(14, 14, 16, 0.35) 0%, rgba(14, 14, 16, 0) 40%);
+  pointer-events: none;
+}
+
+.tf-tech-tile-body {
+  position: relative;
+  padding: clamp(16px, 1.8vw, 26px);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 6px;
+  height: 100%;
+}
+.tf-tech-tile-code {
+  color: var(--accent);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+}
+.tf-tech-tile-name {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(15px, 1.4vw, 20px);
+  line-height: 1.15;
+  color: #fff;
+  letter-spacing: -0.005em;
+  margin: 0;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.45);
+}
+.tf-tech-tile[data-pos="hero"] .tf-tech-tile-name {
+  font-size: clamp(22px, 2.4vw, 34px);
+  letter-spacing: -0.015em;
+}
+.tf-tech-tile[data-pos="c"] .tf-tech-tile-name {
+  font-size: clamp(18px, 1.7vw, 24px);
+}
+.tf-tech-tile-desc {
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 4px 0 0;
+  max-width: 52ch;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.45);
+}
+.tf-tech-tile[data-pos="hero"] .tf-tech-tile-desc {
+  font-size: 14.5px;
+  -webkit-line-clamp: 5;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.tf-tech-tile[data-pos="c"] .tf-tech-tile-desc {
+  -webkit-line-clamp: 2;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Tablet: bento collapses to a simpler 2-col grid with hero and C
+   spanning full width, A and B sharing a row. */
+@media (max-width: 1080px) {
+  .tf-tech-bento-row {
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: auto;
   }
-  .tf-tech-detail {
-    position: static;
-    order: 0;
-    scroll-margin-top: calc(var(--header-h) + 16px);
-  }
-  .tf-tech-rail { order: 1; gap: 24px; }
-  .tf-tech-rail-bullet { padding: 12px 14px; min-height: 44px; }
+  .tf-tech-tile { aspect-ratio: 4 / 3; }
+  .tf-tech-tile[data-pos="hero"] { grid-column: span 2; grid-row: auto; aspect-ratio: 16 / 9; }
+  .tf-tech-tile[data-pos="a"]    { grid-column: span 1; grid-row: auto; }
+  .tf-tech-tile[data-pos="b"]    { grid-column: span 1; grid-row: auto; }
+  .tf-tech-tile[data-pos="c"]    { grid-column: span 2; grid-row: auto; aspect-ratio: 21 / 9; }
+}
+
+/* Phones: single column, each tile aspect-ratio tuned per role */
+@media (max-width: 640px) {
+  .tf-tech-bento-row { grid-template-columns: 1fr; }
+  .tf-tech-tile[data-pos="hero"] { grid-column: 1; aspect-ratio: 4 / 3; }
+  .tf-tech-tile[data-pos="a"],
+  .tf-tech-tile[data-pos="b"],
+  .tf-tech-tile[data-pos="c"] { grid-column: 1; aspect-ratio: 16 / 9; }
 }
 
 @keyframes tf-fade-in {
