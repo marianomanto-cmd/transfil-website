@@ -244,7 +244,7 @@ export const CONTENT: Record<Lang, Content> = {
         { y: '1998', t: 'Primera línea automotriz', d: 'Integración con planta Renault Argentina.' },
         { y: '2007', t: 'Línea Tenaris', d: 'Diseño de transportadores para línea de tubos sin costura.' },
         { y: '2015', t: 'Expansión regional', d: 'Proyectos en Brasil, Chile, Perú y México.' },
-        { y: '2024', t: 'Nueva planta', d: 'Ampliación de capacidad de fabricación en Francisco de Arteaga 3043.' },
+        { y: '2024', t: 'Nueva planta', d: 'Ampliación de capacidad de fabricación en Francisco de Arteaga 2895.' },
       ],
     },
     contact: {
@@ -261,7 +261,7 @@ export const CONTENT: Record<Lang, Content> = {
         required: 'Campo requerido', emailErr: 'Email inválido',
       },
       direct: 'Contacto directo',
-      addr: 'Francisco de Arteaga 3043, Córdoba, Argentina',
+      addr: 'Francisco de Arteaga 2895, Córdoba, Argentina',
       addressLabel: 'Dirección',
     },
     footer: { tag: 'Maquinaria industrial especializada', rights: 'Todos los derechos reservados.', built: 'Trans-Fil S.R.L.' },
@@ -270,7 +270,7 @@ export const CONTENT: Record<Lang, Content> = {
     whatsappMessage: 'Hola, los contacto desde el sitio web de Trans-Fil.',
     langSwitch: { es: 'ES', en: 'EN' },
     backToTop: 'Volver arriba',
-    about: 'Trans-Fil S.R.L. es un fabricante argentino de maquinaria industrial especializada, fundado en 1989 en Córdoba. Diseña, fabrica y mantiene transportadores de viruta, sistemas de lavado industrial, equipos de filtración y tratamiento de fluidos refrigerantes, y maquinaria de corte láser y plasma. Su planta está en Francisco de Arteaga 3043, Córdoba, Argentina. Atiende a más de 120 clientes industriales en 14 países —Argentina, Brasil, Chile, Perú, Bolivia, Paraguay, Uruguay, Colombia, Ecuador, México, Estados Unidos, República Dominicana, Puerto Rico y España— principalmente de los rubros siderúrgico, automotriz, oil & gas y máquinas-herramienta. Provee servicios complementarios de reparación, retrofitting, mantenimiento programado e ingeniería a medida.',
+    about: 'Trans-Fil S.R.L. es un fabricante argentino de maquinaria industrial especializada, fundado en 1989 en Córdoba. Diseña, fabrica y mantiene transportadores de viruta, sistemas de lavado industrial, equipos de filtración y tratamiento de fluidos refrigerantes, y maquinaria de corte láser y plasma. Su planta está en Francisco de Arteaga 2895, Córdoba, Argentina. Atiende a más de 120 clientes industriales en 14 países —Argentina, Brasil, Chile, Perú, Bolivia, Paraguay, Uruguay, Colombia, Ecuador, México, Estados Unidos, República Dominicana, Puerto Rico y España— principalmente de los rubros siderúrgico, automotriz, oil & gas y máquinas-herramienta. Provee servicios complementarios de reparación, retrofitting, mantenimiento programado e ingeniería a medida.',
     faq: [
       {
         q: '¿Qué es Trans-Fil?',
@@ -278,7 +278,7 @@ export const CONTENT: Record<Lang, Content> = {
       },
       {
         q: '¿Dónde está ubicada Trans-Fil?',
-        a: 'La planta de Trans-Fil está en Francisco de Arteaga 3043, Córdoba, Argentina (31°24′17″S · 64°11′31″W).',
+        a: 'La planta de Trans-Fil está en Francisco de Arteaga 2895, Córdoba, Argentina (31°24′17″S · 64°11′31″W).',
       },
       {
         q: '¿Desde cuándo opera Trans-Fil?',
@@ -306,7 +306,7 @@ export const CONTENT: Record<Lang, Content> = {
       },
       {
         q: '¿Cómo contactar a Trans-Fil?',
-        a: 'Por email a ventas@transfil.com.ar, por teléfono o WhatsApp al +54 9 3513 82-0321, o en la planta de Francisco de Arteaga 3043, Córdoba, Argentina. La empresa responde consultas técnicas en menos de 24 horas hábiles.',
+        a: 'Por email a ventas@transfil.com.ar, por teléfono o WhatsApp al +54 9 3513 82-0321, o en la planta de Francisco de Arteaga 2895, Córdoba, Argentina. La empresa responde consultas técnicas en menos de 24 horas hábiles.',
       },
     ],
   },
@@ -444,7 +444,7 @@ export const CONTENT: Record<Lang, Content> = {
         { y: '1998', t: 'First automotive line', d: 'Integration into Renault Argentina plant.' },
         { y: '2007', t: 'Tenaris line', d: 'Conveyor design for seamless tube line.' },
         { y: '2015', t: 'Regional expansion', d: 'Projects in Brazil, Chile, Peru and Mexico.' },
-        { y: '2024', t: 'New facility', d: 'Manufacturing capacity expansion at Francisco de Arteaga 3043.' },
+        { y: '2024', t: 'New facility', d: 'Manufacturing capacity expansion at Francisco de Arteaga 2895.' },
       ],
     },
     contact: {
@@ -461,7 +461,7 @@ export const CONTENT: Record<Lang, Content> = {
         required: 'Required', emailErr: 'Invalid email',
       },
       direct: 'Direct contact',
-      addr: 'Francisco de Arteaga 3043, Córdoba, Argentina',
+      addr: 'Francisco de Arteaga 2895, Córdoba, Argentina',
       addressLabel: 'Address',
     },
     footer: { tag: 'Specialized industrial machinery', rights: 'All rights reserved.', built: 'Trans-Fil S.R.L.' },
@@ -470,7 +470,7 @@ export const CONTENT: Record<Lang, Content> = {
     whatsappMessage: 'Hi, I\'m contacting you from the Trans-Fil website.',
     langSwitch: { es: 'ES', en: 'EN' },
     backToTop: 'Back to top',
-    about: 'Trans-Fil S.R.L. is an Argentine manufacturer of specialized industrial machinery, founded in 1989 in Córdoba. It designs, builds and maintains chip conveyors, industrial washing systems, coolant filtration and fluid treatment equipment, and laser and plasma cutting machinery. Its workshop is located at Francisco de Arteaga 3043, Córdoba, Argentina. Trans-Fil serves over 120 industrial customers across 14 countries —Argentina, Brazil, Chile, Peru, Bolivia, Paraguay, Uruguay, Colombia, Ecuador, Mexico, United States, Dominican Republic, Puerto Rico and Spain— primarily in the steel, automotive, oil & gas and machine-tool sectors. The company also provides repairs, retrofitting, scheduled maintenance and custom engineering services.',
+    about: 'Trans-Fil S.R.L. is an Argentine manufacturer of specialized industrial machinery, founded in 1989 in Córdoba. It designs, builds and maintains chip conveyors, industrial washing systems, coolant filtration and fluid treatment equipment, and laser and plasma cutting machinery. Its workshop is located at Francisco de Arteaga 2895, Córdoba, Argentina. Trans-Fil serves over 120 industrial customers across 14 countries —Argentina, Brazil, Chile, Peru, Bolivia, Paraguay, Uruguay, Colombia, Ecuador, Mexico, United States, Dominican Republic, Puerto Rico and Spain— primarily in the steel, automotive, oil & gas and machine-tool sectors. The company also provides repairs, retrofitting, scheduled maintenance and custom engineering services.',
     faq: [
       {
         q: 'What is Trans-Fil?',
@@ -478,7 +478,7 @@ export const CONTENT: Record<Lang, Content> = {
       },
       {
         q: 'Where is Trans-Fil located?',
-        a: 'The Trans-Fil workshop is at Francisco de Arteaga 3043, Córdoba, Argentina (31°24′17″S · 64°11′31″W).',
+        a: 'The Trans-Fil workshop is at Francisco de Arteaga 2895, Córdoba, Argentina (31°24′17″S · 64°11′31″W).',
       },
       {
         q: 'How long has Trans-Fil been operating?',
@@ -506,7 +506,7 @@ export const CONTENT: Record<Lang, Content> = {
       },
       {
         q: 'How can I contact Trans-Fil?',
-        a: 'Email ventas@transfil.com.ar, phone or WhatsApp +54 9 3513 82-0321, or visit the workshop at Francisco de Arteaga 3043, Córdoba, Argentina. The company replies to technical enquiries within 24 business hours.',
+        a: 'Email ventas@transfil.com.ar, phone or WhatsApp +54 9 3513 82-0321, or visit the workshop at Francisco de Arteaga 2895, Córdoba, Argentina. The company replies to technical enquiries within 24 business hours.',
       },
     ],
   },

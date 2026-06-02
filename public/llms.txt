@@ -2,7 +2,7 @@
 
 > Argentine manufacturer of specialized industrial machinery, founded in 1989 in Córdoba. Designs, builds and maintains chip conveyors, industrial washing systems, fluid filtration equipment and laser/plasma cutting machinery for the steel, automotive and machine-tool sectors. Exports to 14 countries.
 
-Trans-Fil S.R.L. operates from Francisco de Arteaga 3043, Córdoba, Argentina (−31.4036, −64.1924). Over 120 industrial clients in Argentina, Brazil, Chile, Peru, Bolivia, Paraguay, Uruguay, Colombia, Ecuador, Mexico, United States, Dominican Republic, Puerto Rico and Spain.
+Trans-Fil S.R.L. operates from Francisco de Arteaga 2895, Córdoba, Argentina (−31.4036, −64.1924). Over 120 industrial clients in Argentina, Brazil, Chile, Peru, Bolivia, Paraguay, Uruguay, Colombia, Ecuador, Mexico, United States, Dominican Republic, Puerto Rico and Spain.
 
 The site is bilingual (Spanish at `/`, English at `/en/`). All factual data also exposed as JSON-LD: Organization + LocalBusiness in the page `<head>`, plus Service entries (S01–S04) and a FAQPage with 9 Q&As per locale.
 
@@ -24,7 +24,7 @@ The site is bilingual (Spanish at `/`, English at `/en/`). All factual data also
 
 - Email: ventas@transfil.com.ar
 - Phone / WhatsApp: +54 9 3513 82-0321
-- Address: Francisco de Arteaga 3043, Córdoba, Argentina
+- Address: Francisco de Arteaga 2895, Córdoba, Argentina
 
 ## Resources
 
