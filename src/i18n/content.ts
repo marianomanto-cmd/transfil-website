@@ -126,7 +126,7 @@ export const CONTENT: Record<Lang, Content> = {
     hero: {
       eyebrow: 'Maquinaria industrial · Córdoba, Argentina · Desde 1989',
       titleA: 'Procesos', titleB: 'que no', titleC: 'se detienen.',
-      sub: 'Diseñamos, fabricamos y mantenemos maquinaria a medida para metalurgia, automotriz y máquinas-herramienta.',
+      sub: 'Construimos maquinaria industrial que dura décadas. Cada equipo nace de un relevamiento en su planta, y lo acompañamos con mantenimiento durante toda su vida útil.',
       ctaPrimary: 'Ver tecnologías', ctaSecondary: 'Contáctenos',
       stat1: { v: '36', l: 'Años de operación' },
       stat2: { v: '120+', l: 'Clientes industriales' },
@@ -326,7 +326,7 @@ export const CONTENT: Record<Lang, Content> = {
     hero: {
       eyebrow: 'Industrial machinery · Córdoba, Argentina · Since 1989',
       titleA: 'Processes', titleB: 'that don\'t', titleC: 'stop.',
-      sub: 'We design, build and maintain made-to-measure machinery for the metalworking, automotive and machine-tool industries.',
+      sub: 'We build industrial machinery that lasts decades. Every unit starts with an on-site assessment of your plant, and we stay with it for maintenance throughout its working life.',
       ctaPrimary: 'Explore technologies', ctaSecondary: 'Get in touch',
       stat1: { v: '36', l: 'Years of operation' },
       stat2: { v: '120+', l: 'Industrial clients' },
