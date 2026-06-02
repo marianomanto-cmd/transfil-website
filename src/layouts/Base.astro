@@ -247,8 +247,12 @@ const faqJsonLd = {
           }
         });
 
-        // Magnetic primary CTA — subtle attraction to cursor (fine pointers)
-        if (window.matchMedia('(pointer: fine)').matches) {
+        // Magnetic primary CTA — subtle attraction to cursor (fine pointers,
+        // and only when the user hasn't opted out of motion).
+        if (
+          window.matchMedia('(pointer: fine)').matches &&
+          !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        ) {
           const bind = (btn: HTMLElement) => {
             let raf = 0;
             const reset = () => {

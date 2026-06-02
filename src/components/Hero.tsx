@@ -55,24 +55,34 @@ export function Hero({ content }: Props) {
   // pick the right file in JS instead.
   const [videoSrc, setVideoSrc] = useState<string | null>(null);
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.matchMedia) {
-      setEnableParallax(window.matchMedia('(min-width: 900px) and (pointer: fine)').matches);
-    }
-    if (typeof window === 'undefined') return;
+    if (typeof window === 'undefined' || !window.matchMedia) return;
+    const big = window.matchMedia('(min-width: 900px) and (pointer: fine)');
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const updateParallax = () => setEnableParallax(big.matches && !reduce.matches);
+    updateParallax();
+    big.addEventListener?.('change', updateParallax);
+    reduce.addEventListener?.('change', updateParallax);
     const pick = () => {
       const isMobile = window.matchMedia('(max-width: 768px)').matches;
       setVideoSrc(isMobile ? '/video/hero-mobile.mp4' : '/video/hero-desktop.mp4');
     };
     const ric = (window as unknown as { requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number }).requestIdleCallback;
+    let ricId: number | undefined;
+    let toId: number | undefined;
     if (ric) {
-      const id = ric(pick, { timeout: 1500 });
-      return () => {
-        const cic = (window as unknown as { cancelIdleCallback?: (id: number) => void }).cancelIdleCallback;
-        cic?.(id);
-      };
+      ricId = ric(pick, { timeout: 1500 });
+    } else {
+      toId = window.setTimeout(pick, 600);
     }
-    const id = window.setTimeout(pick, 600);
-    return () => window.clearTimeout(id);
+    return () => {
+      big.removeEventListener?.('change', updateParallax);
+      reduce.removeEventListener?.('change', updateParallax);
+      if (ricId !== undefined) {
+        const cic = (window as unknown as { cancelIdleCallback?: (id: number) => void }).cancelIdleCallback;
+        cic?.(ricId);
+      }
+      if (toId !== undefined) window.clearTimeout(toId);
+    };
   }, []);
   const parallax = enableParallax ? Math.min(scrollY * 0.18, 160) : 0;
   const stats = [c.stat1, c.stat2, c.stat3, c.stat4];
