@@ -1,0 +1,36 @@
+# Trans-Fil
+
+> Argentine manufacturer of specialized industrial machinery, founded in 1989 in Córdoba. Designs, builds and maintains chip conveyors, industrial washing systems, fluid filtration equipment and laser/plasma cutting machinery for the steel, automotive and machine-tool sectors. Exports to 14 countries.
+
+Trans-Fil S.R.L. operates from Francisco de Arteaga 3043, Córdoba, Argentina (−31.4036, −64.1924). Over 120 industrial clients in Argentina, Brazil, Chile, Peru, Bolivia, Paraguay, Uruguay, Colombia, Ecuador, Mexico, United States, Dominican Republic, Puerto Rico and Spain.
+
+The site is bilingual (Spanish at `/`, English at `/en/`). All factual data also exposed as JSON-LD: Organization + LocalBusiness in the page `<head>`, plus Service entries (S01–S04) and a FAQPage with 9 Q&As per locale.
+
+## Product lines
+
+- **T01 — Chip transport.** Hinge, scraper, belt, magnetic or plastic-chain conveyors that evacuate chips from CNC machines, transfer lines and entire shop floors. Heavy-duty 24/7 build, configurable per material and flow rate. Centralised lines connect dozens of machines to a single discharge point.
+- **T02 — Industrial washing.** Pass-through, rotary-table and single-cabin washers for machined parts, castings and forgings. Built-in filtration (belt filters, cyclones, oil skimmers), PLC control with HMI, Industry 4.0 integration with traceability and remote support.
+- **T03 — Fluid treatment.** Belt filtration of soluble coolants, magnetic separators for fine ferrous particles, centralised pumping and temperature-control stations, and belt/coalescing oil-recovery skimmers. Extends coolant life and lowers waste-treatment cost.
+- **T04 — General metalwork.** High-precision laser cutting up to 12.7 mm, plasma cutting up to 25.4 mm, CNC press-brake bending up to 3 m, and serial parts production with full assembly + welding + surface treatments when required.
+
+## Services
+
+- **S01 Reparaciones / Repairs.** Diagnostics, spare parts and refurbishment of Trans-Fil and third-party equipment.
+- **S02 Retrofitting.** Modernisation of existing machines: PLC, automation, energy efficiency.
+- **S03 Mantenimiento / Maintenance.** Preventive and predictive plans; scheduled visits and remote support.
+- **S04 Ingeniería a medida / Custom engineering.** Process study, layout, simulation and mechanical design from scratch.
+
+## Contact
+
+- Email: ventas@transfil.com.ar
+- Phone / WhatsApp: +54 9 3513 82-0321
+- Address: Francisco de Arteaga 3043, Córdoba, Argentina
+
+## Resources
+
+- Sitemap: /sitemap-index.xml
+- Robots: /robots.txt
+- Full LLM content: /llms-full.txt
+- Spanish home: /
+- English home: /en/
+- Catalog PDFs: /catalogs/Trans-Fil-Catalogo-General-ES.pdf, /catalogs/Trans-Fil-Catalog-General-EN.pdf, and per-line filtration / washing variants.

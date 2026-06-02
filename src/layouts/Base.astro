@@ -68,7 +68,47 @@ const orgJsonLd = {
   industry: 'Industrial Machinery Manufacturing',
   makesOffer: content.tech.map((t) => ({
     '@type': 'Offer',
-    itemOffered: { '@type': 'Product', name: t.title },
+    itemOffered: {
+      '@type': 'Product',
+      '@id': `${site}/#product-${t.id}`,
+      name: t.title,
+      description: t.desc,
+      category: 'Industrial Machinery',
+      manufacturer: { '@id': `${site}/#organization` },
+    },
+  })),
+};
+
+// Each service Trans-Fil provides (S01..S04 in content.services.items)
+// as its own Service node, attributed back to the org via @id.
+const servicesJsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': content.services.items.map((s) => ({
+    '@type': 'Service',
+    '@id': `${site}/#service-${s.code.toLowerCase()}`,
+    name: s.title,
+    description: s.desc,
+    serviceType: s.title,
+    provider: { '@id': `${site}/#organization` },
+    areaServed: { '@id': `${site}/#organization` },
+  })),
+};
+
+// FAQPage with the bilingual Q&A list — primary surface for AI search
+// engines (Perplexity / ChatGPT / Google AI Overviews) to cite Trans-Fil
+// answers about location, products, history, countries served, etc.
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  '@id': `${canonical}#faq`,
+  inLanguage: content.htmlLang,
+  mainEntity: content.faq.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: f.a,
+    },
   })),
 };
 ---
@@ -114,6 +154,8 @@ const orgJsonLd = {
     <meta name="twitter:image:alt" content={content.meta.ogImageAlt} />
 
     <script type="application/ld+json" set:html={JSON.stringify(orgJsonLd)} />
+    <script type="application/ld+json" set:html={JSON.stringify(servicesJsonLd)} />
+    <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
 
     <!-- Google tag (gtag.js) — GA4. Fires a manual page_view after each
          astro:page-load except the first (the 'config' line above already
@@ -146,6 +188,24 @@ const orgJsonLd = {
   </head>
   <body>
     <a class="tf-skip-link" href="#main">{content.htmlLang.startsWith('es') ? 'Saltar al contenido' : 'Skip to content'}</a>
+
+    {/* Visually-hidden but indexable 'About' block for AI search engines
+        and screen readers. Mirrors the FAQPage JSON-LD in human-readable
+        prose so crawlers can extract facts even without parsing JSON-LD. */}
+    <section class="tf-sr-only" aria-labelledby="about-heading">
+      <h2 id="about-heading">{content.htmlLang.startsWith('es') ? 'Sobre Trans-Fil' : 'About Trans-Fil'}</h2>
+      <p>{content.about}</p>
+      <h3>{content.htmlLang.startsWith('es') ? 'Preguntas frecuentes' : 'Frequently asked questions'}</h3>
+      <dl>
+        {content.faq.map((f) => (
+          <>
+            <dt>{f.q}</dt>
+            <dd>{f.a}</dd>
+          </>
+        ))}
+      </dl>
+    </section>
+
     <slot />
     <script>
       function init() {

@@ -1,0 +1,126 @@
+# Trans-Fil — Full content for AI/LLM agents
+
+This document mirrors the human-facing pages with all factual content laid out as plain Markdown so AI agents can consume it without rendering the site. Source of truth is `src/i18n/content.ts` in the repo.
+
+## Identity
+
+- **Name:** Trans-Fil S.R.L.
+- **Type:** Argentine manufacturer of specialized industrial machinery
+- **Founded:** 1989
+- **Headquarters:** Francisco de Arteaga 3043, Córdoba, Argentina
+- **Geo:** −31.4036°, −64.1924°
+- **Languages served:** Spanish (es-AR), English (en-US)
+- **Years of operation:** 36+
+- **Industrial clients:** 120+
+- **Countries served:** 14
+- **Workshop status:** 24/7 active
+
+## What Trans-Fil does
+
+Trans-Fil designs, manufactures and maintains specialized industrial machinery for the steel, automotive, oil & gas and machine-tool sectors. Each unit is engineered around the actual production process and integrates with the existing line flow.
+
+Four product lines:
+
+### T01 — Chip transport (Transporte de viruta)
+
+Evacuation systems for metal chips, parts and waste from production lines, machining cells, transfer lines and CNC centers. Configurable as hinge, scraper, magnetic, belt, plastic chain or combined.
+
+Bullets:
+
+1. **Chip transport / Transporte de viruta** — Transport systems for every type of chip and for both stand-alone and large-scale machining processes. Configurable as hinge, scraper, belt or plastic chain depending on material and flow rate. Heavy-duty build for 24/7 continuous operation.
+2. **Continuous drying lines / Líneas de secado continuo** — Special conveyor belts with micro-perforated links separate solid and liquid parts during drying, guaranteeing the moisture reduction required by waste-treatment and parts-treatment processes.
+3. **Centralized lines / Líneas centralizadas** — Multi-machine systems that evacuate chips from a whole shop floor to a single discharge point. Dozens of machine tools share a single transport circuit, eliminating manual handling between stations. Frees up staff and cuts cleanup downtime.
+4. **Custom design / Diseño a medida** — Geometry, width, height, speeds and other features designed and adapted to each process and layout. Each unit is sized from the on-site assessment and validated with a 3D drawing before manufacturing. Materials and components selected according to chip type and coolant.
+
+### T02 — Industrial washing (Lavado industrial)
+
+Automatic washers for machined parts, casting and forging. From single cells to continuous lines with drying and air-knife.
+
+Bullets:
+
+1. **Pass-through & rotary / Pasante y rotativas** — Continuous pass-through cabins with belt or rotary table for serial production. Configurable cycle: wash, rinse, dry. Integrates into the existing line, synchronizing load, unload and bath temperature with the plant's rhythm.
+2. **Single-cabin washer / Lavadora de cabina individual** — Multi-purpose washing systems for manual loading and unloading. Suited to parts with varied geometry and small batches where a continuous line isn't justified. Programs selectable from the HMI.
+3. **Built-in filtration / Filtración integrada** — Belt filters, cyclones and oil skimmers that keep the bath clean and extend fluid life. Cuts detergent-change frequency and water consumption. Simple maintenance with front access to consumables.
+4. **PLC control / Control PLC** — Cabinets with touch HMI. Software integrated into the production line and safety system tailored for Industry 4.0. Real-time tracking of cycles, alarms and consumption, with remote support over the customer's network.
+
+### T03 — Fluid treatment (Tratamiento de fluidos)
+
+Coolant filtration, magnetic separation and fluid centralization. Oil recovery and responsible waste handling.
+
+Bullets:
+
+1. **Belt filters / Filtros de banda** — Gravity filtration with paper or textile cloth. Low operating cost, ideal for water-soluble coolants in machining. Automatic cloth advance driven by bath level and rewind of dry residue for simple disposal.
+2. **Magnetic separators / Separadores magnéticos** — Drums and magnetic bars that remove fine ferrous particles before the main filter. Captures micrometric chips that would otherwise saturate the cloth. Extends consumable life.
+3. **Advanced filtration / Filtración avanzada** — Pumping, pressurization and temperature-control stations for coolant feeding multiple machines in parallel. Centralized system that keeps flow and temperature stable regardless of individual demand. Pressure, conductivity and level monitoring with configurable alarms.
+4. **Oil recovery / Recuperación de aceite** — Belt skimmers and coalescing separators that remove tramp oil from coolant so the fluid can be reused. Extends coolant life several times over and lowers waste-treatment cost.
+
+### T04 — General metalwork (Metalúrgica general)
+
+End-to-end metalworking services: high-precision laser and plasma cutting, CNC bending and serial parts production with fast turnaround.
+
+Bullets:
+
+1. **Laser cutting / Corte láser** — High-precision laser cutting services for industry, up to 12.7 mm (1/2 inch). Carbon steel, stainless steel and aluminum. Tight tolerances and clean edges ready for downstream welding or bending.
+2. **Plasma cutting / Corte plasma** — Plasma cutting services for industry, up to 25.4 mm (1 inch). Especially efficient at thicknesses where laser stops being competitive.
+3. **Industrial bending / Plegado industrial** — CNC press brake for bends up to 3 m. Programmed from 3D drawings, with a die library covering varied thicknesses and radii. High repeatability for serial production.
+4. **Serial production / Producción en serie** — Industrial capacity, decades of experience and an extensive supplier network produce metalworking parts in batches with fast turnaround. From customer-validated prototypes to recurring production runs. Includes assembly, welding and surface treatments when required.
+
+## Services beyond delivery
+
+- **S01 Reparaciones / Repairs** — Diagnostics, spare parts and refurbishment of Trans-Fil and third-party equipment.
+- **S02 Retrofitting** — Modernization of existing machines: PLC, automation, energy efficiency.
+- **S03 Mantenimiento / Maintenance** — Preventive and predictive plans. Scheduled visits and ongoing remote support.
+- **S04 Ingeniería a medida / Custom engineering** — Process study, layout, simulation and mechanical design from scratch.
+
+## Process — how Trans-Fil delivers each unit
+
+1. **Estudio de proceso / Process study** — Assess the production process and the specific need; design a custom solution.
+2. **Ingeniería / Engineering** — Custom structural, mechanical, electrical, hydraulic and safety engineering.
+3. **Fabricación / Manufacturing** — Full build in the Córdoba workshop. Traceable materials and dry-run testing before dispatch.
+4. **Puesta en marcha / Commissioning** — On-site installation, parameter tuning and training for operations and maintenance staff.
+5. **Soporte / Support** — Spare parts, technical assistance and continuous improvements. Trans-Fil machines from the '90s are still running.
+
+## Industries served
+
+- **Steel / Siderurgia:** ACINDAR, ALUAR, SIDERSA, TENARIS, GARIBALDI, ACEROS ZAPLA, TUBHIER, OTO MILLS, VOITH, ACEROS BORRONIS.
+- **Automotive, Oil & Appliances / Automotriz, Oil & Línea Blanca:** RENAULT, VOLKSWAGEN, IVECO, FIAT, TOYOTA, CHRYSLER, CORVEN, BREMBO, SACHS, MWM, PERTRAK, WEG, WEATHERFORD, DANA, ALLADIO.
+- **Machine tools / Máquinas-herramienta:** MEPROMAES, COMAU, EMAG, MORI SEIKI, OKUMA, MAZAK, DOOSAN, HAAS.
+
+## Countries served (14)
+
+Argentina, Brazil, Chile, Peru, Bolivia, Paraguay, Uruguay, Colombia, Ecuador, Mexico, United States, Dominican Republic, Puerto Rico, Spain.
+
+## History milestones
+
+- **1989** — Founded. Workshop opens in Córdoba focused on industrial filtration.
+- **1998** — First automotive line. Integration into Renault Argentina plant.
+- **2007** — Tenaris line. Conveyor design for seamless tube line.
+- **2015** — Regional expansion. Projects in Brazil, Chile, Peru and Mexico.
+- **2024** — New facility. Manufacturing capacity expansion at Francisco de Arteaga 3043.
+
+## Contact
+
+- **Email:** ventas@transfil.com.ar
+- **Phone / WhatsApp:** +54 9 3513 82-0321
+- **Address:** Francisco de Arteaga 3043, Córdoba, Argentina
+- **Coordinates:** 31°24′17″S · 64°11′31″W (−31.4036, −64.1924)
+- **Languages:** Spanish, English
+- **Response time:** under 24 business hours for technical enquiries
+
+## Downloadable catalogs
+
+- **General catalog (ES):** /catalogs/Trans-Fil-Catalogo-General-ES.pdf · 12 pages · 7 MB
+- **General catalog (EN):** /catalogs/Trans-Fil-Catalog-General-EN.pdf · 12 pages · 9 MB
+- **Filtration (ES):** /catalogs/Trans-Fil-Catalogo-Filtracion-ES.pdf · 8 pages · 3 MB
+- **Filtration (EN):** /catalogs/Trans-Fil-Catalog-Filtration-EN.pdf · 8 pages · 3 MB
+- **Washing (ES):** /catalogs/Trans-Fil-Catalogo-Lavado-ES.pdf · 6 pages · 3 MB
+- **Washing (EN):** /catalogs/Trans-Fil-Catalog-Washing-EN.pdf · 6 pages · 5 MB
+
+## Site map
+
+- ES home: https://www.transfil.com.ar/
+- EN home: https://www.transfil.com.ar/en/
+- Robots: https://www.transfil.com.ar/robots.txt
+- Sitemap: https://www.transfil.com.ar/sitemap-index.xml
+- Short summary: https://www.transfil.com.ar/llms.txt
+- This file: https://www.transfil.com.ar/llms-full.txt

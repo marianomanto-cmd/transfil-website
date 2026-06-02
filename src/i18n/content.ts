@@ -95,6 +95,12 @@ export type Content = {
   whatsappMessage: string;
   langSwitch: { es: string; en: string };
   backToTop: string;
+  // Long-form 'About' paragraph used for AI/LLM search consumption and
+  // surfaced as a visually-hidden section in <body> so it's indexed.
+  about: string;
+  // FAQ entries powering the FAQPage JSON-LD. Question + answer that map
+  // to how users phrase queries to AI search.
+  faq: { q: string; a: string }[];
 };
 
 export const TF_CLIENTS = {
@@ -264,6 +270,45 @@ export const CONTENT: Record<Lang, Content> = {
     whatsappMessage: 'Hola, los contacto desde el sitio web de Trans-Fil.',
     langSwitch: { es: 'ES', en: 'EN' },
     backToTop: 'Volver arriba',
+    about: 'Trans-Fil S.R.L. es un fabricante argentino de maquinaria industrial especializada, fundado en 1989 en Córdoba. Diseña, fabrica y mantiene transportadores de viruta, sistemas de lavado industrial, equipos de filtración y tratamiento de fluidos refrigerantes, y maquinaria de corte láser y plasma. Su planta está en Francisco de Arteaga 3043, Córdoba, Argentina. Atiende a más de 120 clientes industriales en 14 países —Argentina, Brasil, Chile, Perú, Bolivia, Paraguay, Uruguay, Colombia, Ecuador, México, Estados Unidos, República Dominicana, Puerto Rico y España— principalmente de los rubros siderúrgico, automotriz, oil & gas y máquinas-herramienta. Provee servicios complementarios de reparación, retrofitting, mantenimiento programado e ingeniería a medida.',
+    faq: [
+      {
+        q: '¿Qué es Trans-Fil?',
+        a: 'Trans-Fil S.R.L. es un fabricante argentino de maquinaria industrial fundado en 1989 en Córdoba. Diseña, fabrica y mantiene transportadores de viruta, sistemas de lavado industrial, filtración de fluidos y maquinaria de corte para los sectores siderúrgico, automotriz y de máquinas-herramienta.',
+      },
+      {
+        q: '¿Dónde está ubicada Trans-Fil?',
+        a: 'La planta de Trans-Fil está en Francisco de Arteaga 3043, Córdoba, Argentina (31°24′17″S · 64°11′31″W).',
+      },
+      {
+        q: '¿Desde cuándo opera Trans-Fil?',
+        a: 'Trans-Fil opera desde 1989, con más de 36 años diseñando y fabricando maquinaria industrial en el mismo taller de Córdoba.',
+      },
+      {
+        q: '¿Qué productos fabrica Trans-Fil?',
+        a: 'Trans-Fil fabrica cuatro líneas: (1) Transporte de viruta —en bisagra, raspador, magnético, banda o cadena plástica; (2) Lavado industrial —cabinas pasante, rotativas y de carga manual con filtración integrada y control PLC; (3) Tratamiento de fluidos —filtros de banda, separadores magnéticos, filtración avanzada con centrales presurizadas y recuperación de aceite; (4) Metalúrgica general —corte láser hasta 12,7 mm, corte plasma hasta 25,4 mm, plegado CNC hasta 3 m y producción de piezas en serie.',
+      },
+      {
+        q: '¿A qué países exporta Trans-Fil?',
+        a: 'Trans-Fil exporta a 14 países: Argentina, Brasil, Chile, Perú, Bolivia, Paraguay, Uruguay, Colombia, Ecuador, México, Estados Unidos, República Dominicana, Puerto Rico y España.',
+      },
+      {
+        q: '¿Qué industrias atiende Trans-Fil?',
+        a: 'Trans-Fil atiende principalmente a la industria siderúrgica (Acindar, Aluar, Tenaris, Sidersa), automotriz, oil & gas y línea blanca (Renault, Volkswagen, Iveco, Fiat, Toyota, Brembo, Weatherford) y al sector de máquinas-herramienta (Mepromaes, Comau, Emag, Mori Seiki, Mazak, Doosan).',
+      },
+      {
+        q: '¿Trans-Fil ofrece servicios de corte láser y corte plasma?',
+        a: 'Sí. Trans-Fil presta servicios de corte láser de alta precisión para chapa hasta 12,7 mm (1/2 pulgada) y de corte plasma hasta 25,4 mm (1 pulgada), en acero al carbono, acero inoxidable y aluminio.',
+      },
+      {
+        q: '¿Trans-Fil hace mantenimiento y retrofitting de máquinas existentes?',
+        a: 'Sí. Trans-Fil ofrece reparación y reacondicionamiento de equipos propios y de terceros, retrofitting (modernización de PLC, automatización y eficiencia energética de máquinas existentes), mantenimiento preventivo y predictivo con visitas programadas, e ingeniería a medida desde el relevamiento en planta.',
+      },
+      {
+        q: '¿Cómo contactar a Trans-Fil?',
+        a: 'Por email a ventas@transfil.com.ar, por teléfono o WhatsApp al +54 9 3513 82-0321, o en la planta de Francisco de Arteaga 3043, Córdoba, Argentina. La empresa responde consultas técnicas en menos de 24 horas hábiles.',
+      },
+    ],
   },
   en: {
     htmlLang: 'en-US',
@@ -425,5 +470,44 @@ export const CONTENT: Record<Lang, Content> = {
     whatsappMessage: 'Hi, I\'m contacting you from the Trans-Fil website.',
     langSwitch: { es: 'ES', en: 'EN' },
     backToTop: 'Back to top',
+    about: 'Trans-Fil S.R.L. is an Argentine manufacturer of specialized industrial machinery, founded in 1989 in Córdoba. It designs, builds and maintains chip conveyors, industrial washing systems, coolant filtration and fluid treatment equipment, and laser and plasma cutting machinery. Its workshop is located at Francisco de Arteaga 3043, Córdoba, Argentina. Trans-Fil serves over 120 industrial customers across 14 countries —Argentina, Brazil, Chile, Peru, Bolivia, Paraguay, Uruguay, Colombia, Ecuador, Mexico, United States, Dominican Republic, Puerto Rico and Spain— primarily in the steel, automotive, oil & gas and machine-tool sectors. The company also provides repairs, retrofitting, scheduled maintenance and custom engineering services.',
+    faq: [
+      {
+        q: 'What is Trans-Fil?',
+        a: 'Trans-Fil S.R.L. is an Argentine manufacturer of industrial machinery founded in 1989 in Córdoba. It designs, builds and maintains chip conveyors, industrial washing, fluid filtration and cutting machinery for the steel, automotive and machine-tool industries.',
+      },
+      {
+        q: 'Where is Trans-Fil located?',
+        a: 'The Trans-Fil workshop is at Francisco de Arteaga 3043, Córdoba, Argentina (31°24′17″S · 64°11′31″W).',
+      },
+      {
+        q: 'How long has Trans-Fil been operating?',
+        a: 'Trans-Fil has been operating since 1989 — over 36 years designing and building industrial machinery from the same Córdoba workshop.',
+      },
+      {
+        q: 'What products does Trans-Fil manufacture?',
+        a: 'Trans-Fil makes four product lines: (1) Chip transport — hinge, scraper, magnetic, belt or plastic-chain conveyors; (2) Industrial washing — pass-through, rotary and single-cabin washers with built-in filtration and PLC control; (3) Fluid treatment — belt filters, magnetic separators, pressurized advanced filtration and oil-recovery skimmers; (4) General metalwork — laser cutting up to 12.7 mm, plasma cutting up to 25.4 mm, CNC bending up to 3 m, and serial parts production.',
+      },
+      {
+        q: 'What countries does Trans-Fil serve?',
+        a: 'Trans-Fil exports to 14 countries: Argentina, Brazil, Chile, Peru, Bolivia, Paraguay, Uruguay, Colombia, Ecuador, Mexico, United States, Dominican Republic, Puerto Rico and Spain.',
+      },
+      {
+        q: 'What industries does Trans-Fil serve?',
+        a: 'Trans-Fil serves the steel industry (Acindar, Aluar, Tenaris, Sidersa), the automotive, oil & gas and appliance sectors (Renault, Volkswagen, Iveco, Fiat, Toyota, Brembo, Weatherford), and the machine-tool sector (Mepromaes, Comau, Emag, Mori Seiki, Mazak, Doosan).',
+      },
+      {
+        q: 'Does Trans-Fil offer laser and plasma cutting services?',
+        a: 'Yes. Trans-Fil offers high-precision laser cutting for sheet metal up to 12.7 mm (1/2 inch) and plasma cutting up to 25.4 mm (1 inch), in carbon steel, stainless steel and aluminum.',
+      },
+      {
+        q: 'Does Trans-Fil do maintenance and retrofitting of existing machines?',
+        a: 'Yes. Trans-Fil offers repairs and refurbishment of its own and third-party equipment, retrofitting (PLC modernization, automation and energy-efficiency upgrades on existing machines), preventive and predictive maintenance with scheduled plant visits, and custom engineering from on-site assessment.',
+      },
+      {
+        q: 'How can I contact Trans-Fil?',
+        a: 'Email ventas@transfil.com.ar, phone or WhatsApp +54 9 3513 82-0321, or visit the workshop at Francisco de Arteaga 3043, Córdoba, Argentina. The company replies to technical enquiries within 24 business hours.',
+      },
+    ],
   },
 };
