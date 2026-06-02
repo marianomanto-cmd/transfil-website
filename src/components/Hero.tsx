@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { useScrollY, useCountUp } from '../lib/hooks';
 import type { Content } from '../i18n/content';
 
@@ -28,7 +29,7 @@ function HeroCTAs({ ctaPrimary, ctaSecondary }: { ctaPrimary: string; ctaSeconda
     <div className="tf-hero-ctas">
       <a href="#tech" className="tf-btn tf-btn-primary" onClick={(e) => scrollTo(e, '#tech')}>
         <span>{ctaPrimary}</span>
-        <svg viewBox="0 0 16 16" width="14" height="14">
+        <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
           <path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.6" />
         </svg>
       </a>
@@ -42,10 +43,23 @@ function HeroCTAs({ ctaPrimary, ctaSecondary }: { ctaPrimary: string; ctaSeconda
 export function Hero({ content, bgUrl = '/img/hf-welder.png' }: Props) {
   const c = content.hero;
   const scrollY = useScrollY();
-  const enableParallax =
-    typeof window !== 'undefined' &&
-    window.matchMedia &&
-    window.matchMedia('(min-width: 900px) and (pointer: fine)').matches;
+  // Detect parallax-eligible environment on mount so SSR + first hydration
+  // render are identical. Gates on viewport width, pointer type AND
+  // prefers-reduced-motion — users who opted out of motion never get parallax.
+  const [enableParallax, setEnableParallax] = useState(false);
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.matchMedia) return;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const big = window.matchMedia('(min-width: 900px) and (pointer: fine)');
+    const update = () => setEnableParallax(big.matches && !reduce.matches);
+    update();
+    reduce.addEventListener?.('change', update);
+    big.addEventListener?.('change', update);
+    return () => {
+      reduce.removeEventListener?.('change', update);
+      big.removeEventListener?.('change', update);
+    };
+  }, []);
   const parallax = enableParallax ? Math.min(scrollY * 0.18, 160) : 0;
   const stats = [c.stat1, c.stat2, c.stat3, c.stat4];
 

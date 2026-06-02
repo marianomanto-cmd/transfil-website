@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { cx } from '../lib/cx';
 import type { Content, Lang } from '../i18n/content';
 
@@ -11,6 +11,8 @@ export function Header({ lang, content }: Props) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [progress, setProgress] = useState(0);
+  const drawerRef = useRef<HTMLDivElement>(null);
+  const burgerRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const onScroll = () => {
@@ -22,6 +24,48 @@ export function Header({ lang, content }: Props) {
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  // Mobile drawer: trap focus, close on Escape, lock body scroll while open.
+  useEffect(() => {
+    if (!open) return;
+    const drawer = drawerRef.current;
+    if (!drawer) return;
+
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    const focusables = () =>
+      Array.from(
+        drawer.querySelectorAll<HTMLElement>('a[href], button:not([disabled])')
+      ).filter((el) => el.offsetParent !== null);
+
+    focusables()[0]?.focus();
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setOpen(false);
+        burgerRef.current?.focus();
+        return;
+      }
+      if (e.key !== 'Tab') return;
+      const items = focusables();
+      if (items.length === 0) return;
+      const firstEl = items[0];
+      const lastEl = items[items.length - 1];
+      if (e.shiftKey && document.activeElement === firstEl) {
+        e.preventDefault();
+        lastEl.focus();
+      } else if (!e.shiftKey && document.activeElement === lastEl) {
+        e.preventDefault();
+        firstEl.focus();
+      }
+    };
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [open]);
 
   const items = [
     { href: '#tech', label: content.nav.tech },
@@ -79,8 +123,12 @@ export function Header({ lang, content }: Props) {
             </svg>
           </a>
           <button
+            ref={burgerRef}
+            type="button"
             className="tf-burger"
             aria-label="Menu"
+            aria-expanded={open}
+            aria-controls="tf-mobile-nav"
             data-open={open}
             onClick={() => setOpen(!open)}
           >
@@ -88,7 +136,15 @@ export function Header({ lang, content }: Props) {
           </button>
         </div>
       </div>
-      <div className="tf-mobile-nav" data-open={open}>
+      <div
+        id="tf-mobile-nav"
+        ref={drawerRef}
+        className="tf-mobile-nav"
+        data-open={open}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Menu"
+      >
         {items.map((it) => (
           <a key={it.href} href={it.href} onClick={(e) => onNav(e, it.href)}>
             {it.label}

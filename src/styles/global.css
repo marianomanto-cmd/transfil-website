@@ -56,7 +56,8 @@ body {
 }
 
 /* Very subtle grain texture overlay — keeps dark surfaces from looking
-   flat-digital. Pure CSS via fractalNoise data URI; non-blocking, no req. */
+   flat-digital. Pure CSS via fractalNoise data URI; non-blocking, no req.
+   Skipped on small viewports where its render cost isn't worth it. */
 body::before {
   content: "";
   position: fixed;
@@ -67,9 +68,58 @@ body::before {
   opacity: 0.05;
   mix-blend-mode: overlay;
 }
+@media (max-width: 640px) {
+  body::before { display: none; }
+}
 
 a { color: inherit; text-decoration: none; }
 button { font-family: inherit; }
+
+/* ── Accessibility primitives ────────────────────────────────────────
+   Visible focus ring, skip-link, and the .tf-sr-only utility used by
+   the visually-hidden About + FAQ block. Tap-target helpers below. */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+.tf-btn:focus-visible,
+.tf-cta-mini:focus-visible,
+.tf-mobile-cta:focus-visible { outline-offset: -2px; }
+.tf-lang a:focus-visible,
+.tf-nav a:focus-visible { outline-offset: 4px; }
+
+.tf-skip-link {
+  position: fixed;
+  top: -100px;
+  left: 16px;
+  z-index: 9999;
+  padding: 10px 16px;
+  background: var(--accent);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  transition: top 0.2s;
+}
+.tf-skip-link:focus,
+.tf-skip-link:focus-visible {
+  top: 12px;
+  outline-offset: 2px;
+}
+
+.tf-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
 
 /* ── Typography ──────────────────────────────────────────────────── */
 .tf-mono {
@@ -168,7 +218,8 @@ button { font-family: inherit; }
   align-items: center;
   justify-content: space-between;
   height: 100%;
-  padding: 0 var(--pad-x);
+  padding-left: max(var(--pad-x), env(safe-area-inset-left));
+  padding-right: max(var(--pad-x), env(safe-area-inset-right));
   max-width: var(--maxw);
   margin: 0 auto;
   gap: 24px;
@@ -251,11 +302,13 @@ button { font-family: inherit; }
   align-items: center;
   gap: 8px;
   padding: 8px 14px;
+  min-height: 44px;
   border: 1px solid var(--line-strong);
   border-radius: 999px;
   font-size: 12px;
   letter-spacing: 0.04em;
   color: var(--fg);
+  touch-action: manipulation;
   transition: border-color 0.2s, background 0.2s;
 }
 .tf-cta-mini:hover {
@@ -266,13 +319,14 @@ button { font-family: inherit; }
   display: none;
   flex-direction: column;
   gap: 4px;
-  width: 32px;
-  height: 32px;
+  width: 44px;
+  height: 44px;
   align-items: center;
   justify-content: center;
   background: transparent;
   border: 0;
   cursor: pointer;
+  touch-action: manipulation;
 }
 .tf-burger i {
   display: block;
@@ -462,6 +516,8 @@ button { font-family: inherit; }
   font-size: clamp(36px, 4vw, 56px);
   line-height: 1;
   letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
 }
 .tf-stat-l {
   font-size: 13px;
@@ -560,6 +616,7 @@ button { font-family: inherit; }
   align-items: center;
   gap: 10px;
   padding: 12px 22px;
+  min-height: 44px;
   border-radius: 0;
   font-family: var(--font-display);
   font-size: 14px;
@@ -569,6 +626,7 @@ button { font-family: inherit; }
   cursor: pointer;
   background: transparent;
   color: var(--fg);
+  touch-action: manipulation;
   transition: all 0.25s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 .tf-btn-primary {
@@ -1604,6 +1662,7 @@ button { font-family: inherit; }
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
+.tf-form-sent:empty { display: none; }
 
 .tf-contact-side {
   display: flex;
@@ -1961,12 +2020,13 @@ button { font-family: inherit; }
 /* ── WhatsApp FAB ────────────────────────────────────────────────── */
 .tf-wa-fab {
   position: fixed;
-  right: clamp(16px, 3vw, 32px);
-  bottom: clamp(16px, 3vw, 32px);
+  right: max(clamp(16px, 3vw, 32px), env(safe-area-inset-right));
+  bottom: max(clamp(16px, 3vw, 32px), env(safe-area-inset-bottom));
   display: inline-flex;
   align-items: center;
   gap: 10px;
   padding: 12px 18px;
+  min-height: 44px;
   border-radius: 999px;
   background: #25d366;
   color: #fff;
@@ -1979,6 +2039,7 @@ button { font-family: inherit; }
   opacity: 0;
   transform: translateY(16px) scale(0.96);
   pointer-events: none;
+  touch-action: manipulation;
   transition: opacity 0.3s cubic-bezier(0.2, 0.7, 0.2, 1),
               transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1),
               background 0.2s;
@@ -2040,12 +2101,18 @@ button { font-family: inherit; }
 
 /* Language toggle anchors share button styling */
 .tf-lang a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   color: var(--fg-3);
-  padding: 4px 2px;
+  padding: 12px 8px;
+  min-height: 44px;
+  min-width: 32px;
   letter-spacing: inherit;
   font-family: inherit;
   font-size: inherit;
   text-decoration: none;
+  touch-action: manipulation;
   transition: color 0.2s;
 }
 .tf-lang a[data-on="true"] { color: var(--fg); }
