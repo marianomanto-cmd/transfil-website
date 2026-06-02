@@ -126,7 +126,7 @@ export const CONTENT: Record<Lang, Content> = {
     hero: {
       eyebrow: 'Maquinaria industrial · Córdoba, Argentina · Desde 1989',
       titleA: 'Procesos', titleB: 'que no', titleC: 'se detienen.',
-      sub: 'Diseño, fabricación y mantenimiento de maquinaria especializada para metalurgia, automotriz y máquinas-herramienta.',
+      sub: 'Diseñamos, fabricamos y mantenemos maquinaria a medida para metalurgia, automotriz y máquinas-herramienta.',
       ctaPrimary: 'Ver tecnologías', ctaSecondary: 'Contáctenos',
       stat1: { v: '36', l: 'Años de operación' },
       stat2: { v: '120+', l: 'Clientes industriales' },
@@ -135,8 +135,8 @@ export const CONTENT: Record<Lang, Content> = {
     },
     capabilities: {
       eyebrow: '[ 02 — Capacidades ]',
-      title: 'Cuatro líneas. Una misma ingeniería.',
-      sub: 'Cada equipo se diseña sobre el proceso productivo real e integra al flujo existente.',
+      title: 'Cuatro líneas. Una sola ingeniería.',
+      sub: 'Cada equipo se diseña sobre el proceso productivo real y se integra al flujo existente sin interrumpirlo.',
     },
     tech: [
       {
@@ -144,10 +144,10 @@ export const CONTENT: Record<Lang, Content> = {
         img: '/img/t01-conveyors.webp',
         desc: 'Sistemas de evacuación de viruta metálica, piezas y residuos para líneas de producción, celdas de mecanizado, líneas transfer y centros CNC. Configurables en bisagra, raspador, magnéticos, cintas, cadenas plásticas o combinados.',
         bullets: [
-          { name: 'Transporte de viruta', img: '/img/t01-chip-transport.webp', desc: 'Sistemas de transporte para todo tipo de viruta y procesos de mecanizado individuales y de gran porte. Configurables en bisagra, raspador, cinta o cadena plástica según el material y el caudal. Construcción robusta para operación continua 24/7.', kind: 'photo' },
-          { name: 'Líneas de secado continuo', img: '/img/t01-drying.webp', desc: 'Nuestras líneas de secado continuo utilizan cintas de transporte especiales con eslabones microperforados para separar partes sólidas y líquidas durante el secado, garantizando la reducción de humedad requerida por procesos como tratamiento de residuos, piezas, etc.', kind: 'photo' },
-          { name: 'Líneas centralizadas', img: '/img/t01-conveyors.webp', desc: 'Sistemas multi-máquina que evacúan viruta de toda una nave hacia un punto único de descarga. Conectan decenas de máquinas-herramienta a un mismo circuito de transporte y eliminan la manipulación manual entre estaciones. Liberan personal y reducen el tiempo de paro por limpieza.', kind: 'photo' },
-          { name: 'Diseño a medida', img: '/img/t01-custom.webp', desc: 'Geometría, ancho, altura, velocidades y otras características diseñadas y adaptadas a cada proceso y layout. Cada equipo se dimensiona desde el relevamiento en planta y se valida con plano 3D antes de fabricación. Materiales y componentes seleccionados según tipo de viruta y refrigerante.', kind: 'photo' },
+          { name: 'Transporte de viruta', img: '/img/t01-chip-transport.webp', desc: 'Sistemas de transporte para todo tipo de viruta y procesos de mecanizado, desde celdas individuales hasta líneas de gran escala. Configurables en bisagra, raspador, cinta o cadena plástica según material y caudal. Construcción robusta para operación continua 24/7.', kind: 'photo' },
+          { name: 'Líneas de secado continuo', img: '/img/t01-drying.webp', desc: 'Cintas con eslabones microperforados que separan sólidos y líquidos durante el transporte, garantizando la reducción de humedad que requieren procesos como tratamiento de residuos o secado de piezas pequeñas en serie.', kind: 'photo' },
+          { name: 'Líneas centralizadas', img: '/img/t01-conveyors.webp', desc: 'Sistemas multi-máquina que evacúan la viruta de toda una nave hacia un único punto de descarga. Conectan decenas de máquinas-herramienta a un mismo circuito y eliminan el traslado manual entre estaciones, liberando al personal de tareas repetitivas y reduciendo el tiempo de paro por limpieza.', kind: 'photo' },
+          { name: 'Diseño a medida', img: '/img/t01-custom.webp', desc: 'Geometría, ancho, altura, velocidades y demás características adaptadas a cada proceso y layout. Cada equipo se dimensiona a partir del relevamiento en planta y se valida con plano 3D antes de la fabricación. Materiales y componentes seleccionados según el tipo de viruta y el refrigerante.', kind: 'photo' },
         ],
       },
       {
@@ -155,10 +155,10 @@ export const CONTENT: Record<Lang, Content> = {
         img: '/img/t02-washing.webp',
         desc: 'Lavadoras automáticas para piezas mecanizadas, fundición y forja. Desde celdas individuales hasta líneas continuas con secado y soplado.',
         bullets: [
-          { name: 'Pasante y rotativas', img: '/img/t02-washing.webp', desc: 'Cabinas de paso continuo con cinta o mesa rotativa para producción seriada. Ciclo configurable: lavado, enjuague, secado. Se integran a la línea de producción existente sincronizando carga, descarga y temperatura del baño con el ritmo de planta.', kind: 'photo' },
-          { name: 'Lavadora de cabina individual', img: '/img/t02-cabin.webp', desc: 'Sistemas de lavado especiales para carga y descarga manual de uso múltiple. Aptos para piezas de geometría diversa y lotes chicos donde no se justifica una línea continua. Programas seleccionables desde el HMI según el grado de limpieza requerido.', kind: 'photo' },
-          { name: 'Filtración integrada', img: '/img/t02-filtration.webp', desc: 'Filtros de banda, ciclones y skimmers de aceite que mantienen el baño limpio y prolongan la vida del fluido. Reducen la frecuencia de cambio de detergente y el consumo de agua. Mantenimiento simple, con acceso frontal a los consumibles.', kind: 'photo' },
-          { name: 'Control PLC', img: '/img/t02-plc.webp', desc: 'Tableros con HMI táctil. Software integrado a la línea de producción y sistema de seguridad adaptado para Industria 4.0. Trazabilidad de ciclos, alarmas y consumos en tiempo real, con soporte remoto sobre la red del cliente.', kind: 'photo' },
+          { name: 'Pasante y rotativas', img: '/img/t02-washing.webp', desc: 'Cabinas de paso continuo con cinta o mesa rotativa para producción en serie. Ciclo configurable de lavado, enjuague y secado. Se integran a la línea existente sincronizando carga, descarga y temperatura del baño con el ritmo de planta.', kind: 'photo' },
+          { name: 'Lavadora de cabina individual', img: '/img/t02-cabin.webp', desc: 'Cabinas de carga y descarga manual para uso múltiple, aptas para piezas de geometría variada y lotes chicos donde no se justifica una línea continua. Programas seleccionables desde el HMI según el grado de limpieza requerido.', kind: 'photo' },
+          { name: 'Filtración integrada', img: '/img/t02-filtration.webp', desc: 'Filtros de banda, ciclones y skimmers de aceite que mantienen el baño limpio y prolongan la vida del fluido. Reducen la frecuencia de cambio de detergente y el consumo de agua. Mantenimiento simple con acceso frontal a los consumibles.', kind: 'photo' },
+          { name: 'Control PLC', img: '/img/t02-plc.webp', desc: 'Tableros con HMI táctil. Software integrado a la línea de producción y sistema de seguridad preparado para Industria 4.0. Trazabilidad de ciclos, alarmas y consumos en tiempo real, con soporte remoto a través de la red del cliente.', kind: 'photo' },
         ],
       },
       {
@@ -167,9 +167,9 @@ export const CONTENT: Record<Lang, Content> = {
         desc: 'Filtración de refrigerantes, separación magnética y centralización de fluidos. Recuperación de aceites y manejo responsable de residuos.',
         bullets: [
           { name: 'Filtros de banda', img: '/img/t02-band-filters.webp', desc: 'Filtración por gravedad con tela de papel o textil. Bajo costo operativo, ideal para refrigerantes solubles en mecanizado. Avance automático de la tela según el nivel del baño y rebobinado del residuo seco para disposición simple.', kind: 'photo' },
-          { name: 'Separadores magnéticos', img: '/video/t02-magnetic-separator.mp4', poster: '/img/t02-magnetic-separator-poster.webp', desc: 'Tambores y barras imantadas que retiran partículas ferrosas finas antes del filtro principal. Captan virutas micrométricas que saturan la tela. Aumentan la vida del consumible y reducen el caudal sólido que llega al sistema central.', kind: 'video' },
-          { name: 'Filtración avanzada', img: '/img/t03-advanced-filtration.webp', desc: 'Estaciones de bombeo, presurización y temperado del refrigerante para múltiples máquinas en paralelo. Sistema centralizado que mantiene caudal y temperatura estables independientes del consumo individual. Monitoreo de presión, conductividad y nivel con alarmas configurables.', kind: 'photo' },
-          { name: 'Recuperación de aceite', img: '/img/t02-oil-recovery.webp', desc: 'Skimmers de banda y separadores coalescentes que retiran el aceite tramposo del refrigerante para reusar el fluido. Extienden la vida útil del refrigerante varias veces y bajan el costo de tratamiento de residuos. El aceite recuperado se separa para disposición o reúso.', kind: 'photo' },
+          { name: 'Separadores magnéticos', img: '/video/t02-magnetic-separator.mp4', poster: '/img/t02-magnetic-separator-poster.webp', desc: 'Tambores y barras imantadas que retiran partículas ferrosas finas antes del filtro principal, capturando la viruta micrométrica que de otro modo saturaría la tela. Extienden la vida del consumible y reducen la carga sólida que llega al sistema central.', kind: 'video' },
+          { name: 'Filtración avanzada', img: '/img/t03-advanced-filtration.webp', desc: 'Estaciones centralizadas de bombeo, presurización y temperado del refrigerante para múltiples máquinas en paralelo. Mantienen caudal y temperatura estables independientemente del consumo individual de cada estación. Monitoreo de presión, conductividad y nivel con alarmas configurables.', kind: 'photo' },
+          { name: 'Recuperación de aceite', img: '/img/t02-oil-recovery.webp', desc: 'Skimmers de banda y separadores coalescentes que retiran el aceite tramposo del refrigerante para reutilizar el fluido. Extienden varias veces la vida útil del refrigerante y bajan el costo de tratamiento de residuos. El aceite recuperado se separa para disposición o reúso.', kind: 'photo' },
         ],
       },
       {
@@ -177,10 +177,10 @@ export const CONTENT: Record<Lang, Content> = {
         img: '/img/t04-metalwork-cover.webp',
         desc: 'Servicios metalúrgicos integrales: corte láser y plasma de alta precisión, plegado CNC y producción de piezas en serie con alta capacidad de respuesta.',
         bullets: [
-          { name: 'Corte láser', img: '/video/t04-laser-cutting.mp4', poster: '/img/t04-laser-cutting-poster.webp', desc: 'Prestamos servicios de corte por láser de alta precisión para la industria de hasta 12,7 mm (1/2 pulgada). Acero al carbono, inoxidable y aluminio. Tolerancias ajustadas y bordes limpios listos para soldadura o plegado posterior.', kind: 'video' },
-          { name: 'Corte plasma', img: '/video/t04-plasma-cutting.mp4', poster: '/img/t04-plasma-cutting-poster.webp', desc: 'Prestamos servicios de corte por plasma para la industria de hasta 25,4 mm (1 pulgada). Especialmente eficiente en espesores donde el láser deja de ser competitivo. Buena calidad de borde con alto rendimiento productivo.', kind: 'video' },
+          { name: 'Corte láser', img: '/video/t04-laser-cutting.mp4', poster: '/img/t04-laser-cutting-poster.webp', desc: 'Servicio de corte láser de alta precisión para chapa de hasta 12,7 mm (1/2 pulgada). Acero al carbono, inoxidable y aluminio. Tolerancias ajustadas y bordes limpios, listos para soldadura o plegado posterior.', kind: 'video' },
+          { name: 'Corte plasma', img: '/video/t04-plasma-cutting.mp4', poster: '/img/t04-plasma-cutting-poster.webp', desc: 'Servicio de corte plasma para chapa de hasta 25,4 mm (1 pulgada). Especialmente eficiente en los espesores en los que el láser deja de ser rentable. Buena calidad de borde con alto rendimiento productivo.', kind: 'video' },
           { name: 'Plegado industrial', img: '/video/t04-industrial-bending.mp4', poster: '/img/t04-industrial-bending-poster.webp', desc: 'Plegadora CNC para plegados de hasta 3 m. Programación a partir de plano 3D y biblioteca de matrices para distintos espesores y radios. Repetibilidad alta para producción en serie.', kind: 'video' },
-          { name: 'Producción en serie', img: '/img/t04-serial-production.webp', desc: 'Nuestra capacidad industrial, décadas de experiencia y extensa red de proveedores nos permiten producir piezas para la industria metalúrgica en lotes con alta capacidad de respuesta. Desde prototipos validados con el cliente hasta producciones recurrentes. Asumimos también ensamblado, soldadura y tratamientos superficiales cuando corresponde.', kind: 'photo' },
+          { name: 'Producción en serie', img: '/img/t04-serial-production.webp', desc: 'Capacidad industrial, décadas de experiencia y una extensa red de proveedores nos permiten producir piezas metalúrgicas en lotes con alta capacidad de respuesta. Desde prototipos validados con el cliente hasta producciones recurrentes. Asumimos también ensamblado, soldadura y tratamientos superficiales cuando corresponde.', kind: 'photo' },
         ],
       },
     ],
@@ -202,7 +202,7 @@ export const CONTENT: Record<Lang, Content> = {
       steps: [
         { n: '01', t: 'Estudio de proceso', d: 'Relevamos su proceso productivo y su necesidad específica para diseñar una solución a medida.' },
         { n: '02', t: 'Ingeniería', d: 'Diseño customizado estructural, mecánico, eléctrico, hidráulico y de seguridad.' },
-        { n: '03', t: 'Fabricación', d: 'Construcción íntegra en nuestro taller de Córdoba. Materiales trazables y pruebas en seco antes del despacho.' },
+        { n: '03', t: 'Fabricación', d: 'Construcción completa en nuestro taller de Córdoba. Materiales trazables y pruebas en seco antes del despacho.' },
         { n: '04', t: 'Puesta en marcha', d: 'Instalación en sitio, ajuste de parámetros y capacitación del personal de operación y mantenimiento.' },
         { n: '05', t: 'Soporte', d: 'Repuestos, asistencia técnica y mejoras continuas. Las máquinas Trans-Fil de los \'90 todavía operan.' },
       ],
@@ -210,7 +210,7 @@ export const CONTENT: Record<Lang, Content> = {
     services: {
       eyebrow: '[ 04 — Servicios ]',
       title: 'Más allá de la entrega.',
-      sub: 'Una máquina industrial dura décadas si recibe la atención correcta. Acompañamos cada equipo durante toda su vida útil.',
+      sub: 'Una máquina industrial dura décadas si recibe la atención adecuada. Acompañamos cada equipo durante toda su vida útil.',
       items: [
         { code: 'S01', title: 'Reparaciones', desc: 'Diagnóstico, repuestos y reacondicionamiento de equipos propios y de terceros.', img: '/img/s01-repairs.webp' },
         { code: 'S02', title: 'Retrofitting', desc: 'Modernización de máquinas existentes: PLC, automatización, eficiencia energética.', img: '/img/s02-retrofitting.webp' },
@@ -221,7 +221,7 @@ export const CONTENT: Record<Lang, Content> = {
     industries: {
       eyebrow: '[ 05 — Industrias ]',
       title: 'Donde se trabaja el metal,', title2: 'ahí estamos.',
-      sub: 'Tres décadas integrando equipos en plantas siderúrgicas, automotrices, oil & gas y máquinas-herramienta de Argentina y la región.',
+      sub: 'Tres décadas integrando equipos en plantas siderúrgicas, automotrices, de oil & gas y de máquinas-herramienta en Argentina y la región.',
       tabs: [
         { id: 'steel', label: 'Siderurgia' },
         { id: 'auto', label: 'Automotriz, Oil & Línea Blanca' },
@@ -326,7 +326,7 @@ export const CONTENT: Record<Lang, Content> = {
     hero: {
       eyebrow: 'Industrial machinery · Córdoba, Argentina · Since 1989',
       titleA: 'Processes', titleB: 'that don\'t', titleC: 'stop.',
-      sub: 'Design, manufacturing and maintenance of specialized machinery for metallurgy, automotive and machine-tool industries.',
+      sub: 'We design, build and maintain made-to-measure machinery for the metalworking, automotive and machine-tool industries.',
       ctaPrimary: 'Explore technologies', ctaSecondary: 'Get in touch',
       stat1: { v: '36', l: 'Years of operation' },
       stat2: { v: '120+', l: 'Industrial clients' },
@@ -336,7 +336,7 @@ export const CONTENT: Record<Lang, Content> = {
     capabilities: {
       eyebrow: '[ 02 — Capabilities ]',
       title: 'Four product lines. One engineering team.',
-      sub: 'Each unit is engineered around the actual production process and integrates with the existing line flow.',
+      sub: 'Each unit is engineered around the actual production process and slots into the existing line without disrupting it.',
     },
     tech: [
       {
@@ -344,21 +344,21 @@ export const CONTENT: Record<Lang, Content> = {
         img: '/img/t01-conveyors.webp',
         desc: 'Evacuation systems for metal chips, parts and waste from production lines, machining cells, transfer lines and CNC centers. Configurable as hinge, scraper, magnetic, belt, plastic chain or combined.',
         bullets: [
-          { name: 'Chip transport', img: '/img/t01-chip-transport.webp', desc: 'Transport systems for every type of chip and for both stand-alone and large-scale machining processes. Configurable as hinge, scraper, belt or plastic chain depending on material and flow rate. Heavy-duty build for 24/7 continuous operation.', kind: 'photo' },
-          { name: 'Continuous drying lines', img: '/img/t01-drying.webp', desc: 'Our continuous drying lines use special conveyor belts with micro-perforated links to separate solid and liquid parts during drying, guaranteeing the moisture reduction required by processes such as waste and parts treatment.', kind: 'photo' },
-          { name: 'Centralized lines', img: '/img/t01-conveyors.webp', desc: 'Multi-machine systems that evacuate chips from a whole shop floor to a single discharge point. Dozens of machine tools share a single transport circuit, eliminating manual handling between stations. Frees up staff and cuts cleanup downtime.', kind: 'photo' },
-          { name: 'Custom design', img: '/img/t01-custom.webp', desc: 'Geometry, width, height, speeds and other features designed and adapted to each process and layout. Each unit is sized from the on-site assessment and validated with a 3D drawing before manufacturing. Materials and components selected according to chip type and coolant.', kind: 'photo' },
+          { name: 'Chip transport', img: '/img/t01-chip-transport.webp', desc: 'Transport systems for every chip type and machining setup, from single cells to plant-wide lines. Configurable as hinge, scraper, belt or plastic chain depending on material and flow rate. Heavy-duty build for 24/7 continuous operation.', kind: 'photo' },
+          { name: 'Continuous drying lines', img: '/img/t01-drying.webp', desc: 'Conveyor belts with micro-perforated links that separate solids and liquids while parts travel, hitting the moisture-reduction targets that waste-handling and small-batch parts-drying processes require.', kind: 'photo' },
+          { name: 'Centralized lines', img: '/img/t01-conveyors.webp', desc: 'Multi-machine systems that evacuate chips from an entire shop floor to a single discharge point. Dozens of machine tools share one transport circuit, eliminating manual handling between stations — frees the crew from repetitive trips and cuts cleanup downtime.', kind: 'photo' },
+          { name: 'Custom design', img: '/img/t01-custom.webp', desc: 'Geometry, width, height, speeds and other parameters tailored to each process and layout. Every unit is sized from the on-site assessment and validated with a 3D drawing before manufacturing. Materials and components are chosen for the specific chip type and coolant.', kind: 'photo' },
         ],
       },
       {
         id: 'washing', code: 'T02', title: 'Industrial washing', sub: 'Lavado',
         img: '/img/t02-washing.webp',
-        desc: 'Automatic washers for machined parts, casting and forging. From single cells to continuous lines with drying and air-knife.',
+        desc: 'Automatic washers for machined parts, castings and forgings. From single cells to continuous lines with drying and air-knife blow-off.',
         bullets: [
-          { name: 'Pass-through & rotary', img: '/img/t02-washing.webp', desc: 'Continuous pass-through cabins with belt or rotary table for serial production. Configurable cycle: wash, rinse, dry. They integrate into the existing line, synchronizing load, unload and bath temperature with the plant\'s rhythm.', kind: 'photo' },
-          { name: 'Single-cabin washer', img: '/img/t02-cabin.webp', desc: 'Multi-purpose washing systems for manual loading and unloading. Suited to parts with varied geometry and small batches where a continuous line isn\'t justified. Programs selectable from the HMI based on the cleanliness level required.', kind: 'photo' },
-          { name: 'Built-in filtration', img: '/img/t02-filtration.webp', desc: 'Belt filters, cyclones and oil skimmers that keep the bath clean and extend fluid life. They cut detergent-change frequency and water consumption. Simple maintenance, with front access to consumables.', kind: 'photo' },
-          { name: 'PLC control', img: '/img/t02-plc.webp', desc: 'Cabinets with touch HMI. Software integrated into the production line and safety system tailored for Industry 4.0. Real-time tracking of cycles, alarms and consumption, with remote support over the customer\'s network.', kind: 'photo' },
+          { name: 'Pass-through & rotary', img: '/img/t02-washing.webp', desc: 'Continuous pass-through cabins with belt or rotary table for serial production. Configurable cycle of wash, rinse and dry. Integrates into the existing line, syncing load, unload and bath temperature with plant takt.', kind: 'photo' },
+          { name: 'Single-cabin washer', img: '/img/t02-cabin.webp', desc: 'Multi-purpose manual load-and-unload cabins for parts with varied geometry and short runs where a continuous line isn\'t justified. Programs selectable from the HMI based on the cleanliness level required.', kind: 'photo' },
+          { name: 'Built-in filtration', img: '/img/t02-filtration.webp', desc: 'Belt filters, cyclones and oil skimmers that keep the bath clean and extend fluid life. Cuts detergent-change frequency and water consumption. Simple maintenance with front access to consumables.', kind: 'photo' },
+          { name: 'PLC control', img: '/img/t02-plc.webp', desc: 'Cabinets with touch HMI. Software integrated into the production line and safety system ready for Industry 4.0. Real-time tracking of cycles, alarms and consumption, with remote support over the customer\'s network.', kind: 'photo' },
         ],
       },
       {
@@ -366,10 +366,10 @@ export const CONTENT: Record<Lang, Content> = {
         img: '/img/t03-fluids-cover.webp',
         desc: 'Coolant filtration, magnetic separation and fluid centralization. Oil recovery and responsible waste handling.',
         bullets: [
-          { name: 'Belt filters', img: '/img/t02-band-filters.webp', desc: 'Gravity filtration with paper or textile cloth. Low operating cost, ideal for water-soluble coolants in machining. Automatic cloth advance driven by bath level and rewind of dry residue for simple disposal.', kind: 'photo' },
-          { name: 'Magnetic separators', img: '/video/t02-magnetic-separator.mp4', poster: '/img/t02-magnetic-separator-poster.webp', desc: 'Drums and magnetic bars that remove fine ferrous particles before the main filter. They capture micrometric chips that would otherwise saturate the cloth. Extends consumable life and reduces the solids load reaching the central system.', kind: 'video' },
-          { name: 'Advanced filtration', img: '/img/t03-advanced-filtration.webp', desc: 'Pumping, pressurization and temperature-control stations for coolant feeding multiple machines in parallel. A centralized system that keeps flow and temperature stable regardless of individual demand. Pressure, conductivity and level monitoring with configurable alarms.', kind: 'photo' },
-          { name: 'Oil recovery', img: '/img/t02-oil-recovery.webp', desc: 'Belt skimmers and coalescing separators that remove tramp oil from coolant so the fluid can be reused. They extend coolant life several times over and lower waste-treatment cost. Recovered oil is separated for disposal or reuse.', kind: 'photo' },
+          { name: 'Belt filters', img: '/img/t02-band-filters.webp', desc: 'Gravity filtration with paper or textile cloth. Low operating cost, ideal for water-soluble machining coolants. Automatic cloth advance driven by bath level and rewind of dry residue for simple disposal.', kind: 'photo' },
+          { name: 'Magnetic separators', img: '/video/t02-magnetic-separator.mp4', poster: '/img/t02-magnetic-separator-poster.webp', desc: 'Drums and magnetic bars that remove fine ferrous particles before the main filter, catching the micrometric chips that would otherwise saturate the cloth. Extends consumable life and reduces the solids load reaching the central system.', kind: 'video' },
+          { name: 'Advanced filtration', img: '/img/t03-advanced-filtration.webp', desc: 'Centralized pumping, pressurization and temperature-control stations that feed coolant to multiple machines in parallel. Keep flow and temperature stable regardless of how much each station draws. Pressure, conductivity and level monitoring with configurable alarms.', kind: 'photo' },
+          { name: 'Oil recovery', img: '/img/t02-oil-recovery.webp', desc: 'Belt skimmers and coalescing separators that remove tramp oil from the coolant so the fluid can be reused. Extends coolant life several times over and lowers waste-treatment costs. Recovered oil is separated for disposal or reuse.', kind: 'photo' },
         ],
       },
       {
@@ -377,10 +377,10 @@ export const CONTENT: Record<Lang, Content> = {
         img: '/img/t04-metalwork-cover.webp',
         desc: 'End-to-end metalworking services: high-precision laser and plasma cutting, CNC bending and serial parts production with fast turnaround.',
         bullets: [
-          { name: 'Laser cutting', img: '/video/t04-laser-cutting.mp4', poster: '/img/t04-laser-cutting-poster.webp', desc: 'High-precision laser cutting services for industry, up to 12.7 mm (1/2 inch). Carbon steel, stainless steel and aluminum. Tight tolerances and clean edges ready for downstream welding or bending.', kind: 'video' },
-          { name: 'Plasma cutting', img: '/video/t04-plasma-cutting.mp4', poster: '/img/t04-plasma-cutting-poster.webp', desc: 'Plasma cutting services for industry, up to 25.4 mm (1 inch). Especially efficient at thicknesses where laser stops being competitive. Good edge quality with high throughput.', kind: 'video' },
+          { name: 'Laser cutting', img: '/video/t04-laser-cutting.mp4', poster: '/img/t04-laser-cutting-poster.webp', desc: 'High-precision laser cutting service for sheet up to 12.7 mm (1/2 inch). Carbon steel, stainless steel and aluminum. Tight tolerances and clean edges, ready for downstream welding or bending.', kind: 'video' },
+          { name: 'Plasma cutting', img: '/video/t04-plasma-cutting.mp4', poster: '/img/t04-plasma-cutting-poster.webp', desc: 'Plasma cutting service for sheet up to 25.4 mm (1 inch). Especially cost-effective at the thicknesses where laser is no longer the right tool. Good edge quality with high throughput.', kind: 'video' },
           { name: 'Industrial bending', img: '/video/t04-industrial-bending.mp4', poster: '/img/t04-industrial-bending-poster.webp', desc: 'CNC press brake for bends up to 3 m. Programmed from 3D drawings, with a die library covering varied thicknesses and radii. High repeatability for serial production.', kind: 'video' },
-          { name: 'Serial production', img: '/img/t04-serial-production.webp', desc: 'Our industrial capacity, decades of experience and extensive supplier network let us produce metalworking parts in batches with fast turnaround. From customer-validated prototypes to recurring production runs. We also take on assembly, welding and surface treatments when required.', kind: 'photo' },
+          { name: 'Serial production', img: '/img/t04-serial-production.webp', desc: 'Industrial capacity, decades of experience and an extensive supplier network let us produce metalworking parts in batches with fast turnaround. From customer-validated prototypes to recurring production runs. We also handle assembly, welding and surface treatments when required.', kind: 'photo' },
         ],
       },
     ],
@@ -421,7 +421,7 @@ export const CONTENT: Record<Lang, Content> = {
     industries: {
       eyebrow: '[ 05 — Industries ]',
       title: 'Wherever metal is worked,', title2: 'we\'re there.',
-      sub: 'Three decades integrating equipment in steel mills, automotive plants, oil & gas and machine-tool factories across Argentina and the region.',
+      sub: 'Three decades integrating equipment in steel mills, automotive plants, oil & gas facilities and machine-tool factories across Argentina and the region.',
       tabs: [
         { id: 'steel', label: 'Steel' },
         { id: 'auto', label: 'Automotive, Oil & Appliances' },
@@ -438,7 +438,7 @@ export const CONTENT: Record<Lang, Content> = {
     history: {
       eyebrow: '[ 06 — History ]',
       title: 'Since 1989, from the same workshop.',
-      body: 'Trans-Fil started in Córdoba as a workshop specialized in coolant filtration for the metallurgic industry. Three generations later, we still design every machine as if it were the first.',
+      body: 'Trans-Fil started in Córdoba as a workshop specialized in coolant filtration for the metalworking industry. Three generations later, we still design every machine as if it were the first.',
       milestones: [
         { y: '1989', t: 'Founded', d: 'Workshop opens in Córdoba focused on industrial filtration.' },
         { y: '1998', t: 'First automotive line', d: 'Integration into Renault Argentina plant.' },
