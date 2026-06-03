@@ -1337,6 +1337,80 @@ button { font-family: inherit; }
 .tf-services.is-clean .tf-service[data-has-bg]::before { display: none; }
 .tf-services.is-clean .tf-service[data-has-bg] { background: var(--bg-2); }
 
+/* Stepper variant: 4 compact cards with an abstract icon, mono code tag
+   and a hover-revealed accent rule. No background photo. Reads at a
+   glance on desktop, stacks gracefully on mobile. */
+.tf-services.is-stepper {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+}
+.tf-services.is-stepper .tf-service {
+  background: var(--bg-2);
+  padding: clamp(24px, 2.4vw, 36px);
+  min-height: 0;
+  gap: 20px;
+  overflow: hidden;
+}
+.tf-services.is-stepper .tf-service-hd { align-items: center; }
+.tf-services.is-stepper .tf-service-title {
+  font-size: clamp(22px, 1.8vw, 28px);
+  margin: 4px 0 0;
+}
+.tf-services.is-stepper .tf-service-desc {
+  font-size: 14px;
+  line-height: 1.6;
+  flex: 1;
+}
+.tf-services.is-stepper .tf-service:hover { background: var(--bg-3); }
+.tf-svc-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+  flex-shrink: 0;
+  transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.tf-services.is-stepper .tf-service:hover .tf-svc-icon {
+  transform: translateY(-2px) rotate(-4deg);
+}
+/* Accent rule that slides in from the left on hover/focus — the "active"
+   read of each card. Lives at the bottom edge so it doesn't shift layout. */
+.tf-svc-accent {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+  pointer-events: none;
+}
+.tf-services.is-stepper .tf-service:hover .tf-svc-accent,
+.tf-services.is-stepper .tf-service:focus-within .tf-svc-accent { transform: scaleX(1); }
+
+@media (max-width: 1080px) {
+  .tf-services.is-stepper { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 640px) {
+  .tf-services.is-stepper { grid-template-columns: 1fr; }
+  .tf-services.is-stepper .tf-service { padding: 22px; gap: 14px; }
+  .tf-services.is-stepper .tf-service-title { font-size: 20px; }
+  /* On mobile the row-traversed accent feels off without a true hover —
+     keep it visible as a top-edge keyline instead. */
+  .tf-svc-accent { display: none; }
+  .tf-services.is-stepper .tf-service { border-left: 2px solid var(--accent); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tf-svc-icon,
+  .tf-svc-accent { transition: none; }
+}
+
 .tf-service {
   position: relative;
   isolation: isolate;
