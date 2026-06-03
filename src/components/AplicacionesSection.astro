@@ -68,11 +68,17 @@ const c = content.applications;
       ))}
     </div>
 
-    <!-- 3. Custom-design editorial block -->
+    <!-- 3. Custom-design editorial block — branded conveyor photo as
+         heavily-shadowed backdrop so the brand presence is subtle. -->
     <aside class="tf-apps-custom" aria-labelledby="apps-custom-h">
-      <span class="tf-mono">CUSTOM</span>
-      <h3 id="apps-custom-h" class="tf-apps-custom-title">{c.custom.title}</h3>
-      <p class="tf-apps-custom-body">{c.custom.body}</p>
+      <div class="tf-apps-custom-bg" aria-hidden="true">
+        <img src="/img/apps-custom-bg.webp" alt="" loading="lazy" decoding="async" />
+      </div>
+      <div class="tf-apps-custom-body-wrap">
+        <span class="tf-mono">CUSTOM</span>
+        <h3 id="apps-custom-h" class="tf-apps-custom-title">{c.custom.title}</h3>
+        <p class="tf-apps-custom-body">{c.custom.body}</p>
+      </div>
     </aside>
 
     <!-- 4. Metrics strip -->
