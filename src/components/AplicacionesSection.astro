@@ -1,0 +1,111 @@
+---
+import type { Content } from '../i18n/content';
+import Section from './Section.astro';
+
+interface Props { content: Content }
+const { content } = Astro.props;
+const c = content.applications;
+---
+<Section id="applications" eyebrow={c.eyebrow} title={c.title} sub={c.intro} screenLabel="03 Applications" num="03">
+  <div class="tf-apps">
+    <!-- 1. Symptoms checklist — diagnostic block -->
+    <aside class="tf-apps-symptoms" aria-labelledby="apps-symptoms-h">
+      <header class="tf-apps-symptoms-head">
+        <span class="tf-mono">CHECK</span>
+        <h3 id="apps-symptoms-h" class="tf-apps-symptoms-title">{c.symptoms.title}</h3>
+      </header>
+      <ul class="tf-apps-symptoms-list">
+        {c.symptoms.items.map((s) => (
+          <li>
+            <span class="tf-apps-symptoms-mark" aria-hidden="true">
+              <svg viewBox="0 0 14 14" width="12" height="12">
+                <rect x="1" y="1" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.2" />
+                <path d="M4 7l2.2 2.2L10 5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </span>
+            <span>{s}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="tf-apps-symptoms-close">{c.symptoms.close}</p>
+    </aside>
+
+    <!-- 2. 4 application cards (2×2 grid) -->
+    <div class="tf-apps-grid">
+      {c.cards.map((card) => (
+        <article
+          id={`app-${card.code.toLowerCase()}`}
+          class="tf-app"
+          style="scroll-margin-top: calc(var(--header-h) + 24px);"
+        >
+          <header class="tf-app-head">
+            <span class="tf-mono tf-app-code">{card.code}</span>
+            <span class="tf-app-rule" aria-hidden="true" />
+          </header>
+          <h3 class="tf-app-title">{card.title}</h3>
+
+          <div class="tf-app-block">
+            <span class="tf-mono tf-app-label" data-kind="problem">
+              {content.htmlLang.startsWith('es') ? 'SÍNTOMA' : 'SYMPTOM'}
+            </span>
+            <p class="tf-app-text">{card.problem}</p>
+          </div>
+
+          <div class="tf-app-block">
+            <span class="tf-mono tf-app-label" data-kind="install">
+              {content.htmlLang.startsWith('es') ? 'SOLUCIÓN' : 'SOLUTION'}
+            </span>
+            <p class="tf-app-text">{card.install}</p>
+          </div>
+
+          <div class="tf-app-block is-benefit">
+            <span class="tf-mono tf-app-label" data-kind="benefit">
+              {content.htmlLang.startsWith('es') ? 'BENEFICIO' : 'BENEFIT'}
+            </span>
+            <p class="tf-app-text">{card.benefit}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <!-- 3. Custom-design editorial block -->
+    <aside class="tf-apps-custom" aria-labelledby="apps-custom-h">
+      <span class="tf-mono">CUSTOM</span>
+      <h3 id="apps-custom-h" class="tf-apps-custom-title">{c.custom.title}</h3>
+      <p class="tf-apps-custom-body">{c.custom.body}</p>
+    </aside>
+
+    <!-- 4. Metrics strip -->
+    <section class="tf-apps-metrics-wrap" aria-labelledby="apps-metrics-h">
+      <header class="tf-apps-metrics-head">
+        <span class="tf-mono">METRICS</span>
+        <h3 id="apps-metrics-h" class="tf-apps-metrics-title">
+          {content.htmlLang.startsWith('es') ? 'Ventajas concretas' : 'Concrete gains'}
+        </h3>
+      </header>
+      <dl class="tf-apps-metrics">
+        {c.metrics.items.map((m, i) => (
+          <div class="tf-apps-metric">
+            <dt class="tf-mono">{`0${i + 1}`}</dt>
+            <dd>
+              <span class="tf-apps-metric-v">{m.v}</span>
+              <span class="tf-apps-metric-l">{m.l}</span>
+            </dd>
+          </div>
+        ))}
+      </dl>
+      <p class="tf-apps-metrics-note">{c.metrics.note}</p>
+    </section>
+
+    <!-- 5. CTA banner -->
+    <aside class="tf-apps-cta">
+      <p class="tf-apps-cta-text">{c.cta.text}</p>
+      <a href="#contact" class="tf-btn tf-btn-primary tf-btn-lg">
+        <span>{c.cta.button}</span>
+        <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+          <path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" />
+        </svg>
+      </a>
+    </aside>
+  </div>
+</Section>

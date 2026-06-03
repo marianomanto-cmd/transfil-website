@@ -4,6 +4,7 @@ import { CONTENT } from '../i18n/content';
 import { Header } from '../components/Header';
 import { Hero } from '../components/Hero';
 import { TechSection } from '../components/TechSection';
+import AplicacionesSection from '../components/AplicacionesSection.astro';
 import { CatalogsSection } from '../components/CatalogsSection';
 import ProcessSection from '../components/ProcessSection.astro';
 import ServicesSection from '../components/ServicesSection.astro';
@@ -21,6 +22,7 @@ const content = CONTENT.es;
   <main id="main">
     <Hero content={content} client:load />
     <TechSection content={content} client:visible />
+    <AplicacionesSection content={content} />
     <CatalogsSection content={content} client:visible />
     <ProcessSection content={content} />
     <ServicesSection content={content} />

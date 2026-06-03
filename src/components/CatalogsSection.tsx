@@ -19,9 +19,9 @@ export function CatalogsSection({ content }: { content: Content }) {
       id="catalogs"
       ref={sectionRef as React.RefObject<HTMLElement>}
       className={cx('tf-section', vis && 'is-visible')}
-      data-screen-label="03 Catalogs"
+      data-screen-label="04 Catalogs"
     >
-      <header className="tf-section-head" data-num="03">
+      <header className="tf-section-head" data-num="04">
         <div className="tf-eyebrow">{c.eyebrow}</div>
         <h2 className="tf-h2">{c.title}</h2>
         <p className="tf-section-sub">{c.sub}</p>

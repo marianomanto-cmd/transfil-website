@@ -30,11 +30,11 @@ export function IndustriesSection({ content }: { content: Content }) {
       id="industries"
       ref={sectionRef as React.RefObject<HTMLElement>}
       className={cx('tf-section', vis && 'is-visible')}
-      data-screen-label="05 Industries"
+      data-screen-label="06 Industries"
     >
       <span className="tf-industries-watermark" aria-hidden="true">{c.coverage.length}</span>
       <div className="tf-industries-top">
-        <header className="tf-section-head" data-num="05">
+        <header className="tf-section-head" data-num="06">
           <div className="tf-eyebrow">{c.eyebrow}</div>
           <h2 className="tf-h2">
             <span>{c.title}</span> <span className="tf-h2-accent">{c.title2}</span>

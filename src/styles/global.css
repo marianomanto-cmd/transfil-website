@@ -1051,6 +1051,280 @@ button { font-family: inherit; }
   to { opacity: 1; transform: none; }
 }
 
+/* ── Applications ────────────────────────────────────────────────────
+   Five sub-blocks inside the section:
+     1) symptoms checklist — diagnostic CHECK card
+     2) 4 application cards in a 2×2 grid (A01..A04), each with three
+        labelled blocks (SÍNTOMA / SOLUCIÓN / BENEFICIO)
+     3) custom-design editorial block
+     4) metrics strip (5 numbers + caveat)
+     5) closing CTA banner
+   All reuse existing tokens (--bg-2, --bg-3, --line, --accent, type
+   scale). No new colors / fonts.                                    */
+.tf-apps {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(48px, 6vw, 80px);
+}
+
+/* 1 — Symptoms checklist */
+.tf-apps-symptoms {
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  padding: clamp(28px, 3.2vw, 44px);
+}
+.tf-apps-symptoms-head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.tf-apps-symptoms-head .tf-mono { color: var(--accent); }
+.tf-apps-symptoms-title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(22px, 1.9vw, 28px);
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+.tf-apps-symptoms-list {
+  list-style: none;
+  margin: 0 0 24px;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 32px;
+}
+.tf-apps-symptoms-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--fg-2);
+}
+.tf-apps-symptoms-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+.tf-apps-symptoms-close {
+  margin: 0;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--fg-2);
+  font-style: italic;
+  max-width: 70ch;
+}
+
+/* 2 — Application cards (2×2 grid) */
+.tf-apps-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+}
+.tf-app {
+  background: var(--bg-2);
+  padding: clamp(24px, 2.6vw, 36px);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  transition: background 0.25s;
+}
+.tf-app:hover { background: var(--bg-3); }
+.tf-app-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.tf-app-code { color: var(--fg-3); }
+.tf-app-rule {
+  flex: 1;
+  height: 1px;
+  background: var(--line-strong);
+}
+.tf-app-title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(22px, 1.8vw, 26px);
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+.tf-app-block {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.tf-app-label {
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  color: var(--fg-3);
+}
+.tf-app-label[data-kind="benefit"] { color: var(--accent); }
+.tf-app-text {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--fg-2);
+}
+.tf-app-block.is-benefit {
+  margin-top: auto;
+  padding: 14px 16px;
+  border-left: 2px solid var(--accent);
+  background: var(--accent-soft);
+}
+.tf-app-block.is-benefit .tf-app-text { color: var(--fg); }
+
+/* 3 — Custom-design editorial block */
+.tf-apps-custom {
+  position: relative;
+  padding: clamp(36px, 4vw, 56px) clamp(28px, 3.2vw, 44px);
+  border: 1px solid var(--line);
+  background: linear-gradient(180deg, var(--bg-2), var(--bg));
+}
+.tf-apps-custom .tf-mono {
+  display: inline-block;
+  color: var(--accent);
+  margin-bottom: 16px;
+}
+.tf-apps-custom-title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(28px, 2.6vw, 40px);
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+  margin: 0 0 18px;
+  max-width: 18ch;
+}
+.tf-apps-custom-body {
+  margin: 0;
+  font-size: clamp(15px, 1.1vw, 17px);
+  line-height: 1.65;
+  color: var(--fg-2);
+  max-width: 64ch;
+}
+
+/* 4 — Metrics strip */
+.tf-apps-metrics-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.tf-apps-metrics-head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.tf-apps-metrics-head .tf-mono { color: var(--accent); }
+.tf-apps-metrics-title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(22px, 1.9vw, 28px);
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+.tf-apps-metrics {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0;
+  margin: 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.tf-apps-metric {
+  padding: 24px 18px;
+  border-right: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.tf-apps-metric:last-child { border-right: 0; }
+.tf-apps-metric dt {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--fg-4);
+}
+.tf-apps-metric dd {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.tf-apps-metric-v {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(28px, 2.6vw, 38px);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+.tf-apps-metric-l {
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: var(--fg-3);
+}
+.tf-apps-metrics-note {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--fg-4);
+  max-width: 70ch;
+  font-style: italic;
+}
+
+/* 5 — Closing CTA banner */
+.tf-apps-cta {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: clamp(20px, 3vw, 40px);
+  padding: clamp(28px, 3vw, 40px);
+  border: 1px solid var(--line);
+  background: var(--bg-2);
+}
+.tf-apps-cta-text {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(17px, 1.5vw, 22px);
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  color: var(--fg);
+  max-width: 55ch;
+}
+
+/* Responsive */
+@media (max-width: 1080px) {
+  .tf-apps-symptoms-list { gap: 12px 24px; }
+  .tf-apps-metrics { grid-template-columns: repeat(5, 1fr); }
+  .tf-apps-metric { padding: 20px 14px; }
+  .tf-apps-metric-v { font-size: 26px; }
+}
+@media (max-width: 720px) {
+  .tf-apps-symptoms-list { grid-template-columns: 1fr; }
+  .tf-apps-grid { grid-template-columns: 1fr; }
+  .tf-apps-metrics { grid-template-columns: 1fr 1fr; }
+  .tf-apps-metric:nth-child(2n) { border-right: 0; }
+  .tf-apps-metric:not(:nth-last-child(-n + 2)) { border-bottom: 1px solid var(--line); }
+  .tf-apps-cta { grid-template-columns: 1fr; }
+  .tf-apps-cta .tf-btn { justify-self: start; }
+}
+@media (max-width: 480px) {
+  .tf-apps-metrics { grid-template-columns: 1fr; }
+  .tf-apps-metric { border-right: 0; border-bottom: 1px solid var(--line); }
+  .tf-apps-metric:last-child { border-bottom: 0; }
+}
+
 /* ── Catalogs ────────────────────────────────────────────────────────
    Three downloadable PDFs presented as stylized covers — each card has
    a cover panel (uses --cat-c brand-line color) on top and a body below

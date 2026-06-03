@@ -65,7 +65,7 @@ export function Header({ lang, content }: Props) {
   }, [open]);
 
   useEffect(() => {
-    const ids = ['tech', 'catalogs', 'process', 'services', 'industries', 'history', 'contact'];
+    const ids = ['tech', 'applications', 'catalogs', 'process', 'services', 'industries', 'history', 'contact'];
     const nodes = ids.map((id) => document.getElementById(id)).filter(Boolean) as HTMLElement[];
     if (!nodes.length) return;
     const io = new IntersectionObserver(
@@ -83,6 +83,7 @@ export function Header({ lang, content }: Props) {
 
   const items = [
     { href: '#tech', label: content.nav.tech },
+    { href: '#applications', label: content.nav.applications },
     { href: '#catalogs', label: content.nav.catalogs },
     { href: '#services', label: content.nav.services },
     { href: '#industries', label: content.nav.industries },

@@ -113,9 +113,9 @@ export function ContactSection({ content }: { content: Content }) {
       id="contact"
       ref={sectionRef as React.RefObject<HTMLElement>}
       className={cx('tf-section', 'is-dark', vis && 'is-visible')}
-      data-screen-label="07 Contact"
+      data-screen-label="08 Contact"
     >
-      <header className="tf-section-head" data-num="07">
+      <header className="tf-section-head" data-num="08">
         <div className="tf-eyebrow">{c.eyebrow}</div>
         <h2 className="tf-h2">{c.title}</h2>
         <p className="tf-section-sub">{c.sub}</p>

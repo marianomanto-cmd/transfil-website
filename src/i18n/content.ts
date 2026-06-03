@@ -46,7 +46,7 @@ export type Content = {
     twitterDescription: string;
   };
   nav: {
-    home: string; tech: string; catalogs: string; services: string;
+    home: string; tech: string; applications: string; catalogs: string; services: string;
     industries: string; history: string; contact: string;
   };
   hero: {
@@ -61,6 +61,26 @@ export type Content = {
   };
   capabilities: { eyebrow: string; title: string; sub: string };
   tech: TechItem[];
+  applications: {
+    eyebrow: string;
+    title: string;
+    intro: string;
+    symptoms: {
+      title: string;
+      items: string[];
+      close: string;
+    };
+    cards: {
+      code: string;
+      title: string;
+      problem: string;
+      install: string;
+      benefit: string;
+    }[];
+    custom: { title: string; body: string };
+    metrics: { items: { v: string; l: string }[]; note: string };
+    cta: { text: string; button: string };
+  };
   catalogs: {
     eyebrow: string; title: string; sub: string;
     items: CatalogItem[];
@@ -122,7 +142,7 @@ export const CONTENT: Record<Lang, Content> = {
       ogImageAlt: 'Estación de transporte de viruta TRANS-FIL en taller industrial',
       twitterDescription: '36 años diseñando maquinaria industrial en Córdoba, Argentina. Procesos que no se detienen.',
     },
-    nav: { home: 'Inicio', tech: 'Tecnologías', catalogs: 'Catálogos', services: 'Servicios', industries: 'Industrias', history: 'Historia', contact: 'Contacto' },
+    nav: { home: 'Inicio', tech: 'Tecnologías', applications: 'Aplicaciones', catalogs: 'Catálogos', services: 'Servicios', industries: 'Industrias', history: 'Historia', contact: 'Contacto' },
     hero: {
       eyebrow: 'Maquinaria industrial · Córdoba, Argentina · Desde 1989',
       titleA: 'Procesos', titleB: 'que no', titleC: 'se detienen.',
@@ -184,8 +204,73 @@ export const CONTENT: Record<Lang, Content> = {
         ],
       },
     ],
+    applications: {
+      eyebrow: '[ 03 — Aplicaciones ]',
+      title: 'El costo que no se ve.',
+      intro: 'Muchas plantas descartan el refrigerante cuando se ensucia — después de que ya desgastó las herramientas, dañó la bomba y frenó la línea. La filtración, el transporte de viruta y el lavado no son accesorios: protegen los activos que ya pagó.',
+      symptoms: {
+        title: '¿Le suena alguno de estos?',
+        items: [
+          'Cambia el soluble cada pocas semanas y paga para que se lo retiren.',
+          'Las herramientas duran menos de lo que deberían.',
+          'Detiene la máquina para sacar viruta a mano.',
+          'El refrigerante despide olor o irrita al personal.',
+          'La calidad superficial se cae sin una causa clara.',
+          'La bomba o el husillo fallan antes de tiempo.',
+        ],
+        close: 'Si reconoce dos o más, no es mala suerte: es un costo oculto con solución de ingeniería.',
+      },
+      cards: [
+        {
+          code: 'A01',
+          title: 'Conformado de tubos',
+          problem: 'El lubricante se carga de finos metálicos y aceite tramposo. El fluido degradado lubrica peor y acelera el desgaste de rodillos y matrices; aparecen marcas en la superficie del tubo y aumenta el scrap.',
+          install: 'Filtración centralizada + separación magnética + recuperación de aceite.',
+          benefit: 'Protege el herramental de conformado · multiplica la vida del fluido.',
+        },
+        {
+          code: 'A02',
+          title: 'Mecanizado y torneado',
+          problem: 'La viruta se acumula y los finos recirculan en el refrigerante; el aceite de guías lo contamina. El resultado: desgaste de herramienta, daño en bombas y husillos, y paros para limpiar a mano.',
+          install: 'Transporte de viruta centralizado + filtro de banda + separador magnético.',
+          benefit: 'Más vida de herramienta · menos paros · refrigerante limpio.',
+        },
+        {
+          code: 'A03',
+          title: 'Rectificado de precisión',
+          problem: 'La viruta abrasiva fina es casi invisible, pero arruina el acabado y desgasta la muela si no se retira del fluido. La tolerancia se vuelve inestable lote a lote.',
+          install: 'Filtración fina (banda o papel) + separación magnética de alta eficiencia.',
+          benefit: 'Acabado estable · más vida de muela · refrigerante claro.',
+        },
+        {
+          code: 'A04',
+          title: 'Lavado y preparación de piezas',
+          problem: 'Las piezas llegan con aceite y viruta al ensamble, la soldadura o el pintado. El lavado manual es inconsistente y se vuelve un cuello de botella en la línea.',
+          install: 'Lavadora industrial (pasante, rotativa o cabina) con filtración integrada y control PLC.',
+          benefit: 'Limpieza repetible · más throughput · baño de mayor vida.',
+        },
+      ],
+      custom: {
+        title: 'No hay solución de catálogo.',
+        body: 'Cada transportador de viruta y cada lavadora se dimensiona sobre el proceso real: tipo de viruta, refrigerante, caudal, layout y ritmo de línea. Por eso relevamos en planta y validamos con plano 3D antes de fabricar. Un transportador mal dimensionado se tapa; una lavadora genérica no alcanza el grado de limpieza que su próximo paso necesita. El diseño a medida es lo que hace que el equipo trabaje 24/7 durante décadas.',
+      },
+      metrics: {
+        items: [
+          { v: '2–4×', l: 'vida del refrigerante con remoción de aceite y finos' },
+          { v: '−50/70%', l: 'frecuencia de recambio de soluble' },
+          { v: '+10/30%', l: 'vida útil de herramienta' },
+          { v: '↓', l: 'costo de disposición de residuos líquidos' },
+          { v: '↓', l: 'paros por limpieza manual de viruta' },
+        ],
+        note: 'Rangos típicos en instalaciones con tratamiento adecuado. Los resultados dependen del proceso — los cuantificamos en el relevamiento en su planta.',
+      },
+      cta: {
+        text: '¿No sabe por dónde empezar? Un relevamiento identifica dónde está el costo oculto y cuánto puede recuperar.',
+        button: 'Solicitar relevamiento',
+      },
+    },
     catalogs: {
-      eyebrow: '[ 03 — Descargas ]',
+      eyebrow: '[ 04 — Descargas ]',
       title: 'Descargue nuestros catálogos.',
       sub: 'Especificaciones, esquemas de funcionamiento y modelos disponibles para cada línea. PDF imprimible.',
       items: [
@@ -208,7 +293,7 @@ export const CONTENT: Record<Lang, Content> = {
       ],
     },
     services: {
-      eyebrow: '[ 04 — Servicios ]',
+      eyebrow: '[ 05 — Servicios ]',
       title: 'Más allá de la entrega.',
       sub: 'Una máquina industrial dura décadas si recibe la atención adecuada. Acompañamos cada equipo durante toda su vida útil.',
       items: [
@@ -219,7 +304,7 @@ export const CONTENT: Record<Lang, Content> = {
       ],
     },
     industries: {
-      eyebrow: '[ 05 — Industrias ]',
+      eyebrow: '[ 06 — Industrias ]',
       title: 'Donde se trabaja el metal,', title2: 'ahí estamos.',
       sub: 'Tres décadas integrando equipos en plantas siderúrgicas, automotrices, de oil & gas y de máquinas-herramienta en Argentina y la región.',
       tabs: [
@@ -236,7 +321,7 @@ export const CONTENT: Record<Lang, Content> = {
       hoverPause: '← HOVER PARA PAUSAR →',
     },
     history: {
-      eyebrow: '[ 06 — Historia ]',
+      eyebrow: '[ 07 — Historia ]',
       title: 'Desde 1989, en el mismo taller.',
       body: 'Trans-Fil nació en Córdoba como un taller especializado en filtración de refrigerantes para la industria metalúrgica. Tres generaciones después, continuamos diseñando cada máquina con la misma dedicación inicial.',
       milestones: [
@@ -248,7 +333,7 @@ export const CONTENT: Record<Lang, Content> = {
       ],
     },
     contact: {
-      eyebrow: '[ 07 — Contacto ]',
+      eyebrow: '[ 08 — Contacto ]',
       title: 'Cuéntenos sobre su proceso.',
       sub: 'Un asesor técnico responderá en menos de 24h hábiles. Si lo prefiere, escríbanos directamente.',
       form: {
@@ -305,6 +390,18 @@ export const CONTENT: Record<Lang, Content> = {
         a: 'Sí. Trans-Fil ofrece reparación y reacondicionamiento de equipos propios y de terceros, retrofitting (modernización de PLC, automatización y eficiencia energética de máquinas existentes), mantenimiento preventivo y predictivo con visitas programadas, e ingeniería a medida desde el relevamiento en planta.',
       },
       {
+        q: '¿Por qué se degrada el refrigerante de mecanizado?',
+        a: 'El refrigerante se degrada por la acumulación de finos metálicos, el aceite tramposo que proviene de guías y husillos, y el crecimiento bacteriano. El aceite tramposo es la causa principal: favorece las bacterias, baja el pH y genera olor. Removerlo y filtrar los finos multiplica la vida del fluido.',
+      },
+      {
+        q: '¿Cómo se extiende la vida del soluble?',
+        a: 'Con remoción de aceite tramposo (skimmers o separadores coalescentes) y filtración de partículas (filtros de banda y separadores magnéticos). En instalaciones con tratamiento adecuado, la vida del refrigerante suele multiplicarse de 2 a 4 veces, reduciendo el recambio y el costo de disposición de residuos.',
+      },
+      {
+        q: '¿Cuándo conviene invertir en filtración de refrigerante?',
+        a: 'Cuando se cambia el soluble con frecuencia, las herramientas duran menos de lo esperado, hay daño en bombas o husillos, o se detiene la máquina para retirar viruta a mano. Un relevamiento en planta cuantifica el costo oculto y el retorno de la inversión.',
+      },
+      {
         q: '¿Cómo contactar a Trans-Fil?',
         a: 'Por email a ventas@transfil.com.ar, por teléfono o WhatsApp al +54 9 3513 82-0321, o en la planta de Francisco de Arteaga 2895, Córdoba, Argentina. La empresa responde consultas técnicas en menos de 24 horas hábiles.',
       },
@@ -322,7 +419,7 @@ export const CONTENT: Record<Lang, Content> = {
       ogImageAlt: 'TRANS-FIL chip conveyor station in industrial workshop',
       twitterDescription: '36 years designing industrial machinery in Córdoba, Argentina. Processes that don\'t stop.',
     },
-    nav: { home: 'Home', tech: 'Technologies', catalogs: 'Catalogs', services: 'Services', industries: 'Industries', history: 'History', contact: 'Contact' },
+    nav: { home: 'Home', tech: 'Technologies', applications: 'Applications', catalogs: 'Catalogs', services: 'Services', industries: 'Industries', history: 'History', contact: 'Contact' },
     hero: {
       eyebrow: 'Industrial machinery · Córdoba, Argentina · Since 1989',
       titleA: 'Processes', titleB: 'that don\'t', titleC: 'stop.',
@@ -384,8 +481,73 @@ export const CONTENT: Record<Lang, Content> = {
         ],
       },
     ],
+    applications: {
+      eyebrow: '[ 03 — Applications ]',
+      title: 'The cost you don\'t see.',
+      intro: 'Many plants discard coolant once it gets dirty — after it has already worn the tooling, damaged the pump and stopped the line. Filtration, chip transport and washing aren\'t accessories: they protect the assets you\'ve already paid for.',
+      symptoms: {
+        title: 'Do any of these sound familiar?',
+        items: [
+          'You change the coolant every few weeks and pay to have it hauled away.',
+          'Tooling lasts less than it should.',
+          'You stop the machine to clear chips by hand.',
+          'The coolant smells or irritates the operators.',
+          'Surface finish drifts without a clear cause.',
+          'Pumps or spindles fail earlier than expected.',
+        ],
+        close: 'If two or more of these ring true, it isn\'t bad luck — it\'s a hidden cost with an engineering fix.',
+      },
+      cards: [
+        {
+          code: 'A01',
+          title: 'Tube forming',
+          problem: 'The lubricant loads up with metal fines and tramp oil. The degraded fluid lubricates worse and accelerates roll and die wear; marks appear on the tube surface and scrap climbs.',
+          install: 'Centralized filtration + magnetic separation + oil recovery.',
+          benefit: 'Protects forming tooling · multiplies fluid life.',
+        },
+        {
+          code: 'A02',
+          title: 'Machining and turning',
+          problem: 'Chips build up and the fines recirculate in the coolant; way-lube contaminates it further. The result: tool wear, damage to pumps and spindles, and stoppages to clean by hand.',
+          install: 'Centralized chip transport + belt filter + magnetic separator.',
+          benefit: 'Longer tool life · fewer stoppages · clean coolant.',
+        },
+        {
+          code: 'A03',
+          title: 'Precision grinding',
+          problem: 'Fine abrasive swarf is nearly invisible, but it ruins the finish and wears the wheel if it isn\'t taken out of the fluid. Tolerance drifts batch to batch.',
+          install: 'Fine filtration (belt or paper) + high-efficiency magnetic separation.',
+          benefit: 'Stable finish · longer wheel life · clear coolant.',
+        },
+        {
+          code: 'A04',
+          title: 'Parts washing and prep',
+          problem: 'Parts reach assembly, welding or paint with oil and chips still on them. Manual washing is inconsistent and becomes a bottleneck on the line.',
+          install: 'Industrial washer (pass-through, rotary or cabinet) with integrated filtration and PLC control.',
+          benefit: 'Repeatable cleanliness · higher throughput · longer bath life.',
+        },
+      ],
+      custom: {
+        title: 'There\'s no off-the-shelf answer.',
+        body: 'Every chip conveyor and every washer is sized against the real process: chip type, coolant, flow rate, layout and line cadence. That\'s why we survey on-site and validate with a 3D drawing before we cut metal. An undersized conveyor jams; a generic washer doesn\'t hit the cleanliness grade your next step needs. Custom design is what lets the equipment run 24/7 for decades.',
+      },
+      metrics: {
+        items: [
+          { v: '2–4×', l: 'coolant life with oil and fines removal' },
+          { v: '−50/70%', l: 'coolant-change frequency' },
+          { v: '+10/30%', l: 'tool life' },
+          { v: '↓', l: 'liquid-waste disposal cost' },
+          { v: '↓', l: 'stoppages for manual chip cleanup' },
+        ],
+        note: 'Typical ranges in installations with proper treatment. Results depend on the process — we quantify them during the on-site assessment.',
+      },
+      cta: {
+        text: 'Not sure where to start? An on-site assessment pinpoints where the hidden cost is and how much you can recover.',
+        button: 'Request an assessment',
+      },
+    },
     catalogs: {
-      eyebrow: '[ 03 — Downloads ]',
+      eyebrow: '[ 04 — Downloads ]',
       title: 'Download our catalogs.',
       sub: 'Specifications, operating diagrams and available models for each line. Printable PDF.',
       items: [
@@ -408,7 +570,7 @@ export const CONTENT: Record<Lang, Content> = {
       ],
     },
     services: {
-      eyebrow: '[ 04 — Services ]',
+      eyebrow: '[ 05 — Services ]',
       title: 'Beyond the delivery.',
       sub: 'Industrial machinery lasts decades when properly cared for. We support every unit throughout its working life.',
       items: [
@@ -419,7 +581,7 @@ export const CONTENT: Record<Lang, Content> = {
       ],
     },
     industries: {
-      eyebrow: '[ 05 — Industries ]',
+      eyebrow: '[ 06 — Industries ]',
       title: 'Wherever metal is worked,', title2: 'we\'re there.',
       sub: 'Three decades integrating equipment in steel mills, automotive plants, oil & gas facilities and machine-tool factories across Argentina and the region.',
       tabs: [
@@ -436,7 +598,7 @@ export const CONTENT: Record<Lang, Content> = {
       hoverPause: '← HOVER TO PAUSE →',
     },
     history: {
-      eyebrow: '[ 06 — History ]',
+      eyebrow: '[ 07 — History ]',
       title: 'Since 1989, from the same workshop.',
       body: 'Trans-Fil started in Córdoba as a workshop specialized in coolant filtration for the metalworking industry. Three generations later, we still design every machine as if it were the first.',
       milestones: [
@@ -448,7 +610,7 @@ export const CONTENT: Record<Lang, Content> = {
       ],
     },
     contact: {
-      eyebrow: '[ 07 — Contact ]',
+      eyebrow: '[ 08 — Contact ]',
       title: 'Tell us about your process.',
       sub: 'A technical advisor will respond in under 24 business hours. Or write us directly.',
       form: {
@@ -503,6 +665,18 @@ export const CONTENT: Record<Lang, Content> = {
       {
         q: 'Does Trans-Fil do maintenance and retrofitting of existing machines?',
         a: 'Yes. Trans-Fil offers repairs and refurbishment of its own and third-party equipment, retrofitting (PLC modernization, automation and energy-efficiency upgrades on existing machines), preventive and predictive maintenance with scheduled plant visits, and custom engineering from on-site assessment.',
+      },
+      {
+        q: 'Why does machining coolant degrade?',
+        a: 'Coolant degrades from a build-up of metal fines, tramp oil from ways and spindles, and bacterial growth. Tramp oil is the main driver: it feeds the bacteria, lowers pH and generates odor. Removing it and filtering the fines multiplies fluid life.',
+      },
+      {
+        q: 'How is coolant life extended?',
+        a: 'By removing tramp oil (skimmers or coalescing separators) and filtering particles (belt filters and magnetic separators). In installations with proper treatment, coolant life is typically multiplied 2 to 4 times, cutting replacement frequency and waste-disposal cost.',
+      },
+      {
+        q: 'When is it worth investing in coolant filtration?',
+        a: 'When the coolant is changed often, tooling lasts less than expected, there is pump or spindle damage, or the machine is stopped to remove chips by hand. An on-site assessment quantifies the hidden cost and the return on investment.',
       },
       {
         q: 'How can I contact Trans-Fil?',
