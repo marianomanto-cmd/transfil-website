@@ -252,7 +252,7 @@ export const CONTENT: Record<Lang, Content> = {
       ],
       custom: {
         title: 'Cada equipo se dimensiona sobre su proceso.',
-        body: 'Cada transportador de viruta y cada lavadora se dimensiona sobre el proceso real: tipo de viruta, refrigerante, caudal, layout y ritmo de línea. Por eso relevamos en planta y validamos con plano 3D antes de fabricar. Un transportador mal dimensionado se tapa; una lavadora genérica no alcanza el grado de limpieza que su próximo paso necesita. El diseño a medida es lo que hace que el equipo trabaje 24/7 durante décadas.',
+        body: 'Cada transportador de viruta, filtro y lavadora se dimensiona sobre el proceso real: tipo de viruta, refrigerante, caudal, layout y ritmo de línea. Validamos con diseño 3D antes de fabricar. Un transportador mal dimensionado se tapa; una lavadora genérica no alcanza el grado de limpieza que su próximo paso necesita. El diseño a medida es lo que hace que el equipo trabaje 24/7 durante décadas.',
       },
       metrics: {
         items: [
@@ -529,7 +529,7 @@ export const CONTENT: Record<Lang, Content> = {
       ],
       custom: {
         title: 'Every machine is sized for your process.',
-        body: 'Every chip conveyor and every washer is sized against the real process: chip type, coolant, flow rate, layout and line cadence. That\'s why we survey on-site and validate with a 3D drawing before we cut metal. An undersized conveyor jams; a generic washer doesn\'t hit the cleanliness grade your next step needs. Custom design is what lets the equipment run 24/7 for decades.',
+        body: 'Every chip conveyor, filter and washer is sized against the real process: chip type, coolant, flow rate, layout and line cadence. We validate with a 3D design before we cut metal. An undersized conveyor jams; a generic washer doesn\'t hit the cleanliness grade your next step needs. Custom design is what lets the equipment run 24/7 for decades.',
       },
       metrics: {
         items: [
