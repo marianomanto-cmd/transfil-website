@@ -209,7 +209,7 @@ export const CONTENT: Record<Lang, Content> = {
       title: 'El costo que no se ve.',
       intro: 'Muchas plantas descartan el refrigerante cuando se ensucia — después de que ya desgastó las herramientas, dañó la bomba y frenó la línea. La filtración, el transporte de viruta y el lavado no son accesorios: protegen los activos que ya pagó.',
       symptoms: {
-        title: '¿Le suena alguno de estos?',
+        title: '¿Reconoce estos síntomas en su planta?',
         items: [
           'Cambia el soluble cada pocas semanas y paga para que se lo retiren.',
           'Las herramientas duran menos de lo que deberían.',
@@ -251,7 +251,7 @@ export const CONTENT: Record<Lang, Content> = {
         },
       ],
       custom: {
-        title: 'No hay solución de catálogo.',
+        title: 'Cada equipo se dimensiona sobre su proceso.',
         body: 'Cada transportador de viruta y cada lavadora se dimensiona sobre el proceso real: tipo de viruta, refrigerante, caudal, layout y ritmo de línea. Por eso relevamos en planta y validamos con plano 3D antes de fabricar. Un transportador mal dimensionado se tapa; una lavadora genérica no alcanza el grado de limpieza que su próximo paso necesita. El diseño a medida es lo que hace que el equipo trabaje 24/7 durante décadas.',
       },
       metrics: {
@@ -486,7 +486,7 @@ export const CONTENT: Record<Lang, Content> = {
       title: 'The cost you don\'t see.',
       intro: 'Many plants discard coolant once it gets dirty — after it has already worn the tooling, damaged the pump and stopped the line. Filtration, chip transport and washing aren\'t accessories: they protect the assets you\'ve already paid for.',
       symptoms: {
-        title: 'Do any of these sound familiar?',
+        title: 'Do you recognize these symptoms on your plant floor?',
         items: [
           'You change the coolant every few weeks and pay to have it hauled away.',
           'Tooling lasts less than it should.',
@@ -528,7 +528,7 @@ export const CONTENT: Record<Lang, Content> = {
         },
       ],
       custom: {
-        title: 'There\'s no off-the-shelf answer.',
+        title: 'Every machine is sized for your process.',
         body: 'Every chip conveyor and every washer is sized against the real process: chip type, coolant, flow rate, layout and line cadence. That\'s why we survey on-site and validate with a 3D drawing before we cut metal. An undersized conveyor jams; a generic washer doesn\'t hit the cleanliness grade your next step needs. Custom design is what lets the equipment run 24/7 for decades.',
       },
       metrics: {

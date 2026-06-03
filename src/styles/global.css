@@ -1200,7 +1200,13 @@ button { font-family: inherit; }
 }
 .tf-apps-custom-bg {
   position: absolute;
-  inset: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  /* Image only occupies the right 65% of the block, leaving the text side
+     as solid --bg-2. Lets the photo sit further right without fighting
+     the headline. */
+  width: 65%;
   z-index: -1;
   overflow: hidden;
 }
@@ -1211,20 +1217,19 @@ button { font-family: inherit; }
   height: 100%;
   object-fit: cover;
   object-position: center right;
-  /* Knock the image way back: desaturate, dim. */
-  filter: saturate(0.4) brightness(0.55) contrast(1.05);
-  opacity: 0.55;
+  /* Eased back: a touch more visible than before. */
+  filter: saturate(0.55) brightness(0.72) contrast(1.05);
+  opacity: 0.7;
 }
-/* Strong gradient overlay — opaque on the text side, fading the photo
-   in only toward the right edge. Doubled with a vertical darkener so
-   the headline always sits on solid contrast. */
+/* Gradient overlay — strong on the left edge (the seam with the text
+   side) and fading off toward the right so the brand peeks through. */
 .tf-apps-custom-bg::after {
   content: "";
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(105deg, var(--bg-2) 0%, rgba(21, 21, 26, 0.92) 38%, rgba(21, 21, 26, 0.7) 62%, rgba(21, 21, 26, 0.5) 100%),
-    linear-gradient(to bottom, rgba(14, 14, 16, 0.4) 0%, transparent 30%, transparent 70%, rgba(14, 14, 16, 0.55) 100%);
+    linear-gradient(100deg, var(--bg-2) 0%, rgba(21, 21, 26, 0.82) 22%, rgba(21, 21, 26, 0.55) 55%, rgba(21, 21, 26, 0.28) 100%),
+    linear-gradient(to bottom, rgba(14, 14, 16, 0.3) 0%, transparent 30%, transparent 70%, rgba(14, 14, 16, 0.4) 100%);
   pointer-events: none;
 }
 .tf-apps-custom-body-wrap {
@@ -1255,10 +1260,13 @@ button { font-family: inherit; }
 }
 @media (max-width: 720px) {
   .tf-apps-custom { min-height: 0; padding-block: clamp(44px, 8vw, 64px); }
+  /* Mobile: image covers the whole block as a faint texture; the right-
+     side framing only makes sense on wide layouts. */
+  .tf-apps-custom-bg { width: 100%; }
   .tf-apps-custom-bg img { object-position: center; opacity: 0.35; }
   .tf-apps-custom-bg::after {
     background:
-      linear-gradient(180deg, rgba(21, 21, 26, 0.78) 0%, rgba(21, 21, 26, 0.88) 100%);
+      linear-gradient(180deg, rgba(21, 21, 26, 0.72) 0%, rgba(21, 21, 26, 0.82) 100%);
   }
 }
 
