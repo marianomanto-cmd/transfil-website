@@ -36,15 +36,20 @@ const icons: Record<string, string> = {
         class="tf-service"
         style="scroll-margin-top: calc(var(--header-h) + 24px);"
       >
-        <div class="tf-service-hd">
-          <span class="tf-mono">{s.code}</span>
-          <span class="tf-service-rule" aria-hidden="true" />
-          <span class="tf-svc-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" width="24" height="24" set:html={icons[s.code] ?? ''} />
-          </span>
+        <div class="tf-svc-thumb" aria-hidden="true">
+          <img src={s.img} alt="" loading="lazy" decoding="async" />
         </div>
-        <h3 class="tf-service-title">{s.title}</h3>
-        <p class="tf-service-desc">{s.desc}</p>
+        <div class="tf-svc-body">
+          <div class="tf-service-hd">
+            <span class="tf-mono">{s.code}</span>
+            <span class="tf-service-rule" aria-hidden="true" />
+            <span class="tf-svc-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22" set:html={icons[s.code] ?? ''} />
+            </span>
+          </div>
+          <h3 class="tf-service-title">{s.title}</h3>
+          <p class="tf-service-desc">{s.desc}</p>
+        </div>
         <span class="tf-svc-accent" aria-hidden="true" />
       </article>
     ))}
