@@ -10,9 +10,11 @@ function TileMedia({ src, poster, kind, label }: { src: string; poster?: string;
   const videoRef = useRef<HTMLVideoElement>(null);
   const isVideo = kind === 'video' && VIDEO_EXT_RE.test(src);
 
-  // Only play the video while it's in the viewport — avoids 4 simultaneous
-  // autoplay-loop streams downloading and decoding when the tech section
-  // first becomes visible.
+  // Only play the video while it's a fair chunk in the viewport — avoids
+  // four simultaneous autoplay-loop streams downloading and decoding when
+  // the user scrolls past the tech section quickly. Threshold 0.5 + a
+  // rootMargin that contracts the viewport top/bottom keeps videos
+  // paused unless the user actually stops on a tile.
   useEffect(() => {
     if (!isVideo || !videoRef.current) return;
     const el = videoRef.current;
@@ -24,10 +26,13 @@ function TileMedia({ src, poster, kind, label }: { src: string; poster?: string;
           el.pause();
         }
       },
-      { threshold: 0.25 }
+      { threshold: 0.5, rootMargin: '-10% 0px -10% 0px' }
     );
     io.observe(el);
-    return () => io.disconnect();
+    return () => {
+      io.disconnect();
+      el.pause();
+    };
   }, [isVideo]);
 
   if (isVideo) {

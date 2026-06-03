@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useScrollY, useCountUp } from '../lib/hooks';
 import type { Content } from '../i18n/content';
 
@@ -54,6 +54,27 @@ export function Hero({ content }: Props) {
   // critical path. <source media> isn't reliably honored by Safari/FF;
   // pick the right file in JS instead.
   const [videoSrc, setVideoSrc] = useState<string | null>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Pause the hero video while the section is off-screen — the loop keeps
+  // burning GPU on long pages otherwise. IO trigger is independent from
+  // the idle-callback that decides the src.
+  useEffect(() => {
+    if (!videoSrc || !videoRef.current) return;
+    const el = videoRef.current;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) el.play().catch(() => {});
+        else el.pause();
+      },
+      { threshold: 0.1 }
+    );
+    io.observe(el);
+    return () => {
+      io.disconnect();
+      el.pause();
+    };
+  }, [videoSrc]);
   useEffect(() => {
     if (typeof window === 'undefined' || !window.matchMedia) return;
     const big = window.matchMedia('(min-width: 900px) and (pointer: fine)');
@@ -95,6 +116,7 @@ export function Hero({ content }: Props) {
         style={{ transform: `translate3d(0, ${parallax}px, 0)` }}
       >
         <video
+          ref={videoRef}
           className="tf-hero-video"
           autoPlay
           muted
