@@ -1139,6 +1139,9 @@ button { font-family: inherit; }
   transition: background 0.25s;
 }
 .tf-app:hover { background: var(--bg-3); }
+/* Desktop: the toggle wrapper is a pass-through — head + title flow as
+   direct flex children of .tf-app. Mobile turns it into the tap target. */
+.tf-app-toggle { display: contents; }
 .tf-app-head {
   display: flex;
   align-items: center;
@@ -1149,6 +1152,13 @@ button { font-family: inherit; }
   flex: 1;
   height: 1px;
   background: var(--line-strong);
+}
+.tf-app-chev { display: none; }
+.tf-app-body {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  flex: 1;
 }
 .tf-app-title {
   font-family: var(--font-display);
@@ -1377,6 +1387,47 @@ button { font-family: inherit; }
   .tf-apps-metric:not(:nth-last-child(-n + 2)) { border-bottom: 1px solid var(--line); }
   .tf-apps-cta { grid-template-columns: 1fr; }
   .tf-apps-cta .tf-btn { justify-self: start; }
+}
+
+/* Mobile: A01..A04 cards collapse. Head + title remain visible, the
+   three SÍNTOMA/SOLUCIÓN/BENEFICIO blocks toggle. JS sets data-open. */
+@media (max-width: 640px) {
+  .tf-app-toggle {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+  .tf-app-toggle:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+  }
+  .tf-app-chev {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    color: var(--fg-3);
+    flex-shrink: 0;
+    transition: transform 0.25s ease, color 0.2s;
+  }
+  .tf-app-toggle:hover .tf-app-chev { color: var(--fg-2); }
+  .tf-app[data-open="true"] .tf-app-chev { transform: rotate(180deg); }
+  /* Hide the body when collapsed. Snap rather than animate height —
+     keeps the layout shift cheap and predictable on mobile. */
+  .tf-app[data-open="false"] .tf-app-body { display: none; }
+  /* Collapsed cards don't need as much vertical padding. */
+  .tf-app[data-open="false"] { padding-bottom: clamp(20px, 4vw, 28px); }
+  /* On the closed state remove the gap below the toggle so the bottom
+     edge sits flush with the head/title pair. */
+  .tf-app[data-open="false"] { gap: 14px; }
+  .tf-app[data-open="false"] .tf-app-toggle { gap: 10px; }
+}
+@media (max-width: 640px) and (prefers-reduced-motion: reduce) {
+  .tf-app-chev { transition: none; }
 }
 @media (max-width: 480px) {
   .tf-apps-metrics { grid-template-columns: 1fr; }

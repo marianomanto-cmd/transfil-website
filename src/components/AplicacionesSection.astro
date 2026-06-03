@@ -30,7 +30,10 @@ const c = content.applications;
       <p class="tf-apps-symptoms-close">{c.symptoms.close}</p>
     </aside>
 
-    <!-- 2. 4 application cards (2×2 grid) -->
+    <!-- 2. 4 application cards (2×2 grid). On mobile each card is
+         collapsible: head + title stay visible, the three SÍNTOMA /
+         SOLUCIÓN / BENEFICIO blocks live inside .tf-app-body and toggle
+         via a script below (progressive enhancement). -->
     <div class="tf-apps-grid">
       {c.cards.map((card) => (
         <article
@@ -38,31 +41,39 @@ const c = content.applications;
           class="tf-app"
           style="scroll-margin-top: calc(var(--header-h) + 24px);"
         >
-          <header class="tf-app-head">
-            <span class="tf-mono tf-app-code">{card.code}</span>
-            <span class="tf-app-rule" aria-hidden="true" />
-          </header>
-          <h3 class="tf-app-title">{card.title}</h3>
-
-          <div class="tf-app-block">
-            <span class="tf-mono tf-app-label" data-kind="problem">
-              {content.htmlLang.startsWith('es') ? 'SÍNTOMA' : 'SYMPTOM'}
-            </span>
-            <p class="tf-app-text">{card.problem}</p>
+          <div class="tf-app-toggle">
+            <header class="tf-app-head">
+              <span class="tf-mono tf-app-code">{card.code}</span>
+              <span class="tf-app-rule" aria-hidden="true" />
+              <span class="tf-app-chev" aria-hidden="true">
+                <svg viewBox="0 0 16 16" width="14" height="14">
+                  <path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </span>
+            </header>
+            <h3 class="tf-app-title">{card.title}</h3>
           </div>
+          <div class="tf-app-body">
+            <div class="tf-app-block">
+              <span class="tf-mono tf-app-label" data-kind="problem">
+                {content.htmlLang.startsWith('es') ? 'SÍNTOMA' : 'SYMPTOM'}
+              </span>
+              <p class="tf-app-text">{card.problem}</p>
+            </div>
 
-          <div class="tf-app-block">
-            <span class="tf-mono tf-app-label" data-kind="install">
-              {content.htmlLang.startsWith('es') ? 'SOLUCIÓN' : 'SOLUTION'}
-            </span>
-            <p class="tf-app-text">{card.install}</p>
-          </div>
+            <div class="tf-app-block">
+              <span class="tf-mono tf-app-label" data-kind="install">
+                {content.htmlLang.startsWith('es') ? 'SOLUCIÓN' : 'SOLUTION'}
+              </span>
+              <p class="tf-app-text">{card.install}</p>
+            </div>
 
-          <div class="tf-app-block is-benefit">
-            <span class="tf-mono tf-app-label" data-kind="benefit">
-              {content.htmlLang.startsWith('es') ? 'BENEFICIO' : 'BENEFIT'}
-            </span>
-            <p class="tf-app-text">{card.benefit}</p>
+            <div class="tf-app-block is-benefit">
+              <span class="tf-mono tf-app-label" data-kind="benefit">
+                {content.htmlLang.startsWith('es') ? 'BENEFICIO' : 'BENEFIT'}
+              </span>
+              <p class="tf-app-text">{card.benefit}</p>
+            </div>
           </div>
         </article>
       ))}
@@ -115,3 +126,44 @@ const c = content.applications;
     </aside>
   </div>
 </Section>
+
+<script>
+  // Progressive enhancement: on small screens turn each .tf-app into a
+  // collapsible card (head + title visible; body toggles). Desktop is
+  // untouched — body is always visible via CSS regardless of data-open.
+  function initAppsCollapse() {
+    const isMobile = window.matchMedia('(max-width: 640px)').matches;
+    const articles = document.querySelectorAll<HTMLElement>('.tf-app');
+    articles.forEach((article) => {
+      const toggle = article.querySelector<HTMLElement>('.tf-app-toggle');
+      const body = article.querySelector<HTMLElement>('.tf-app-body');
+      if (!toggle || !body) return;
+      if (!body.id) body.id = `${article.id}-body`;
+
+      if (isMobile && !article.dataset.collapsibleBound) {
+        article.dataset.collapsibleBound = '1';
+        article.dataset.open = 'false';
+        toggle.setAttribute('role', 'button');
+        toggle.setAttribute('tabindex', '0');
+        toggle.setAttribute('aria-expanded', 'false');
+        toggle.setAttribute('aria-controls', body.id);
+
+        const setOpen = (open: boolean) => {
+          article.dataset.open = String(open);
+          toggle.setAttribute('aria-expanded', String(open));
+        };
+        toggle.addEventListener('click', () => {
+          setOpen(article.dataset.open !== 'true');
+        });
+        toggle.addEventListener('keydown', (e: KeyboardEvent) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            setOpen(article.dataset.open !== 'true');
+          }
+        });
+      }
+    });
+  }
+
+  document.addEventListener('astro:page-load', initAppsCollapse);
+</script>
