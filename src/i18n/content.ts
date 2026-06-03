@@ -252,7 +252,7 @@ export const CONTENT: Record<Lang, Content> = {
       ],
       custom: {
         title: 'Cada equipo se dimensiona sobre su proceso.',
-        body: 'Cada transportador de viruta, filtro y lavadora se dimensiona sobre el proceso real: tipo de viruta, refrigerante, caudal, layout y ritmo de línea. Validamos con diseño 3D antes de fabricar. Un transportador mal dimensionado se tapa; una lavadora genérica no alcanza el grado de limpieza que su próximo paso necesita. El diseño a medida es lo que hace que el equipo trabaje 24/7 durante décadas.',
+        body: 'Cada transportador de viruta, filtro y lavadora se dimensionan sobre el proceso real: tipo de viruta, refrigerante, caudal, layout y ritmo de línea. Validamos con diseño 3D antes de fabricar. Un transportador mal dimensionado se tapa; una lavadora genérica no alcanza el grado de limpieza que su próximo paso necesita. El diseño a medida es lo que hace que el equipo trabaje 24/7 durante décadas.',
       },
       metrics: {
         items: [
