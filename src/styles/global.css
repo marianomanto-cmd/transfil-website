@@ -2753,10 +2753,10 @@ html { scrollbar-color: var(--line-strong) var(--bg); scrollbar-width: thin; }
 .tf-section.is-visible .tf-eyebrow::before { width: 16px; }
 
 /* ── Header — logo subtle hover ──────────────────────────────────── */
-.tf-logo .tf-logo-mark svg {
+.tf-logo .tf-logo-mark img {
   transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
-.tf-logo:hover .tf-logo-mark svg {
+.tf-logo:hover .tf-logo-mark img {
   transform: rotate(45deg);
 }
 .tf-logo:hover .tf-logo-mark circle { fill: var(--accent); transition: fill 0.3s; }
@@ -3001,10 +3001,10 @@ html { scrollbar-color: var(--line-strong) var(--bg); scrollbar-width: thin; }
 .tf-form-sent:empty { display: none; }
 
 /* ── Footer — logo hover + back-to-top button ────────────────────── */
-.tf-footer-brand .tf-logo-mark svg {
+.tf-footer-brand .tf-logo-mark img {
   transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
-.tf-footer-brand:hover .tf-logo-mark svg { transform: rotate(180deg); }
+.tf-footer-brand:hover .tf-logo-mark img { transform: rotate(180deg); }
 
 .tf-backtop {
   position: fixed;
