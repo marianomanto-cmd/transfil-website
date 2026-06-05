@@ -44,9 +44,12 @@ export const POST: APIRoute = async ({ request }) => {
     return json(false, 400);
   }
 
-  const apiKey = import.meta.env.RESEND_API_KEY;
+  // On Vercel the secret lives in the serverless runtime env (process.env);
+  // import.meta.env covers local dev (.env). Reading both avoids Vite's
+  // build-time inlining turning a runtime-only secret into `undefined`.
+  const apiKey = import.meta.env.RESEND_API_KEY || process.env.RESEND_API_KEY;
   if (!apiKey) {
-    console.error('[contact] RESEND_API_KEY is not set');
+    console.error('[contact] RESEND_API_KEY is not set (check Vercel env vars + redeploy)');
     return json(false, 500);
   }
 
