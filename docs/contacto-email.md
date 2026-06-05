@@ -50,3 +50,19 @@ Vercel, `src/pages/api/contact.ts`) → envía el mail con **Resend** a
    - `RESEND_API_KEY is not set` → falta la key / faltó Redeploy.
    - `Resend error: …domain is not verified` → el DNS todavía no verificó.
    - `Resend error: …API key is invalid` → key mal copiada.
+
+## Reenvío interno de ventas@ (Google Workspace)
+
+Todo lo que llega a `ventas@transfil.com.ar` se **copia automáticamente a 3
+casillas internas** del equipo, y además **conserva la copia en ventas@**.
+
+- **Dónde se configura:** Google Admin (`admin.google.com`) → Apps → Google
+  Workspace → **Settings for Gmail → Routing** → regla **«Reenvío ventas@ → equipo»**.
+- **Cómo está armada la regla:**
+  - *Email messages to affect:* **Inbound** + **Internal - Receiving**.
+  - *Action:* **Modify message → Also deliver to** con las 3 casillas.
+  - *Envelope filter:* **Only affect specific envelope recipients → Exactly matches**
+    `ventas@transfil.com.ar` (así la regla afecta solo lo dirigido a esa casilla,
+    no al resto del dominio).
+- **Para agregar/quitar destinatarios:** editar esa misma regla de Routing.
+- No depende del sitio ni de Resend; es configuración del correo de Workspace.
