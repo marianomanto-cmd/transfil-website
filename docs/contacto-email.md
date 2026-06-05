@@ -11,7 +11,28 @@ Vercel, `src/pages/api/contact.ts`) → envía el mail con **Resend** a
 - **to:** `ventas@transfil.com.ar`
 - **reply-to:** el email del visitante (se responde directo desde la casilla)
 - **honeypot:** campo oculto `website`; si llega con valor, se descarta (bot)
-- **dataLayer:** al envío exitoso dispara `{ event: 'form_success', linea }` para GTM/GA4
+- **dataLayer:** al envío exitoso dispara `{ event: 'generate_lead', linea }` para GTM/GA4
+
+## Key events (GTM / GA4)
+
+El código empuja estos eventos al `dataLayer`; en GTM se capturan con triggers de
+*Custom Event* (mismo nombre) y se envían a GA4 como key events.
+
+| Evento | Cuándo se dispara | Params |
+|---|---|---|
+| `generate_lead` | Envío exitoso del formulario de contacto | `linea` |
+| `click_whatsapp` | Clic en cualquier link de WhatsApp (FAB, footer, contacto) | `link_url` |
+| `click_phone` | Clic en cualquier link `tel:` (footer, contacto) | `link_url` |
+
+Los clics se capturan con un listener delegado en `document` (en `src/layouts/Base.astro`),
+así que cubren todos los links actuales y futuros. Para **dispararlos a mano** y verificarlos
+en GTM Preview / GA4 DebugView, pegá en la consola del navegador (en producción):
+
+```js
+dataLayer.push({ event: 'generate_lead', linea: 'test' });
+dataLayer.push({ event: 'click_whatsapp', link_url: 'test' });
+dataLayer.push({ event: 'click_phone', link_url: 'test' });
+```
 
 ## Variable de entorno — el secreto NO va en el repo
 

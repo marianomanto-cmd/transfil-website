@@ -116,7 +116,7 @@ export function ContactSection({ content }: { content: Content }) {
       // Conversion event for GTM/GA4 — fired only on a confirmed send, before
       // the fields are cleared.
       window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({ event: 'form_success', linea: data.linea || 'general' });
+      window.dataLayer.push({ event: 'generate_lead', linea: data.linea || 'general' });
 
       setSent(true);
       setTimeout(() => setSent(false), 5000);

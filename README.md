@@ -14,7 +14,7 @@ Bilingual single-page institutional site for **Trans-Fil S.R.L.** — industrial
 - Design tokens + section styles in `src/styles/global.css`; scoped styles inside Astro components where they're self-contained (e.g. `ProcessSection.astro`).
 - `@astrojs/sitemap` emits `sitemap-index.xml` + `sitemap-0.xml` with hreflang + per-build `lastmod`.
 - View Transitions via `<ClientRouter />` for ES ↔ EN swaps.
-- Analytics: **Google Tag Manager** (`GTM-PV9STD3`) — GA4 (`G-Y6H3JFZNNM`) is configured inside the container. The layout pushes a `page_view` to the `dataLayer` on every `astro:page-load` after the first (so view-transitions count), plus a `form_success` event on a confirmed contact-form send.
+- Analytics: **Google Tag Manager** (`GTM-PV9STD3`) — GA4 (`G-Y6H3JFZNNM`) is configured inside the container. The layout pushes `dataLayer` key events for GTM/GA4: `page_view` on every `astro:page-load` after the first (so view-transitions count), `generate_lead` on a confirmed contact-form send, and `click_whatsapp` / `click_phone` on those link clicks (delegated listener in `Base.astro`).
 
 ## Local development
 
