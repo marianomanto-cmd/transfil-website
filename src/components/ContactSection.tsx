@@ -3,6 +3,12 @@ import { cx } from '../lib/cx';
 import { useReveal } from '../lib/hooks';
 import type { Content } from '../i18n/content';
 
+declare global {
+  interface Window {
+    dataLayer?: Record<string, unknown>[];
+  }
+}
+
 function Field({
   label, children, err, req, full, htmlFor,
 }: {
@@ -27,7 +33,8 @@ function Field({
 
 type FormState = {
   name: string; company: string; email: string; phone: string;
-  industry: string; message: string;
+  industry: string; linea: string; message: string;
+  website: string; // honeypot — must stay empty for real visitors
 };
 
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
@@ -36,10 +43,13 @@ export function ContactSection({ content }: { content: Content }) {
   const c = content.contact;
   const [data, setData] = useState<FormState>({
     name: '', company: '', email: '', phone: '',
-    industry: c.form.industryOpts[0], message: '',
+    industry: c.form.industryOpts[0], linea: c.form.lineaOpts[0], message: '',
+    website: '',
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [sendErr, setSendErr] = useState(false);
   const [sectionRef, vis] = useReveal(0.1);
 
   const nameRef = useRef<HTMLInputElement>(null);
@@ -47,7 +57,7 @@ export function ContactSection({ content }: { content: Content }) {
   const messageRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
-    setData((d) => ({ ...d, industry: c.form.industryOpts[0] }));
+    setData((d) => ({ ...d, industry: c.form.industryOpts[0], linea: c.form.lineaOpts[0] }));
   }, [content]);
 
   const set = (k: keyof FormState) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
@@ -68,8 +78,9 @@ export function ContactSection({ content }: { content: Content }) {
     setErrors((prev) => ({ ...prev, [k]: errs[k] || '' }));
   };
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (sending) return;
     const errs = validate(data);
     setErrors(errs);
     const refMap = { name: nameRef, email: emailRef, message: messageRef };
@@ -78,28 +89,47 @@ export function ContactSection({ content }: { content: Content }) {
       refMap[firstInvalid].current?.focus();
       return;
     }
-    const isEs = content.htmlLang.startsWith('es');
-    const subject = `[Web${data.company ? ` · ${data.company}` : ''}] ${data.name}`;
-    const lines = [
-      `${c.form.name}: ${data.name}`,
-      data.company ? `${c.form.company}: ${data.company}` : null,
-      `${c.form.email}: ${data.email}`,
-      data.phone ? `${c.form.phone}: ${data.phone}` : null,
-      `${c.form.industry}: ${data.industry}`,
-      '',
-      `${c.form.message}:`,
-      data.message,
-      '',
-      isEs ? '— Enviado desde transfil.com.ar' : '— Sent from transfil.com.ar',
-    ].filter(Boolean) as string[];
-    const href = `mailto:ventas@transfil.com.ar?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join('\n'))}`;
-    window.location.href = href;
-    setSent(true);
-    setTimeout(() => setSent(false), 5000);
-    setData({
-      name: '', company: '', email: '', phone: '',
-      industry: c.form.industryOpts[0], message: '',
-    });
+
+    setSendErr(false);
+    setSending(true);
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nombre: data.name,
+          empresa: data.company,
+          email: data.email,
+          telefono: data.phone,
+          industria: data.industry,
+          linea: data.linea,
+          mensaje: data.message,
+          website: data.website, // honeypot
+        }),
+      });
+      const payload = res.ok ? await res.json().catch(() => null) : null;
+      if (!payload?.ok) {
+        setSendErr(true);
+        return;
+      }
+
+      // Conversion event for GTM/GA4 — fired only on a confirmed send, before
+      // the fields are cleared.
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event: 'form_success', linea: data.linea || 'general' });
+
+      setSent(true);
+      setTimeout(() => setSent(false), 5000);
+      setData({
+        name: '', company: '', email: '', phone: '',
+        industry: c.form.industryOpts[0], linea: c.form.lineaOpts[0], message: '',
+        website: '',
+      });
+    } catch {
+      setSendErr(true);
+    } finally {
+      setSending(false);
+    }
   };
 
   const errIds = {
@@ -122,6 +152,23 @@ export function ContactSection({ content }: { content: Content }) {
       </header>
       <div className="tf-contact">
         <form className="tf-form" onSubmit={submit} noValidate>
+          {/* Honeypot: kept off-screen (not display:none) so bots fill it but
+              users never see it. A filled value is rejected server-side. */}
+          <div
+            aria-hidden="true"
+            style={{ position: 'absolute', left: '-9999px', width: 1, height: 1, overflow: 'hidden' }}
+          >
+            <label htmlFor="tf-website">Website</label>
+            <input
+              id="tf-website"
+              type="text"
+              name="website"
+              tabIndex={-1}
+              autoComplete="off"
+              value={data.website}
+              onChange={set('website')}
+            />
+          </div>
           <div className="tf-form-grid">
             <Field label={c.form.name} err={errors.name} req htmlFor="tf-name">
               <input
@@ -165,6 +212,13 @@ export function ContactSection({ content }: { content: Content }) {
                 ))}
               </select>
             </Field>
+            <Field label={c.form.linea} full htmlFor="tf-linea">
+              <select id="tf-linea" value={data.linea} onChange={set('linea')}>
+                {c.form.lineaOpts.map((o) => (
+                  <option key={o} value={o}>{o}</option>
+                ))}
+              </select>
+            </Field>
             <Field label={c.form.message} err={errors.message} full req htmlFor="tf-message">
               <textarea
                 id="tf-message"
@@ -180,14 +234,22 @@ export function ContactSection({ content }: { content: Content }) {
             </Field>
           </div>
           <div className="tf-form-foot">
-            <button type="submit" className="tf-btn tf-btn-primary tf-btn-lg">
-              <span>{c.form.send}</span>
+            <button
+              type="submit"
+              className="tf-btn tf-btn-primary tf-btn-lg"
+              disabled={sending}
+              aria-busy={sending}
+            >
+              <span>{sending ? c.form.sending : c.form.send}</span>
               <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
                 <path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.6" />
               </svg>
             </button>
             <span className="tf-form-sent" role="status" aria-live="polite">
               {sent ? `✓ ${c.form.sent}` : ''}
+            </span>
+            <span className="tf-form-err" role="alert" aria-live="assertive">
+              {sendErr ? c.form.sendErr : ''}
             </span>
           </div>
         </form>

@@ -102,8 +102,10 @@ export type Content = {
     eyebrow: string; title: string; sub: string;
     form: {
       name: string; company: string; email: string; phone: string;
-      industry: string; industryOpts: string[]; message: string;
-      send: string; sent: string; required: string; emailErr: string;
+      industry: string; industryOpts: string[];
+      linea: string; lineaOpts: string[]; message: string;
+      send: string; sending: string; sent: string; sendErr: string;
+      required: string; emailErr: string;
     };
     direct: string;
     addr: string;
@@ -340,9 +342,13 @@ export const CONTENT: Record<Lang, Content> = {
         name: 'Nombre', company: 'Empresa', email: 'Email', phone: 'Teléfono',
         industry: 'Industria',
         industryOpts: ['Siderurgia', 'Automotriz', 'Oil & Gas', 'Máquinas-Herramienta', 'Línea Blanca', 'Otro'],
+        linea: 'Línea de interés',
+        lineaOpts: ['Filtración', 'Transporte de viruta', 'Lavado industrial', 'Corte y plegado', 'Otra'],
         message: '¿Qué proceso desea mejorar?',
         send: 'Enviar consulta',
+        sending: 'Enviando…',
         sent: 'Consulta recibida. Nos pondremos en contacto.',
+        sendErr: 'No se pudo enviar. Reintentá o escribinos a ventas@transfil.com.ar.',
         required: 'Campo requerido', emailErr: 'Email inválido',
       },
       direct: 'Contacto directo',
@@ -617,9 +623,13 @@ export const CONTENT: Record<Lang, Content> = {
         name: 'Name', company: 'Company', email: 'Email', phone: 'Phone',
         industry: 'Industry',
         industryOpts: ['Steel', 'Automotive', 'Oil & Gas', 'Machine Tools', 'Appliances', 'Other'],
+        linea: 'Line of interest',
+        lineaOpts: ['Filtration', 'Chip conveying', 'Industrial washing', 'Cutting & bending', 'Other'],
         message: 'What process do you want to improve?',
         send: 'Send inquiry',
+        sending: 'Sending…',
         sent: 'Inquiry received. We\'ll get back to you.',
+        sendErr: 'Could not send. Please retry or email ventas@transfil.com.ar.',
         required: 'Required', emailErr: 'Invalid email',
       },
       direct: 'Direct contact',

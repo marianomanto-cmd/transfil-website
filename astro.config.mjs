@@ -1,9 +1,14 @@
 import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
+import vercel from '@astrojs/vercel';
 
 export default defineConfig({
   site: 'https://www.transfil.com.ar',
+  // Default `output: 'static'` is kept so every page is prerendered; only
+  // routes that opt out with `export const prerender = false` (the contact
+  // API endpoint) run on-demand as Vercel serverless functions.
+  adapter: vercel(),
   integrations: [
     react(),
     sitemap({
