@@ -165,25 +165,24 @@ const faqJsonLd = {
     <script type="application/ld+json" set:html={JSON.stringify(servicesJsonLd)} />
     <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
 
-    <!-- Google tag (gtag.js) — GA4. Fires a manual page_view after each
-         astro:page-load except the first (the 'config' line above already
-         counts the initial pageview). -->
-    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-Y6H3JFZNNM"></script>
+    <!-- GA4 now lives inside the GTM container (GTM-PV9STD3); the initial
+         page_view is sent by the GA4 config tag when GTM loads. This pushes a
+         page_view to the dataLayer on every astro:page-load except the first,
+         so client-side view transitions are tracked too. -->
     <script is:inline>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-Y6H3JFZNNM');
-      let __gtagFirst = true;
-      document.addEventListener('astro:page-load', function () {
-        if (__gtagFirst) { __gtagFirst = false; return; }
-        if (typeof gtag !== 'function') return;
-        gtag('event', 'page_view', {
-          page_path: location.pathname + location.search,
-          page_title: document.title,
-          page_location: location.href,
+      (function () {
+        var first = true;
+        document.addEventListener('astro:page-load', function () {
+          if (first) { first = false; return; }
+          window.dataLayer = window.dataLayer || [];
+          window.dataLayer.push({
+            event: 'page_view',
+            page_path: location.pathname + location.search,
+            page_title: document.title,
+            page_location: location.href,
+          });
         });
-      });
+      })();
     </script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
