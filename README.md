@@ -49,7 +49,7 @@ The landing page has 8 numbered sections + one unnumbered side-story:
 | –  | `#process`      | `ProcessSection.astro`          | 5 step cards over darkened workshop bg (unnumbered side-story)       |
 | 04 | `#catalogs`     | `CatalogsSection.tsx`           | 3 PDF covers + in-page viewer modal                                  |
 | 05 | `#services`     | `ServicesSection.astro`         | 4 services as a "stepper" grid of icon cards (S01–S04)               |
-| 06 | `#industries`   | `IndustriesSection.tsx`         | Radar map + 3 client marquees + 14-countries watermark               |
+| 06 | `#industries`   | `IndustriesSection.tsx`         | Dotted coverage map + 3 client marquees + 14-countries watermark               |
 | 07 | `#history`      | `HistorySection.astro`          | 5 milestones on vertical timeline                                    |
 | 08 | `#contact`      | `ContactSection.tsx`            | Form + side panel + abstract SVG locator                             |
 
@@ -58,7 +58,7 @@ The landing page has 8 numbered sections + one unnumbered side-story:
 ```
 src/
   i18n/content.ts        all bilingual copy, typed (single source of truth)
-  layouts/Base.astro     <head>, SEO meta, JSON-LD x3, GA4, skip-link, sr-only FAQ
+  layouts/Base.astro     <head>, SEO meta, JSON-LD x3, GTM, skip-link, sr-only FAQ
   components/
     Hero.tsx                  workshop video bg + display headline + stats
     TechSection.tsx           bento grid of 4 tech groups × 4 bullets
@@ -66,14 +66,15 @@ src/
     ProcessSection.astro      5 step cards over darkened workshop bg
     CatalogsSection.tsx       3 PDF covers + in-page viewer modal
     ServicesSection.astro     4 services as icon stepper (S01–S04)
-    IndustriesSection.tsx     radar map + 3 client marquees + watermark
+    IndustriesSection.tsx     dotted coverage map + 3 client marquees + watermark
     HistorySection.astro      5 milestones on vertical timeline
     ContactSection.tsx        form + side panel + SVG locator
     Footer.astro              brand mark + per-tech and per-service deep-links
     Header.tsx                sticky header w/ scroll-progress + scroll-spy + burger
     Section.astro             helper layout for plain-content sections
     Media.tsx                 <img>/<video> wrapper with corner brackets
-    CoverageRadar.tsx         SVG world map used inside IndustriesSection
+    CoverageRadar.tsx         dotted (halftone) coverage map in IndustriesSection
+    coverage-dots.ts          pre-computed halftone dot positions for the map
     BackToTop.tsx             FAB
     WhatsAppFAB.tsx           FAB
   pages/
@@ -85,15 +86,14 @@ src/
     hooks.ts             useReveal / useScrollY / useCountUp
   styles/global.css      design tokens + section styles
 public/
-  favicon.svg            primary favicon
-  favicon-16.png         legacy 16×16
-  favicon-32.png         legacy 32×32
+  favicon-16/32/48.png   favicons, generated from the brand logo
   apple-touch-icon.png   180×180 for iOS homescreen
-  site.webmanifest       PWA-lite metadata
+  favicon-192/512.png    larger icons (PWA / manifest, social)
+  site.webmanifest       icons + theme-color (display: browser → not installable)
   robots.txt             allow-all, points at /sitemap-index.xml
   llms.txt               short site summary for AI agents (llmstxt.org)
   llms-full.txt          full bilingual fact dump for AI agents
-  img/                   bullet thumbnails, catalog covers, service photos, og-image.jpg
+  img/                   logo-mark.png, bullet thumbnails, catalog covers, service photos, og-image.jpg
   images/                process section background
   video/                 hero loop + autoplay clips referenced by Tech bullets
   catalogs/              the 6 catalog PDFs (3 ES + 3 EN)
@@ -151,11 +151,9 @@ Deep-link anchors (`#service-s01..s04`, used by the footer) and the `scroll-marg
 
 ## Contact form
 
-`ContactSection.tsx#submit` validates locally and then opens the user's email client via `mailto:ventas@transfil.com.ar` prefilled with the form fields (subject + body assembled in `submit`). Zero backend required.
+`ContactSection.tsx#submit` validates locally, then `fetch`-POSTs the fields as JSON to `/api/contact` (`src/pages/api/contact.ts`, `prerender = false` → a Vercel serverless function) which sends the email via **Resend** to `ventas@transfil.com.ar` (`from: web@transfil.com.ar`, `replyTo` = the visitor). A hidden `website` honeypot plus server-side validation guard it; the form adds a "Línea de interés" select, sending/success/error states, and pushes a `generate_lead` dataLayer event on a confirmed send. Setup, DNS records and the `RESEND_API_KEY` env var are documented in `docs/contacto-email.md`.
 
 The form is accessibility-correct: `role=alert` on field errors, `aria-required` + `aria-invalid` + `aria-describedby` on each required input, `role=status` + `aria-live="polite"` on the success toast (with a `:empty` CSS rule so it doesn't reserve flex gap when idle), on-blur validation per field, focus-first-invalid on submit.
-
-To upgrade to a real endpoint later (Formspree, Resend, etc.), replace the `window.location.href = href` line.
 
 ## SEO
 
@@ -213,7 +211,7 @@ To upgrade to a real endpoint later (Formspree, Resend, etc.), replace the `wind
 ## Open follow-ups
 
 1. **og-image per locale** — current `og-image.jpg` works for both; could add English overlay text for /en/ shares.
-2. **Contact form backend** — `mailto:` handoff is in place; upgrade to a real endpoint when the client picks one (Formspree, Resend, etc.).
+2. **Contact form ops** — live via the Resend endpoint (`/api/contact`); to actually send, set `RESEND_API_KEY` in Vercel and publish the GTM container. See `docs/contacto-email.md`.
 3. **EN polish of the Applications section** — the Spanish copy was reviewed against SEO targets; the English version is a functional translation that the client should review before that locale is promoted.
 4. **Final imagery review** — bullet photos and service photos are an evolving mix of real shots and AI renders. Replace anything still looking placeholder-y when better assets arrive. All paths live in `src/i18n/content.ts`.
 5. **Tech section hero per-tech cover** — currently the bento's "hero" tile shows the first bullet's image, not the tech's `t.img` cover. The cover photos exist in `content.tech[i].img` but are unused in the current layout. Decide whether to surface them somewhere (e.g., on a future overview state) or remove from the schema.
