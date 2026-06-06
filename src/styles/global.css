@@ -3538,28 +3538,19 @@ p { text-wrap: pretty; }
   opacity: 0.55;
 }
 
-/* Landmasses: faint blue-tinted fill + slightly stronger outline */
-.tf-radar-land path {
-  fill: url(#tf-land-grad);
-  stroke: var(--line-strong);
-  stroke-width: 0.4;
-  stroke-linejoin: round;
-  stroke-linecap: round;
+/* Dotted landmasses (halftone) — faint cool-gray dot field */
+.tf-radar-dots circle {
+  fill: var(--fg-3);
+  fill-opacity: 0.5;
 }
-
-/* Central America connector — narrow stroke that bridges MX and SA */
-.tf-radar-isthmus {
-  fill: none;
-  stroke: var(--line-strong);
-  stroke-width: 0.5;
-  stroke-linecap: round;
+/* Halo behind each served-country marker so it reads above the dot field */
+.tf-radar-dot-halo {
+  fill: var(--accent);
+  opacity: 0.16;
 }
-
-/* Offshore islands */
-.tf-radar-islands ellipse {
-  fill: url(#tf-land-grad);
-  stroke: var(--line-strong);
-  stroke-width: 0.3;
+/* Signal pulse travelling each arc from Córdoba outward */
+.tf-radar-pulse {
+  fill: #cfe0ff;
 }
 
 /* Connector arcs — drawn-in animation + gradient stroke */

@@ -1,3 +1,5 @@
+import { COVERAGE_DOTS } from './coverage-dots';
+
 type Country = {
   code: string;
   label: string;
@@ -29,41 +31,8 @@ const COUNTRIES: Country[] = [
   { code: 'ES', label: 'ESPAÑA',          labelEn: 'SPAIN',         x: 125, y: 10, lx: -3.2, ly: 0.4, anchor: 'end' },
 ];
 
-// Simplified continent silhouettes ---------------------------------------------------
-const SOUTH_AMERICA =
-  'M 58 38 L 62 40 L 66 40 L 71 42 L 75 44 L 78 47 L 80 50 L 88 54 L 95 58 ' +
-  'L 91 64 L 90 70 L 87 73 L 85 74 L 78 80 L 74 84 L 72 88 L 66 89 L 63 95 ' +
-  'L 60 99 L 58 105 L 54 105 L 52 100 L 53 95 L 55 90 L 55 87 L 56 84 ' +
-  'L 58 74 L 58 68 L 52 62 L 49 58 L 48 53 L 47 50 L 49 47 L 51 44 L 50 41 ' +
-  'L 52 41 L 54 39 L 55 38 Z';
-
-const NORTH_AMERICA =
-  'M 5 0 L 63 0 L 60 6 L 55 12 L 53 17 L 50 23 L 48 25 L 45 25 L 40 24 ' +
-  'L 35 24 L 30 19 L 24 18 L 13 18 L 9 9 Z';
-
-const MEXICO =
-  'M 24 18 L 30 19 L 35 24 L 40 26 L 43 30 L 43 33 L 40 35 L 36 35 L 35 33 ' +
-  'L 30 33 L 28 30 L 24 24 L 22 22 Z';
-
-const CENTRAL_AMERICA =
-  'M 38 35 L 41 36 L 44 37 L 47 39 L 50 41';
-
-const IBERIA =
-  'M 119 7 L 127 5 L 130 7 L 130 12 L 128 14 L 121 14 L 118 11 Z';
-
-const N_AFRICA =
-  'M 121 16 L 128 14 L 130 18 L 130 28 L 125 30 L 121 28 L 119 20 Z';
-
-const ISLANDS = [
-  { cx: 52, cy: 29, rx: 3.2, ry: 1.3 },   // Cuba (elongated)
-  { cx: 59.5, cy: 32, rx: 1.7, ry: 0.9 }, // Hispaniola
-  { cx: 63, cy: 32.5, rx: 0.8, ry: 0.5 }, // Puerto Rico
-  { cx: 53, cy: 33, rx: 1.1, ry: 0.5 },   // Jamaica
-];
-
 // Quadratic-bezier arc from (x1,y1) to (x2,y2), curved perpendicular
 // to the chord toward the "outside" of the map (upward, toward smaller y).
-// liftFactor controls how dramatic the arc is.
 function arc(x1: number, y1: number, x2: number, y2: number, liftFactor = 0.22): string {
   const mx = (x1 + x2) / 2;
   const my = (y1 + y2) / 2;
@@ -84,6 +53,13 @@ type Props = { lang: 'es' | 'en' };
 
 export function CoverageRadar({ lang }: Props) {
   const hq = COUNTRIES.find((c) => c.hq)!;
+  // Pre-computed arcs HQ → destination, with a stagger for the draw-in + pulse.
+  const links = COUNTRIES.filter((c) => !c.hq).map((c, i) => ({
+    code: c.code,
+    d: arc(hq.x, hq.y, c.x, c.y, c.code === 'ES' || c.code === 'US' ? 0.26 : 0.18),
+    delay: 0.25 + i * 0.08,
+  }));
+
   return (
     <div className="tf-radar">
       <svg viewBox="0 0 140 105" preserveAspectRatio="xMidYMid meet">
@@ -94,11 +70,6 @@ export function CoverageRadar({ lang }: Props) {
             <stop offset="0.55" stopColor="#3a86ff" stopOpacity="0.55" />
             <stop offset="1" stopColor="#3a86ff" stopOpacity="0.18" />
           </radialGradient>
-          {/* Gradient for landmasses — subtle blue tint, darker at south */}
-          <linearGradient id="tf-land-grad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stopColor="#3a86ff" stopOpacity="0.07" />
-            <stop offset="1" stopColor="#3a86ff" stopOpacity="0.03" />
-          </linearGradient>
           {/* Glow filter for the HQ marker */}
           <filter id="tf-glow" x="-50%" y="-50%" width="200%" height="200%">
             <feGaussianBlur stdDeviation="1.2" result="b" />
@@ -126,37 +97,37 @@ export function CoverageRadar({ lang }: Props) {
           <line x1="0" y1="73.5" x2="140" y2="73.5" strokeDasharray="1 1.2" />
         </g>
 
-        {/* Central America connector (thin line, no fill) */}
-        <path d={CENTRAL_AMERICA} className="tf-radar-isthmus" />
-
-        {/* Landmasses */}
-        <g className="tf-radar-land">
-          <path d={NORTH_AMERICA} />
-          <path d={MEXICO} />
-          <path d={SOUTH_AMERICA} />
-          <path d={IBERIA} />
-          <path d={N_AFRICA} />
-        </g>
-
-        {/* Caribbean islands */}
-        <g className="tf-radar-islands">
-          {ISLANDS.map((i, idx) => (
-            <ellipse key={idx} cx={i.cx} cy={i.cy} rx={i.rx} ry={i.ry} />
+        {/* Landmasses rendered as a halftone dot field (data in coverage-dots.ts) */}
+        <g className="tf-radar-dots">
+          {COVERAGE_DOTS.map(([x, y], i) => (
+            <circle key={i} cx={x} cy={y} r={0.52} />
           ))}
         </g>
 
-        {/* Connector arcs from HQ to every other destination — gradient stroke */}
+        {/* Connector arcs from HQ to every destination — gradient stroke, drawn in */}
         <g className="tf-radar-links" stroke="url(#tf-arc-grad)" fill="none">
-          {COUNTRIES.filter((c) => !c.hq).map((c, i) => {
-            const longHaul = c.code === 'ES' || c.code === 'US';
-            return (
-              <path
-                key={c.code}
-                d={arc(hq.x, hq.y, c.x, c.y, longHaul ? 0.26 : 0.18)}
-                style={{ animationDelay: `${0.25 + i * 0.08}s` }}
+          {links.map((l) => (
+            <path key={l.code} id={`tf-arc-${l.code}`} d={l.d} style={{ animationDelay: `${l.delay}s` }} />
+          ))}
+        </g>
+
+        {/* Signal pulses travelling each arc from Córdoba outward */}
+        <g className="tf-radar-pulses">
+          {links.map((l) => (
+            <circle key={l.code} r={0.55} className="tf-radar-pulse" opacity={0}>
+              <animateMotion dur="3.4s" begin={`${l.delay + 1.4}s`} repeatCount="indefinite">
+                <mpath href={`#tf-arc-${l.code}`} />
+              </animateMotion>
+              <animate
+                attributeName="opacity"
+                values="0;1;1;0"
+                keyTimes="0;0.12;0.82;1"
+                dur="3.4s"
+                begin={`${l.delay + 1.4}s`}
+                repeatCount="indefinite"
               />
-            );
-          })}
+            </circle>
+          ))}
         </g>
 
         {/* Compass rose top-left */}
@@ -168,7 +139,7 @@ export function CoverageRadar({ lang }: Props) {
           <text x="0" y="-6.3" textAnchor="middle">N</text>
         </g>
 
-        {/* Scale bar bottom-left — 1000 km ≈ ~9 viewBox units at this projection */}
+        {/* Scale bar bottom-left */}
         <g className="tf-radar-scale" transform="translate(8 100)">
           <line x1="0" y1="0" x2="18" y2="0" />
           <line x1="0" y1="-1.2" x2="0" y2="1.2" />
@@ -187,6 +158,7 @@ export function CoverageRadar({ lang }: Props) {
                   <circle cx={c.x} cy={c.y} r={5} className="tf-radar-hq-pulse" style={{ animationDelay: '0.5s' }} />
                 </>
               )}
+              {!c.hq && <circle cx={c.x} cy={c.y} r={2} className="tf-radar-dot-halo" />}
               <circle
                 cx={c.x}
                 cy={c.y}
