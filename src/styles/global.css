@@ -715,6 +715,11 @@ button { font-family: inherit; }
 .tf-tech-bento-cover[data-open="true"] .tf-tech-bento-cover-media > * {
   filter: saturate(0.95) contrast(1.02) brightness(0.9);
 }
+/* Per-capability vertical framing so the collapsed cover lands on the subject
+   instead of a generic slice (washing: parts exiting the cabin; metalwork:
+   the welding arc, both near the bottom of their source photo). */
+#tech-washing .tf-tech-bento-cover-media > * { object-position: center 62%; }
+#tech-metalwork .tf-tech-bento-cover-media > * { object-position: center 76%; }
 .tf-tech-bento-cover-overlay {
   position: absolute;
   inset: 0;
