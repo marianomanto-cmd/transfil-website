@@ -61,6 +61,19 @@ export function TechSection({ content }: { content: Content }) {
   const [expandedTech, setExpandedTech] = useState<number | null>(null);
   const [selectedBullets, setSelectedBullets] = useState<number[]>(items.map(() => -1));
 
+  // Desktop accordion: a footer/deep-link to #tech-<id> opens that capability.
+  useEffect(() => {
+    const openFromHash = () => {
+      const m = location.hash.match(/^#tech-(.+)$/);
+      if (!m) return;
+      const idx = items.findIndex((t) => t.id === m[1]);
+      if (idx >= 0) setExpandedTech(idx);
+    };
+    openFromHash();
+    window.addEventListener('hashchange', openFromHash);
+    return () => window.removeEventListener('hashchange', openFromHash);
+  }, [items]);
+
   const toggleTech = (ti: number) => {
     setExpandedTech((prev) => (prev === ti ? null : ti));
   };
@@ -108,39 +121,60 @@ export function TechSection({ content }: { content: Content }) {
               aria-labelledby={`tech-bento-${t.id}`}
               style={{ scrollMarginTop: 'calc(var(--header-h) + 24px)' }}
             >
-              <header className="tf-tech-bento-head">
-                <span className="tf-mono tf-tech-bento-code">{t.code}</span>
-                <h3 className="tf-tech-bento-title" id={`tech-bento-${t.id}`}>
-                  {t.title}
-                </h3>
-                <span className="tf-tech-bento-rule" aria-hidden="true" />
-              </header>
+              {/* Desktop + tablet: collapsed cover (a slice of the cover image
+                  + title). Click toggles the bento reveal below; the deep-link
+                  effect + toggleTech keep only one capability open at a time. */}
+              <div className="tf-tech-bento-cover" data-open={isExpanded}>
+                <button
+                  type="button"
+                  className="tf-tech-bento-cover-toggle"
+                  aria-expanded={isExpanded}
+                  aria-controls={`tech-bento-row-${t.id}`}
+                  aria-labelledby={`tech-bento-${t.id}`}
+                  onClick={() => toggleTech(ti)}
+                />
+                <div className="tf-tech-bento-cover-media" aria-hidden="true">
+                  <TileMedia src={t.img} kind="photo" label={t.title} />
+                </div>
+                <div className="tf-tech-bento-cover-overlay" aria-hidden="true" />
+                <div className="tf-tech-bento-cover-body">
+                  <span className="tf-mono tf-tech-bento-cover-code">{t.code}</span>
+                  <h3 className="tf-tech-bento-cover-title" id={`tech-bento-${t.id}`}>{t.title}</h3>
+                </div>
+                <span className="tf-tech-bento-cover-chev" aria-hidden="true">
+                  <svg viewBox="0 0 16 16" width="15" height="15">
+                    <path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </span>
+              </div>
 
-              {/* Desktop + tablet: 4-tile asymmetric bento */}
-              <div className="tf-tech-bento-row">
-                {t.bullets.map((b, bi) => {
-                  const pos = TILE_POS[bi] ?? 'a';
-                  return (
-                    <article
-                      className="tf-tech-tile"
-                      data-pos={pos}
-                      data-kind={b.kind}
-                      key={b.name}
-                    >
-                      <div className="tf-tech-tile-media" aria-hidden="true">
-                        <TileMedia src={b.img} poster={b.poster} kind={b.kind} label={b.name} />
-                      </div>
-                      <div className="tf-tech-tile-overlay" aria-hidden="true" />
-                      <div className="tf-tech-tile-body">
-                        <span className="tf-mono tf-tech-tile-code">
-                          {t.code} · {String(bi + 1).padStart(2, '0')}
-                        </span>
-                        <h4 className="tf-tech-tile-name">{b.name}</h4>
-                        <p className="tf-tech-tile-desc">{b.desc}</p>
-                      </div>
-                    </article>
-                  );
-                })}
+              {/* Desktop + tablet: 4-tile asymmetric bento, revealed on expand */}
+              <div className="tf-tech-bento-reveal" data-open={isExpanded}>
+                <div className="tf-tech-bento-row" id={`tech-bento-row-${t.id}`}>
+                  {t.bullets.map((b, bi) => {
+                    const pos = TILE_POS[bi] ?? 'a';
+                    return (
+                      <article
+                        className="tf-tech-tile"
+                        data-pos={pos}
+                        data-kind={b.kind}
+                        key={b.name}
+                      >
+                        <div className="tf-tech-tile-media" aria-hidden="true">
+                          <TileMedia src={b.img} poster={b.poster} kind={b.kind} label={b.name} />
+                        </div>
+                        <div className="tf-tech-tile-overlay" aria-hidden="true" />
+                        <div className="tf-tech-tile-body">
+                          <span className="tf-mono tf-tech-tile-code">
+                            {t.code} · {String(bi + 1).padStart(2, '0')}
+                          </span>
+                          <h4 className="tf-tech-tile-name">{b.name}</h4>
+                          <p className="tf-tech-tile-desc">{b.desc}</p>
+                        </div>
+                      </article>
+                    );
+                  })}
+                </div>
               </div>
 
               {/* Mobile only: collapsible accordion */}
