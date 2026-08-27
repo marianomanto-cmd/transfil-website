@@ -69,7 +69,7 @@ const TF_CONTENT = {
           { name: "Filtros de banda", img: "img/hydraulic-station.avif", desc: "Filtración por gravedad con tela de papel o textil. Bajo costo operativo, ideal para refrigerantes solubles en mecanizado.", kind: "photo" },
           { name: "Separadores magnéticos", img: "img/gearbox-detail.avif", desc: "Tambores y barras imantadas que retiran partículas ferrosas finas antes del filtro principal. Aumenta la vida del consumible.", kind: "photo" },
           { name: "Centrales hidráulicas", img: "img/hydraulic-station-2.avif", desc: "Estaciones de bombeo, presurización y temperado del refrigerante para múltiples máquinas en paralelo.", kind: "video" },
-          { name: "Recuperación de aceite", img: "img/conveyor-blue.avif", desc: "Skimmers de banda y separadores coalescentes que retiran el aceite tramposo del refrigerante para reusar el fluido.", kind: "photo" },
+          { name: "Recuperación de aceite", img: "img/conveyor-blue.avif", desc: "Skimmers de banda y separadores coalescentes que retiran el aceite atrapado del refrigerante para reusar el fluido.", kind: "photo" },
         ],
       },
       {

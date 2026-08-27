@@ -191,7 +191,7 @@ export const CONTENT: Record<Lang, Content> = {
           { name: 'Filtros de banda', img: '/img/t02-band-filters.webp', desc: 'Filtración por gravedad con tela de papel o textil. Bajo costo operativo, ideal para refrigerantes solubles en mecanizado. Avance automático de la tela según el nivel del baño y rebobinado del residuo seco para disposición simple.', kind: 'photo' },
           { name: 'Separadores magnéticos', img: '/video/t02-magnetic-separator.mp4', poster: '/img/t02-magnetic-separator-poster.webp', desc: 'Tambores y barras imantadas que retiran partículas ferrosas finas antes del filtro principal, capturando la viruta micrométrica que de otro modo saturaría la tela. Extienden la vida del consumible y reducen la carga sólida que llega al sistema central.', kind: 'video' },
           { name: 'Filtración avanzada', img: '/img/t03-advanced-filtration.webp', desc: 'Estaciones centralizadas de bombeo, presurización y temperado del refrigerante para múltiples máquinas en paralelo. Mantienen caudal y temperatura estables independientemente del consumo individual de cada estación. Monitoreo de presión, conductividad y nivel con alarmas configurables.', kind: 'photo' },
-          { name: 'Recuperación de aceite', img: '/img/t02-oil-recovery.webp', desc: 'Skimmers de banda y separadores coalescentes que retiran el aceite tramposo del refrigerante para reutilizar el fluido. Extienden varias veces la vida útil del refrigerante y bajan el costo de tratamiento de residuos. El aceite recuperado se separa para disposición o reúso.', kind: 'photo' },
+          { name: 'Recuperación de aceite', img: '/img/t02-oil-recovery.webp', desc: 'Skimmers de banda y separadores coalescentes que retiran el aceite atrapado del refrigerante para reutilizar el fluido. Extienden varias veces la vida útil del refrigerante y bajan el costo de tratamiento de residuos. El aceite recuperado se separa para disposición o reúso.', kind: 'photo' },
         ],
       },
       {
@@ -226,7 +226,7 @@ export const CONTENT: Record<Lang, Content> = {
         {
           code: 'A01',
           title: 'Conformado de tubos',
-          problem: 'El lubricante se carga de finos metálicos y aceite tramposo. El fluido degradado lubrica peor y acelera el desgaste de rodillos y matrices; aparecen marcas en la superficie del tubo y aumenta el scrap.',
+          problem: 'El lubricante se carga de finos metálicos y aceite atrapado. El fluido degradado lubrica peor y acelera el desgaste de rodillos y matrices; aparecen marcas en la superficie del tubo y aumenta el scrap.',
           install: 'Filtración centralizada + separación magnética + recuperación de aceite.',
           benefit: 'Protege el herramental de conformado · multiplica la vida del fluido.',
         },
@@ -397,11 +397,11 @@ export const CONTENT: Record<Lang, Content> = {
       },
       {
         q: '¿Por qué se degrada el refrigerante de mecanizado?',
-        a: 'El refrigerante se degrada por la acumulación de finos metálicos, el aceite tramposo que proviene de guías y husillos, y el crecimiento bacteriano. El aceite tramposo es la causa principal: favorece las bacterias, baja el pH y genera olor. Removerlo y filtrar los finos multiplica la vida del fluido.',
+        a: 'El refrigerante se degrada por la acumulación de finos metálicos, el aceite atrapado que proviene de guías y husillos, y el crecimiento bacteriano. El aceite atrapado es la causa principal: favorece las bacterias, baja el pH y genera olor. Removerlo y filtrar los finos multiplica la vida del fluido.',
       },
       {
         q: '¿Cómo se extiende la vida del soluble?',
-        a: 'Con remoción de aceite tramposo (skimmers o separadores coalescentes) y filtración de partículas (filtros de banda y separadores magnéticos). En instalaciones con tratamiento adecuado, la vida del refrigerante suele multiplicarse de 2 a 4 veces, reduciendo el recambio y el costo de disposición de residuos.',
+        a: 'Con remoción de aceite atrapado (skimmers o separadores coalescentes) y filtración de partículas (filtros de banda y separadores magnéticos). En instalaciones con tratamiento adecuado, la vida del refrigerante suele multiplicarse de 2 a 4 veces, reduciendo el recambio y el costo de disposición de residuos.',
       },
       {
         q: '¿Cuándo conviene invertir en filtración de refrigerante?',
