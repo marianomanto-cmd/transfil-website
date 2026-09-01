@@ -7,7 +7,13 @@ type NavItem = { href: string; label: string };
 
 type Props = {
   lang: Lang;
-  content: Content;
+  /**
+   * Only the two branches the header reads. Passing the whole `Content`
+   * would serialise the entire site dictionary into the island's props —
+   * ~30 KB of unrelated copy on every page.
+   */
+  nav: Content['nav'];
+  langSwitch: Content['langSwitch'];
   /**
    * Which routable page this header sits on. The language switcher jumps to
    * the same page in the target locale (home ↔ home, landing ↔ landing) and
@@ -23,9 +29,9 @@ type Props = {
   cta?: { href: string; label: string };
 };
 
-function LangSwitch({ lang, content, page, className }: {
+function LangSwitch({ lang, labels, page, className }: {
   lang: Lang;
-  content: Content;
+  labels: Content['langSwitch'];
   page: PageKey;
   className?: string;
 }) {
@@ -35,7 +41,7 @@ function LangSwitch({ lang, content, page, className }: {
         <Fragment key={l}>
           {i > 0 && <span aria-hidden="true">/</span>}
           <a data-on={lang === l} href={pathFor(page, l)} hrefLang={LOCALE_META[l].hreflang}>
-            {content.langSwitch[l]}
+            {labels[l]}
           </a>
         </Fragment>
       ))}
@@ -43,7 +49,7 @@ function LangSwitch({ lang, content, page, className }: {
   );
 }
 
-export function Header({ lang, content, page = 'home', navItems, cta }: Props) {
+export function Header({ lang, nav, langSwitch, page = 'home', navItems, cta }: Props) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -119,15 +125,15 @@ export function Header({ lang, content, page = 'home', navItems, cta }: Props) {
 
   const items: NavItem[] =
     navItems ?? [
-      { href: '#tech', label: content.nav.tech },
-      { href: '#applications', label: content.nav.applications },
-      { href: '#catalogs', label: content.nav.catalogs },
-      { href: '#services', label: content.nav.services },
-      { href: '#industries', label: content.nav.industries },
-      { href: '#history', label: content.nav.history },
-      { href: '#contact', label: content.nav.contact },
+      { href: '#tech', label: nav.tech },
+      { href: '#applications', label: nav.applications },
+      { href: '#catalogs', label: nav.catalogs },
+      { href: '#services', label: nav.services },
+      { href: '#industries', label: nav.industries },
+      { href: '#history', label: nav.history },
+      { href: '#contact', label: nav.contact },
     ];
-  const headerCta = cta ?? { href: '#contact', label: content.nav.contact };
+  const headerCta = cta ?? { href: '#contact', label: nav.contact };
 
   const onNav = (e: React.MouseEvent, href: string) => {
     e.preventDefault();
@@ -164,7 +170,7 @@ export function Header({ lang, content, page = 'home', navItems, cta }: Props) {
           })}
         </nav>
         <div className="tf-header-aside">
-          <LangSwitch lang={lang} content={content} page={page} />
+          <LangSwitch lang={lang} labels={langSwitch} page={page} />
           <a href={headerCta.href} className="tf-cta-mini" onClick={(e) => onNav(e, headerCta.href)}>
             <span>{headerCta.label}</span>
             <svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true">
@@ -200,7 +206,7 @@ export function Header({ lang, content, page = 'home', navItems, cta }: Props) {
           </a>
         ))}
         <div className="tf-mobile-nav-foot">
-          <LangSwitch lang={lang} content={content} page={page} className="tf-mobile-lang" />
+          <LangSwitch lang={lang} labels={langSwitch} page={page} className="tf-mobile-lang" />
           <a href={headerCta.href} className="tf-mobile-cta" onClick={(e) => onNav(e, headerCta.href)}>
             <span>{headerCta.label}</span>
             <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">

@@ -16,10 +16,21 @@ export default defineConfig({
         defaultLocale: 'es',
         locales: { es: 'es-AR', en: 'en-US', pt: 'pt-BR' },
       },
-      // Stamp every entry with build time so search engines can prioritise
-      // re-crawling when the site changes.
+      // The sitemap has to agree with the canonical each page emits, and
+      // canonicals come from `src/i18n/routes.ts`: locale roots keep their
+      // trailing slash (`/`, `/en/`, `/pt/`), landings don't (`/conformado`).
+      // Also stamps build time so crawlers know when to come back.
       serialize(item) {
-        return { ...item, lastmod: new Date().toISOString() };
+        const canonical = (url) => {
+          const { pathname } = new URL(url);
+          return /^\/(en\/|pt\/)?$/.test(pathname) ? url : url.replace(/\/$/, '');
+        };
+        return {
+          ...item,
+          url: canonical(item.url),
+          links: item.links?.map((l) => ({ ...l, url: canonical(l.url) })),
+          lastmod: new Date().toISOString(),
+        };
       },
     }),
   ],

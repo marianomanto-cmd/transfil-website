@@ -1,0 +1,705 @@
+---
+// Campaign landing layout — the shape every application landing reuses.
+//
+// Order is deliberate and is the pattern to repeat (see docs/LANDINGS.md):
+//   symptom → system → why us → proof → form/WhatsApp → FAQ → closing
+//
+// Everything textual comes from `src/i18n/landings.ts`; this file only
+// arranges it. To add /lavado, /transporte or /hornos, add the dict entry
+// and three thin pages — no changes here.
+import Base from './Base.astro';
+import { TF_CLIENTS, type Content, type Lang } from '../i18n/content';
+import type { LandingContent } from '../i18n/landings';
+import { SITE, pathFor, urlFor } from '../i18n/routes';
+import { Header } from '../components/Header';
+import { ContactSection } from '../components/ContactSection';
+import Footer from '../components/Footer.astro';
+import { WhatsAppFAB } from '../components/WhatsAppFAB';
+import { BackToTop } from '../components/BackToTop';
+
+interface Props {
+  lang: Lang;
+  content: Content;
+  landing: LandingContent;
+}
+
+const { lang, content, landing: l } = Astro.props;
+
+const canonical = urlFor(l.page, lang);
+const waHref = `https://wa.me/5493513820321?text=${encodeURIComponent(l.whatsapp)}`;
+
+// Names already published on the home — no invented references, no logos.
+const proofNames = [...TF_CLIENTS.steel, ...TF_CLIENTS.auto.slice(0, 6)];
+
+// This page's own graph. The Organization + Service (S01–S04) nodes come
+// from Base; the FAQPage is built there from the `faq` prop below.
+const webPageJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  '@id': `${canonical}#webpage`,
+  url: canonical,
+  name: l.meta.title,
+  description: l.meta.description,
+  inLanguage: content.htmlLang,
+  isPartOf: {
+    '@type': 'WebSite',
+    '@id': `${SITE}/#website`,
+    url: `${SITE}/`,
+    name: 'Trans-Fil',
+  },
+  about: { '@id': `${canonical}#service` },
+  breadcrumb: { '@id': `${canonical}#breadcrumb` },
+  primaryImageOfPage: `${SITE}/img/t03-fluids-cover.webp`,
+  provider: { '@id': `${SITE}/#organization` },
+};
+
+const serviceJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  '@id': `${canonical}#service`,
+  url: canonical,
+  name: l.service.name,
+  description: l.service.description,
+  serviceType: l.service.serviceType,
+  category: 'Industrial fluid filtration',
+  inLanguage: content.htmlLang,
+  provider: { '@id': `${SITE}/#organization` },
+  areaServed: { '@id': `${SITE}/#organization` },
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: l.system.title,
+    itemListElement: l.system.blocks.map((b) => ({
+      '@type': 'Offer',
+      itemOffered: {
+        '@type': 'Product',
+        name: b.title,
+        description: b.desc,
+        manufacturer: { '@id': `${SITE}/#organization` },
+      },
+    })),
+  },
+};
+
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  '@id': `${canonical}#breadcrumb`,
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: content.nav.home,
+      item: `${SITE}${pathFor('home', lang)}`,
+    },
+    { '@type': 'ListItem', position: 2, name: l.breadcrumb, item: canonical },
+  ],
+};
+
+// Feeds the visually-hidden, crawler-readable block in <body>.
+const about = `${l.problem.symptom} ${l.problem.solution} ${l.problem.benefit} ${l.closing}`;
+
+const navItems = [
+  { href: '#sistema', label: l.nav.system },
+  { href: '#por-que', label: l.nav.why },
+  { href: '#faq', label: l.nav.faq },
+];
+---
+<Base
+  lang={lang}
+  content={content}
+  page={l.page}
+  meta={l.meta}
+  ogImage={{ src: '/img/t03-fluids-cover.webp', width: 1800, height: 900 }}
+  faq={l.faq.items}
+  about={about}
+  extraJsonLd={[webPageJsonLd, serviceJsonLd, breadcrumbJsonLd]}
+>
+  <Header
+    lang={lang}
+    nav={content.nav}
+    langSwitch={content.langSwitch}
+    page={l.page}
+    navItems={navItems}
+    cta={{ href: '#contacto', label: l.nav.contact }}
+    client:load
+  />
+
+  <main id="main" class="tf-lp" data-page={l.event} data-locale={lang}>
+    <!-- ── Above the fold: the symptom, not the company ─────────── -->
+    <section class="tf-lp-hero">
+      <div class="tf-lp-hero-bg" aria-hidden="true">
+        <img
+          src="/img/t03-fluids-cover.webp"
+          alt=""
+          width="1800"
+          height="900"
+          fetchpriority="high"
+          decoding="async"
+        />
+      </div>
+      <div class="tf-lp-hero-body">
+        <span class="tf-mono tf-lp-eyebrow">{l.hero.eyebrow}</span>
+        <h1 class="tf-lp-h1">{l.hero.h1}</h1>
+        <p class="tf-lp-sub">{l.hero.sub}</p>
+        <div class="tf-lp-ctas">
+          <a href="#contacto" class="tf-btn tf-btn-primary tf-btn-lg" data-cta="relevamiento">
+            <span>{l.hero.ctaPrimary}</span>
+            <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+              <path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" />
+            </svg>
+          </a>
+          <a
+            href={waHref}
+            class="tf-btn tf-btn-ghost tf-btn-lg"
+            target="_blank"
+            rel="noopener noreferrer"
+            data-cta="whatsapp"
+          >
+            <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true">
+              <path d="M2 14 3 11 A6 6 0 1 1 5.3 13L2 14Z" fill="none" stroke="currentColor" stroke-width="1.3" />
+            </svg>
+            <span>{l.hero.ctaSecondary}</span>
+          </a>
+        </div>
+
+        <dl class="tf-lp-numbers">
+          {l.numbers.items.map((n, i) => (
+            <div class="tf-lp-number">
+              <dt class="tf-mono">{`0${i + 1}`}</dt>
+              <dd>
+                <span class="tf-lp-number-v">{n.v}</span>
+                <span class="tf-lp-number-l">{n.l}</span>
+              </dd>
+            </div>
+          ))}
+        </dl>
+        <p class="tf-lp-numbers-note">{l.numbers.note}</p>
+      </div>
+    </section>
+
+    <!-- ── 01 The problem (A01 from the home, expanded) ──────────── -->
+    <section id="problema" class="tf-section">
+      <header class="tf-section-head" data-num="01">
+        <div class="tf-eyebrow">{l.problem.eyebrow}</div>
+        <h2 class="tf-h2">{l.problem.title}</h2>
+      </header>
+      <div class="tf-lp-problem">
+        <div class="tf-lp-problem-block">
+          <span class="tf-mono tf-lp-label">{content.ui.symptom}</span>
+          <p>{l.problem.symptom}</p>
+        </div>
+        <div class="tf-lp-problem-block">
+          <span class="tf-mono tf-lp-label">{content.ui.solution}</span>
+          <p>{l.problem.solution}</p>
+        </div>
+        <div class="tf-lp-problem-block is-benefit">
+          <span class="tf-mono tf-lp-label" data-kind="benefit">{content.ui.benefit}</span>
+          <p>{l.problem.benefit}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 02 The system: three stages + the central station ─────── -->
+    <section id="sistema" class="tf-section is-dark">
+      <header class="tf-section-head" data-num="02">
+        <div class="tf-eyebrow">{l.system.eyebrow}</div>
+        <h2 class="tf-h2">{l.system.title}</h2>
+        <p class="tf-section-sub">{l.system.intro}</p>
+      </header>
+      <div class="tf-lp-stages">
+        {l.system.blocks.map((b) => (
+          <article class="tf-lp-stage">
+            <figure class="tf-lp-stage-media">
+              {b.media.kind === 'video' ? (
+                /* src is attached by the script below once the tile scrolls
+                   into view — a paid landing shouldn't pull 1.4 MB of H.264
+                   before the fold is even read. The poster carries the frame
+                   until then. */
+                <video
+                  data-src={b.media.src}
+                  poster={b.media.poster}
+                  width="1280"
+                  height="720"
+                  muted
+                  loop
+                  playsinline
+                  preload="none"
+                  aria-label={b.media.alt}
+                />
+              ) : (
+                <img
+                  src={b.media.src}
+                  alt={b.media.alt}
+                  width="1200"
+                  height="800"
+                  loading="lazy"
+                  decoding="async"
+                />
+              )}
+              <figcaption class="tf-mono">{b.code}</figcaption>
+            </figure>
+            <div class="tf-lp-stage-body">
+              <h3 class="tf-lp-stage-title">{b.title}</h3>
+              <p>{b.desc}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <!-- ── 03 Why here ───────────────────────────────────────────── -->
+    <section id="por-que" class="tf-section">
+      <header class="tf-section-head" data-num="03">
+        <div class="tf-eyebrow">{l.why.eyebrow}</div>
+        <h2 class="tf-h2">{l.why.title}</h2>
+      </header>
+      <ul class="tf-lp-why">
+        {l.why.items.map((it, i) => (
+          <li class="tf-lp-why-item">
+            <span class="tf-mono tf-lp-why-num">{`0${i + 1}`}</span>
+            <strong>{it.t}</strong>
+            <p>{it.d}</p>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <!-- ── 04 Proof: names already public on the home ────────────── -->
+    <section id="antecedentes" class="tf-section is-dark">
+      <header class="tf-section-head" data-num="04">
+        <div class="tf-eyebrow">{l.proof.eyebrow}</div>
+        <h2 class="tf-h2">{l.proof.title}</h2>
+        <p class="tf-section-sub">{l.proof.sub}</p>
+      </header>
+      <ul class="tf-lp-proof">
+        {proofNames.map((n) => <li class="tf-mono">{n}</li>)}
+      </ul>
+    </section>
+
+    <!-- ── 05 Form + WhatsApp ────────────────────────────────────── -->
+    <ContactSection
+      contact={content.contact}
+      lang={content.lang}
+      whatsappMessage={content.whatsappMessage}
+      workshopActive={content.workshopActive}
+      id="contacto"
+      page={l.event}
+      defaultLinea={l.form.defaultLinea}
+      lineType={{ label: l.form.lineTypeLabel, options: l.form.lineTypeOpts }}
+      heading={{ eyebrow: l.form.eyebrow, title: l.form.title, sub: l.form.sub }}
+      success={{ title: l.form.successTitle, body: l.form.successBody, waCta: l.form.successWa }}
+      waPrompt={{ text: l.form.waPrompt, cta: l.form.waCta }}
+      waMessage={l.whatsapp}
+      client:load
+    />
+
+    <!-- ── 06 FAQ (its own FAQPage schema, built in Base) ────────── -->
+    <section id="faq" class="tf-section">
+      <header class="tf-section-head" data-num="06">
+        <div class="tf-eyebrow">{l.faq.eyebrow}</div>
+        <h2 class="tf-h2">{l.faq.title}</h2>
+      </header>
+      <div class="tf-lp-faq">
+        {l.faq.items.map((f) => (
+          <details class="tf-lp-faq-item">
+            <summary>
+              <span>{f.q}</span>
+              <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+                <path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </summary>
+            <p>{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <!-- ── Closing line ──────────────────────────────────────────── -->
+    <section class="tf-lp-closing">
+      <p>{l.closing}</p>
+      <a href="#contacto" class="tf-btn tf-btn-primary tf-btn-lg" data-cta="relevamiento">
+        <span>{l.hero.ctaPrimary}</span>
+        <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+          <path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" />
+        </svg>
+      </a>
+    </section>
+  </main>
+
+  <Footer content={content} lang={lang} page={l.page} />
+  <WhatsAppFAB message={l.whatsapp} dataCta="whatsapp" client:idle />
+  <BackToTop label={content.backToTop} client:idle />
+</Base>
+
+<script>
+  // `whatsapp_click` for GTM/GA4 — landing-scoped, with the page + locale
+  // that GTM needs to separate paid-campaign leads from site-wide WhatsApp
+  // clicks (the layout's global `click_whatsapp` still fires for those).
+  // One delegated listener so React-rendered anchors are covered too.
+  function initLandingEvents() {
+    const root = document.querySelector<HTMLElement>('.tf-lp');
+    if (!root || root.dataset.eventsBound === '1') return;
+    root.dataset.eventsBound = '1';
+    const page = root.dataset.page || '';
+    const locale = root.dataset.locale || '';
+    document.addEventListener(
+      'click',
+      (e) => {
+        const target = e.target as HTMLElement | null;
+        const a = target?.closest?.('[data-cta="whatsapp"]');
+        if (!a) return;
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          event: 'whatsapp_click',
+          page,
+          locale,
+          lead_type: 'whatsapp',
+        });
+      },
+      true
+    );
+  }
+
+  // Stage videos: fetch and play only while the tile is on screen. Same
+  // trade-off the home makes — no GPU decode or bandwidth spent off-view.
+  function initStageVideos() {
+    const videos = document.querySelectorAll<HTMLVideoElement>('.tf-lp-stage-media video[data-src]');
+    if (!videos.length) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          const v = entry.target as HTMLVideoElement;
+          if (entry.isIntersecting) {
+            if (!v.src && v.dataset.src) v.src = v.dataset.src;
+            v.play().catch(() => {});
+          } else {
+            v.pause();
+          }
+        }
+      },
+      { threshold: 0.4 }
+    );
+    videos.forEach((v) => io.observe(v));
+  }
+
+  document.addEventListener('astro:page-load', () => {
+    initLandingEvents();
+    initStageVideos();
+  });
+</script>
+
+<style>
+  /* ── Hero: symptom first, company nowhere ────────────────────── */
+  .tf-lp-hero {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding: calc(var(--header-h) + clamp(56px, 8vw, 120px)) var(--pad-x) clamp(48px, 6vw, 88px);
+    border-bottom: 1px solid var(--line);
+  }
+  .tf-lp-hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+  .tf-lp-hero-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 40%;
+    opacity: 0.28;
+    filter: grayscale(0.35) contrast(1.05);
+  }
+  .tf-lp-hero-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(100deg, var(--bg) 22%, rgba(14, 14, 16, 0.86) 55%, rgba(14, 14, 16, 0.7) 100%),
+      radial-gradient(900px 500px at 15% 0%, rgba(58, 134, 255, 0.1), transparent 65%);
+  }
+  .tf-lp-hero-body {
+    max-width: var(--maxw);
+    margin: 0 auto;
+  }
+  .tf-lp-eyebrow {
+    color: var(--accent);
+    display: block;
+    margin-bottom: 20px;
+  }
+  .tf-lp-h1 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(34px, 5.4vw, 76px);
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+    margin: 0;
+    max-width: 18ch;
+    text-wrap: balance;
+  }
+  .tf-lp-sub {
+    font-size: clamp(15px, 1.25vw, 19px);
+    line-height: 1.55;
+    color: var(--fg-2);
+    max-width: 60ch;
+    margin: 24px 0 0;
+  }
+  .tf-lp-ctas {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 32px;
+  }
+
+  /* Three numbers, with the "measured on site" caveat right under them. */
+  .tf-lp-numbers {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+    margin: clamp(40px, 5vw, 64px) 0 0;
+    max-width: 900px;
+    border-top: 1px solid var(--line);
+  }
+  .tf-lp-number {
+    padding: 24px 24px 0 0;
+    border-right: 1px solid var(--line);
+  }
+  .tf-lp-number:last-child { border-right: 0; }
+  .tf-lp-number dt { color: var(--fg-4); margin-bottom: 12px; }
+  .tf-lp-number dd { margin: 0; display: flex; flex-direction: column; gap: 6px; }
+  .tf-lp-number-v {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(28px, 3.4vw, 46px);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums slashed-zero;
+  }
+  .tf-lp-number-l {
+    font-size: 13px;
+    line-height: 1.4;
+    color: var(--fg-3);
+    max-width: 22ch;
+  }
+  .tf-lp-numbers-note {
+    margin: 18px 0 0;
+    font-size: 12.5px;
+    font-style: italic;
+    color: var(--fg-4);
+    max-width: 70ch;
+  }
+
+  /* ── 01 Problem ──────────────────────────────────────────────── */
+  .tf-lp-problem {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+  }
+  .tf-lp-problem-block {
+    background: var(--bg-2);
+    padding: clamp(24px, 2.6vw, 36px);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .tf-lp-problem-block.is-benefit {
+    border-left: 2px solid var(--accent);
+    background: var(--accent-soft);
+  }
+  .tf-lp-problem-block p {
+    margin: 0;
+    font-size: 14.5px;
+    line-height: 1.65;
+    color: var(--fg-2);
+  }
+  .tf-lp-problem-block.is-benefit p { color: var(--fg); }
+  .tf-lp-label { color: var(--fg-3); font-size: 10.5px; letter-spacing: 0.12em; }
+  .tf-lp-label[data-kind='benefit'] { color: var(--accent); }
+
+  /* ── 02 System stages ────────────────────────────────────────── */
+  .tf-lp-stages {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+  }
+  .tf-lp-stage {
+    border: 1px solid var(--line);
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    transition: border-color 0.25s;
+  }
+  .tf-lp-stage:hover { border-color: var(--line-strong); }
+  .tf-lp-stage-media {
+    position: relative;
+    margin: 0;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--bg-3);
+  }
+  .tf-lp-stage-media img,
+  .tf-lp-stage-media video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .tf-lp-stage-media figcaption {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    padding: 4px 8px;
+    background: rgba(14, 14, 16, 0.78);
+    border: 1px solid var(--line-strong);
+    color: var(--accent);
+  }
+  .tf-lp-stage-body {
+    padding: clamp(20px, 2.2vw, 30px);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .tf-lp-stage-title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(18px, 1.5vw, 22px);
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+  .tf-lp-stage-body p {
+    margin: 0;
+    font-size: 14.5px;
+    line-height: 1.65;
+    color: var(--fg-2);
+  }
+
+  /* ── 03 Why here ─────────────────────────────────────────────── */
+  .tf-lp-why {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .tf-lp-why-item {
+    background: var(--bg);
+    padding: clamp(22px, 2.4vw, 32px);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .tf-lp-why-num { color: var(--accent); }
+  .tf-lp-why-item strong {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 17px;
+    letter-spacing: -0.01em;
+  }
+  .tf-lp-why-item p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--fg-2);
+  }
+
+  /* ── 04 Proof — names only, no logos ─────────────────────────── */
+  .tf-lp-proof {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .tf-lp-proof li {
+    padding: 10px 16px;
+    border: 1px solid var(--line);
+    color: var(--fg-2);
+    font-size: 11.5px;
+  }
+
+  /* ── 06 FAQ ──────────────────────────────────────────────────── */
+  .tf-lp-faq {
+    max-width: 860px;
+    border-top: 1px solid var(--line);
+  }
+  .tf-lp-faq-item {
+    border-bottom: 1px solid var(--line);
+  }
+  .tf-lp-faq-item summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 20px 0;
+    cursor: pointer;
+    list-style: none;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(16px, 1.3vw, 19px);
+    letter-spacing: -0.01em;
+    touch-action: manipulation;
+  }
+  .tf-lp-faq-item summary::-webkit-details-marker { display: none; }
+  .tf-lp-faq-item summary:hover { color: var(--accent); }
+  .tf-lp-faq-item summary svg {
+    flex: none;
+    color: var(--fg-3);
+    transition: transform 0.2s;
+  }
+  .tf-lp-faq-item[open] summary svg { transform: rotate(180deg); }
+  .tf-lp-faq-item p {
+    margin: 0;
+    padding: 0 40px 24px 0;
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--fg-2);
+    max-width: 70ch;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tf-lp-faq-item summary svg { transition: none; }
+  }
+
+  /* ── Closing ─────────────────────────────────────────────────── */
+  .tf-lp-closing {
+    padding: clamp(56px, 7vw, 104px) var(--pad-x);
+    border-top: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 28px;
+    max-width: var(--maxw);
+    margin: 0 auto;
+  }
+  .tf-lp-closing p {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(22px, 2.6vw, 38px);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    max-width: 24ch;
+    text-wrap: balance;
+  }
+
+  /* ── Responsive ──────────────────────────────────────────────── */
+  @media (max-width: 1080px) {
+    .tf-lp-problem { grid-template-columns: 1fr; }
+    .tf-lp-why { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 720px) {
+    .tf-lp-stages { grid-template-columns: 1fr; }
+    .tf-lp-why { grid-template-columns: 1fr; }
+    .tf-lp-numbers { grid-template-columns: 1fr; border-top: 0; }
+    .tf-lp-number {
+      border-right: 0;
+      border-top: 1px solid var(--line);
+      padding: 20px 0 0;
+    }
+    .tf-lp-number-l { max-width: none; }
+    .tf-lp-ctas .tf-btn { flex: 1 1 100%; justify-content: center; }
+  }
+</style>

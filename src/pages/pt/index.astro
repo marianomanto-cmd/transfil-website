@@ -18,7 +18,7 @@ import { BackToTop } from '../../components/BackToTop';
 const content = CONTENT.pt;
 ---
 <Base lang="pt" content={content} page="home">
-  <Header lang="pt" content={content} client:load />
+  <Header lang="pt" nav={content.nav} langSwitch={content.langSwitch} client:load />
   <main id="main">
     <Hero content={content} client:load />
     <TechSection content={content} client:visible />
@@ -28,7 +28,13 @@ const content = CONTENT.pt;
     <ServicesSection content={content} />
     <IndustriesSection content={content} client:visible />
     <HistorySection content={content} />
-    <ContactSection content={content} client:visible />
+    <ContactSection
+      contact={content.contact}
+      lang={content.lang}
+      whatsappMessage={content.whatsappMessage}
+      workshopActive={content.workshopActive}
+      client:visible
+    />
   </main>
   <Footer content={content} lang="pt" />
   <WhatsAppFAB message={content.whatsappMessage} client:idle />

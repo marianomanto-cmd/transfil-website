@@ -2313,6 +2313,64 @@ button { font-family: inherit; }
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
+
+/* Landing-only: success panel (replaces the inline toast) and the
+   "prefer WhatsApp?" fallback under the form. Rendered by ContactSection,
+   so they can't live in the landing layout's scoped styles. */
+.tf-form-success {
+  margin-top: 24px;
+  padding: 22px 24px;
+  border: 1px solid var(--accent);
+  background: var(--accent-soft);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+.tf-form-success strong {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 18px;
+  letter-spacing: -0.01em;
+}
+.tf-form-success p {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--fg-2);
+  max-width: 56ch;
+}
+.tf-form-success .tf-btn { margin-top: 4px; }
+
+.tf-form-wa {
+  margin-top: 22px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  font-size: 14px;
+  color: var(--fg-3);
+}
+.tf-form-wa-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid var(--line-strong);
+  color: var(--fg);
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 500;
+  touch-action: manipulation;
+  transition: border-color 0.2s, background 0.2s;
+}
+.tf-form-wa-cta:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
 .tf-form-err:empty { display: none; }
 
 .tf-contact-side {

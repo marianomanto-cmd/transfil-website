@@ -4,9 +4,11 @@ import { cx } from '../lib/cx';
 type Props = {
   phone?: string;
   message: string;
+  /** Set on campaign landings so the delegated `whatsapp_click` picks it up. */
+  dataCta?: string;
 };
 
-export function WhatsAppFAB({ phone = '5493513820321', message }: Props) {
+export function WhatsAppFAB({ phone = '5493513820321', message, dataCta }: Props) {
   const [show, setShow] = useState(false);
   useEffect(() => {
     const onScroll = () => setShow(window.scrollY > 120);
@@ -22,6 +24,7 @@ export function WhatsAppFAB({ phone = '5493513820321', message }: Props) {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="WhatsApp"
+      data-cta={dataCta}
     >
       <svg viewBox="0 0 32 32" width="26" height="26" aria-hidden="true">
         <path

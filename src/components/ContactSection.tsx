@@ -33,17 +33,81 @@ function Field({
 
 type FormState = {
   name: string; company: string; email: string; phone: string;
-  industry: string; linea: string; message: string;
+  industry: string; linea: string; lineType: string; message: string;
   website: string; // honeypot — must stay empty for real visitors
 };
 
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
-export function ContactSection({ content }: { content: Content }) {
-  const c = content.contact;
+/** UTM / click-id params worth forwarding to the sales inbox. */
+const TRACKED_PARAMS = [
+  'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content',
+  'gclid', 'gbraid', 'wbraid', 'fbclid', 'li_fat_id',
+];
+
+const readTrackedParams = (): Record<string, string> => {
+  if (typeof window === 'undefined') return {};
+  const q = new URLSearchParams(window.location.search);
+  const out: Record<string, string> = {};
+  for (const k of TRACKED_PARAMS) {
+    const v = q.get(k);
+    if (v) out[k] = v.slice(0, 200);
+  }
+  return out;
+};
+
+type Props = {
+  /**
+   * Only the branches the form reads. Passing the whole `Content` would
+   * serialise the entire site dictionary into the island's props — ~30 KB
+   * of unrelated copy on every page.
+   */
+  contact: Content['contact'];
+  lang: Content['lang'];
+  whatsappMessage: string;
+  workshopActive: string;
+  /** Section id — campaign landings anchor on `contacto`. */
+  id?: string;
+  /**
+   * Landing key. Present only on campaign landings; it goes into the email
+   * subject (`[Conformado][es] …`) and into the `generate_lead` event, and
+   * is what tells the section to render its landing variant.
+   */
+  page?: string;
+  /** Pre-selected "Línea de interés" (must be one of `lineaOpts`). */
+  defaultLinea?: string;
+  /** Extra select rendered on landings only. */
+  lineType?: { label: string; options: string[] };
+  /** Section header override. Falls back to the home's contact copy. */
+  heading?: { eyebrow: string; title: string; sub: string };
+  /** Richer success panel, with a WhatsApp fallback. */
+  success?: { title: string; body: string; waCta: string };
+  /** "¿Preferís WhatsApp?" block under the form. */
+  waPrompt?: { text: string; cta: string };
+  /** WhatsApp prefill for this page. Defaults to the site-wide message. */
+  waMessage?: string;
+};
+
+export function ContactSection({
+  contact: c,
+  lang,
+  whatsappMessage,
+  workshopActive,
+  id = 'contact',
+  page,
+  defaultLinea,
+  lineType,
+  heading,
+  success,
+  waPrompt,
+  waMessage,
+}: Props) {
+  const initialLinea = defaultLinea ?? c.form.lineaOpts[0];
+  const waHref = `https://wa.me/5493513820321?text=${encodeURIComponent(waMessage ?? whatsappMessage)}`;
   const [data, setData] = useState<FormState>({
     name: '', company: '', email: '', phone: '',
-    industry: c.form.industryOpts[0], linea: c.form.lineaOpts[0], message: '',
+    industry: c.form.industryOpts[0], linea: initialLinea,
+    lineType: lineType?.options[0] ?? '', message: '',
     website: '',
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -57,8 +121,13 @@ export function ContactSection({ content }: { content: Content }) {
   const messageRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
-    setData((d) => ({ ...d, industry: c.form.industryOpts[0], linea: c.form.lineaOpts[0] }));
-  }, [content]);
+    setData((d) => ({
+      ...d,
+      industry: c.form.industryOpts[0],
+      linea: initialLinea,
+      lineType: lineType?.options[0] ?? '',
+    }));
+  }, [c]);
 
   const set = (k: keyof FormState) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
     setData((d) => ({ ...d, [k]: e.target.value }));
@@ -105,6 +174,11 @@ export function ContactSection({ content }: { content: Content }) {
           linea: data.linea,
           mensaje: data.message,
           website: data.website, // honeypot
+          // Landing-only context. Absent on the home, where the endpoint
+          // keeps its original subject and body.
+          ...(page ? { page, locale: lang } : {}),
+          ...(data.lineType ? { tipoLinea: data.lineType } : {}),
+          utm: readTrackedParams(),
         }),
       });
       const payload = res.ok ? await res.json().catch(() => null) : null;
@@ -116,13 +190,20 @@ export function ContactSection({ content }: { content: Content }) {
       // Conversion event for GTM/GA4 — fired only on a confirmed send, before
       // the fields are cleared.
       window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({ event: 'generate_lead', linea: data.linea || 'general' });
+      window.dataLayer.push(
+        page
+          ? { event: 'generate_lead', page, locale: lang, lead_type: 'form' }
+          : { event: 'generate_lead', linea: data.linea || 'general' },
+      );
 
       setSent(true);
-      setTimeout(() => setSent(false), 5000);
+      // The landing keeps its success panel up (it replaces the form CTA);
+      // the home's inline toast still auto-clears.
+      if (!success) setTimeout(() => setSent(false), 5000);
       setData({
         name: '', company: '', email: '', phone: '',
-        industry: c.form.industryOpts[0], linea: c.form.lineaOpts[0], message: '',
+        industry: c.form.industryOpts[0], linea: initialLinea,
+        lineType: lineType?.options[0] ?? '', message: '',
         website: '',
       });
     } catch {
@@ -140,15 +221,15 @@ export function ContactSection({ content }: { content: Content }) {
 
   return (
     <section
-      id="contact"
+      id={id}
       ref={sectionRef as React.RefObject<HTMLElement>}
       className={cx('tf-section', 'is-dark', vis && 'is-visible')}
       data-screen-label="08 Contact"
     >
-      <header className="tf-section-head" data-num="08">
-        <div className="tf-eyebrow">{c.eyebrow}</div>
-        <h2 className="tf-h2">{c.title}</h2>
-        <p className="tf-section-sub">{c.sub}</p>
+      <header className="tf-section-head" data-num={heading ? undefined : '08'}>
+        <div className="tf-eyebrow">{heading?.eyebrow ?? c.eyebrow}</div>
+        <h2 className="tf-h2">{heading?.title ?? c.title}</h2>
+        <p className="tf-section-sub">{heading?.sub ?? c.sub}</p>
       </header>
       <div className="tf-contact">
         <form className="tf-form" onSubmit={submit} noValidate>
@@ -219,6 +300,15 @@ export function ContactSection({ content }: { content: Content }) {
                 ))}
               </select>
             </Field>
+            {lineType && (
+              <Field label={lineType.label} full htmlFor="tf-line-type">
+                <select id="tf-line-type" value={data.lineType} onChange={set('lineType')}>
+                  {lineType.options.map((o) => (
+                    <option key={o} value={o}>{o}</option>
+                  ))}
+                </select>
+              </Field>
+            )}
             <Field label={c.form.message} err={errors.message} full req htmlFor="tf-message">
               <textarea
                 id="tf-message"
@@ -239,6 +329,7 @@ export function ContactSection({ content }: { content: Content }) {
               className="tf-btn tf-btn-primary tf-btn-lg"
               disabled={sending}
               aria-busy={sending}
+              data-cta={page ? 'relevamiento' : undefined}
             >
               <span>{sending ? c.form.sending : c.form.send}</span>
               <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
@@ -246,12 +337,46 @@ export function ContactSection({ content }: { content: Content }) {
               </svg>
             </button>
             <span className="tf-form-sent" role="status" aria-live="polite">
-              {sent ? `✓ ${c.form.sent}` : ''}
+              {sent && !success ? `✓ ${c.form.sent}` : ''}
             </span>
             <span className="tf-form-err" role="alert" aria-live="assertive">
               {sendErr ? c.form.sendErr : ''}
             </span>
           </div>
+
+          {success && sent && (
+            <div className="tf-form-success" role="status" aria-live="polite">
+              <strong>✓ {success.title}</strong>
+              <p>{success.body}</p>
+              <a
+                className="tf-btn tf-btn-ghost"
+                href={waHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-cta="whatsapp"
+              >
+                {success.waCta}
+              </a>
+            </div>
+          )}
+
+          {waPrompt && (
+            <div className="tf-form-wa">
+              <span>{waPrompt.text}</span>
+              <a
+                className="tf-form-wa-cta"
+                href={waHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-cta="whatsapp"
+              >
+                <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+                  <path d="M2 14 3 11 A6 6 0 1 1 5.3 13L2 14Z" fill="none" stroke="currentColor" strokeWidth="1.3" />
+                </svg>
+                <span>{waPrompt.cta}</span>
+              </a>
+            </div>
+          )}
         </form>
         <aside className="tf-contact-side">
           <div className="tf-contact-block">
@@ -262,9 +387,10 @@ export function ContactSection({ content }: { content: Content }) {
             <a href="tel:+5493513820321" className="tf-contact-link">+54 9 3513 82-0321</a>
             <a
               className="tf-contact-wa"
-              href={`https://wa.me/5493513820321?text=${encodeURIComponent(content.whatsappMessage)}`}
+              href={waHref}
               target="_blank"
               rel="noopener noreferrer"
+              data-cta={page ? 'whatsapp' : undefined}
             >
               <svg viewBox="0 0 16 16" width="13" height="13" aria-hidden="true">
                 <path d="M2 14 3 11 A6 6 0 1 1 5.3 13L2 14Z" fill="none" stroke="currentColor" strokeWidth="1.3" />
@@ -273,7 +399,7 @@ export function ContactSection({ content }: { content: Content }) {
             </a>
             <div className="tf-contact-hours" aria-hidden="true">
               <i />
-              <span>24/7 · {content.workshopActive}</span>
+              <span>24/7 · {workshopActive}</span>
             </div>
           </div>
           <div className="tf-contact-block">

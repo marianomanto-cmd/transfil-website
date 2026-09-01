@@ -11,6 +11,12 @@ const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 const esc = (s: string) =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
+// Campaign landings send a `page` key; it becomes the subject tag so sales
+// can filter paid-traffic leads out of the general web inbox.
+const PAGE_TAG: Record<string, string> = {
+  conformado: 'Conformado',
+};
+
 const json = (ok: boolean, status = 200) =>
   new Response(JSON.stringify({ ok }), {
     status,
@@ -34,6 +40,20 @@ export const POST: APIRoute = async ({ request }) => {
   const industria = get('industria');
   const linea = get('linea');
   const website = get('website'); // honeypot
+  // Landing-only context. Absent on the home, where everything below keeps
+  // behaving exactly as it did.
+  // Both land in the subject line, so they're whitelisted rather than
+  // escaped — only a known-shaped slug / locale code gets through.
+  const page = /^[a-z0-9-]{1,32}$/.test(get('page')) ? get('page') : '';
+  const locale = /^[a-z]{2}$/.test(get('locale')) ? get('locale') : '';
+  const tipoLinea = get('tipoLinea');
+  const utm =
+    body.utm && typeof body.utm === 'object' && !Array.isArray(body.utm)
+      ? Object.entries(body.utm as Record<string, unknown>)
+          .filter((e): e is [string, string] => typeof e[1] === 'string' && e[1] !== '')
+          .slice(0, 12)
+          .map(([k, v]) => [k, v.slice(0, 200)] as [string, string])
+      : [];
 
   // Honeypot: a real visitor never sees or fills this field. If it has a
   // value the request is a bot — pretend success and send nothing.
@@ -60,6 +80,9 @@ export const POST: APIRoute = async ({ request }) => {
     ['Empresa', empresa],
     ['Industria', industria],
     ['Línea de interés', linea],
+    ['Tipo de línea', tipoLinea],
+    ['Origen', page ? `${page}${locale ? ` · ${locale}` : ''}` : ''],
+    ...utm,
   ];
   const detail = rows
     .filter(([, v]) => v)
@@ -82,7 +105,9 @@ export const POST: APIRoute = async ({ request }) => {
       from: 'Web Trans-Fil <web@transfil.com.ar>',
       to: 'ventas@transfil.com.ar',
       replyTo: email,
-      subject: `Nueva consulta web · ${linea || 'General'} — ${nombre}`,
+      subject: page
+        ? `[${PAGE_TAG[page] ?? page}]${locale ? `[${locale}]` : ''} Consulta web — ${empresa || nombre}`
+        : `Nueva consulta web · ${linea || 'General'} — ${nombre}`,
       html,
     });
     if (error) {

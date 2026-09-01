@@ -25,7 +25,8 @@ interface Props {
   noindex?: boolean;
   /** Per-page SEO overrides. Landings pass their own; the homes don't. */
   meta?: Partial<Content['meta']>;
-  ogImage?: string;
+  /** Page-specific share image. Defaults to the site-wide og-image.jpg. */
+  ogImage?: { src: string; width: number; height: number };
   /** FAQ powering the FAQPage JSON-LD + the sr-only block. */
   faq?: { q: string; a: string }[];
   /** Long-form prose for the sr-only About block. */
@@ -50,9 +51,13 @@ const {
 const site = SITE;
 const canonical = page ? urlFor(page, lang) : `${site}${pathname ?? '/'}`;
 const meta = { ...content.meta, ...metaOverride };
-const ogImage = ogImageOverride
-  ? `${site}${ogImageOverride}`
-  : `${site}/img/og-image.jpg`;
+const og = ogImageOverride ?? { src: '/img/og-image.jpg', width: 1200, height: 630 };
+const ogImage = `${site}${og.src}`;
+const ogImageType = og.src.endsWith('.webp')
+  ? 'image/webp'
+  : og.src.endsWith('.png')
+    ? 'image/png'
+    : 'image/jpeg';
 const alternates = page ? alternatesFor(page) : [];
 const xDefault = page ? urlFor(page, 'es') : null;
 
@@ -190,9 +195,9 @@ const faqJsonLd = {
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:secure_url" content={ogImage} />
-    <meta property="og:image:type" content="image/jpeg" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content={ogImageType} />
+    <meta property="og:image:width" content={String(og.width)} />
+    <meta property="og:image:height" content={String(og.height)} />
     <meta property="og:image:alt" content={meta.ogImageAlt} />
     <meta property="og:locale" content={content.ogLocale} />
     {altOgLocales(lang).map((l) => (
