@@ -33,6 +33,8 @@ interface Props {
   about?: string;
   /** Extra JSON-LD nodes (WebPage / Service / BreadcrumbList on landings). */
   extraJsonLd?: Record<string, unknown>[];
+  /** Above-the-fold image to preload — the page's LCP candidate. */
+  preloadImage?: string;
 }
 
 const {
@@ -46,6 +48,7 @@ const {
   faq = content.faq,
   about = content.about,
   extraJsonLd = [],
+  preloadImage,
 } = Astro.props;
 
 const site = SITE;
@@ -181,6 +184,10 @@ const faqJsonLd = {
       <link rel="alternate" hreflang={a.hreflang} href={a.href} />
     ))}
     {xDefault && <link rel="alternate" hreflang="x-default" href={xDefault} />}
+
+    {preloadImage && (
+      <link rel="preload" as="image" href={preloadImage} fetchpriority="high" />
+    )}
 
     <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />

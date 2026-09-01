@@ -94,7 +94,7 @@ El orden de la página no es decorativo. Está en
 
 | # | Bloque | Qué hace |
 |---|---|---|
-| — | **Above the fold** | El **síntoma**, no la empresa. Una sola `<h1>`, subtítulo con la solución en una línea, CTA primario a `#contacto` + WhatsApp con prefill propio, y tres números con su disclaimer ("rangos típicos, se cuantifican en planta"). |
+| — | **Above the fold** | El **síntoma**, no la empresa. Una sola `<h1>`, subtítulo con la solución, CTA primario a `#contacto` + WhatsApp con prefill propio, y tres números con su disclaimer ("rangos típicos, se cuantifican en planta"). De fondo, un loop mudo del proceso (`hero.media`). |
 | 01 | **El problema** | Síntoma / solución / beneficio. Es la tarjeta A0X del home con más aire, no copy nuevo. |
 | 02 | **El sistema** | Las etapas del equipo, cada una con un asset **real** de `/img` o `/video`. |
 | 03 | **Por qué acá** | Taller propio, repuestos en días, a medida del layout, integrable con el resto, equipos viejos andando, años y países. Sin nombrar competidores. |
@@ -150,24 +150,30 @@ falta tocar `LandingLayout.astro`.
 
    en `src/pages/<slug>.astro`, `src/pages/en/<slug>.astro` y
    `src/pages/pt/<slug>.astro`.
-5. **WhatsApp.** El campo `whatsapp` del diccionario es el prefill de
+5. **Masthead.** `hero.media` toma `{ video, poster }`. El póster tiene que ser
+   **el mismo frame con el que arranca el video**: es lo que pinta primero (y
+   `Base.astro` lo precarga con `preloadImage`), así que si no coincide se ve
+   un salto cuando el video entra. El loop se corta con crossfade de cola
+   sobre cabeza (ver *Reglas de assets*) y respeta `prefers-reduced-motion`:
+   con esa preferencia activa nunca se descarga, queda el póster.
+6. **WhatsApp.** El campo `whatsapp` del diccionario es el prefill de
    *todos* los links de WA de esa página (hero, form, panel lateral, FAB).
    Escribilo mencionando la landing: así ventas sabe de dónde viene el chat.
-6. **OG.** `LandingLayout` pasa `ogImage` a `Base.astro`. Poné una imagen
+7. **OG.** `LandingLayout` pasa `ogImage` a `Base.astro`. Poné una imagen
    coherente con la aplicación (no la del transporte de viruta) y su `alt`
    propio en `meta.ogImageAlt`.
-7. **FAQ.** 5–7 preguntas reales de preventa. Se convierten solas en
+8. **FAQ.** 5–7 preguntas reales de preventa. Se convierten solas en
    `FAQPage` con el `@id` de esa URL.
-8. **Sitemap.** No hay que hacer nada: `@astrojs/sitemap` toma toda página
+9. **Sitemap.** No hay que hacer nada: `@astrojs/sitemap` toma toda página
    prerenderizada y le agrega los tres `hreflang`.
-9. **GTM.** Tampoco hay que tocar nada en el código: los eventos salen con
+10. **GTM.** Tampoco hay que tocar nada en el código: los eventos salen con
    `page: '<slug>'`. En GTM alcanza con que el trigger de
    `generate_lead` / `whatsapp_click` lea la variable `page`.
-10. **Link desde el home.** Agregá `link: { page: '<slug>', label: '…' }` a
+11. **Link desde el home.** Agregá `link: { page: '<slug>', label: '…' }` a
     la tarjeta A0X correspondiente en `content.ts`, en los tres idiomas.
     Eso rinde el botón "Ver solución" en la tarjeta **y** el link en el
     footer, automáticamente.
-11. **Verificá:** `npm run check && npm run build`, y que las tres URLs
+12. **Verificá:** `npm run check && npm run build`, y que las tres URLs
     salgan con canonical propio, hreflang recíproco y una sola `<h1>`.
 
 ### Eventos que empuja una landing
@@ -223,6 +229,46 @@ uno solo: **no agregues otro**.
 - **Nada de stock photos.** Si no hay asset propio para algo, se cambia el
   bloque, no se compra una foto genérica.
 - Los videos de las etapas se cargan recién cuando entran en viewport
-  (`data-src` + IntersectionObserver en `LandingLayout.astro`). No le
-  saques ese gating a una landing de pauta.
-- Toda imagen lleva `width` / `height` y `alt` real desde el diccionario.
+  (`data-src` + IntersectionObserver en `LandingLayout.astro`). El del
+  masthead se carga en `requestIdleCallback`, para que el LCP sea el póster
+  y no compita con la primera pintura. No le saques ese gating a una
+  landing de pauta.
+- Toda imagen lleva `width` / `height` y `alt` real desde el diccionario. El
+  fondo del masthead es decorativo (`aria-hidden`), así que no lleva alt.
+
+### Cortar un loop de masthead
+
+`/video/hero-coolant.mp4` (398 KB, 1280×676, 3,8 s) sale del master UHD del
+plano de refrigerante — el mismo que usa el hero del home. Dos cosas
+importan:
+
+1. **Que no se vea la costura.** La cámara deriva a lo largo de la toma, así
+   que un loop pelado salta. La receta es fundir la cola sobre la cabeza,
+   con lo que el último frame queda igual al primero:
+
+   ```sh
+   # ventana limpia del master → intermedio
+   ffmpeg -ss 3.5 -to 8.0 -i master.mp4 -vf "scale=1280:-2:flags=lanczos" \
+     -c:v libx264 -preset ultrafast -crf 12 -an seg.mp4
+
+   # cola de 0,7 s fundida sobre la cabeza → loop de 3,8 s
+   ffmpeg -i seg.mp4 -filter_complex "
+     [0:v]split[a][b];
+     [a]trim=start=0:end=3.8,setpts=PTS-STARTPTS[main];
+     [b]trim=start=3.8,setpts=PTS-STARTPTS,format=yuva420p,fade=t=out:st=0:d=0.7:alpha=1[tail];
+     [main][tail]overlay=eof_action=pass,format=yuv420p[v]" \
+     -map "[v]" -r 25 -c:v libx264 -preset slower -crf 33 -profile:v high \
+     -an -movflags +faststart hero-<slug>.mp4
+   ```
+
+   Para verificar la costura, comparar el primer frame contra el último: la
+   diferencia tiene que ser la misma que entre dos frames consecutivos
+   cualesquiera (sólo cambia la niebla; la estructura de la máquina, no).
+   `xfade` no sirve acá: exige que la primera entrada sea más larga que la
+   transición.
+
+2. **Que pese poco.** Va al 44 % de opacidad bajo un gradiente, así que CRF
+   33 a 1280 px de ancho alcanza y sobra. Apuntar a ≤ 400 KB.
+
+El póster se saca del **mismo frame con el que arranca el loop**
+(`ffmpeg -ss <t> -i master.mp4 -frames:v 1 -c:v libwebp -quality 76 …`).

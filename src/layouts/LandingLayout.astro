@@ -108,6 +108,7 @@ const navItems = [
   lang={lang}
   content={content}
   page={l.page}
+  preloadImage={l.hero.media.poster}
   meta={l.meta}
   ogImage={{ src: '/img/t03-fluids-cover.webp', width: 1800, height: 900 }}
   faq={l.faq.items}
@@ -127,14 +128,20 @@ const navItems = [
   <main id="main" class="tf-lp" data-page={l.event} data-locale={lang}>
     <!-- ── Above the fold: the symptom, not the company ─────────── -->
     <section class="tf-lp-hero">
+      {/* Decorative masthead. The poster paints immediately (and is the
+          LCP); the script below attaches the video source once the browser
+          is idle, so a 291 KB fetch never competes with the first paint. */}
       <div class="tf-lp-hero-bg" aria-hidden="true">
-        <img
-          src="/img/t03-fluids-cover.webp"
-          alt=""
-          width="1800"
-          height="900"
-          fetchpriority="high"
-          decoding="async"
+        <video
+          class="tf-lp-hero-video"
+          data-hero-src={l.hero.media.video}
+          poster={l.hero.media.poster}
+          width="1280"
+          height="676"
+          muted
+          loop
+          playsinline
+          preload="none"
         />
       </div>
       <div class="tf-lp-hero-body">
@@ -360,6 +367,31 @@ const navItems = [
     );
   }
 
+  // Masthead loop: the poster is the LCP, so the video source is attached
+  // after idle — same trade-off the home's Hero makes. Pauses when the
+  // masthead scrolls away so the GPU isn't decoding behind the fold.
+  function initHeroVideo() {
+    const v = document.querySelector<HTMLVideoElement>('video[data-hero-src]');
+    if (!v || v.dataset.bound === '1') return;
+    v.dataset.bound = '1';
+    // A full-bleed moving backdrop is exactly what reduced-motion is for:
+    // leave the poster frame and never fetch the loop.
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const start = () => {
+      if (!v.src && v.dataset.heroSrc) v.src = v.dataset.heroSrc;
+      v.play().catch(() => {});
+      new IntersectionObserver(
+        ([e]) => (e.isIntersecting ? v.play().catch(() => {}) : v.pause()),
+        { threshold: 0.05 }
+      ).observe(v);
+    };
+    if ('requestIdleCallback' in window) {
+      (window as any).requestIdleCallback(start, { timeout: 2500 });
+    } else {
+      setTimeout(start, 900);
+    }
+  }
+
   // Stage videos: fetch and play only while the tile is on screen. Same
   // trade-off the home makes — no GPU decode or bandwidth spent off-view.
   function initStageVideos() {
@@ -384,6 +416,7 @@ const navItems = [
 
   document.addEventListener('astro:page-load', () => {
     initLandingEvents();
+    initHeroVideo();
     initStageVideos();
   });
 </script>
@@ -402,20 +435,23 @@ const navItems = [
     inset: 0;
     z-index: -1;
   }
-  .tf-lp-hero-bg img {
+  .tf-lp-hero-bg img,
+  .tf-lp-hero-bg video {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center 40%;
-    opacity: 0.28;
-    filter: grayscale(0.35) contrast(1.05);
+    object-position: center 45%;
+    opacity: 0.44;
+    filter: grayscale(0.2) contrast(1.06);
+    display: block;
   }
+
   .tf-lp-hero-bg::after {
     content: '';
     position: absolute;
     inset: 0;
     background:
-      linear-gradient(100deg, var(--bg) 22%, rgba(14, 14, 16, 0.86) 55%, rgba(14, 14, 16, 0.7) 100%),
+      linear-gradient(100deg, var(--bg) 20%, rgba(14, 14, 16, 0.82) 52%, rgba(14, 14, 16, 0.5) 100%),
       radial-gradient(900px 500px at 15% 0%, rgba(58, 134, 255, 0.1), transparent 65%);
   }
   .tf-lp-hero-body {
@@ -430,11 +466,13 @@ const navItems = [
   .tf-lp-h1 {
     font-family: var(--font-display);
     font-weight: 500;
-    font-size: clamp(34px, 5.4vw, 76px);
-    line-height: 1.02;
-    letter-spacing: -0.03em;
+    /* Sized so the declarative headline lands in three lines and the three
+       numbers still clear the fold on a 900px-tall screen. */
+    font-size: clamp(30px, 4.4vw, 62px);
+    line-height: 1.06;
+    letter-spacing: -0.025em;
     margin: 0;
-    max-width: 18ch;
+    max-width: 24ch;
     text-wrap: balance;
   }
   .tf-lp-sub {

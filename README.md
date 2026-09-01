@@ -138,6 +138,7 @@ To change wording, image paths, country lists, milestones, contact info or FAQ e
 
 - Copy: `src/i18n/landings.ts` (`LANDINGS.conformado.{es,en,pt}`, typed `LandingContent`).
 - Layout: `src/layouts/LandingLayout.astro` — symptom → system → why us → proof → form/WhatsApp → FAQ → closing. Reuses the `tf-*` classes and tokens; no new visual language.
+- Masthead: a muted 3.8s loop of the coolant shot (`/video/hero-coolant.mp4`, 398 KB), cut from the same UHD master the home hero uses and made seamless by cross-fading its tail over its head. The poster is the LCP (preloaded via `Base.astro`'s `preloadImage`) and matches the loop's first frame; the video source is attached on idle and skipped entirely under `prefers-reduced-motion`. Recipe in [`docs/LANDINGS.md`](docs/LANDINGS.md).
 - Pages: `src/pages/conformado.astro`, `src/pages/en/conformado.astro`, `src/pages/pt/conformado.astro` — six lines each.
 - Own SEO: canonical, reciprocal hreflang, page-specific OG, and `WebPage` + `Service` + `FAQPage` + `BreadcrumbList` JSON-LD. The home's FAQ is *not* emitted here.
 - Deep-linked from the home: the `A01` card carries `link: { page: 'conformado', … }`, which renders both the card's "Ver solución" button and the footer link.

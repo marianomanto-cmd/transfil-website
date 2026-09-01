@@ -43,7 +43,12 @@ export type LandingContent = {
     sub: string;
     ctaPrimary: string;
     ctaSecondary: string;
-    bgAlt: string;
+    /**
+     * Decorative masthead loop. The poster is what paints first (and is the
+     * LCP); the video is attached after idle. Same footage the home hero
+     * uses, cut to the coolant shot and made seamless.
+     */
+    media: { video: string; poster: string };
   };
   numbers: { items: { v: string; l: string }[]; note: string };
   /** A01 from the home, expanded — same argument, more room. */
@@ -97,7 +102,16 @@ const MEDIA = {
   },
   band: { src: '/img/t02-band-filters.webp', kind: 'photo' },
   oil: { src: '/img/t02-oil-recovery.webp', kind: 'photo' },
-  central: { src: '/img/t03-advanced-filtration.webp', kind: 'photo' },
+  // The full centralized skid — pumps, filter housings, heat exchanger,
+  // tank and control cabinet. It used to sit behind the masthead, where the
+  // detail was lost; it earns its place illustrating F04.
+  central: { src: '/img/t03-fluids-cover.webp', kind: 'photo' },
+} as const;
+
+/** Masthead loop, shared by every locale of this landing. */
+const HERO_MEDIA = {
+  video: '/video/hero-coolant.mp4',
+  poster: '/img/hero-coolant-poster.webp',
 } as const;
 
 export const LANDINGS: Record<LandingSlug, Record<Lang, LandingContent>> = {
@@ -125,12 +139,12 @@ export const LANDINGS: Record<LandingSlug, Record<Lang, LandingContent>> = {
       },
       nav: { system: 'El sistema', why: 'Por qué acá', faq: 'Preguntas', contact: 'Relevamiento' },
       hero: {
-        eyebrow: '[ Conformado de tubos · ERW / HFW / Perfilado / Trefilado ]',
-        h1: 'El fluido sucio les está comiendo matrices y scrap.',
-        sub: 'Filtración centralizada para líneas de conformado de tubos. Banda + magnético + recuperación de aceite. Fabricado en Córdoba. Relevamiento en planta antes de cotizar.',
-        ctaPrimary: 'Pedir relevamiento',
+        eyebrow: '[ Filtración de proceso · Conformado de tubos · ERW / HFW / Perfilado / Trefilado ]',
+        h1: 'El fluido contaminado reduce la vida útil del herramental y aumenta el scrap.',
+        sub: 'Filtración centralizada para líneas de conformado de tubos: separación magnética, filtrado de sólidos y recuperación de aceite. Fabricación propia en Córdoba. Realizamos un relevamiento en planta antes de presentar la propuesta técnica.',
+        ctaPrimary: 'Solicitar relevamiento en planta',
         ctaSecondary: 'WhatsApp',
-        bgAlt: 'Central de filtración y tratamiento de fluidos Trans-Fil',
+        media: HERO_MEDIA,
       },
       numbers: {
         items: [
@@ -178,7 +192,7 @@ export const LANDINGS: Record<LandingSlug, Record<Lang, LandingContent>> = {
             code: 'F04',
             title: 'Todo junto → central de filtración',
             desc: 'Estación de bombeo, presurización y temperado que alimenta la línea completa. Mantiene caudal y temperatura estables independientemente del consumo de cada puesto, con monitoreo de presión, nivel y alarmas configurables.',
-            media: { ...MEDIA.central, alt: 'Central de filtración avanzada Trans-Fil' },
+            media: { ...MEDIA.central, alt: 'Central de filtración Trans-Fil: skid de bombeo, filtros, intercambiador y tanque' },
           },
         ],
       },
@@ -271,12 +285,12 @@ export const LANDINGS: Record<LandingSlug, Record<Lang, LandingContent>> = {
       },
       nav: { system: 'The system', why: 'Why us', faq: 'FAQ', contact: 'Plant survey' },
       hero: {
-        eyebrow: '[ Tube forming · ERW / HFW / Roll forming / Drawing ]',
-        h1: 'Dirty fluid is eating your dies and driving scrap.',
-        sub: 'Centralized filtration for tube-forming lines. Belt + magnetic + tramp-oil recovery. Built in Córdoba. A plant survey comes before the quote.',
+        eyebrow: '[ Process filtration · Tube forming · ERW / HFW / Roll forming / Drawing ]',
+        h1: 'Contaminated fluid shortens tooling life and drives up scrap.',
+        sub: 'Centralized filtration for tube-forming lines: magnetic separation, solids filtration and tramp-oil recovery. Built in our own workshop in Córdoba. A plant survey precedes every technical proposal.',
         ctaPrimary: 'Request a plant survey',
         ctaSecondary: 'WhatsApp',
-        bgAlt: 'Trans-Fil centralized fluid filtration and treatment station',
+        media: HERO_MEDIA,
       },
       numbers: {
         items: [
@@ -324,7 +338,7 @@ export const LANDINGS: Record<LandingSlug, Record<Lang, LandingContent>> = {
             code: 'F04',
             title: 'All of it → central filtration station',
             desc: 'Pumping, pressurization and temperature-control station feeding the whole line. Keeps flow and temperature stable regardless of what each station draws, with pressure and level monitoring and configurable alarms.',
-            media: { ...MEDIA.central, alt: 'Trans-Fil advanced central filtration station' },
+            media: { ...MEDIA.central, alt: 'Trans-Fil central filtration station: pump skid, filter housings, heat exchanger and tank' },
           },
         ],
       },
@@ -417,12 +431,12 @@ export const LANDINGS: Record<LandingSlug, Record<Lang, LandingContent>> = {
       },
       nav: { system: 'O sistema', why: 'Por que aqui', faq: 'Perguntas', contact: 'Levantamento' },
       hero: {
-        eyebrow: '[ Conformação de tubos · ERW / HFW / Perfilação / Trefilação ]',
-        h1: 'O fluido sujo está comendo matrizes e gerando sucata.',
-        sub: 'Filtragem centralizada para linhas de conformação de tubos. Esteira + magnético + recuperação de óleo. Fabricação em Córdoba. Levantamento em planta antes de orçar.',
-        ctaPrimary: 'Pedir levantamento',
+        eyebrow: '[ Filtragem de processo · Conformação de tubos · ERW / HFW / Perfilação / Trefilação ]',
+        h1: 'O fluido contaminado reduz a vida útil do ferramental e aumenta a sucata.',
+        sub: 'Filtragem centralizada para linhas de conformação de tubos: separação magnética, filtragem de sólidos e recuperação de óleo tramp. Fabricação própria em Córdoba. Realizamos um levantamento em planta antes de apresentar a proposta técnica.',
+        ctaPrimary: 'Solicitar levantamento em planta',
         ctaSecondary: 'WhatsApp',
-        bgAlt: 'Central de filtragem e tratamento de fluidos Trans-Fil',
+        media: HERO_MEDIA,
       },
       numbers: {
         items: [
@@ -470,7 +484,7 @@ export const LANDINGS: Record<LandingSlug, Record<Lang, LandingContent>> = {
             code: 'F04',
             title: 'Tudo junto → central de filtragem',
             desc: 'Estação de bombeamento, pressurização e controle de temperatura que alimenta a linha inteira. Mantém vazão e temperatura estáveis independentemente do consumo de cada posto, com monitoramento de pressão, nível e alarmes configuráveis.',
-            media: { ...MEDIA.central, alt: 'Central de filtragem avançada Trans-Fil' },
+            media: { ...MEDIA.central, alt: 'Central de filtragem Trans-Fil: skid de bombeamento, filtros, trocador e tanque' },
           },
         ],
       },
