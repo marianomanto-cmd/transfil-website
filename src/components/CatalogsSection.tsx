@@ -10,9 +10,8 @@ export function CatalogsSection({ content }: { content: Content }) {
   const c = content.catalogs;
   const [active, setActive] = useState<CatalogItem | null>(null);
   const [sectionRef, vis] = useReveal(0.1);
-  const lang: 'es' | 'en' = content.htmlLang.startsWith('es') ? 'es' : 'en';
-  const downloadLabel = lang === 'es' ? 'Descargar' : 'Download';
-  const closeLabel = lang === 'es' ? 'Cerrar' : 'Close';
+  const downloadLabel = content.ui.download;
+  const closeLabel = content.ui.close;
 
   return (
     <section
@@ -25,6 +24,7 @@ export function CatalogsSection({ content }: { content: Content }) {
         <div className="tf-eyebrow">{c.eyebrow}</div>
         <h2 className="tf-h2">{c.title}</h2>
         <p className="tf-section-sub">{c.sub}</p>
+        {c.note && <p className="tf-section-note">{c.note}</p>}
       </header>
       <div className="tf-catalogs">
         {c.items.map((it, i) => (

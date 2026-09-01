@@ -1,31 +1,44 @@
 ---
 import Base from '../layouts/Base.astro';
-import { CONTENT } from '../i18n/content';
+import { CONTENT, type Lang } from '../i18n/content';
+import { langFromPath, pathFor } from '../i18n/routes';
 
-// Switch on the request path so /en/foo and /en/ deep-links land on
-// the English 404 even though Astro routes everything unknown here.
-const isEn = Astro.url.pathname.startsWith('/en');
-const lang = isEn ? 'en' : 'es';
-const content = isEn ? CONTENT.en : CONTENT.es;
-const copy = isEn
-  ? {
-      tag: '[ 404 — Page not found ]',
-      title: "We couldn't find that page.",
-      sub: 'The page may have moved or the URL may be mistyped. Head back to the home page to keep exploring Trans-Fil.',
-      cta: 'Back to home',
-      altLink: 'Versión en español',
-      altHref: '/',
-      home: '/en/',
-    }
-  : {
-      tag: '[ 404 — Página no encontrada ]',
-      title: 'No encontramos esa ruta.',
-      sub: 'Es posible que la página haya sido movida o que la dirección esté mal escrita. Volvé al inicio para seguir explorando Trans-Fil.',
-      cta: 'Volver al inicio',
-      altLink: 'English version',
-      altHref: '/en/',
-      home: '/',
-    };
+// Switch on the request path so /en/foo, /pt/foo and their deep-links land
+// on the right locale even though Astro routes everything unknown here.
+const lang: Lang = langFromPath(Astro.url.pathname);
+const content = CONTENT[lang];
+
+// The two links offered besides "back home": the same page in the other
+// two locales, labelled in their own language.
+const OTHER_LABEL: Record<Lang, string> = {
+  es: 'Versión en español',
+  en: 'English version',
+  pt: 'Versão em português',
+};
+
+const COPY: Record<Lang, { tag: string; title: string; sub: string; cta: string }> = {
+  es: {
+    tag: '[ 404 — Página no encontrada ]',
+    title: 'No encontramos esa ruta.',
+    sub: 'Es posible que la página haya sido movida o que la dirección esté mal escrita. Volvé al inicio para seguir explorando Trans-Fil.',
+    cta: 'Volver al inicio',
+  },
+  en: {
+    tag: '[ 404 — Page not found ]',
+    title: "We couldn't find that page.",
+    sub: 'The page may have moved or the URL may be mistyped. Head back to the home page to keep exploring Trans-Fil.',
+    cta: 'Back to home',
+  },
+  pt: {
+    tag: '[ 404 — Página não encontrada ]',
+    title: 'Não encontramos essa página.',
+    sub: 'A página pode ter sido movida ou o endereço pode estar errado. Volte ao início para continuar explorando a Trans-Fil.',
+    cta: 'Voltar ao início',
+  },
+};
+
+const copy = COPY[lang];
+const others = (Object.keys(COPY) as Lang[]).filter((l) => l !== lang);
 ---
 <Base lang={lang} content={content} pathname="/404" noindex>
   <main id="main" class="tf-404">
@@ -33,13 +46,15 @@ const copy = isEn
     <h1 class="tf-404-title">{copy.title}</h1>
     <p class="tf-404-sub">{copy.sub}</p>
     <div class="tf-404-actions">
-      <a href={copy.home} class="tf-btn tf-btn-primary">
+      <a href={pathFor('home', lang)} class="tf-btn tf-btn-primary">
         <span>{copy.cta}</span>
         <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
           <path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" />
         </svg>
       </a>
-      <a href={copy.altHref} class="tf-btn tf-btn-ghost">{copy.altLink}</a>
+      {others.map((l) => (
+        <a href={pathFor('home', l)} class="tf-btn tf-btn-ghost" hreflang={l}>{OTHER_LABEL[l]}</a>
+      ))}
     </div>
   </main>
 </Base>

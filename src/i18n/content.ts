@@ -1,4 +1,6 @@
-export type Lang = 'es' | 'en';
+import type { Lang, PageKey } from './routes';
+
+export type { Lang };
 
 export type TechBullet = {
   name: string;
@@ -34,9 +36,9 @@ export type Milestone = { y: string; t: string; d: string };
 export type Tab = { id: 'steel' | 'auto' | 'tools'; label: string };
 
 export type Content = {
+  lang: Lang;
   htmlLang: string;
   ogLocale: string;
-  altLocale: string;
   meta: {
     title: string;
     description: string;
@@ -76,6 +78,9 @@ export type Content = {
       problem: string;
       install: string;
       benefit: string;
+      // Only set on cards that have a dedicated landing page (A01 →
+      // /conformado). Renders a "Ver solución" link at the foot of the card.
+      link?: { page: PageKey; label: string };
     }[];
     custom: { title: string; body: string };
     metrics: { items: { v: string; l: string }[]; note: string };
@@ -85,6 +90,9 @@ export type Content = {
     eyebrow: string; title: string; sub: string;
     items: CatalogItem[];
     cta: string;
+    // Optional caveat under the section subtitle — used in PT, where the
+    // downloadable PDFs are the English editions.
+    note?: string;
   };
   process: {
     eyebrow: string; title: string; lead: string;
@@ -115,8 +123,24 @@ export type Content = {
   chips: { established: string; argentina: string; iso: string };
   workshopActive: string;
   whatsappMessage: string;
-  langSwitch: { es: string; en: string };
+  langSwitch: { es: string; en: string; pt: string };
   backToTop: string;
+  // Chrome strings that used to be hardcoded ES/EN ternaries inside
+  // components. They live here so a new locale never leaves Spanish
+  // fragments behind.
+  ui: {
+    skipToContent: string;
+    aboutHeading: string;
+    faqHeading: string;
+    symptom: string;
+    solution: string;
+    benefit: string;
+    metricsTitle: string;
+    download: string;
+    close: string;
+    coverage: string;
+    countriesReached: string;
+  };
   // Long-form 'About' paragraph used for AI/LLM search consumption and
   // surfaced as a visually-hidden section in <body> so it's indexed.
   about: string;
@@ -133,9 +157,9 @@ export const TF_CLIENTS = {
 
 export const CONTENT: Record<Lang, Content> = {
   es: {
+    lang: 'es',
     htmlLang: 'es-AR',
     ogLocale: 'es_AR',
-    altLocale: 'en_US',
     meta: {
       title: 'Trans-Fil | Maquinaria Industrial Especializada · Córdoba, Argentina',
       description: 'Maquinaria industrial especializada en Córdoba desde 1989: transporte de viruta, lavado industrial, filtración de fluidos y maquinaria de corte.',
@@ -229,6 +253,7 @@ export const CONTENT: Record<Lang, Content> = {
           problem: 'El lubricante se carga de finos metálicos y aceite atrapado. El fluido degradado lubrica peor y acelera el desgaste de rodillos y matrices; aparecen marcas en la superficie del tubo y aumenta el scrap.',
           install: 'Filtración centralizada + separación magnética + recuperación de aceite.',
           benefit: 'Protege el herramental de conformado · multiplica la vida del fluido.',
+          link: { page: 'conformado', label: 'Ver solución' },
         },
         {
           code: 'A02',
@@ -359,8 +384,21 @@ export const CONTENT: Record<Lang, Content> = {
     chips: { established: 'EST. 1989', argentina: 'CÓRDOBA · ARGENTINA', iso: 'ISO 9001' },
     workshopActive: 'Taller · Activo',
     whatsappMessage: 'Hola, los contacto desde el sitio web de Trans-Fil.',
-    langSwitch: { es: 'ES', en: 'EN' },
+    langSwitch: { es: 'ES', en: 'EN', pt: 'PT' },
     backToTop: 'Volver arriba',
+    ui: {
+      skipToContent: 'Saltar al contenido',
+      aboutHeading: 'Sobre Trans-Fil',
+      faqHeading: 'Preguntas frecuentes',
+      symptom: 'SÍNTOMA',
+      solution: 'SOLUCIÓN',
+      benefit: 'BENEFICIO',
+      metricsTitle: 'Resultados típicos de la inversión',
+      download: 'Descargar',
+      close: 'Cerrar',
+      coverage: 'COBERTURA',
+      countriesReached: 'Países alcanzados',
+    },
     about: 'Trans-Fil S.R.L. es un fabricante argentino de maquinaria industrial especializada, fundado en 1989 en Córdoba. Diseña, fabrica y mantiene transportadores de viruta, sistemas de lavado industrial, equipos de filtración y tratamiento de fluidos refrigerantes, y maquinaria de corte láser y plasma. Su planta está en Francisco de Arteaga 2895, Córdoba, Argentina. Atiende a más de 120 clientes industriales en 14 países —Argentina, Brasil, Chile, Perú, Bolivia, Paraguay, Uruguay, Colombia, Ecuador, México, Estados Unidos, República Dominicana, Puerto Rico y España— principalmente de los rubros siderúrgico, automotriz, oil & gas y máquinas-herramienta. Provee servicios complementarios de reparación, retrofitting, mantenimiento programado e ingeniería a medida.',
     faq: [
       {
@@ -414,9 +452,9 @@ export const CONTENT: Record<Lang, Content> = {
     ],
   },
   en: {
+    lang: 'en',
     htmlLang: 'en-US',
     ogLocale: 'en_US',
-    altLocale: 'es_AR',
     meta: {
       title: 'Trans-Fil | Specialized Industrial Machinery · Córdoba, Argentina',
       description: 'Specialized industrial machinery in Córdoba since 1989: chip conveyors, industrial washing, fluid filtration and cutting machinery.',
@@ -510,6 +548,7 @@ export const CONTENT: Record<Lang, Content> = {
           problem: 'The lubricant loads up with metal fines and tramp oil. The degraded fluid lubricates worse and accelerates roll and die wear; marks appear on the tube surface and scrap climbs.',
           install: 'Centralized filtration + magnetic separation + oil recovery.',
           benefit: 'Protects forming tooling · multiplies fluid life.',
+          link: { page: 'conformado', label: 'See the solution' },
         },
         {
           code: 'A02',
@@ -640,8 +679,21 @@ export const CONTENT: Record<Lang, Content> = {
     chips: { established: 'EST. 1989', argentina: 'CÓRDOBA · ARGENTINA', iso: 'ISO 9001' },
     workshopActive: 'Workshop · Active',
     whatsappMessage: 'Hi, I\'m contacting you from the Trans-Fil website.',
-    langSwitch: { es: 'ES', en: 'EN' },
+    langSwitch: { es: 'ES', en: 'EN', pt: 'PT' },
     backToTop: 'Back to top',
+    ui: {
+      skipToContent: 'Skip to content',
+      aboutHeading: 'About Trans-Fil',
+      faqHeading: 'Frequently asked questions',
+      symptom: 'SYMPTOM',
+      solution: 'SOLUTION',
+      benefit: 'BENEFIT',
+      metricsTitle: 'Typical investment results',
+      download: 'Download',
+      close: 'Close',
+      coverage: 'COVERAGE',
+      countriesReached: 'Countries reached',
+    },
     about: 'Trans-Fil S.R.L. is an Argentine manufacturer of specialized industrial machinery, founded in 1989 in Córdoba. It designs, builds and maintains chip conveyors, industrial washing systems, coolant filtration and fluid treatment equipment, and laser and plasma cutting machinery. Its workshop is located at Francisco de Arteaga 2895, Córdoba, Argentina. Trans-Fil serves over 120 industrial customers across 14 countries —Argentina, Brazil, Chile, Peru, Bolivia, Paraguay, Uruguay, Colombia, Ecuador, Mexico, United States, Dominican Republic, Puerto Rico and Spain— primarily in the steel, automotive, oil & gas and machine-tool sectors. The company also provides repairs, retrofitting, scheduled maintenance and custom engineering services.',
     faq: [
       {
@@ -691,6 +743,302 @@ export const CONTENT: Record<Lang, Content> = {
       {
         q: 'How can I contact Trans-Fil?',
         a: 'Email ventas@transfil.com.ar, phone or WhatsApp +54 9 3513 82-0321, or visit the workshop at Francisco de Arteaga 2895, Córdoba, Argentina. The company replies to technical enquiries within 24 business hours.',
+      },
+    ],
+  },
+  pt: {
+    lang: 'pt',
+    htmlLang: 'pt-BR',
+    ogLocale: 'pt_BR',
+    meta: {
+      title: 'Trans-Fil | Máquinas Industriais Especializadas · Córdoba, Argentina',
+      description: 'Máquinas industriais especializadas em Córdoba desde 1989: transporte de cavaco, lavagem industrial, filtragem de fluidos e máquinas de corte.',
+      ogTitle: 'Trans-Fil — Máquinas industriais · Córdoba',
+      ogDescription: 'Projetamos, fabricamos e mantemos máquinas industriais desde 1989: transporte de cavaco, lavagem, filtragem de fluidos e corte para metalurgia e automotivo.',
+      ogImageAlt: 'Estação de transporte de cavaco TRANS-FIL em oficina industrial',
+      twitterDescription: '36 anos projetando máquinas industriais em Córdoba, Argentina. Processos que não param.',
+    },
+    nav: { home: 'Início', tech: 'Tecnologias', applications: 'Aplicações', catalogs: 'Catálogos', services: 'Serviços', industries: 'Setores', history: 'História', contact: 'Contato' },
+    hero: {
+      eyebrow: 'Máquinas industriais · Córdoba, Argentina · Desde 1989',
+      titleA: 'Processos', titleB: 'que não', titleC: 'param.',
+      sub: 'Projeto, fabricação e manutenção de máquinas industriais especializadas para a indústria metalmecânica.',
+      ctaPrimary: 'Ver tecnologias', ctaSecondary: 'Fale conosco',
+      stat1: { v: '36', l: 'Anos de operação' },
+      stat2: { v: '120+', l: 'Clientes industriais' },
+      stat3: { v: '14', l: 'Países atendidos' },
+      stat4: { v: '24/7', l: 'Suporte em planta' },
+    },
+    capabilities: {
+      eyebrow: '[ 02 — Capacidades ]',
+      title: 'Quatro linhas. Uma só engenharia.',
+      sub: 'Cada equipamento é projetado sobre o processo produtivo real e entra no fluxo existente sem interrompê-lo.',
+    },
+    tech: [
+      {
+        id: 'conveyors', code: 'T01', title: 'Transporte', sub: 'Conveyors',
+        img: '/img/t01-conveyors.webp',
+        desc: 'Sistemas de evacuação de cavaco metálico, peças e resíduos para linhas de produção, células de usinagem, linhas transfer e centros CNC. Configuráveis em esteira articulada, raspador, magnético, correia, corrente plástica ou combinados.',
+        bullets: [
+          { name: 'Transporte de cavaco', img: '/img/t01-chip-transport.webp', desc: 'Sistemas de transporte para todo tipo de cavaco e processo de usinagem, de células individuais a linhas de grande porte. Configuráveis em esteira articulada, raspador, correia ou corrente plástica conforme o material e a vazão. Construção robusta para operação contínua 24/7.', kind: 'photo' },
+          { name: 'Linhas de secagem contínua', img: '/img/t01-drying.webp', desc: 'Esteiras com elos microperfurados que separam sólidos e líquidos durante o transporte, garantindo a redução de umidade exigida por processos como tratamento de resíduos ou secagem de peças pequenas em série.', kind: 'photo' },
+          { name: 'Linhas centralizadas', img: '/img/t01-conveyors.webp', desc: 'Sistemas multimáquina que evacuam o cavaco de todo o galpão para um único ponto de descarga. Conectam dezenas de máquinas-ferramenta ao mesmo circuito e eliminam o transporte manual entre estações, liberando a equipe de tarefas repetitivas e reduzindo a parada por limpeza.', kind: 'photo' },
+          { name: 'Projeto sob medida', img: '/img/t01-custom.webp', desc: 'Geometria, largura, altura, velocidades e demais características adaptadas a cada processo e layout. Cada equipamento é dimensionado a partir do levantamento em planta e validado com desenho 3D antes da fabricação. Materiais e componentes escolhidos conforme o tipo de cavaco e o fluido de corte.', kind: 'photo' },
+        ],
+      },
+      {
+        id: 'washing', code: 'T02', title: 'Lavagem industrial', sub: 'Washing machinery',
+        img: '/img/t02-washing.webp',
+        desc: 'Lavadoras automáticas para peças usinadas, fundidas e forjadas. De células individuais a linhas contínuas com secagem e sopro.',
+        bullets: [
+          { name: 'Passagem contínua e rotativas', img: '/img/t02-washing.webp', desc: 'Cabines de passagem contínua com esteira ou mesa rotativa para produção em série. Ciclo configurável de lavagem, enxágue e secagem. Integram-se à linha existente sincronizando carga, descarga e temperatura do banho com o ritmo da planta.', kind: 'photo' },
+          { name: 'Lavadora de cabine individual', img: '/img/t02-cabin.webp', desc: 'Cabines de carga e descarga manual para uso múltiplo, adequadas a peças de geometria variada e lotes pequenos, onde uma linha contínua não se justifica. Programas selecionáveis pela IHM conforme o grau de limpeza exigido.', kind: 'photo' },
+          { name: 'Filtragem integrada', img: '/img/t02-filtration.webp', desc: 'Filtros de esteira, ciclones e skimmers de óleo que mantêm o banho limpo e prolongam a vida do fluido. Reduzem a frequência de troca de detergente e o consumo de água. Manutenção simples, com acesso frontal aos consumíveis.', kind: 'photo' },
+          { name: 'Controle CLP', img: '/img/t02-plc.webp', desc: 'Painéis com IHM sensível ao toque. Software integrado à linha de produção e sistema de segurança preparado para Indústria 4.0. Rastreabilidade de ciclos, alarmes e consumos em tempo real, com suporte remoto pela rede do cliente.', kind: 'photo' },
+        ],
+      },
+      {
+        id: 'filtration', code: 'T03', title: 'Tratamento de fluidos', sub: 'Fluids treatment',
+        img: '/img/t03-fluids-cover.webp',
+        desc: 'Filtragem de fluidos de corte, separação magnética e centralização de fluidos. Recuperação de óleos e destinação responsável de resíduos.',
+        bullets: [
+          { name: 'Filtros de esteira', img: '/img/t02-band-filters.webp', desc: 'Filtragem por gravidade com manta de papel ou têxtil (depurador a tecido). Baixo custo operacional, ideal para fluidos solúveis de usinagem. Avanço automático da manta conforme o nível do banho e rebobinamento do resíduo seco para destinação simples.', kind: 'photo' },
+          { name: 'Separadores magnéticos', img: '/video/t02-magnetic-separator.mp4', poster: '/img/t02-magnetic-separator-poster.webp', desc: 'Tambores e barras magnéticas que retiram partículas ferrosas finas antes do filtro principal, capturando o cavaco micrométrico que de outro modo saturaria a manta. Prolongam a vida do consumível e reduzem a carga sólida que chega ao sistema central.', kind: 'video' },
+          { name: 'Filtragem avançada', img: '/img/t03-advanced-filtration.webp', desc: 'Centrais de bombeamento, pressurização e controle de temperatura do fluido de corte para várias máquinas em paralelo. Mantêm vazão e temperatura estáveis independentemente do consumo de cada estação. Monitoramento de pressão, condutividade e nível com alarmes configuráveis.', kind: 'photo' },
+          { name: 'Recuperação de óleo', img: '/img/t02-oil-recovery.webp', desc: 'Skimmers de esteira e separadores coalescentes que retiram o óleo tramp do fluido de corte para reaproveitar a emulsão. Multiplicam a vida útil do fluido e reduzem o custo de tratamento de resíduos. O óleo recuperado é separado para destinação ou reúso.', kind: 'photo' },
+        ],
+      },
+      {
+        id: 'metalwork', code: 'T04', title: 'Metalurgia geral', sub: 'General metalwork',
+        img: '/img/t04-metalwork-cover.webp',
+        desc: 'Serviços metalúrgicos completos: corte a laser e plasma de alta precisão, dobra CNC e produção de peças em série com alta capacidade de resposta.',
+        bullets: [
+          { name: 'Corte a laser', img: '/video/t04-laser-cutting.mp4', poster: '/img/t04-laser-cutting-poster.webp', desc: 'Serviço de corte a laser de alta precisão para chapas de até 12,7 mm (1/2 polegada). Aço-carbono, inoxidável e alumínio. Tolerâncias apertadas e bordas limpas, prontas para solda ou dobra posterior.', kind: 'video' },
+          { name: 'Corte plasma', img: '/video/t04-plasma-cutting.mp4', poster: '/img/t04-plasma-cutting-poster.webp', desc: 'Serviço de corte plasma para chapas de até 25,4 mm (1 polegada). Especialmente eficiente nas espessuras em que o laser deixa de ser vantajoso. Boa qualidade de borda com alto rendimento produtivo.', kind: 'video' },
+          { name: 'Dobra industrial', img: '/video/t04-industrial-bending.mp4', poster: '/img/t04-industrial-bending-poster.webp', desc: 'Dobradeira CNC para dobras de até 3 m. Programação a partir de desenho 3D e biblioteca de matrizes para diferentes espessuras e raios. Alta repetibilidade para produção em série.', kind: 'video' },
+          { name: 'Produção em série', img: '/img/t04-serial-production.webp', desc: 'Capacidade industrial, décadas de experiência e uma ampla rede de fornecedores permitem produzir peças metalúrgicas em lotes com alta capacidade de resposta. De protótipos validados com o cliente a produções recorrentes. Assumimos também montagem, solda e tratamentos superficiais quando necessário.', kind: 'photo' },
+        ],
+      },
+    ],
+    applications: {
+      eyebrow: '[ 03 — Aplicações ]',
+      title: 'O custo que não se vê.',
+      intro: 'Muitas plantas descartam o fluido de corte quando ele suja — depois de já ter desgastado as ferramentas, danificado a bomba e parado a linha. Filtragem, transporte de cavaco e lavagem não são acessórios: protegem os ativos que você já pagou.',
+      symptoms: {
+        title: 'Você reconhece estes sintomas na sua planta?',
+        items: [
+          'Troca o solúvel a cada poucas semanas e paga para que seja recolhido.',
+          'As ferramentas duram menos do que deveriam.',
+          'Para a máquina para retirar cavaco na mão.',
+          'O fluido de corte exala odor ou irrita a equipe.',
+          'O acabamento superficial cai sem causa clara.',
+          'A bomba ou o eixo-árvore falham antes do previsto.',
+        ],
+        close: 'Se você reconhece dois ou mais, não é azar: é um custo oculto com solução de engenharia.',
+      },
+      cards: [
+        {
+          code: 'A01',
+          title: 'Conformação de tubos',
+          problem: 'O lubrificante se carrega de finos metálicos e óleo tramp. O fluido degradado lubrifica pior e acelera o desgaste de roletes e matrizes; aparecem marcas na superfície do tubo e a sucata aumenta.',
+          install: 'Filtragem centralizada + separação magnética + recuperação de óleo.',
+          benefit: 'Protege o ferramental de conformação · multiplica a vida do fluido.',
+          link: { page: 'conformado', label: 'Ver a solução' },
+        },
+        {
+          code: 'A02',
+          title: 'Usinagem e torneamento',
+          problem: 'O cavaco se acumula e os finos recirculam no fluido de corte; o óleo de barramento o contamina. O resultado: desgaste de ferramenta, dano em bombas e eixos-árvore, e paradas para limpeza manual.',
+          install: 'Transporte de cavaco centralizado + filtro de esteira + separador magnético.',
+          benefit: 'Mais vida de ferramenta · menos paradas · fluido limpo.',
+        },
+        {
+          code: 'A03',
+          title: 'Retificação de precisão',
+          problem: 'O cavaco abrasivo fino é quase invisível, mas arruína o acabamento e desgasta o rebolo se não for retirado do fluido. A tolerância fica instável de lote a lote.',
+          install: 'Filtragem fina (esteira ou papel) + separação magnética de alta eficiência.',
+          benefit: 'Acabamento estável · mais vida de rebolo · fluido limpo.',
+        },
+        {
+          code: 'A04',
+          title: 'Lavagem e preparação de peças',
+          problem: 'As peças chegam com óleo e cavaco à montagem, à solda ou à pintura. A lavagem manual é inconsistente e vira gargalo na linha.',
+          install: 'Lavadora industrial (passagem contínua, rotativa ou cabine) com filtragem integrada e controle CLP.',
+          benefit: 'Limpeza repetível · mais throughput · banho de maior vida.',
+        },
+      ],
+      custom: {
+        title: 'Cada equipamento é dimensionado sobre o seu processo.',
+        body: 'Cada transportador de cavaco, filtro e lavadora é dimensionado sobre o processo real: tipo de cavaco, fluido de corte, vazão, layout e ritmo de linha. Validamos com projeto 3D antes de fabricar. Um transportador mal dimensionado entope; uma lavadora genérica não atinge o grau de limpeza que a próxima etapa exige. O projeto sob medida é o que faz o equipamento trabalhar 24/7 por décadas.',
+      },
+      metrics: {
+        items: [
+          { v: '2–4×', l: 'vida do fluido de corte com remoção de óleo e finos' },
+          { v: '−50/70%', l: 'frequência de troca do solúvel' },
+          { v: '+10/30%', l: 'vida útil de ferramenta' },
+          { v: '↓', l: 'custo de destinação de resíduos líquidos' },
+          { v: '↓', l: 'paradas por limpeza manual de cavaco' },
+        ],
+        note: 'Faixas típicas em instalações com tratamento adequado. Os resultados dependem do processo — nós os quantificamos no levantamento na sua planta.',
+      },
+      cta: {
+        text: 'Não sabe por onde começar? Um levantamento identifica onde está o custo oculto e quanto dá para recuperar.',
+        button: 'Solicitar levantamento',
+      },
+    },
+    catalogs: {
+      eyebrow: '[ 04 — Downloads ]',
+      title: 'Baixe nossos catálogos.',
+      sub: 'Especificações, esquemas de funcionamento e modelos disponíveis para cada linha. PDF para impressão.',
+      note: 'Os PDFs estão em inglês. Precisa de material em português? Fale com a gente.',
+      items: [
+        { id: 'general', title: 'Catálogo Geral', desc: 'As três linhas + serviços adicionais (corte a laser/plasma, fornos, racks).', pages: 12, size: '9 MB', file: '/catalogs/Trans-Fil-Catalog-General-EN.pdf', color: '#3a86ff', img: '/img/catalog-general-en.webp' },
+        { id: 'filtration', title: 'Filtragem', desc: 'Sistemas centralizados de tratamento e filtragem de fluidos de corte.', pages: 8, size: '3 MB', file: '/catalogs/Trans-Fil-Catalog-Filtration-EN.pdf', color: '#ff6b1a', img: '/img/catalog-filtration-en.webp' },
+        { id: 'washing', title: 'Lavagem', desc: 'Linhas automatizadas de lavagem e secagem de peças. Túnel, torre, cabine e especiais.', pages: 6, size: '5 MB', file: '/catalogs/Trans-Fil-Catalog-Washing-EN.pdf', color: '#4ade80', img: '/img/catalog-washing-en.webp' },
+      ],
+      cta: 'Ver catálogo',
+    },
+    process: {
+      eyebrow: 'PROCESSO',
+      title: 'Projetamos, fabricamos e acompanhamos cada equipamento.',
+      lead: 'Da primeira visita à sua planta ao suporte contínuo depois do start-up. Uma só equipe, um só responsável.',
+      steps: [
+        { n: '01', t: 'Estudo de processo', d: 'Levantamos seu processo produtivo e sua necessidade específica para projetar uma solução sob medida.' },
+        { n: '02', t: 'Engenharia', d: 'Projeto customizado estrutural, mecânico, elétrico, hidráulico e de segurança.' },
+        { n: '03', t: 'Fabricação', d: 'Construção completa na nossa oficina de Córdoba. Materiais rastreáveis e testes a seco antes do embarque.' },
+        { n: '04', t: 'Start-up', d: 'Instalação no local, ajuste de parâmetros e treinamento da equipe de operação e manutenção.' },
+        { n: '05', t: 'Suporte', d: 'Peças de reposição, assistência técnica e melhorias contínuas. As máquinas Trans-Fil dos anos 90 ainda operam.' },
+      ],
+    },
+    services: {
+      eyebrow: '[ 05 — Serviços ]',
+      title: 'Além da entrega.',
+      sub: 'Uma máquina industrial dura décadas se receber a atenção adequada. Acompanhamos cada equipamento durante toda a vida útil.',
+      items: [
+        { code: 'S01', title: 'Reparos', desc: 'Diagnóstico, peças de reposição e recondicionamento de equipamentos próprios e de terceiros.', img: '/img/s01-repairs.webp' },
+        { code: 'S02', title: 'Retrofit', desc: 'Modernização de máquinas existentes: CLP, automação, eficiência energética.', img: '/img/s02-retrofitting.webp' },
+        { code: 'S03', title: 'Manutenção', desc: 'Planos preventivos e preditivos. Visitas programadas e suporte remoto contínuo.', img: '/img/s03-maintenance.webp' },
+        { code: 'S04', title: 'Engenharia sob medida', desc: 'Estudo de processo, layout, simulação e projeto mecânico do zero.', img: '/img/s04-engineering.webp' },
+      ],
+    },
+    industries: {
+      eyebrow: '[ 06 — Setores ]',
+      title: 'Onde se trabalha o metal,', title2: 'lá estamos.',
+      sub: 'Três décadas integrando equipamentos em siderúrgicas, montadoras, plantas de óleo e gás e fábricas de máquinas-ferramenta na Argentina e na região.',
+      tabs: [
+        { id: 'steel', label: 'Siderurgia' },
+        { id: 'auto', label: 'Automotivo, Óleo & Linha Branca' },
+        { id: 'tools', label: 'Máquinas-Ferramenta' },
+      ],
+      coverage: [
+        'Argentina', 'Brasil', 'Chile', 'Peru',
+        'Bolívia', 'Paraguai', 'Uruguai', 'Colômbia',
+        'Equador', 'México', 'Estados Unidos', 'Rep. Dominicana',
+        'Porto Rico', 'Espanha',
+      ],
+      hoverPause: '← PASSE O MOUSE PARA PAUSAR →',
+    },
+    history: {
+      eyebrow: '[ 07 — História ]',
+      title: 'Desde 1989, na mesma oficina.',
+      body: 'A Trans-Fil nasceu em Córdoba como uma oficina especializada em filtragem de fluidos de corte para a indústria metalmecânica. Três gerações depois, seguimos projetando cada máquina com a mesma dedicação inicial.',
+      milestones: [
+        { y: '1989', t: 'Fundação', d: 'Início da oficina em Córdoba com foco em filtragem industrial.' },
+        { y: '1998', t: 'Primeira linha automotiva', d: 'Integração com a planta da Renault Argentina.' },
+        { y: '2007', t: 'Linha Tenaris', d: 'Projeto de transportadores para linha de tubos sem costura.' },
+        { y: '2015', t: 'Expansão regional', d: 'Projetos no Brasil, Chile, Peru e México.' },
+        { y: '2024', t: 'Nova planta', d: 'Ampliação da capacidade de fabricação em Francisco de Arteaga 2895.' },
+      ],
+    },
+    contact: {
+      eyebrow: '[ 08 — Contato ]',
+      title: 'Conte para nós sobre o seu processo.',
+      sub: 'Um consultor técnico responde em menos de 24 h úteis. Se preferir, fale direto com a gente.',
+      form: {
+        name: 'Nome', company: 'Empresa', email: 'E-mail', phone: 'Telefone',
+        industry: 'Setor',
+        industryOpts: ['Siderurgia', 'Automotivo', 'Óleo & Gás', 'Máquinas-Ferramenta', 'Linha Branca', 'Outro'],
+        linea: 'Linha de interesse',
+        lineaOpts: ['Filtragem', 'Transporte de cavaco', 'Lavagem industrial', 'Corte e dobra', 'Outra'],
+        message: 'Que processo você quer melhorar?',
+        send: 'Enviar consulta',
+        sending: 'Enviando…',
+        sent: 'Consulta recebida. Entraremos em contato.',
+        sendErr: 'Não foi possível enviar. Tente de novo ou escreva para ventas@transfil.com.ar.',
+        required: 'Campo obrigatório', emailErr: 'E-mail inválido',
+      },
+      direct: 'Contato direto',
+      addr: 'Francisco de Arteaga 2895, Córdoba, Argentina',
+      addressLabel: 'Endereço',
+    },
+    footer: { tag: 'Máquinas industriais especializadas', rights: 'Todos os direitos reservados.', built: 'Trans-Fil S.R.L.' },
+    chips: { established: 'EST. 1989', argentina: 'CÓRDOBA · ARGENTINA', iso: 'ISO 9001' },
+    workshopActive: 'Oficina · Ativa',
+    whatsappMessage: 'Olá, contato vocês pelo site da Trans-Fil.',
+    langSwitch: { es: 'ES', en: 'EN', pt: 'PT' },
+    backToTop: 'Voltar ao topo',
+    ui: {
+      skipToContent: 'Ir para o conteúdo',
+      aboutHeading: 'Sobre a Trans-Fil',
+      faqHeading: 'Perguntas frequentes',
+      symptom: 'SINTOMA',
+      solution: 'SOLUÇÃO',
+      benefit: 'BENEFÍCIO',
+      metricsTitle: 'Resultados típicos do investimento',
+      download: 'Baixar',
+      close: 'Fechar',
+      coverage: 'COBERTURA',
+      countriesReached: 'Países atendidos',
+    },
+    about: 'A Trans-Fil S.R.L. é uma fabricante argentina de máquinas industriais especializadas, fundada em 1989 em Córdoba. Projeta, fabrica e mantém transportadores de cavaco, sistemas de lavagem industrial, equipamentos de filtragem e tratamento de fluidos de corte, e máquinas de corte a laser e plasma. Sua planta fica em Francisco de Arteaga 2895, Córdoba, Argentina. Atende mais de 120 clientes industriais em 14 países —Argentina, Brasil, Chile, Peru, Bolívia, Paraguai, Uruguai, Colômbia, Equador, México, Estados Unidos, República Dominicana, Porto Rico e Espanha— principalmente dos setores siderúrgico, automotivo, óleo e gás e de máquinas-ferramenta. Presta ainda serviços complementares de reparo, retrofit, manutenção programada e engenharia sob medida.',
+    faq: [
+      {
+        q: 'O que é a Trans-Fil?',
+        a: 'A Trans-Fil S.R.L. é uma fabricante argentina de máquinas industriais fundada em 1989 em Córdoba. Projeta, fabrica e mantém transportadores de cavaco, sistemas de lavagem industrial, filtragem de fluidos e máquinas de corte para os setores siderúrgico, automotivo e de máquinas-ferramenta.',
+      },
+      {
+        q: 'Onde fica a Trans-Fil?',
+        a: 'A planta da Trans-Fil fica em Francisco de Arteaga 2895, Córdoba, Argentina (31°24′17″S · 64°11′31″W).',
+      },
+      {
+        q: 'Desde quando a Trans-Fil opera?',
+        a: 'A Trans-Fil opera desde 1989, com mais de 36 anos projetando e fabricando máquinas industriais na mesma oficina de Córdoba.',
+      },
+      {
+        q: 'Que produtos a Trans-Fil fabrica?',
+        a: 'A Trans-Fil fabrica quatro linhas: (1) Transporte de cavaco —esteira articulada, raspador, magnético, correia ou corrente plástica; (2) Lavagem industrial —cabines de passagem contínua, rotativas e de carga manual, com filtragem integrada e controle CLP; (3) Tratamento de fluidos —filtros de esteira, separadores magnéticos, filtragem avançada com centrais pressurizadas e recuperação de óleo; (4) Metalurgia geral —corte a laser até 12,7 mm, corte plasma até 25,4 mm, dobra CNC até 3 m e produção de peças em série.',
+      },
+      {
+        q: 'Para quais países a Trans-Fil exporta?',
+        a: 'A Trans-Fil exporta para 14 países: Argentina, Brasil, Chile, Peru, Bolívia, Paraguai, Uruguai, Colômbia, Equador, México, Estados Unidos, República Dominicana, Porto Rico e Espanha.',
+      },
+      {
+        q: 'Que setores a Trans-Fil atende?',
+        a: 'A Trans-Fil atende principalmente a indústria siderúrgica (Acindar, Aluar, Tenaris, Sidersa), os setores automotivo, óleo e gás e linha branca (Renault, Volkswagen, Iveco, Fiat, Toyota, Brembo, Weatherford) e o setor de máquinas-ferramenta (Mepromaes, Comau, Emag, Mori Seiki, Mazak, Doosan).',
+      },
+      {
+        q: 'A Trans-Fil presta serviços de corte a laser e corte plasma?',
+        a: 'Sim. A Trans-Fil presta serviços de corte a laser de alta precisão para chapas de até 12,7 mm (1/2 polegada) e de corte plasma até 25,4 mm (1 polegada), em aço-carbono, aço inoxidável e alumínio.',
+      },
+      {
+        q: 'A Trans-Fil faz manutenção e retrofit de máquinas existentes?',
+        a: 'Sim. A Trans-Fil oferece reparo e recondicionamento de equipamentos próprios e de terceiros, retrofit (modernização de CLP, automação e eficiência energética de máquinas existentes), manutenção preventiva e preditiva com visitas programadas, e engenharia sob medida a partir do levantamento em planta.',
+      },
+      {
+        q: 'Por que o fluido de corte se degrada?',
+        a: 'O fluido de corte se degrada pelo acúmulo de finos metálicos, pelo óleo tramp que vem de barramentos e eixos-árvore, e pelo crescimento bacteriano. O óleo tramp é a causa principal: alimenta as bactérias, baixa o pH e gera odor. Removê-lo e filtrar os finos multiplica a vida do fluido.',
+      },
+      {
+        q: 'Como se prolonga a vida do solúvel?',
+        a: 'Com remoção de óleo tramp (skimmers ou separadores coalescentes) e filtragem de partículas (filtros de esteira e separadores magnéticos). Em instalações com tratamento adequado, a vida do fluido costuma se multiplicar de 2 a 4 vezes, reduzindo a troca e o custo de destinação de resíduos.',
+      },
+      {
+        q: 'Quando vale a pena investir em filtragem de fluido de corte?',
+        a: 'Quando o solúvel é trocado com frequência, as ferramentas duram menos do que o esperado, há dano em bombas ou eixos-árvore, ou a máquina é parada para retirar cavaco na mão. Um levantamento em planta quantifica o custo oculto e o retorno do investimento.',
+      },
+      {
+        q: 'Como entrar em contato com a Trans-Fil?',
+        a: 'Por e-mail em ventas@transfil.com.ar, por telefone ou WhatsApp no +54 9 3513 82-0321, ou na planta de Francisco de Arteaga 2895, Córdoba, Argentina. A empresa responde consultas técnicas em menos de 24 horas úteis.',
       },
     ],
   },

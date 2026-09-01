@@ -157,6 +157,16 @@ button { font-family: inherit; }
   max-width: 640px;
   margin: 16px 0 0;
 }
+/* Small caveat under a section subtitle (PT catalogs: PDFs are in English). */
+.tf-section-note {
+  margin: 10px 0 0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--fg-3);
+  max-width: 60ch;
+}
+
 
 /* ── Header ──────────────────────────────────────────────────────── */
 .tf-header {
@@ -1305,6 +1315,29 @@ button { font-family: inherit; }
 }
 .tf-app-block.is-benefit .tf-app-text { color: var(--fg); }
 
+/* Deep link to the card's own landing page (A01 → /conformado). Only the
+   cards that have one render it. */
+.tf-app-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-start;
+  padding: 10px 14px;
+  border: 1px solid var(--line-strong);
+  color: var(--fg);
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  transition: background 0.2s, border-color 0.2s;
+}
+.tf-app-link:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.tf-app-link svg { transition: transform 0.2s; }
+.tf-app-link:hover svg { transform: translateX(3px); }
+
 /* 3 — Custom-design editorial block.
    Backdrop = branded conveyor photo + heavy multi-layer shadowing so the
    image is just felt rather than read. The dark gradient anchors the
@@ -2389,6 +2422,12 @@ button { font-family: inherit; }
   transition: color 0.2s;
 }
 .tf-footer-col a:hover { color: var(--accent); }
+/* Application landing (A01 → /conformado): a real page, not an anchor. */
+.tf-footer-highlight { color: var(--fg); }
+.tf-footer-highlight::before {
+  content: '→ ';
+  color: var(--accent);
+}
 .tf-footer-static { font-size: 14px; color: var(--fg-3); }
 .tf-footer-rule {
   max-width: var(--maxw);
@@ -2778,6 +2817,16 @@ button { font-family: inherit; }
 }
 .tf-lang a[data-on="true"] { color: var(--fg); }
 .tf-lang a:hover { color: var(--fg); }
+
+/* Three locales (ES / EN / PT) have to share the top bar with the logo and
+   the burger on a 360px screen — tighten the gutters without dropping below
+   the 44px tap target. */
+@media (max-width: 640px) {
+  .tf-header-inner { gap: 12px; }
+  .tf-header-aside { gap: 10px; }
+  .tf-lang { gap: 2px; }
+  .tf-lang a { padding: 12px 5px; min-width: 24px; }
+}
 
 /* ╔══════════════════════════════════════════════════════════════════╗
    ║  Cosmetic enhancements                                           ║

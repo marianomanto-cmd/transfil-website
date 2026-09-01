@@ -1,9 +1,12 @@
 import { COVERAGE_DOTS } from './coverage-dots';
+import type { Lang } from '../i18n/routes';
 
 type Country = {
   code: string;
+  /** Spanish label — the fallback when a locale has no override. */
   label: string;
   labelEn?: string;
+  labelPt?: string;
   x: number;
   y: number;
   hq?: boolean;
@@ -18,17 +21,17 @@ const COUNTRIES: Country[] = [
   { code: 'AR', label: 'CÓRDOBA',         x: 66, y: 81, hq: true, lx: 3.2, ly: 0.4, anchor: 'start' },
   { code: 'BR', label: 'BRASIL',          labelEn: 'BRAZIL',        x: 83, y: 66, lx: 3.2, ly: 0.4, anchor: 'start' },
   { code: 'CL', label: 'CHILE',           x: 59, y: 83, lx: -3.2, ly: 0.4, anchor: 'end' },
-  { code: 'PE', label: 'PERÚ',            labelEn: 'PERU',          x: 53, y: 62, lx: -3.2, ly: 0.4, anchor: 'end' },
-  { code: 'BO', label: 'BOLIVIA',         x: 62, y: 67, lx: 3.2, ly: 0.4, anchor: 'start' },
-  { code: 'PY', label: 'PARAGUAY',        x: 73, y: 75, lx: 3.2, ly: 0.4, anchor: 'start' },
-  { code: 'UY', label: 'URUGUAY',         x: 74, y: 85, lx: 3.2, ly: 0.4, anchor: 'start' },
-  { code: 'CO', label: 'COLOMBIA',        x: 56, y: 45, lx: -3.2, ly: 0.4, anchor: 'end' },
-  { code: 'EC', label: 'ECUADOR',         x: 52, y: 50, lx: -3.2, ly: 0.4, anchor: 'end' },
+  { code: 'PE', label: 'PERÚ',            labelEn: 'PERU',          labelPt: 'PERU',            x: 53, y: 62, lx: -3.2, ly: 0.4, anchor: 'end' },
+  { code: 'BO', label: 'BOLIVIA',                                   labelPt: 'BOLÍVIA',         x: 62, y: 67, lx: 3.2, ly: 0.4, anchor: 'start' },
+  { code: 'PY', label: 'PARAGUAY',                                  labelPt: 'PARAGUAI',        x: 73, y: 75, lx: 3.2, ly: 0.4, anchor: 'start' },
+  { code: 'UY', label: 'URUGUAY',                                   labelPt: 'URUGUAI',         x: 74, y: 85, lx: 3.2, ly: 0.4, anchor: 'start' },
+  { code: 'CO', label: 'COLOMBIA',                                  labelPt: 'COLÔMBIA',        x: 56, y: 45, lx: -3.2, ly: 0.4, anchor: 'end' },
+  { code: 'EC', label: 'ECUADOR',                                   labelPt: 'EQUADOR',         x: 52, y: 50, lx: -3.2, ly: 0.4, anchor: 'end' },
   { code: 'MX', label: 'MÉXICO',          labelEn: 'MEXICO',        x: 31, y: 31, lx: -3.2, ly: 0.4, anchor: 'end' },
   { code: 'US', label: 'ESTADOS UNIDOS',  labelEn: 'UNITED STATES', x: 53, y: 11, lx: 3.2, ly: 0.4, anchor: 'start' },
-  { code: 'DO', label: 'R. DOMINICANA',   labelEn: 'DOMINICAN REP.', x: 60, y: 32, lx: 3.2, ly: 0.4, anchor: 'start' },
-  { code: 'PR', label: 'PUERTO RICO',     x: 66, y: 31, lx: 0, ly: 3.2, anchor: 'middle' },
-  { code: 'ES', label: 'ESPAÑA',          labelEn: 'SPAIN',         x: 125, y: 10, lx: -3.2, ly: 0.4, anchor: 'end' },
+  { code: 'DO', label: 'R. DOMINICANA',   labelEn: 'DOMINICAN REP.', labelPt: 'REP. DOMINICANA', x: 60, y: 32, lx: 3.2, ly: 0.4, anchor: 'start' },
+  { code: 'PR', label: 'PUERTO RICO',                               labelPt: 'PORTO RICO',      x: 66, y: 31, lx: 0, ly: 3.2, anchor: 'middle' },
+  { code: 'ES', label: 'ESPAÑA',          labelEn: 'SPAIN',         labelPt: 'ESPANHA',         x: 125, y: 10, lx: -3.2, ly: 0.4, anchor: 'end' },
 ];
 
 // Quadratic-bezier arc from (x1,y1) to (x2,y2), curved perpendicular
@@ -49,9 +52,19 @@ function arc(x1: number, y1: number, x2: number, y2: number, liftFactor = 0.22):
   return `M ${x1} ${y1} Q ${cx.toFixed(2)} ${cy.toFixed(2)} ${x2} ${y2}`;
 }
 
-type Props = { lang: 'es' | 'en' };
+type Props = {
+  lang: Lang;
+  /** "COBERTURA" stamp, from `content.ui.coverage`. */
+  coverageLabel: string;
+  /** "Países alcanzados", from `content.ui.countriesReached`. */
+  countriesLabel: string;
+};
 
-export function CoverageRadar({ lang }: Props) {
+/** Locale override for a country name, falling back to the Spanish label. */
+const labelFor = (c: Country, lang: Lang) =>
+  (lang === 'en' ? c.labelEn : lang === 'pt' ? c.labelPt : undefined) ?? c.label;
+
+export function CoverageRadar({ lang, coverageLabel, countriesLabel }: Props) {
   const hq = COUNTRIES.find((c) => c.hq)!;
   // Pre-computed arcs HQ → destination, with a stagger for the draw-in + pulse.
   const links = COUNTRIES.filter((c) => !c.hq).map((c, i) => ({
@@ -172,7 +185,7 @@ export function CoverageRadar({ lang }: Props) {
                 textAnchor={c.anchor ?? 'start'}
                 className={c.hq ? 'tf-radar-label is-hq' : 'tf-radar-label'}
               >
-                {lang === 'en' && c.labelEn ? c.labelEn : c.label}
+                {labelFor(c, lang)}
               </text>
             </g>
           ))}
@@ -180,11 +193,11 @@ export function CoverageRadar({ lang }: Props) {
       </svg>
 
       <div className="tf-radar-meta">
-        <span><b>14</b> · {lang === 'es' ? 'Países alcanzados' : 'Countries reached'}</span>
+        <span><b>14</b> · {countriesLabel}</span>
         <span>HQ · CÓRDOBA · AR</span>
       </div>
       <span className="tf-radar-stamp">
-        {lang === 'es' ? 'COBERTURA' : 'COVERAGE'} · 2026
+        {coverageLabel} · 2026
       </span>
     </div>
   );

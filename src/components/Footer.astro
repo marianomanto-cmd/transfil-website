@@ -1,9 +1,23 @@
 ---
-import type { Content } from '../i18n/content';
+import type { Content, Lang } from '../i18n/content';
+import { pathFor, type PageKey } from '../i18n/routes';
 
-interface Props { content: Content }
-const { content } = Astro.props;
+interface Props {
+  content: Content;
+  lang: Lang;
+  /** Page the footer sits on — decides whether anchors stay in-page. */
+  page?: PageKey;
+}
+const { content, lang, page = 'home' } = Astro.props;
 const year = new Date().getFullYear();
+
+// On the home the section anchors are in-page; anywhere else (a campaign
+// landing) they have to travel back to the home first.
+const home = pathFor('home', lang);
+const anchor = (hash: string) => (page === 'home' ? hash : `${home}${hash}`);
+
+// Cards that own a landing page (A01 → /conformado) get a footer link.
+const landingCards = content.applications.cards.filter((c) => c.link);
 ---
 <footer class="tf-footer">
   <div class="tf-footer-grid">
@@ -18,11 +32,14 @@ const year = new Date().getFullYear();
     </div>
     <div class="tf-footer-col">
       <div class="tf-footer-h">{content.nav.tech}</div>
-      {content.tech.map((t) => <a href={`#tech-${t.id}`}>{t.title}</a>)}
+      {content.tech.map((t) => <a href={anchor(`#tech-${t.id}`)}>{t.title}</a>)}
+      {landingCards.map((c) => (
+        <a href={pathFor(c.link!.page, lang)} class="tf-footer-highlight">{c.title}</a>
+      ))}
     </div>
     <div class="tf-footer-col">
       <div class="tf-footer-h">{content.nav.services}</div>
-      {content.services.items.map((s) => <a href={`#service-${s.code.toLowerCase()}`}>{s.title}</a>)}
+      {content.services.items.map((s) => <a href={anchor(`#service-${s.code.toLowerCase()}`)}>{s.title}</a>)}
     </div>
     <div class="tf-footer-col">
       <div class="tf-footer-h">{content.nav.contact}</div>

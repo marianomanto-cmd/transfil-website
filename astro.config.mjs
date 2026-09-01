@@ -14,7 +14,7 @@ export default defineConfig({
     sitemap({
       i18n: {
         defaultLocale: 'es',
-        locales: { es: 'es-AR', en: 'en-US' },
+        locales: { es: 'es-AR', en: 'en-US', pt: 'pt-BR' },
       },
       // Stamp every entry with build time so search engines can prioritise
       // re-crawling when the site changes.
@@ -25,8 +25,18 @@ export default defineConfig({
   ],
   i18n: {
     defaultLocale: 'es',
-    locales: ['es', 'en'],
+    locales: ['es', 'en', 'pt'],
     routing: { prefixDefaultLocale: false },
+  },
+  // The Vercel adapter turns these into platform-level redirects (see
+  // `.vercel/output/config.json`), so they cost nothing at runtime.
+  redirects: {
+    // Legacy campaign URLs → the /conformado landing.
+    '/filtracion-conformado-tubos': { status: 301, destination: '/conformado' },
+    '/filtracao-conformacao-tubos': { status: 301, destination: '/pt/conformado' },
+    // @astrojs/sitemap emits `sitemap-index.xml`; crawlers and humans still
+    // guess `/sitemap.xml`, which used to 404.
+    '/sitemap.xml': { status: 301, destination: '/sitemap-index.xml' },
   },
   build: { inlineStylesheets: 'auto' },
 });

@@ -17,7 +17,7 @@ import { BackToTop } from '../components/BackToTop';
 
 const content = CONTENT.es;
 ---
-<Base lang="es" content={content} pathname="/">
+<Base lang="es" content={content} page="home">
   <Header lang="es" content={content} client:load />
   <main id="main">
     <Hero content={content} client:load />
@@ -30,7 +30,7 @@ const content = CONTENT.es;
     <HistorySection content={content} />
     <ContactSection content={content} client:visible />
   </main>
-  <Footer content={content} />
+  <Footer content={content} lang="es" />
   <WhatsAppFAB message={content.whatsappMessage} client:idle />
   <BackToTop label={content.backToTop} client:idle />
 </Base>

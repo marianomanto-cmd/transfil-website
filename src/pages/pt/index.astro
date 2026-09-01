@@ -15,10 +15,10 @@ import Footer from '../../components/Footer.astro';
 import { WhatsAppFAB } from '../../components/WhatsAppFAB';
 import { BackToTop } from '../../components/BackToTop';
 
-const content = CONTENT.en;
+const content = CONTENT.pt;
 ---
-<Base lang="en" content={content} page="home">
-  <Header lang="en" content={content} client:load />
+<Base lang="pt" content={content} page="home">
+  <Header lang="pt" content={content} client:load />
   <main id="main">
     <Hero content={content} client:load />
     <TechSection content={content} client:visible />
@@ -30,7 +30,7 @@ const content = CONTENT.en;
     <HistorySection content={content} />
     <ContactSection content={content} client:visible />
   </main>
-  <Footer content={content} lang="en" />
+  <Footer content={content} lang="pt" />
   <WhatsAppFAB message={content.whatsappMessage} client:idle />
   <BackToTop label={content.backToTop} client:idle />
 </Base>

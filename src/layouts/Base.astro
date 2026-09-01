@@ -2,18 +2,59 @@
 import '../styles/global.css';
 import { ClientRouter } from 'astro:transitions';
 import type { Content, Lang } from '../i18n/content';
+import {
+  SITE,
+  LOCALES,
+  LOCALE_META,
+  altOgLocales,
+  alternatesFor,
+  urlFor,
+  type PageKey,
+} from '../i18n/routes';
 
 interface Props {
   lang: Lang;
   content: Content;
-  pathname: string;
+  /**
+   * Routable page key. Drives canonical + the reciprocal hreflang block.
+   * Omitted only by the 404, which is `noindex` and has no alternates.
+   */
+  page?: PageKey;
+  /** Explicit path — only needed when `page` is absent (404). */
+  pathname?: string;
   noindex?: boolean;
+  /** Per-page SEO overrides. Landings pass their own; the homes don't. */
+  meta?: Partial<Content['meta']>;
+  ogImage?: string;
+  /** FAQ powering the FAQPage JSON-LD + the sr-only block. */
+  faq?: { q: string; a: string }[];
+  /** Long-form prose for the sr-only About block. */
+  about?: string;
+  /** Extra JSON-LD nodes (WebPage / Service / BreadcrumbList on landings). */
+  extraJsonLd?: Record<string, unknown>[];
 }
 
-const { lang, content, pathname, noindex = false } = Astro.props;
-const site = 'https://www.transfil.com.ar';
-const canonical = `${site}${pathname}`;
-const ogImage = `${site}/img/og-image.jpg`;
+const {
+  lang,
+  content,
+  page,
+  pathname,
+  noindex = false,
+  meta: metaOverride,
+  ogImage: ogImageOverride,
+  faq = content.faq,
+  about = content.about,
+  extraJsonLd = [],
+} = Astro.props;
+
+const site = SITE;
+const canonical = page ? urlFor(page, lang) : `${site}${pathname ?? '/'}`;
+const meta = { ...content.meta, ...metaOverride };
+const ogImage = ogImageOverride
+  ? `${site}${ogImageOverride}`
+  : `${site}/img/og-image.jpg`;
+const alternates = page ? alternatesFor(page) : [];
+const xDefault = page ? urlFor(page, 'es') : null;
 
 const orgJsonLd = {
   '@context': 'https://schema.org',
@@ -24,7 +65,7 @@ const orgJsonLd = {
   url: `${site}/`,
   logo: `${site}/favicon-512.png`,
   image: ogImage,
-  description: content.meta.description,
+  description: meta.description,
   foundingDate: '1989',
   founders: [{ '@type': 'Person', name: 'Mantovani' }],
   inLanguage: content.htmlLang,
@@ -62,7 +103,7 @@ const orgJsonLd = {
         { '@type': 'Country', name: 'Puerto Rico' },
         { '@type': 'Country', name: 'Spain' },
       ],
-      availableLanguage: ['Spanish', 'English'],
+      availableLanguage: LOCALES.map((l) => LOCALE_META[l].schemaLanguage),
     },
   ],
   industry: 'Industrial Machinery Manufacturing',
@@ -102,7 +143,7 @@ const faqJsonLd = {
   '@type': 'FAQPage',
   '@id': `${canonical}#faq`,
   inLanguage: content.htmlLang,
-  mainEntity: content.faq.map((f) => ({
+  mainEntity: faq.map((f) => ({
     '@type': 'Question',
     name: f.q,
     acceptedAnswer: {
@@ -126,14 +167,15 @@ const faqJsonLd = {
     })(window,document,'script','dataLayer','GTM-PV9STD3');</script>
     <!-- End Google Tag Manager -->
 
-    <title>{content.meta.title}</title>
-    <meta name="description" content={content.meta.description} />
+    <title>{meta.title}</title>
+    <meta name="description" content={meta.description} />
     {noindex && <meta name="robots" content="noindex, follow" />}
     <meta name="theme-color" content="#0e0e10" />
     <link rel="canonical" href={canonical} />
-    <link rel="alternate" hreflang="es-AR" href={`${site}/`} />
-    <link rel="alternate" hreflang="en-US" href={`${site}/en/`} />
-    <link rel="alternate" hreflang="x-default" href={`${site}/`} />
+    {alternates.map((a) => (
+      <link rel="alternate" hreflang={a.hreflang} href={a.href} />
+    ))}
+    {xDefault && <link rel="alternate" hreflang="x-default" href={xDefault} />}
 
     <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
@@ -143,27 +185,32 @@ const faqJsonLd = {
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Trans-Fil" />
-    <meta property="og:title" content={content.meta.ogTitle} />
-    <meta property="og:description" content={content.meta.ogDescription} />
+    <meta property="og:title" content={meta.ogTitle} />
+    <meta property="og:description" content={meta.ogDescription} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:secure_url" content={ogImage} />
     <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content={content.meta.ogImageAlt} />
+    <meta property="og:image:alt" content={meta.ogImageAlt} />
     <meta property="og:locale" content={content.ogLocale} />
-    <meta property="og:locale:alternate" content={content.altLocale} />
+    {altOgLocales(lang).map((l) => (
+      <meta property="og:locale:alternate" content={l} />
+    ))}
 
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={content.meta.ogTitle} />
-    <meta name="twitter:description" content={content.meta.twitterDescription} />
+    <meta name="twitter:title" content={meta.ogTitle} />
+    <meta name="twitter:description" content={meta.twitterDescription} />
     <meta name="twitter:image" content={ogImage} />
-    <meta name="twitter:image:alt" content={content.meta.ogImageAlt} />
+    <meta name="twitter:image:alt" content={meta.ogImageAlt} />
 
     <script type="application/ld+json" set:html={JSON.stringify(orgJsonLd)} />
     <script type="application/ld+json" set:html={JSON.stringify(servicesJsonLd)} />
     <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+    {extraJsonLd.map((node) => (
+      <script type="application/ld+json" set:html={JSON.stringify(node)} />
+    ))}
 
     <!-- GA4 now lives inside the GTM container (GTM-PV9STD3); the initial
          page_view is sent by the GA4 config tag when GTM loads. This pushes a
@@ -221,17 +268,17 @@ const faqJsonLd = {
       height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
 
-    <a class="tf-skip-link" href="#main">{content.htmlLang.startsWith('es') ? 'Saltar al contenido' : 'Skip to content'}</a>
+    <a class="tf-skip-link" href="#main">{content.ui.skipToContent}</a>
 
     {/* Visually-hidden but indexable 'About' block for AI search engines
         and screen readers. Mirrors the FAQPage JSON-LD in human-readable
         prose so crawlers can extract facts even without parsing JSON-LD. */}
     <section class="tf-sr-only" aria-labelledby="about-heading">
-      <h2 id="about-heading">{content.htmlLang.startsWith('es') ? 'Sobre Trans-Fil' : 'About Trans-Fil'}</h2>
-      <p>{content.about}</p>
-      <h3>{content.htmlLang.startsWith('es') ? 'Preguntas frecuentes' : 'Frequently asked questions'}</h3>
+      <h2 id="about-heading">{content.ui.aboutHeading}</h2>
+      <p>{about}</p>
+      <h3>{content.ui.faqHeading}</h3>
       <dl>
-        {content.faq.map((f) => (
+        {faq.map((f) => (
           <>
             <dt>{f.q}</dt>
             <dd>{f.a}</dd>

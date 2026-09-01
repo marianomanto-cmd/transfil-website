@@ -1,13 +1,49 @@
-import { useEffect, useRef, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import { cx } from '../lib/cx';
 import type { Content, Lang } from '../i18n/content';
+import { LOCALES, LOCALE_META, pathFor, type PageKey } from '../i18n/routes';
+
+type NavItem = { href: string; label: string };
 
 type Props = {
   lang: Lang;
   content: Content;
+  /**
+   * Which routable page this header sits on. The language switcher jumps to
+   * the same page in the target locale (home ↔ home, landing ↔ landing) and
+   * the logo goes to that locale's home.
+   */
+  page?: PageKey;
+  /**
+   * Section links. Defaults to the home's eight anchors; a campaign landing
+   * passes its own (or `[]` for a bare header with just logo + switcher + CTA).
+   */
+  navItems?: NavItem[];
+  /** Header CTA. Defaults to the contact section of the home. */
+  cta?: { href: string; label: string };
 };
 
-export function Header({ lang, content }: Props) {
+function LangSwitch({ lang, content, page, className }: {
+  lang: Lang;
+  content: Content;
+  page: PageKey;
+  className?: string;
+}) {
+  return (
+    <div className={cx('tf-lang', className)} role="group" aria-label="Language">
+      {LOCALES.map((l, i) => (
+        <Fragment key={l}>
+          {i > 0 && <span aria-hidden="true">/</span>}
+          <a data-on={lang === l} href={pathFor(page, l)} hrefLang={LOCALE_META[l].hreflang}>
+            {content.langSwitch[l]}
+          </a>
+        </Fragment>
+      ))}
+    </div>
+  );
+}
+
+export function Header({ lang, content, page = 'home', navItems, cta }: Props) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -81,15 +117,17 @@ export function Header({ lang, content }: Props) {
     return () => io.disconnect();
   }, []);
 
-  const items = [
-    { href: '#tech', label: content.nav.tech },
-    { href: '#applications', label: content.nav.applications },
-    { href: '#catalogs', label: content.nav.catalogs },
-    { href: '#services', label: content.nav.services },
-    { href: '#industries', label: content.nav.industries },
-    { href: '#history', label: content.nav.history },
-    { href: '#contact', label: content.nav.contact },
-  ];
+  const items: NavItem[] =
+    navItems ?? [
+      { href: '#tech', label: content.nav.tech },
+      { href: '#applications', label: content.nav.applications },
+      { href: '#catalogs', label: content.nav.catalogs },
+      { href: '#services', label: content.nav.services },
+      { href: '#industries', label: content.nav.industries },
+      { href: '#history', label: content.nav.history },
+      { href: '#contact', label: content.nav.contact },
+    ];
+  const headerCta = cta ?? { href: '#contact', label: content.nav.contact };
 
   const onNav = (e: React.MouseEvent, href: string) => {
     e.preventDefault();
@@ -101,11 +139,7 @@ export function Header({ lang, content }: Props) {
   return (
     <header className={cx('tf-header', scrolled && 'is-scrolled')}>
       <div className="tf-header-inner">
-        <a
-          href={lang === 'es' ? '/' : '/en/'}
-          className="tf-logo"
-          aria-label="Trans-Fil"
-        >
+        <a href={pathFor('home', lang)} className="tf-logo" aria-label="Trans-Fil">
           <span className="tf-logo-mark" aria-hidden="true">
             <img src="/img/logo-mark.png" width="34" height="28" alt="" />
           </span>
@@ -130,13 +164,9 @@ export function Header({ lang, content }: Props) {
           })}
         </nav>
         <div className="tf-header-aside">
-          <div className="tf-lang" role="group" aria-label="Language">
-            <a data-on={lang === 'es'} href="/" hrefLang="es-AR">ES</a>
-            <span aria-hidden="true">/</span>
-            <a data-on={lang === 'en'} href="/en/" hrefLang="en-US">EN</a>
-          </div>
-          <a href="#contact" className="tf-cta-mini" onClick={(e) => onNav(e, '#contact')}>
-            <span>{content.nav.contact}</span>
+          <LangSwitch lang={lang} content={content} page={page} />
+          <a href={headerCta.href} className="tf-cta-mini" onClick={(e) => onNav(e, headerCta.href)}>
+            <span>{headerCta.label}</span>
             <svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true">
               <path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="square" />
             </svg>
@@ -170,13 +200,9 @@ export function Header({ lang, content }: Props) {
           </a>
         ))}
         <div className="tf-mobile-nav-foot">
-          <div className="tf-lang tf-mobile-lang" role="group" aria-label="Language">
-            <a data-on={lang === 'es'} href="/" hrefLang="es-AR">ES</a>
-            <span aria-hidden="true">/</span>
-            <a data-on={lang === 'en'} href="/en/" hrefLang="en-US">EN</a>
-          </div>
-          <a href="#contact" className="tf-mobile-cta" onClick={(e) => onNav(e, '#contact')}>
-            <span>{content.nav.contact}</span>
+          <LangSwitch lang={lang} content={content} page={page} className="tf-mobile-lang" />
+          <a href={headerCta.href} className="tf-mobile-cta" onClick={(e) => onNav(e, headerCta.href)}>
+            <span>{headerCta.label}</span>
             <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
               <path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="square" />
             </svg>

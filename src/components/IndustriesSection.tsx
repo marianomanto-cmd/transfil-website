@@ -48,7 +48,11 @@ export function IndustriesSection({ content }: { content: Content }) {
             ))}
           </ul>
         </header>
-        <CoverageRadar lang={content.htmlLang.startsWith('es') ? 'es' : 'en'} />
+        <CoverageRadar
+          lang={content.lang}
+          coverageLabel={content.ui.coverage}
+          countriesLabel={content.ui.countriesReached}
+        />
       </div>
       <div className="tf-tabs" role="tablist">
         {c.tabs.map((t) => {
