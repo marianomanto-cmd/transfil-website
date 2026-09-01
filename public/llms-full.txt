@@ -9,7 +9,7 @@ This document mirrors the human-facing pages with all factual content laid out a
 - **Founded:** 1989
 - **Headquarters:** Francisco de Arteaga 2895, Córdoba, Argentina
 - **Geo:** −31.4036°, −64.1924°
-- **Languages served:** Spanish (es-AR), English (en-US)
+- **Languages served:** Spanish (es-AR), English (en-US), Brazilian Portuguese (pt-BR)
 - **Years of operation:** 36+
 - **Industrial clients:** 120+
 - **Countries served:** 14
@@ -104,7 +104,7 @@ Argentina, Brazil, Chile, Peru, Bolivia, Paraguay, Uruguay, Colombia, Ecuador, M
 - **Phone / WhatsApp:** +54 9 3513 82-0321
 - **Address:** Francisco de Arteaga 2895, Córdoba, Argentina
 - **Coordinates:** 31°24′17″S · 64°11′31″W (−31.4036, −64.1924)
-- **Languages:** Spanish, English
+- **Languages:** Spanish, English, Portuguese
 - **Response time:** under 24 business hours for technical enquiries
 
 ## Downloadable catalogs
@@ -116,11 +116,24 @@ Argentina, Brazil, Chile, Peru, Bolivia, Paraguay, Uruguay, Colombia, Ecuador, M
 - **Washing (ES):** /catalogs/Trans-Fil-Catalogo-Lavado-ES.pdf · 6 pages · 3 MB
 - **Washing (EN):** /catalogs/Trans-Fil-Catalog-Washing-EN.pdf · 6 pages · 5 MB
 
+## Application landings
+
+Pages dedicated to one production application rather than to the company. Each one has its own FAQ, its own schema.org Service node and its own contact form; paid campaigns point at these, not at the home.
+
+### Tube-forming lines (ERW / HFW / roll forming / drawing)
+
+Centralized coolant filtration for tube mills. Three stages plus a central station: magnetic separation for ferrous fines, belt filtration for solids, belt skimmers / coalescing separators for tramp oil, and a pumping-pressurization-tempering station feeding the whole line. Sized from an on-site survey before quoting; built in the Córdoba workshop. Typical results with proper treatment: coolant life 2–4×, coolant-change frequency −50/70%, tool life +10/30%.
+
+- ES: https://www.transfil.com.ar/conformado
+- EN: https://www.transfil.com.ar/en/conformado
+- PT: https://www.transfil.com.ar/pt/conformado
+
 ## Site map
 
 - ES home: https://www.transfil.com.ar/
 - EN home: https://www.transfil.com.ar/en/
+- PT home: https://www.transfil.com.ar/pt/
 - Robots: https://www.transfil.com.ar/robots.txt
-- Sitemap: https://www.transfil.com.ar/sitemap-index.xml
+- Sitemap: https://www.transfil.com.ar/sitemap-index.xml (also served at /sitemap.xml)
 - Short summary: https://www.transfil.com.ar/llms.txt
 - This file: https://www.transfil.com.ar/llms-full.txt

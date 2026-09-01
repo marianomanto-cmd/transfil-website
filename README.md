@@ -1,27 +1,32 @@
 # Trans-Fil Website
 
-Bilingual single-page institutional site for **Trans-Fil S.R.L.** — industrial machinery, Córdoba, Argentina. Production at <https://www.transfil.com.ar>.
+Trilingual institutional site for **Trans-Fil S.R.L.** — industrial machinery, Córdoba, Argentina — plus its campaign landings. Production at <https://www.transfil.com.ar>.
 
-- ES at `/` (default)
-- EN at `/en/`
+| Page | ES | EN | PT |
+|---|---|---|---|
+| Home (single-page, 8 sections) | `/` | `/en/` | `/pt/` |
+| Tube-forming filtration landing | `/conformado` | `/en/conformado` | `/pt/conformado` |
+
 - Custom 404 at `/404` (auto-localises based on the path that triggered it; `noindex`)
+- Locales, prefixes and per-page URLs all come from `src/i18n/routes.ts` — see [`docs/LANDINGS.md`](docs/LANDINGS.md)
 
 ## Stack
 
 - **Astro 5** static output, with **React** islands hydrated per-component (`client:visible` / `client:load` / `client:idle`).
 - **TypeScript** everywhere; `npm run check` runs `astro check`.
-- All copy in `src/i18n/content.ts` — single source of truth, typed (`Content` type).
+- All institutional copy in `src/i18n/content.ts` and all campaign-landing copy in `src/i18n/landings.ts` — single sources of truth, typed (`Content` / `LandingContent`).
+- All URLs in `src/i18n/routes.ts` — locales, prefixes and the path of every page in every language. No component hardcodes a path.
 - Design tokens + section styles in `src/styles/global.css`; scoped styles inside Astro components where they're self-contained (e.g. `ProcessSection.astro`).
-- `@astrojs/sitemap` emits `sitemap-index.xml` + `sitemap-0.xml` with hreflang + per-build `lastmod`.
-- View Transitions via `<ClientRouter />` for ES ↔ EN swaps.
-- Analytics: **Google Tag Manager** (`GTM-PV9STD3`) — GA4 (`G-Y6H3JFZNNM`) is configured inside the container. The layout pushes `dataLayer` key events for GTM/GA4: `page_view` on every `astro:page-load` after the first (so view-transitions count), `generate_lead` on a confirmed contact-form send, and `click_whatsapp` / `click_phone` on those link clicks (delegated listener in `Base.astro`).
+- `@astrojs/sitemap` emits `sitemap-index.xml` + `sitemap-0.xml` with the three hreflangs per URL and per-build `lastmod`; `/sitemap.xml` 301s to the index.
+- View Transitions via `<ClientRouter />` for ES ↔ EN ↔ PT swaps.
+- Analytics: **Google Tag Manager** (`GTM-PV9STD3`) — GA4 (`G-Y6H3JFZNNM`) is configured inside the container. The layout pushes `dataLayer` key events for GTM/GA4: `page_view` on every `astro:page-load` after the first (so view-transitions count), `generate_lead` on a confirmed contact-form send, and `click_whatsapp` / `click_phone` on those link clicks (delegated listener in `Base.astro`). Campaign landings additionally push `generate_lead` with `page` / `locale` / `lead_type` and a `whatsapp_click` event — see [`docs/LANDINGS.md`](docs/LANDINGS.md).
 
 ## Local development
 
 ```sh
 npm install
 npm run dev      # http://localhost:4321
-npm run build    # static output in dist/ (3 pages: /, /en/, /404)
+npm run build    # static output in dist/ (7 pages: 3 homes, 3 landings, /404)
 npm run preview  # serve dist/ locally
 npm run check    # astro type-check
 ```
@@ -57,8 +62,13 @@ The landing page has 8 numbered sections + one unnumbered side-story:
 
 ```
 src/
-  i18n/content.ts        all bilingual copy, typed (single source of truth)
-  layouts/Base.astro     <head>, SEO meta, JSON-LD x3, GTM, skip-link, sr-only FAQ
+  i18n/
+    routes.ts            locales, prefixes and every page's URL per language
+    content.ts           all institutional copy in ES/EN/PT, typed
+    landings.ts          campaign-landing copy (LANDINGS.conformado.*), typed
+  layouts/
+    Base.astro           <head>, SEO meta, JSON-LD, GTM, skip-link, sr-only FAQ
+    LandingLayout.astro  the campaign-landing shape, reused by every landing
   components/
     Hero.tsx                  workshop video bg + display headline + stats
     TechSection.tsx           bento grid of 4 tech groups × 4 bullets
@@ -69,7 +79,7 @@ src/
     IndustriesSection.tsx     dotted coverage map + 3 client marquees + watermark
     HistorySection.astro      5 milestones on vertical timeline
     ContactSection.tsx        form + side panel + SVG locator
-    Footer.astro              brand mark + per-tech and per-service deep-links
+    Footer.astro              brand mark + per-tech and per-service deep-links + landing link
     Header.tsx                sticky header w/ scroll-progress + scroll-spy + burger
     Section.astro             helper layout for plain-content sections
     Media.tsx                 <img>/<video> wrapper with corner brackets
@@ -80,6 +90,11 @@ src/
   pages/
     index.astro          ES home
     en/index.astro       EN home
+    pt/index.astro       PT home
+    conformado.astro     ES tube-forming landing
+    en/conformado.astro  EN tube-forming landing
+    pt/conformado.astro  PT tube-forming landing
+    api/contact.ts       Resend endpoint (prerender=false → serverless)
     404.astro            custom 404 (path-aware locale, noindex)
   lib/
     cx.ts                className helper
@@ -92,19 +107,43 @@ public/
   site.webmanifest       icons + theme-color (display: browser → not installable)
   robots.txt             allow-all, points at /sitemap-index.xml
   llms.txt               short site summary for AI agents (llmstxt.org)
-  llms-full.txt          full bilingual fact dump for AI agents
+  llms-full.txt          full ES/EN fact dump + landings, for AI agents
   img/                   logo-mark.png, bullet thumbnails, catalog covers, service photos, og-image.jpg
   images/                process section background
   video/                 hero loop + autoplay clips referenced by Tech bullets
   catalogs/              the 6 catalog PDFs (3 ES + 3 EN)
+docs/
+  LANDINGS.md            locales + the landing pattern + roadmap + recipe
+  contacto-email.md      Resend setup, DNS records, RESEND_API_KEY
 design_handoff/          original handoff (kept for reference)
 ```
 
-## Bilingual content
+## Trilingual content (ES / EN / PT)
 
-Every user-facing string lives in `src/i18n/content.ts`. The `Content` type defines what each section needs; `CONTENT.es` and `CONTENT.en` provide the values. The pages just thread `CONTENT[lang]` into the section components.
+Three locales: `es` (default, no prefix, `es-AR`), `en` (`/en/`, `en-US`) and `pt` (`/pt/`, `pt-BR` — Brazilian Portuguese, industrial register).
 
-To change wording, image paths, country lists, milestones, contact info, FAQ entries, etc., edit `content.ts` only. Components don't hardcode user-facing strings (with one tiny exception in `AplicacionesSection.astro` for SÍNTOMA/SOLUCIÓN/BENEFICIO labels — kept inline because they're block markers, not content).
+Every user-facing string lives in `src/i18n/content.ts`. The `Content` type defines what each section needs; `CONTENT.es`, `CONTENT.en` and `CONTENT.pt` provide the values, so TypeScript flags any locale missing a field. Pages just thread `CONTENT[lang]` into the section components.
+
+Chrome labels that used to be inline `lang === 'es' ? … : …` ternaries inside components (skip-link, `SÍNTOMA` / `SOLUCIÓN` / `BENEFICIO`, `Descargar` / `Cerrar`, `COBERTURA`, `Países alcanzados`, the About/FAQ headings) now live in `content.ui`. That's what keeps a new locale from silently shipping Spanish fragments — **don't reintroduce a locale ternary in a component**.
+
+`src/i18n/routes.ts` owns the URL layer: `LOCALES`, `LOCALE_META` (html lang / og:locale / hreflang / prefix / schema language) and `PAGE_PATHS` (`home` and `conformado` × 3 locales). The language switcher, the hreflang block, canonicals, the logo link, the footer deep-links and the sitemap all read from it.
+
+PT catalogs point at the English PDFs (there is no Portuguese edition yet); `catalogs.note` renders the caveat under the section subtitle.
+
+To change wording, image paths, country lists, milestones, contact info or FAQ entries, edit `content.ts` only. Adding a locale is documented step by step in [`docs/LANDINGS.md`](docs/LANDINGS.md).
+
+## Campaign landings
+
+`/conformado` (+ `/en/` and `/pt/`) is the first **application** landing: coolant filtration for tube-forming lines. Google Ads and LinkedIn point here, never at the home.
+
+- Copy: `src/i18n/landings.ts` (`LANDINGS.conformado.{es,en,pt}`, typed `LandingContent`).
+- Layout: `src/layouts/LandingLayout.astro` — symptom → system → why us → proof → form/WhatsApp → FAQ → closing. Reuses the `tf-*` classes and tokens; no new visual language.
+- Pages: `src/pages/conformado.astro`, `src/pages/en/conformado.astro`, `src/pages/pt/conformado.astro` — six lines each.
+- Own SEO: canonical, reciprocal hreflang, page-specific OG, and `WebPage` + `Service` + `FAQPage` + `BreadcrumbList` JSON-LD. The home's FAQ is *not* emitted here.
+- Deep-linked from the home: the `A01` card carries `link: { page: 'conformado', … }`, which renders both the card's "Ver solución" button and the footer link.
+- 301s from the legacy campaign URLs (`/filtracion-conformado-tubos`, `/filtracao-conformacao-tubos`) in `astro.config.mjs`.
+
+The full pattern, the roadmap (`/lavado`, `/transporte`, `/hornos` — not implemented) and the step-by-step recipe for a new landing are in [`docs/LANDINGS.md`](docs/LANDINGS.md).
 
 ## Tech section: bento on desktop, accordion on mobile
 
@@ -121,7 +160,7 @@ State (active tech / selected bullet per tech) is managed in React and persists 
 `AplicacionesSection.astro` is the commercial-educational block sitting between Tech and Catalogs. Five stacked sub-blocks:
 
 1. **Symptoms checklist** — 6 diagnostic items in a 2-col grid (1-col on mobile) + closing line.
-2. **Four application cards** (`A01–A04`) in a 2×2 grid — each carries a `SÍNTOMA`, `SOLUCIÓN` and `BENEFICIO` block. The `BENEFICIO` block gets a left accent border + `--accent-soft` background.
+2. **Four application cards** (`A01–A04`) in a 2×2 grid — each carries a `SÍNTOMA`, `SOLUCIÓN` and `BENEFICIO` block. The `BENEFICIO` block gets a left accent border + `--accent-soft` background. A card with a `link` in `content.ts` (today only `A01` → `/conformado`) also renders a "Ver solución" button and gets a footer link, in all three locales.
 3. **Custom-design editorial block** — branded TRANS-FIL conveyor photo as a heavily-shadowed backdrop on the right 65% of the block; on mobile it covers the whole block at lower opacity behind a near-solid overlay.
 4. **Metrics strip** — 5 numeric callouts (2–4× coolant life, −50/70% changes, +10/30% tool life, etc.) with an italic caveat.
 5. **Closing CTA banner** — single primary button pointing at `#contact`.
@@ -153,29 +192,34 @@ Deep-link anchors (`#service-s01..s04`, used by the footer) and the `scroll-marg
 
 `ContactSection.tsx#submit` validates locally, then `fetch`-POSTs the fields as JSON to `/api/contact` (`src/pages/api/contact.ts`, `prerender = false` → a Vercel serverless function) which sends the email via **Resend** to `ventas@transfil.com.ar` (`from: web@transfil.com.ar`, `replyTo` = the visitor). A hidden `website` honeypot plus server-side validation guard it; the form adds a "Línea de interés" select, sending/success/error states, and pushes a `generate_lead` dataLayer event on a confirmed send. Setup, DNS records and the `RESEND_API_KEY` env var are documented in `docs/contacto-email.md`.
 
+On a campaign landing the same component takes `page`, `defaultLinea`, `lineType`, `heading`, `success`, `waPrompt` and `waMessage` props: it pre-selects the line of interest, adds a "tipo de línea" select, captures the URL's UTMs, swaps the inline toast for a success panel with a WhatsApp button, and pushes `generate_lead` with `page` / `locale` / `lead_type`. The endpoint then tags the subject `[Conformado][es] Consulta web — {empresa}` and appends *Tipo de línea*, *Origen* and the UTM rows. **Without `page` — i.e. from the home — subject and body are byte-for-byte what they were.** There is one mailer; don't add another.
+
+`Header` and `ContactSection` deliberately take narrow props (`nav` + `langSwitch`; `contact` + `lang` + `whatsappMessage` + `workshopActive`) rather than the whole `Content`. Passing the full dictionary serialised ~60 KB of unrelated copy into the island props on every page. Keep it that way.
+
 The form is accessibility-correct: `role=alert` on field errors, `aria-required` + `aria-invalid` + `aria-describedby` on each required input, `role=status` + `aria-live="polite"` on the success toast (with a `:empty` CSS rule so it doesn't reserve flex gap when idle), on-blur validation per field, focus-first-invalid on submit.
 
 ## SEO
 
 - **Canonical**: every page emits a self-referential `<link rel="canonical">`.
-- **hreflang**: ES, EN and `x-default` symmetric across pages and sitemap.
+- **hreflang**: ES, EN, PT and `x-default` (→ ES), reciprocal across pages and sitemap, generated from `src/i18n/routes.ts`.
 - **OG / Twitter**: `/img/og-image.jpg` (1200×630, ~94 KB) with TRANS-FIL conveyor branding, per-locale `og:image:alt`.
 - **Meta description**: trimmed to ≤155 chars per locale; `keywords` removed (Google ignores, Bing penalises).
 - **JSON-LD x3** in `Base.astro`:
   - `Organization` + `LocalBusiness` combined schema — workshop address, geo coordinates (−31.4036, −64.1924), `inLanguage`, E.164 telephone, `areaServed` as 14 `Country` objects.
   - `Service @graph` — one node per service S01–S04, attributed back to the org via `@id`.
-  - `FAQPage` — the 12 bilingual Q&As from `content.faq` (3 of them about coolant degradation / soluble life / when to invest in filtration are direct surface for AI search engines).
+  - `FAQPage` — the 12 Q&As from `content.faq` per locale (3 of them about coolant degradation / soluble life / when to invest in filtration are direct surface for AI search engines). Landings override it with their own FAQ and add `WebPage` + `Service` + `BreadcrumbList`.
 - **Visually-hidden About + FAQ** in `<body>` — `.tf-sr-only` block that mirrors the JSON-LD in plain text so crawlers can extract facts without parsing JSON-LD.
 - **404**: `noindex` via a `noindex` prop on `<Base>`.
-- **Sitemap**: `<lastmod>` per build via `serialize` hook.
-- **robots.txt**: allow-all + points at `https://www.transfil.com.ar/sitemap-index.xml`.
+- **Sitemap**: 6 URLs (3 homes + 3 landings), each with the three `xhtml:link` alternates and a `<lastmod>` per build. The `serialize` hook also normalises trailing slashes so every `<loc>` matches the page's own canonical (locale roots keep the slash, landings don't).
+- **robots.txt**: allow-all + points at `https://www.transfil.com.ar/sitemap-index.xml`. `/sitemap.xml` used to 404; it now 301s to the index.
+- **Redirects**: declared in `astro.config.mjs` and emitted by the Vercel adapter as real 301s in `.vercel/output/config.json` (no meta-refresh HTML).
 - **Deep links from footer**: each tech and service in the footer links to its own anchor (`#tech-conveyors`, `#service-s01`, …); the targets carry `scroll-margin-top: calc(var(--header-h) + 24px)` so the sticky header doesn't cover them.
 - **Image alt + dims**: tech tile photos, video labels and catalog covers carry descriptive `alt` / `aria-label` text, plus `width`/`height` attributes where the source is known (anti-CLS).
 
 ## AI / LLM discoverability
 
 - `/llms.txt` — short site summary per the llmstxt.org proposal (product lines, services, contact).
-- `/llms-full.txt` — the full bilingual fact dump (all four product lines with bullets, services, industries, countries, history, contact, catalog file paths). Source of truth for AI agents fetching the site outside the rendered HTML.
+- `/llms-full.txt` — the full fact dump (all four product lines with bullets, services, industries, countries, history, contact, catalog file paths). Source of truth for AI agents fetching the site outside the rendered HTML.
 - The FAQPage schema (12 Q&As) and the `.tf-sr-only` About + FAQ block in `<body>` cover the same ground for crawlers that don't fetch the side-files.
 
 ## Performance
@@ -210,9 +254,12 @@ The form is accessibility-correct: `role=alert` on field errors, `aria-required`
 
 ## Open follow-ups
 
-1. **og-image per locale** — current `og-image.jpg` works for both; could add English overlay text for /en/ shares.
-2. **Contact form ops** — live via the Resend endpoint (`/api/contact`); to actually send, set `RESEND_API_KEY` in Vercel and publish the GTM container. See `docs/contacto-email.md`.
-3. **EN polish of the Applications section** — the Spanish copy was reviewed against SEO targets; the English version is a functional translation that the client should review before that locale is promoted.
+1. **Landing OG image** — `/conformado` shares `/img/t03-fluids-cover.webp` (1800×900, real filtration hardware, correct `alt`). A purpose-built 1200×630 JPG with campaign framing would be better; the repo has no image tooling, so it needs to come from design. Swap it in the `ogImage` prop in `src/layouts/LandingLayout.astro`.
+2. **og-image per locale** — the site-wide `og-image.jpg` works for all three; could add locale-specific overlay text.
+3. **Contact form ops** — live via the Resend endpoint (`/api/contact`); to actually send, set `RESEND_API_KEY` in Vercel and publish the GTM container. The landing subject tag (`[Conformado][es] …`) and the UTM rows are worth verifying with one real send after deploy. See `docs/contacto-email.md`.
+4. **GTM triggers for the landings** — `generate_lead` now carries `page` / `locale` / `lead_type`, and `whatsapp_click` is new. Note `click_whatsapp` (the site-wide delegated listener) still fires on the same clicks: don't mark both as key events or campaign WhatsApp leads get counted twice.
+5. **PT catalogs** — `/pt/` serves the English PDFs with a caveat under the subtitle. Replace with Portuguese editions when they exist (`catalogs.items[].file` + `.img`, and drop `catalogs.note`).
+6. **EN / PT copy review** — the Spanish copy was reviewed against SEO targets; the English and Brazilian-Portuguese versions are professional translations the client should review before those locales are promoted.
 4. **Final imagery review** — bullet photos and service photos are an evolving mix of real shots and AI renders. Replace anything still looking placeholder-y when better assets arrive. All paths live in `src/i18n/content.ts`.
 5. **Tech section hero per-tech cover** — currently the bento's "hero" tile shows the first bullet's image, not the tech's `t.img` cover. The cover photos exist in `content.tech[i].img` but are unused in the current layout. Decide whether to surface them somewhere (e.g., on a future overview state) or remove from the schema.
 6. **Hero LCP further** — the lazy video helps but a dedicated `<link rel="preload" as="image" href="/img/hero-poster.webp" fetchpriority="high">` would shave more time off the first paint.

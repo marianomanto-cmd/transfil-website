@@ -31,10 +31,12 @@ const c = content.applications;
       <p class="tf-apps-symptoms-close">{c.symptoms.close}</p>
     </aside>
 
-    <!-- 2. 4 application cards (2×2 grid). On mobile each card is
-         collapsible: head + title stay visible, the three SÍNTOMA /
-         SOLUCIÓN / BENEFICIO blocks live inside .tf-app-body and toggle
-         via a script below (progressive enhancement). -->
+    {/* 2. 4 application cards (2×2 grid). On mobile each card is
+        collapsible: head + title stay visible, the three symptom /
+        solution / benefit blocks live inside .tf-app-body and toggle
+        via a script below (progressive enhancement). An expression
+        comment, not an HTML one, so the Spanish labels don't ship
+        inside the PT and EN pages. */}
     <div class="tf-apps-grid">
       {c.cards.map((card) => (
         <article

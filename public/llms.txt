@@ -4,7 +4,7 @@
 
 Trans-Fil S.R.L. operates from Francisco de Arteaga 2895, Córdoba, Argentina (−31.4036, −64.1924). Over 120 industrial clients in Argentina, Brazil, Chile, Peru, Bolivia, Paraguay, Uruguay, Colombia, Ecuador, Mexico, United States, Dominican Republic, Puerto Rico and Spain.
 
-The site is bilingual (Spanish at `/`, English at `/en/`). All factual data also exposed as JSON-LD: Organization + LocalBusiness in the page `<head>`, plus Service entries (S01–S04) and a FAQPage with 9 Q&As per locale.
+The site is trilingual (Spanish at `/`, English at `/en/`, Brazilian Portuguese at `/pt/`). All factual data also exposed as JSON-LD: Organization + LocalBusiness in the page `<head>`, plus Service entries (S01–S04) and a FAQPage with 12 Q&As per locale.
 
 ## Product lines
 
@@ -26,11 +26,16 @@ The site is bilingual (Spanish at `/`, English at `/en/`). All factual data also
 - Phone / WhatsApp: +54 9 3513 82-0321
 - Address: Francisco de Arteaga 2895, Córdoba, Argentina
 
+## Application landings
+
+- **Tube-forming coolant filtration** — centralized filtration + magnetic separation + tramp-oil recovery for ERW / HFW tube mills, roll forming and drawing lines. Plant survey before quoting. `/conformado` (ES) · `/en/conformado` (EN) · `/pt/conformado` (PT).
+
 ## Resources
 
-- Sitemap: /sitemap-index.xml
+- Sitemap: /sitemap-index.xml (also reachable as /sitemap.xml)
 - Robots: /robots.txt
 - Full LLM content: /llms-full.txt
 - Spanish home: /
 - English home: /en/
+- Portuguese home: /pt/
 - Catalog PDFs: /catalogs/Trans-Fil-Catalogo-General-ES.pdf, /catalogs/Trans-Fil-Catalog-General-EN.pdf, and per-line filtration / washing variants.
