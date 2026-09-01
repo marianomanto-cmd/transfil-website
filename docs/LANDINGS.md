@@ -236,39 +236,41 @@ uno solo: **no agregues otro**.
 - Toda imagen lleva `width` / `height` y `alt` real desde el diccionario. El
   fondo del masthead es decorativo (`aria-hidden`), así que no lleva alt.
 
-### Cortar un loop de masthead
+### Preparar un loop de masthead
 
-`/video/hero-coolant.mp4` (398 KB, 1280×676, 3,8 s) sale del master UHD del
-plano de refrigerante — el mismo que usa el hero del home. Dos cosas
+`/video/hero-coolant.mp4` (812 KB, 1024×540, 15,96 s) sale del master UHD del
+plano de refrigerante — el mismo take que usa el hero del home. Dos cosas
 importan:
 
-1. **Que no se vea la costura.** La cámara deriva a lo largo de la toma, así
-   que un loop pelado salta. La receta es fundir la cola sobre la cabeza,
-   con lo que el último frame queda igual al primero:
+1. **Que no se vea el reinicio.** El take es un travelling de acercamiento:
+   el último frame está mucho más cerca que el primero, así que un loop
+   pelado pega un salto fuerte cada vez que reinicia. La solución es **ida y
+   vuelta**: la toma completa hacia adelante y después en reversa. No
+   descarta un solo frame, el loop cierra exacto y el acercamiento se lee
+   como un vaivén lento, que en un fondo queda natural.
 
    ```sh
-   # ventana limpia del master → intermedio
-   ffmpeg -ss 3.5 -to 8.0 -i master.mp4 -vf "scale=1280:-2:flags=lanczos" \
-     -c:v libx264 -preset ultrafast -crf 12 -an seg.mp4
-
-   # cola de 0,7 s fundida sobre la cabeza → loop de 3,8 s
-   ffmpeg -i seg.mp4 -filter_complex "
-     [0:v]split[a][b];
-     [a]trim=start=0:end=3.8,setpts=PTS-STARTPTS[main];
-     [b]trim=start=3.8,setpts=PTS-STARTPTS,format=yuva420p,fade=t=out:st=0:d=0.7:alpha=1[tail];
-     [main][tail]overlay=eof_action=pass,format=yuv420p[v]" \
-     -map "[v]" -r 25 -c:v libx264 -preset slower -crf 33 -profile:v high \
+   ffmpeg -i master.mp4 -filter_complex "
+     [0:v]scale=1024:-2:flags=lanczos,setpts=PTS-STARTPTS,split[f][r];
+     [r]reverse,trim=start_frame=1,setpts=PTS-STARTPTS[rv];
+     [f][rv]concat=n=2:v=1,format=yuv420p[v]" \
+     -map "[v]" -r 25 -c:v libx264 -preset slower -crf 35 -profile:v high \
      -an -movflags +faststart hero-<slug>.mp4
    ```
 
-   Para verificar la costura, comparar el primer frame contra el último: la
-   diferencia tiene que ser la misma que entre dos frames consecutivos
-   cualesquiera (sólo cambia la niebla; la estructura de la máquina, no).
-   `xfade` no sirve acá: exige que la primera entrada sea más larga que la
-   transición.
+   > **Lo que no hay que hacer:** cerrar el loop fundiendo la cola sobre la
+   > cabeza. Los frames del borde coinciden, sí, pero cada vuelta arranca con
+   > un disolve visible de casi un segundo entre dos momentos distintos de la
+   > toma — se lee como un corte. Ya se probó; no sirve para un plano con
+   > movimiento de cámara.
 
-2. **Que pese poco.** Va al 44 % de opacidad bajo un gradiente, así que CRF
-   33 a 1280 px de ancho alcanza y sobra. Apuntar a ≤ 400 KB.
+2. **Que pese poco.** Va al 62 % de opacidad bajo un gradiente, así que 1024
+   px de ancho y CRF 35 alcanzan de sobra. Apuntar a ≤ 850 KB.
 
-El póster se saca del **mismo frame con el que arranca el loop**
-(`ffmpeg -ss <t> -i master.mp4 -frames:v 1 -c:v libwebp -quality 76 …`).
+El póster se saca del **mismo frame con el que arranca el loop** (el `t=0`
+del master) y al mismo ancho, para que no se note el cambio cuando el video
+entra: `ffmpeg -ss 0 -i master.mp4 -frames:v 1 -vf scale=1024:-2 -c:v libwebp
+-quality 78 …`
+
+Para verificar, comparar por PSNR el póster contra el frame 0 del video y el
+primer frame contra el último: los dos pares tienen que dar ~30 dB o más.

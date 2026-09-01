@@ -130,14 +130,14 @@ const navItems = [
     <section class="tf-lp-hero">
       {/* Decorative masthead. The poster paints immediately (and is the
           LCP); the script below attaches the video source once the browser
-          is idle, so a 291 KB fetch never competes with the first paint. */}
+          is idle, so the fetch never competes with the first paint. */}
       <div class="tf-lp-hero-bg" aria-hidden="true">
         <video
           class="tf-lp-hero-video"
           data-hero-src={l.hero.media.video}
           poster={l.hero.media.poster}
-          width="1280"
-          height="676"
+          width="1024"
+          height="540"
           muted
           loop
           playsinline
@@ -441,8 +441,8 @@ const navItems = [
     height: 100%;
     object-fit: cover;
     object-position: center 45%;
-    opacity: 0.44;
-    filter: grayscale(0.2) contrast(1.06);
+    opacity: 0.62;
+    filter: brightness(1.12) saturate(1.06) contrast(1.02);
     display: block;
   }
 
@@ -451,7 +451,7 @@ const navItems = [
     position: absolute;
     inset: 0;
     background:
-      linear-gradient(100deg, var(--bg) 20%, rgba(14, 14, 16, 0.82) 52%, rgba(14, 14, 16, 0.5) 100%),
+      linear-gradient(100deg, var(--bg) 18%, rgba(14, 14, 16, 0.74) 50%, rgba(14, 14, 16, 0.3) 100%),
       radial-gradient(900px 500px at 15% 0%, rgba(58, 134, 255, 0.1), transparent 65%);
   }
   .tf-lp-hero-body {

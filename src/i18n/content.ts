@@ -373,7 +373,7 @@ export const CONTENT: Record<Lang, Content> = {
         send: 'Enviar consulta',
         sending: 'Enviando…',
         sent: 'Consulta recibida. Nos pondremos en contacto.',
-        sendErr: 'No se pudo enviar. Reintentá o escribinos a ventas@transfil.com.ar.',
+        sendErr: 'No se pudo enviar. Reintente o escríbanos a ventas@transfil.com.ar.',
         required: 'Campo requerido', emailErr: 'Email inválido',
       },
       direct: 'Contacto directo',
