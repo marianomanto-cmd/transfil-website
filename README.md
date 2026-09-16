@@ -75,6 +75,7 @@ src/
     AplicacionesSection.astro diagnostic panel + A01–A04 cards + metrics + CTA
     FlowDiagram.astro         dirty fluid → filtration cassette → stable flow
     MachineDiagram.astro      the four A01–A04 process microdiagrams
+    SystemDiagram.astro       scroll-driven schematic of the filtration station
     ProcessSection.astro      5 step cards over darkened workshop bg
     CatalogsSection.tsx       3 PDF covers + in-page viewer modal
     ServicesSection.astro     4 services as icon stepper (S01–S04)
@@ -144,9 +145,31 @@ To change wording, image paths, country lists, milestones, contact info or FAQ e
 - Pages: `src/pages/conformado.astro`, `src/pages/en/conformado.astro`, `src/pages/pt/conformado.astro` — six lines each.
 - Own SEO: canonical, reciprocal hreflang, page-specific OG, and `WebPage` + `Service` + `FAQPage` + `BreadcrumbList` JSON-LD. The home's FAQ is *not* emitted here.
 - Deep-linked from the home: the `A01` card carries `link: { page: 'conformado', … }`, which renders both the card's "Ver solución" button and the footer link.
+- Section `02 — El sistema` opens with `SystemDiagram.astro` (below), then the four `F01–F04` cards.
 - 301s from the legacy campaign URLs (`/filtracion-conformado-tubos`, `/filtracao-conformacao-tubos`) in `astro.config.mjs`.
 
 The full pattern, the roadmap (`/lavado`, `/transporte`, `/hornos` — not implemented) and the step-by-step recipe for a new landing are in [`docs/LANDINGS.md`](docs/LANDINGS.md).
+
+## Filtration-station schematic (`SystemDiagram.astro`)
+
+Opens section `02 — El sistema` on every application landing: one SVG plan of the central filtration station (viewBox `1320 × 680`), walked stage by stage. It replaces the line-art PNG that used to circulate — same content, redrawn in the site's dark language, with every reference as translatable text.
+
+**The run.** The outer block is `380vh`; the inner one is `position: sticky` and the scroll advances `F01 → F02 → F03 → F04`. Each quarter lights its equipment group to full ink (the rest sit at `0.4`), moves a plan-style focus (four corner ticks + a blue halo, redrawn from a `{x,y,w,h}` model so the tick arms keep their length as the box changes shape) and pulls the tub's gradient from brown toward blue as the fluid gets clean. The effective run is `380vh − 100vh ≈ 2520px` at a 900px viewport — about 630px, or six wheel notches, per stage.
+
+**References are HTML, not `<text>`.** Fourteen `<span>`s positioned in percentages over the plan, in an `aria-hidden` overlay. They translate through `landings.ts` like any other string, scale with the container via `cqw`, and can be selected. The SVG carries the whole description in `role="img"` + `aria-label` so a screen reader gets one coherent sentence instead of fourteen fragments.
+
+**The rail** below the plan is real navigation: four buttons with `aria-current="step"`. With the pin active a click scrolls to that stage; without it (phones, reduced motion) the click *is* the navigation and renders the stage directly.
+
+**Dependencies: none.** Loops are CSS. The stage progress is one `scroll` listener (capture + `requestAnimationFrame`, torn down on view transitions). GSAP is used for the focus tween *only if* `window.gsap` already exists; it isn't installed, so the focus snaps — which the group cross-fade covers.
+
+**Phones (≤860px)** drop the pin: 380vh of hijacked scroll on a handset is a trap. The plan becomes a normal block that pans horizontally inside its frame, the rail goes 2×2, and selecting a stage scrolls the frame so the lit zone is actually on screen. `prefers-reduced-motion` gets the same treatment — no pin, no loops, every group at full ink.
+
+**Two constraints worth knowing before editing:**
+
+1. `.tf-sd-stage` has `min-width: 1030px`. That is where `max(10.5px, 1.02cqw)` meets its floor: below it the labels stop shrinking with the drawing, and the bottom reference row starts colliding. Holding the container above that point keeps the plan at the proportions it was drawn in at every viewport. Lower it and the labels overlap on phones.
+2. `body` must not be `overflow-x: hidden` — see the note in `global.css`. `hidden` makes the body a scroll container and silently kills `position: sticky` for every descendant, which is exactly how this schematic pins. `clip` crops identically without creating a scrollport.
+
+Label positions live inline on each `<span>`. If the copy changes, re-check the bottom row: `waste`, `tank`, `exchanger`, `bag` and `cabinet` share one baseline and the Spanish strings are the longest in the set.
 
 ## Tech section: bento on desktop, accordion on mobile
 
@@ -263,6 +286,7 @@ The form is accessibility-correct: `role=alert` on field errors, `aria-required`
   - hero parallax disabled when `(prefers-reduced-motion: reduce)` matches (gated on top of viewport + pointer checks; listens to `change` events on both media queries),
   - magnetic CTA effect skipped entirely,
   - process reveal, tech transitions, scroll-behavior, marquee tilt, accordion chevron, applications chevron all neutered,
+  - the landing schematic drops its `380vh` pin entirely — hijacking three screens of scroll is itself motion nobody asked for — and shows every stage at full ink, navigable from the rail,
   - the whole applications section holds its final frame: no scan, no rotations, no particle loops, no cursor light. The flow figure swaps its moving particles for a parked set (`.tf-fl-still`) so the dirty → filtered → clean story still reads as a static drawing. Verified at 0 running animations.
 - `font-variant-numeric: tabular-nums + slashed-zero` on stats, years, codes, coords.
 - `data-active` scroll-spy on nav links via `IntersectionObserver` (includes the new `#applications` id).

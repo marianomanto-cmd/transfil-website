@@ -56,7 +56,11 @@ html, body {
 }
 
 body {
-  overflow-x: hidden;
+  /* `clip`, not `hidden`: hidden turns the body into a scroll container,
+     which silently disables `position: sticky` for every descendant (the
+     /conformado schematic pins with it). `clip` crops the same way without
+     creating a scrollport. `html` above already carries the same value. */
+  overflow-x: clip;
   background-image:
     radial-gradient(1200px 800px at 80% -10%, rgba(58, 134, 255, 0.06), transparent 60%),
     radial-gradient(1000px 600px at -10% 30%, rgba(255, 255, 255, 0.02), transparent 60%);

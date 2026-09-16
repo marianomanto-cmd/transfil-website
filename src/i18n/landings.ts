@@ -63,6 +63,22 @@ export type LandingContent = {
     eyebrow: string;
     title: string;
     intro: string;
+    /** Labels for the process schematic that opens the section. Every one
+        of them is on screen, so all three locales carry their own. */
+    diagram: {
+      caption: string;
+      scaleNote: string;
+      /** The schematic's only screen-reader text — the reference overlay is
+          aria-hidden so nobody hears fourteen loose fragments. Keep the
+          order of the run if this is edited. */
+      alt: string;
+      labels: {
+        dirty: string; attenuator: string; magnetic: string; gravity: string;
+        skimmer: string; level: string; lowOut: string; highOut: string;
+        clean: string; waste: string; tank: string; exchanger: string;
+        bag: string; cabinet: string;
+      };
+    };
     blocks: { code: string; title: string; desc: string; media: LandingMedia }[];
   };
   why: {
@@ -169,6 +185,18 @@ export const LANDINGS: Record<LandingSlug, Record<Lang, LandingContent>> = {
         title: 'Tres etapas de filtración y una central de proceso.',
         intro:
           'Cada etapa remueve un contaminante distinto. Instaladas en serie sobre la pileta de la línea, el fluido que retorna a la formadora no arrastra finos ferrosos, sólidos ni aceite atrapado.',
+        diagram: {
+          caption: 'Esquema de funcionamiento / Central de filtración',
+          scaleNote: 'Esquema — no a escala',
+          alt: 'Esquema de la central de filtración Trans-Fil: entrada de soluble contaminado, atenuador, separador magnético, filtro de gravedad, depósito de líquido, skimmer, sensor de nivel, intercambiador de calor, filtro bolsa, gabinete eléctrico y salidas de soluble limpio.',
+          labels: {
+            dirty: 'Soluble contaminado', attenuator: 'Atenuador', magnetic: 'Separador magnético',
+            gravity: 'Filtro de gravedad', skimmer: 'Skimmer', level: 'Sensor de nivel',
+            lowOut: 'Salida baja presión', highOut: 'Salida alta presión', clean: 'Soluble limpio',
+            waste: 'Depósito de residuos', tank: 'Depósito de líquido', exchanger: 'Intercambiador de calor',
+            bag: 'Filtro bolsa', cabinet: 'Gabinete eléctrico',
+          },
+        },
         blocks: [
           {
             code: 'F01',
@@ -315,6 +343,18 @@ export const LANDINGS: Record<LandingSlug, Record<Lang, LandingContent>> = {
         title: 'Three filtration stages and one process station.',
         intro:
           'Each stage removes a different contaminant. Installed in series on the line’s tank, the fluid returning to the mill carries no ferrous fines, solids or tramp oil.',
+        diagram: {
+          caption: 'Process schematic / Central filtration station',
+          scaleNote: 'Schematic — not to scale',
+          alt: 'Schematic of the Trans-Fil central filtration station: contaminated coolant inlet, attenuator, magnetic separator, gravity filter, liquid tank, skimmer, level sensor, heat exchanger, bag filter, electrical cabinet and clean-coolant outlets.',
+          labels: {
+            dirty: 'Contaminated coolant', attenuator: 'Attenuator', magnetic: 'Magnetic separator',
+            gravity: 'Gravity filter', skimmer: 'Skimmer', level: 'Level sensor',
+            lowOut: 'Low-pressure outlet', highOut: 'High-pressure outlet', clean: 'Clean coolant',
+            waste: 'Waste tank', tank: 'Liquid tank', exchanger: 'Heat exchanger',
+            bag: 'Bag filter', cabinet: 'Electrical cabinet',
+          },
+        },
         blocks: [
           {
             code: 'F01',
@@ -461,6 +501,18 @@ export const LANDINGS: Record<LandingSlug, Record<Lang, LandingContent>> = {
         title: 'Três etapas de filtragem e uma central de processo.',
         intro:
           'Cada etapa remove um contaminante diferente. Instaladas em série sobre o tanque da linha, o fluido que retorna à formadora não carrega finos ferrosos, sólidos nem óleo tramp.',
+        diagram: {
+          caption: 'Esquema de funcionamento / Central de filtragem',
+          scaleNote: 'Esquema — fora de escala',
+          alt: 'Esquema da central de filtragem Trans-Fil: entrada de fluido contaminado, atenuador, separador magnético, filtro de gravidade, depósito de líquido, skimmer, sensor de nível, trocador de calor, filtro de saco, painel elétrico e saídas de fluido limpo.',
+          labels: {
+            dirty: 'Fluido contaminado', attenuator: 'Atenuador', magnetic: 'Separador magnético',
+            gravity: 'Filtro de gravidade', skimmer: 'Skimmer', level: 'Sensor de nível',
+            lowOut: 'Saída de baixa pressão', highOut: 'Saída de alta pressão', clean: 'Fluido limpo',
+            waste: 'Depósito de resíduos', tank: 'Depósito de líquido', exchanger: 'Trocador de calor',
+            bag: 'Filtro de saco', cabinet: 'Painel elétrico',
+          },
+        },
         blocks: [
           {
             code: 'F01',
