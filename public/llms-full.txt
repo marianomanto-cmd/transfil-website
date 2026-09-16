@@ -116,6 +116,42 @@ Argentina, Brazil, Chile, Peru, Bolivia, Paraguay, Uruguay, Colombia, Ecuador, M
 - **Washing (ES):** /catalogs/Trans-Fil-Catalogo-Lavado-ES.pdf · 6 pages · 3 MB
 - **Washing (EN):** /catalogs/Trans-Fil-Catalog-Washing-EN.pdf · 6 pages · 5 MB
 
+## Production applications (where the equipment goes)
+
+The four production processes Trans-Fil equips most often. Each is stated as the symptom a plant reports, the installation that answers it and the benefit it buys.
+
+Diagnostic symptoms that point at contaminated fluid: coolant changed every few weeks and hauled away; tooling lasting less than it should; machines stopped to clear chips by hand; coolant that smells or irritates operators; surface finish drifting without a clear cause; pumps or spindles failing early. Two or more of these together indicate a hidden cost with an engineering fix rather than bad luck.
+
+### A01 — Tube forming
+
+Symptom: the lubricant loads up with metal fines and tramp oil; the degraded fluid lubricates worse, accelerates roll and die wear, marks the tube surface and drives scrap up.
+Installation: centralized filtration + magnetic separation + oil recovery.
+Benefit: protects forming tooling and multiplies fluid life. Covered in depth by the /conformado landing.
+
+### A02 — Machining and turning
+
+Symptom: chips build up and the fines recirculate in the coolant while way-lube contaminates it further — tool wear, damage to pumps and spindles, and stoppages to clean by hand.
+Installation: centralized chip transport + belt filter + magnetic separator.
+Benefit: longer tool life, fewer stoppages, clean coolant.
+
+### A03 — Precision grinding
+
+Symptom: fine abrasive swarf is nearly invisible but ruins the finish and wears the wheel if it isn't taken out of the fluid; tolerance drifts batch to batch.
+Installation: fine filtration (belt or paper) + high-efficiency magnetic separation.
+Benefit: stable finish, longer wheel life, clear coolant.
+
+### A04 — Parts washing and prep
+
+Symptom: parts reach assembly, welding or paint with oil and chips still on them; manual washing is inconsistent and becomes a bottleneck on the line.
+Installation: industrial washer (pass-through, rotary or cabinet) with integrated filtration and PLC control.
+Benefit: repeatable cleanliness, higher throughput, longer bath life.
+
+### Typical results of the investment
+
+Coolant life 2–4× with oil and fines removal · coolant-change frequency −50/70% · tool life +10/30% · lower liquid-waste disposal cost · fewer stoppages for manual chip cleanup. Typical ranges in installations with proper treatment; actual results depend on the process and are quantified in the on-site survey.
+
+Every machine is sized against the real process — chip type, coolant, flow rate, layout and line cadence — and validated with a 3D design before fabrication.
+
 ## Application landings
 
 Pages dedicated to one production application rather than to the company. Each one has its own FAQ, its own schema.org Service node and its own contact form; paid campaigns point at these, not at the home.

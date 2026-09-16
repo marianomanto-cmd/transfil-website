@@ -40,20 +40,27 @@ const DEMO_HITS = [1, 4];
         <h3 id="apps-symptoms-h" class="tf-apps-symptoms-title">{c.symptoms.title}</h3>
         <div class="tf-apps-readout" aria-hidden="true">
           <span class="tf-mono tf-apps-readout-l">{c.symptoms.threshold}</span>
-          <span class="tf-apps-count"><b>02</b><i>/</i>06</span>
+          <span class="tf-apps-segs">
+            {c.symptoms.items.map((_, i) => (
+              <i style={`--i:${i}`} data-on={i < DEMO_HITS.length ? 'true' : undefined}></i>
+            ))}
+          </span>
+          <span class="tf-apps-count"><b>{String(DEMO_HITS.length).padStart(2, '0')}</b><i>/</i>{String(c.symptoms.items.length).padStart(2, '0')}</span>
         </div>
       </header>
-      <div class="tf-apps-meter" aria-hidden="true"><span></span></div>
+      <span class="tf-apps-rule" aria-hidden="true"></span>
       <ul class="tf-apps-symptoms-list">
         {c.symptoms.items.map((s, i) => (
           <li style={`--i:${i}`} data-hit={DEMO_HITS.includes(i) ? 'true' : undefined}>
+            <span class="tf-mono tf-apps-symptoms-n" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
             <span class="tf-apps-symptoms-mark" aria-hidden="true">
-              <svg viewBox="0 0 14 14" width="12" height="12">
-                <rect class="tf-chk-box" x="1" y="1" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.2" />
-                <path class="tf-chk-tick" pathLength="1" d="M4 7l2.2 2.2L10 5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+              <svg viewBox="0 0 16 16" width="15" height="15">
+                <rect class="tf-chk-bed" x="1.5" y="1.5" width="13" height="13" />
+                <rect class="tf-chk-box" x="1.5" y="1.5" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.2" />
+                <path class="tf-chk-tick" pathLength="1" d="M4.6 8.2l2.4 2.4L11.6 5.6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
             </span>
-            <span>{s}</span>
+            <span class="tf-apps-symptoms-t">{s}</span>
           </li>
         ))}
       </ul>
@@ -244,9 +251,39 @@ const DEMO_HITS = [1, 4];
   .tf-apps-symptoms {
     position: relative;
     overflow: hidden;
-    background: linear-gradient(180deg, #16161c 0%, var(--bg-2) 60%);
-    border: 1px solid var(--line);
+    border: 1px solid var(--line-strong);
     padding: clamp(28px, 3.2vw, 44px);
+    background:
+      radial-gradient(120% 140% at 8% 0%, rgba(58, 134, 255, 0.09), transparent 58%),
+      repeating-linear-gradient(to right, rgba(255, 255, 255, 0.022) 0 1px, transparent 1px 32px),
+      repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.022) 0 1px, transparent 1px 32px),
+      linear-gradient(180deg, #17171e 0%, #101015 100%);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.05),
+      0 24px 48px -32px rgba(0, 0, 0, 0.9);
+  }
+  /* Corner ticks — the same frame the diagram viewports use. */
+  .tf-apps-symptoms::before,
+  .tf-apps-symptoms::after {
+    content: "";
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border: 1px solid var(--accent);
+    opacity: 0.45;
+    pointer-events: none;
+  }
+  .tf-apps-symptoms::before {
+    top: 8px;
+    left: 8px;
+    border-right: 0;
+    border-bottom: 0;
+  }
+  .tf-apps-symptoms::after {
+    right: 8px;
+    bottom: 8px;
+    border-left: 0;
+    border-top: 0;
   }
   /* One pass of a blue scan across the panel when it comes into view. */
   .tf-apps-scan {
@@ -254,13 +291,14 @@ const DEMO_HITS = [1, 4];
     inset: 0 auto 0 0;
     width: 38%;
     pointer-events: none;
-    background: linear-gradient(90deg, transparent 0%, rgba(58, 134, 255, 0.09) 55%, rgba(58, 134, 255, 0.02) 100%);
-    border-right: 1px solid rgba(58, 134, 255, 0.4);
+    background: linear-gradient(90deg, transparent 0%, rgba(58, 134, 255, 0.13) 62%, rgba(58, 134, 255, 0.04) 100%);
+    border-right: 1px solid rgba(88, 154, 255, 0.75);
+    box-shadow: 0 0 22px rgba(58, 134, 255, 0.22);
     transform: translateX(-105%);
     opacity: 0;
   }
   .tf-apps-symptoms.is-active .tf-apps-scan {
-    animation: tf-apps-scan 1.15s var(--ap-ease) 0.1s 1;
+    animation: tf-apps-scan 1.35s var(--ap-ease) 0.1s 1;
   }
   @keyframes tf-apps-scan {
     0% { transform: translateX(-105%); opacity: 0; }
@@ -289,13 +327,40 @@ const DEMO_HITS = [1, 4];
     margin-left: auto;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     flex-shrink: 0;
+    padding: 7px 12px;
+    border: 1px solid var(--line-strong);
+    background: rgba(8, 10, 16, 0.6);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
     opacity: 0;
     transform: translateY(-4px);
     transition: opacity 0.5s var(--ap-ease) 0.85s, transform 0.5s var(--ap-ease) 0.85s;
   }
-  .tf-apps-readout-l { font-size: 9.5px; color: var(--fg-4); }
+  .tf-apps-readout-l { font-size: 9.5px; color: var(--fg-3); }
+  /* Six segments, two lit — the "02 / 06" made visual. */
+  .tf-apps-segs {
+    display: flex;
+    gap: 3px;
+  }
+  .tf-apps-segs i {
+    width: 7px;
+    height: 12px;
+    background: #23232b;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  }
+  .tf-apps-segs i[data-on] {
+    background: var(--accent);
+    box-shadow: 0 0 8px rgba(58, 134, 255, 0.55);
+    opacity: 0;
+  }
+  .tf-apps-symptoms.is-active .tf-apps-segs i[data-on] {
+    animation: tf-apps-seg 0.4s var(--ap-ease) calc(1s + var(--i) * 0.16s) forwards;
+  }
+  @keyframes tf-apps-seg {
+    from { opacity: 0; transform: scaleY(0.3); }
+    to { opacity: 1; transform: scaleY(1); }
+  }
   .tf-apps-count {
     font-family: var(--font-mono);
     font-size: 13px;
@@ -307,39 +372,36 @@ const DEMO_HITS = [1, 4];
   .tf-apps-count i { color: var(--line-strong); font-style: normal; margin: 0 2px; }
   .tf-apps-symptoms.is-active .tf-apps-readout { opacity: 1; transform: none; }
 
-  /* Threshold meter — fills to 2 of 6. */
-  .tf-apps-meter {
-    position: relative;
-    height: 2px;
-    background: var(--line);
-    margin-bottom: 24px;
-    overflow: hidden;
-  }
-  .tf-apps-meter > span {
-    position: absolute;
-    inset: 0 auto 0 0;
-    width: 33.33%;
-    background: linear-gradient(90deg, var(--accent-2), var(--accent));
+  /* Structural divider under the head, drawn on entry. */
+  .tf-apps-rule {
+    display: block;
+    height: 1px;
+    margin-bottom: 22px;
+    background: linear-gradient(90deg, var(--accent) 0 86px, var(--line-strong) 86px);
     transform: scaleX(0);
     transform-origin: left center;
-    transition: transform 0.7s var(--ap-ease) 0.95s;
+    transition: transform 0.75s var(--ap-ease) 0.35s;
   }
-  .tf-apps-symptoms.is-active .tf-apps-meter > span { transform: scaleX(1); }
+  .tf-apps-symptoms.is-active .tf-apps-rule { transform: scaleX(1); }
 
   .tf-apps-symptoms-list {
     list-style: none;
-    margin: 0 0 24px;
-    padding: 0;
+    margin: 0 0 22px;
+    padding: 0 0 22px;
+    border-bottom: 1px solid var(--line-strong);
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 14px 32px;
+    column-gap: clamp(24px, 3vw, 48px);
   }
   .tf-apps-symptoms-list li {
+    position: relative;
     display: flex;
     align-items: flex-start;
     gap: 12px;
+    padding: 13px 14px 13px 12px;
+    border-bottom: 1px solid var(--line);
     font-size: 15px;
-    line-height: 1.5;
+    line-height: 1.45;
     color: var(--fg-2);
     opacity: 0;
     transform: translateY(6px);
@@ -347,39 +409,66 @@ const DEMO_HITS = [1, 4];
       opacity 0.45s var(--ap-ease) calc(0.2s + var(--i) * 0.07s),
       transform 0.45s var(--ap-ease) calc(0.2s + var(--i) * 0.07s);
   }
+  /* Last row of each column carries no rule — the close block has one. */
+  .tf-apps-symptoms-list li:nth-last-child(-n + 2) { border-bottom: 0; }
   .tf-apps-symptoms.is-active .tf-apps-symptoms-list li {
     opacity: 1;
     transform: none;
   }
+  .tf-apps-symptoms-n {
+    margin-top: 5px;
+    font-size: 10px;
+    color: var(--fg-4);
+    flex-shrink: 0;
+    font-variant-numeric: tabular-nums slashed-zero;
+  }
+  .tf-apps-symptoms-t { min-width: 0; }
   .tf-apps-symptoms-mark {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    margin-top: 3px;
     color: var(--fg-4);
-    margin-top: 2px;
     flex-shrink: 0;
     transition: color 0.4s var(--ap-ease);
   }
+  .tf-chk-bed { fill: transparent; }
   .tf-chk-tick {
     stroke-dasharray: 1;
     stroke-dashoffset: 1;
   }
-  /* The two demonstration hits: box lights up, tick draws itself. */
+  /* The two demonstration hits: the row lights up, the tick draws itself. */
+  .tf-apps-symptoms-list li[data-hit] {
+    color: var(--fg);
+    background: linear-gradient(90deg, rgba(58, 134, 255, 0.11), rgba(58, 134, 255, 0.02) 62%, transparent);
+  }
+  .tf-apps-symptoms-list li[data-hit]::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 2px;
+    background: var(--accent);
+    transform: scaleY(0);
+    transition: transform 0.4s var(--ap-ease) calc(0.7s + var(--i) * 0.12s);
+  }
+  .tf-apps-symptoms.is-active li[data-hit]::before { transform: scaleY(1); }
   .tf-apps-symptoms-list li[data-hit] .tf-apps-symptoms-mark { color: var(--accent); }
+  .tf-apps-symptoms-list li[data-hit] .tf-apps-symptoms-n { color: var(--accent); }
+  .tf-apps-symptoms-list li[data-hit] .tf-chk-bed { fill: rgba(58, 134, 255, 0.16); }
   .tf-apps-symptoms.is-active li[data-hit] .tf-chk-tick {
     animation: tf-chk 0.42s var(--ap-ease) calc(0.75s + var(--i) * 0.12s) forwards;
   }
   .tf-apps-symptoms.is-active li[data-hit] .tf-apps-symptoms-mark {
-    filter: drop-shadow(0 0 5px rgba(58, 134, 255, 0.5));
+    filter: drop-shadow(0 0 6px rgba(58, 134, 255, 0.6));
   }
   @keyframes tf-chk {
     to { stroke-dashoffset: 0; }
   }
 
   .tf-apps-symptoms-close {
+    position: relative;
     margin: 0;
-    padding-top: 20px;
-    border-top: 1px solid var(--line);
+    padding-left: 18px;
     font-size: 14px;
     line-height: 1.55;
     color: var(--fg-2);
@@ -388,6 +477,16 @@ const DEMO_HITS = [1, 4];
     opacity: 0;
     transform: translateY(6px);
     transition: opacity 0.5s var(--ap-ease) 1s, transform 0.5s var(--ap-ease) 1s;
+  }
+  .tf-apps-symptoms-close::before {
+    content: "";
+    position: absolute;
+    top: 7px;
+    left: 0;
+    width: 7px;
+    height: 7px;
+    background: var(--accent);
+    transform: rotate(45deg);
   }
   .tf-apps-symptoms.is-active .tf-apps-symptoms-close { opacity: 1; transform: none; }
 
@@ -631,7 +730,20 @@ const DEMO_HITS = [1, 4];
 
   @media (max-width: 720px) {
     .tf-apps-symptoms-list { grid-template-columns: 1fr; }
+    /* Single column: only the actual last row loses its rule. */
+    .tf-apps-symptoms-list li:nth-last-child(-n + 2) { border-bottom: 1px solid var(--line); }
+    .tf-apps-symptoms-list li:last-child { border-bottom: 0; }
     .tf-apps-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 480px) {
+    .tf-apps-symptoms-list li {
+      gap: 10px;
+      padding: 11px 2px 11px 10px;
+      font-size: 14.5px;
+    }
+    .tf-apps-readout { gap: 9px; padding: 6px 10px; }
+    .tf-apps-segs i { width: 6px; height: 11px; }
   }
 
   /* Mobile: A01..A04 collapse. Head, title and the machine diagram stay
@@ -697,8 +809,17 @@ const DEMO_HITS = [1, 4];
       transform: none;
       transition: none;
     }
-    .tf-app-rule { transform: scaleX(1); transition: none; }
-    .tf-apps-meter > span { transform: scaleX(1); transition: none; }
+    .tf-app-rule,
+    .tf-apps-rule { transform: scaleX(1); transition: none; }
+    .tf-apps-symptoms-list li[data-hit]::before {
+      transform: scaleY(1);
+      transition: none;
+    }
+    .tf-apps-segs i[data-on] {
+      opacity: 1;
+      animation: none;
+    }
+    .tf-apps-symptoms.is-active .tf-apps-segs i[data-on] { animation: none; }
     .tf-apps-scan { display: none; }
     .tf-app-sweep { display: none; }
     .tf-chk-tick { stroke-dashoffset: 0; }

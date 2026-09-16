@@ -72,7 +72,7 @@ src/
   components/
     Hero.tsx                  workshop video bg + display headline + stats
     TechSection.tsx           bento grid of 4 tech groups × 4 bullets
-    AplicacionesSection.astro symptom-cost-solution cards + metrics + CTA
+    AplicacionesSection.astro diagnostic panel + A01–A04 cards + metrics + CTA
     FlowDiagram.astro         dirty fluid → filtration cassette → stable flow
     MachineDiagram.astro      the four A01–A04 process microdiagrams
     ProcessSection.astro      5 step cards over darkened workshop bg
@@ -163,7 +163,7 @@ State (active tech / selected bullet per tech) is managed in React and persists 
 `AplicacionesSection.astro` is the commercial-educational block sitting between Tech and Catalogs. It reads as one narrative — *problem → diagnosis → contamination → filtration → stable flow → applications* — built from six stacked sub-blocks:
 
 0. **Kicker rail** — `FILTRACIÓN · RECUPERACIÓN · VIDA ÚTIL` under the section head (from `applications.kicker`, localized).
-1. **Diagnostic panel** — the 6 symptoms in a 2-col grid (1-col on mobile). On entry a blue scan sweeps the panel once, the items stagger in, two demonstration checks draw themselves and a `UMBRAL 02 / 06` readout plus a meter fill to ⅓. The 02/06 is the threshold the closing line states ("two or more"), *not* a claim about the reader's plant — that framing is deliberate.
+1. **Diagnostic panel** — instrument housing (blueprint grid, corner ticks, localized blue glow) around the 6 symptoms as indexed rows `01`–`06` in a 2-col grid (1-col on mobile). On entry a blue scan sweeps the panel once, the divider draws, the rows stagger in, and the two demonstration rows light up: accent bar, lit bed, filled box and a tick that draws itself. The `UMBRAL` readout is a bordered block with a six-segment gauge (two lit) next to `02 / 06`. That count is the threshold the closing line states ("two or more"), *not* a claim about the reader's plant — the framing, the label and the gauge are all deliberate about that.
 2. **Flow figure** (`FlowDiagram.astro`) — contaminated fluid (blue + industrial brown, scattered heights) → an isometric filtration cassette → recovered fluid (blue only, collapsed onto the centreline). Inside the cassette blue passes through three stages while brown is caught at the plates and settles into the bed. Pure HTML/CSS/SVG: no WebGL, no canvas, no per-particle JS. Each rail particle is a full-width track element whose single `translateX(100%)` keyframe resolves against the rail width, with a negative `animation-delay` that spreads the particles at t=0 *and* doubles as the static position under reduced motion.
 3. **Four application cards** (`A01–A04`) in a 2×2 grid — each carries `SÍNTOMA`, `SOLUCIÓN`, `BENEFICIO` and its own process microdiagram (`MachineDiagram.astro`: rolls + tube, lathe + chips, wheel + coolant, tunnel + spray). The four share one visual language (graphite structure, grey technical lines, blue for flow, brown for contamination, same viewBox / stroke weights / blueprint grid). The `BENEFICIO` block gets a left accent border, a deep blue bed and one light sweep on entry. A card with a `link` in `content.ts` (today only `A01` → `/conformado`) also renders a "Ver solución" button, in all three locales.
 4. **Custom-design editorial block** — branded TRANS-FIL conveyor photo as a heavily-shadowed backdrop on the right 65%; on mobile it covers the whole block at lower opacity behind a near-solid overlay.
@@ -234,7 +234,8 @@ The form is accessibility-correct: `role=alert` on field errors, `aria-required`
 ## AI / LLM discoverability
 
 - `/llms.txt` — short site summary per the llmstxt.org proposal (product lines, services, contact).
-- `/llms-full.txt` — the full fact dump (all four product lines with bullets, services, industries, countries, history, contact, catalog file paths). Source of truth for AI agents fetching the site outside the rendered HTML.
+- `/llms-full.txt` — the full fact dump (all four product lines with bullets, the four production applications A01–A04 as symptom → installation → benefit, services, industries, countries, history, contact, catalog file paths). Source of truth for AI agents fetching the site outside the rendered HTML.
+- Both side-files are hand-maintained: when `applications.cards` or the product-line copy changes in `src/i18n/content.ts`, update them in the same commit — nothing generates them.
 - The FAQPage schema (12 Q&As) and the `.tf-sr-only` About + FAQ block in `<body>` cover the same ground for crawlers that don't fetch the side-files.
 
 ## Performance
@@ -246,6 +247,8 @@ The form is accessibility-correct: `role=alert` on field errors, `aria-required`
 - **Below-the-fold media**: bullet thumbnails are `loading="lazy"` + `decoding="async"`. Tech-section videos are IO-gated (only the tile actively in viewport — ≥50% visible after a 10% rootMargin inset — plays).
 - **Counter SSR**: `useCountUp` renders the final value in HTML; client rewinds + animates on intersect. JS-off readers don't see "0 años de operación". Patterns like `24/7` short-circuit so the literal text renders.
 - **View Transitions**: `<ClientRouter />` keeps the document alive across ES ↔ EN swaps.
+- **Applications CSS is component-scoped**: the section's ~600 lines live in `AplicacionesSection.astro` / `FlowDiagram.astro` / `MachineDiagram.astro` rather than `global.css`, so the campaign landings — which never render it — stop downloading them (`global.css` −4 KB, and the landing bundle no longer carries the flow/diagram rules at all).
+- **Nothing animates off-screen**: an IntersectionObserver puts `is-idle` on the flow figure and each machine diagram when it leaves the viewport, which pauses every loop. Measured: 97 running animations with the section in view, 0 once it scrolls away. The pause rules need `!important` because the entry rules re-declare the `animation` shorthand, which resets `animation-play-state`.
 - **Assets re-encoded** (see commits `eda68b8`, `5cb3ba0`, `a2f682a`):
   - **Videos** — total cut from 12 MB → 4.6 MB. `t02-magnetic-separator` trimmed 18s → 10s loop at CRF 31 (2.9 MB → 1.4 MB); `t04-laser-cutting` / `t04-plasma-cutting` downscaled to 540p + 25 fps + CRF 33 (744/625 KB → 375/311 KB); hero-desktop downscaled 1080p → 720p (2.7 MB → 1.2 MB). All videos run `-c:v libx264 -preset slower -an -movflags +faststart`.
   - **Images** — 18 largest webp files re-encoded at `cwebp -q 78 -m 6`; total -19% on those, no perceptible loss after the heavy shadowing/darkening overlays the site applies.
@@ -270,12 +273,13 @@ The form is accessibility-correct: `role=alert` on field errors, `aria-required`
 
 ## Open follow-ups
 
-1. **Landing OG image** — `/conformado` shares `/img/t03-fluids-cover.webp` (1800×900, real filtration hardware, correct `alt`). A purpose-built 1200×630 JPG with campaign framing would be better; the repo has no image tooling, so it needs to come from design. Swap it in the `ogImage` prop in `src/layouts/LandingLayout.astro`.
-2. **og-image per locale** — the site-wide `og-image.jpg` works for all three; could add locale-specific overlay text.
-3. **Contact form ops** — live via the Resend endpoint (`/api/contact`); to actually send, set `RESEND_API_KEY` in Vercel and publish the GTM container. The landing subject tag (`[Conformado][es] …`) and the UTM rows are worth verifying with one real send after deploy. See `docs/contacto-email.md`.
-4. **GTM triggers for the landings** — `generate_lead` now carries `page` / `locale` / `lead_type`, and `whatsapp_click` is new. Note `click_whatsapp` (the site-wide delegated listener) still fires on the same clicks: don't mark both as key events or campaign WhatsApp leads get counted twice.
-5. **PT catalogs** — `/pt/` serves the English PDFs with a caveat under the subtitle. Replace with Portuguese editions when they exist (`catalogs.items[].file` + `.img`, and drop `catalogs.note`).
-6. **EN / PT copy review** — the Spanish copy was reviewed against SEO targets; the English and Brazilian-Portuguese versions are professional translations the client should review before those locales are promoted.
-4. **Final imagery review** — bullet photos and service photos are an evolving mix of real shots and AI renders. Replace anything still looking placeholder-y when better assets arrive. All paths live in `src/i18n/content.ts`.
-5. **Tech section hero per-tech cover** — currently the bento's "hero" tile shows the first bullet's image, not the tech's `t.img` cover. The cover photos exist in `content.tech[i].img` but are unused in the current layout. Decide whether to surface them somewhere (e.g., on a future overview state) or remove from the schema.
-6. **Hero LCP further** — the lazy video helps but a dedicated `<link rel="preload" as="image" href="/img/hero-poster.webp" fetchpriority="high">` would shave more time off the first paint.
+1. **Applications section vs. the V7 prototype** — the rebuild was specified by a written handoff that referenced a prototype file (`transfil-applications-animation-v7.html`) which was not in the repo and could not be found anywhere in the working environment. Composition, motion and the diagrams were built from the written spec plus the site's own tokens, so they match the description rather than the prototype frame-for-frame. If that file turns up, diff it against the section before making further changes.
+2. **Landing OG image** — `/conformado` shares `/img/t03-fluids-cover.webp` (1800×900, real filtration hardware, correct `alt`). A purpose-built 1200×630 JPG with campaign framing would be better; the repo has no image tooling, so it needs to come from design. Swap it in the `ogImage` prop in `src/layouts/LandingLayout.astro`.
+3. **og-image per locale** — the site-wide `og-image.jpg` works for all three; could add locale-specific overlay text.
+4. **Contact form ops** — live via the Resend endpoint (`/api/contact`); to actually send, set `RESEND_API_KEY` in Vercel and publish the GTM container. The landing subject tag (`[Conformado][es] …`) and the UTM rows are worth verifying with one real send after deploy. See `docs/contacto-email.md`.
+5. **GTM triggers for the landings** — `generate_lead` now carries `page` / `locale` / `lead_type`, and `whatsapp_click` is new. Note `click_whatsapp` (the site-wide delegated listener) still fires on the same clicks: don't mark both as key events or campaign WhatsApp leads get counted twice.
+6. **PT catalogs** — `/pt/` serves the English PDFs with a caveat under the subtitle. Replace with Portuguese editions when they exist (`catalogs.items[].file` + `.img`, and drop `catalogs.note`).
+7. **EN / PT copy review** — the Spanish copy was reviewed against SEO targets; the English and Brazilian-Portuguese versions are professional translations the client should review before those locales are promoted.
+8. **Final imagery review** — bullet photos and service photos are an evolving mix of real shots and AI renders. Replace anything still looking placeholder-y when better assets arrive. All paths live in `src/i18n/content.ts`.
+9. **Tech section hero per-tech cover** — currently the bento's "hero" tile shows the first bullet's image, not the tech's `t.img` cover. The cover photos exist in `content.tech[i].img` but are unused in the current layout. Decide whether to surface them somewhere (e.g., on a future overview state) or remove from the schema.
+10. **Hero LCP further** — the lazy video helps but a dedicated `<link rel="preload" as="image" href="/img/hero-poster.webp" fetchpriority="high">` would shave more time off the first paint.

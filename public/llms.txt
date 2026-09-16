@@ -26,6 +26,17 @@ The site is trilingual (Spanish at `/`, English at `/en/`, Brazilian Portuguese 
 - Phone / WhatsApp: +54 9 3513 82-0321
 - Address: Francisco de Arteaga 2895, Córdoba, Argentina
 
+## Production applications
+
+Where the equipment goes, stated as symptom → installation → benefit. Full detail in /llms-full.txt.
+
+- **A01 Tube forming.** Lubricant loaded with metal fines and tramp oil wears rolls and dies → centralized filtration + magnetic separation + oil recovery. Protects forming tooling, multiplies fluid life.
+- **A02 Machining and turning.** Chips build up and fines recirculate → centralized chip transport + belt filter + magnetic separator. Longer tool life, fewer stoppages, clean coolant.
+- **A03 Precision grinding.** Fine abrasive swarf ruins finish and wears the wheel → fine belt/paper filtration + high-efficiency magnetic separation. Stable finish, longer wheel life.
+- **A04 Parts washing and prep.** Parts reaching assembly with oil and chips → industrial washer (pass-through, rotary or cabinet) with integrated filtration and PLC control. Repeatable cleanliness, higher throughput.
+
+Typical results: coolant life 2–4×, coolant-change frequency −50/70%, tool life +10/30%, lower liquid-waste disposal cost.
+
 ## Application landings
 
 - **Tube-forming coolant filtration** — centralized filtration + magnetic separation + tramp-oil recovery for ERW / HFW tube mills, roll forming and drawing lines. Plant survey before quoting. `/conformado` (ES) · `/en/conformado` (EN) · `/pt/conformado` (PT).
