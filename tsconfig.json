@@ -9,5 +9,5 @@
     }
   },
   "include": [".astro/types.d.ts", "**/*"],
-  "exclude": ["dist", "node_modules", "design_handoff"]
+  "exclude": ["dist", "node_modules", "design_handoff", "public/vendor"]
 }

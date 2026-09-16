@@ -76,6 +76,7 @@ src/
     FlowDiagram.astro         dirty fluid → filtration cassette → stable flow
     MachineDiagram.astro      the four A01–A04 process microdiagrams
     SystemDiagram.astro       scroll-driven schematic of the filtration station
+    SystemDiagram3D.astro     orbitable 3D machine diagram of the whole plant
     ProcessSection.astro      5 step cards over darkened workshop bg
     CatalogsSection.tsx       3 PDF covers + in-page viewer modal
     ServicesSection.astro     4 services as icon stepper (S01–S04)
@@ -145,7 +146,7 @@ To change wording, image paths, country lists, milestones, contact info or FAQ e
 - Pages: `src/pages/conformado.astro`, `src/pages/en/conformado.astro`, `src/pages/pt/conformado.astro` — six lines each.
 - Own SEO: canonical, reciprocal hreflang, page-specific OG, and `WebPage` + `Service` + `FAQPage` + `BreadcrumbList` JSON-LD. The home's FAQ is *not* emitted here.
 - Deep-linked from the home: the `A01` card carries `link: { page: 'conformado', … }`, which renders both the card's "Ver solución" button and the footer link.
-- Section `02 — El sistema` opens with `SystemDiagram.astro` (below), then the four `F01–F04` cards.
+- Section `02 — El sistema` opens with `SystemDiagram.astro`, then the four `F01–F04` cards, and closes with `SystemDiagram3D.astro` (both below).
 - 301s from the legacy campaign URLs (`/filtracion-conformado-tubos`, `/filtracao-conformacao-tubos`) in `astro.config.mjs`.
 
 The full pattern, the roadmap (`/lavado`, `/transporte`, `/hornos` — not implemented) and the step-by-step recipe for a new landing are in [`docs/LANDINGS.md`](docs/LANDINGS.md).
@@ -170,6 +171,30 @@ Opens section `02 — El sistema` on every application landing: one SVG plan of 
 2. `body` must not be `overflow-x: hidden` — see the note in `global.css`. `hidden` makes the body a scroll container and silently kills `position: sticky` for every descendant, which is exactly how this schematic pins. `clip` crops identically without creating a scrollport.
 
 Label positions live inline on each `<span>`. If the copy changes, re-check the bottom row: `waste`, `tank`, `exchanger`, `bag` and `cabinet` share one baseline and the Spanish strings are the longest in the set.
+
+## Machine diagram in 3D (`SystemDiagram3D.astro`)
+
+Closes section `02 — El sistema`: an orbitable view of a whole tube-forming operation — forming line, transfer back in its pit, protective applicator, central filtration station with the centrifuge mounted on the tank, cooling tower — and, above all, **how they are connected**. The four fluid circuits are drawn as real pipe (`TubeGeometry` over Catmull-Rom curves) with visible flow direction. It is the 3D version of the machine diagram the company already uses in commercial material.
+
+Nothing is a 3D asset: the plant is ~230 meshes built from primitives, in metres, y-up, resting on `y = 0`, and every mesh and material is named in Spanish — so the exported OBJ/GLB opens in Blender at real scale with its hierarchy intact.
+
+**Circuits.** Brown `soluble a filtrar`, light blue `filtrado — baja presión`, cyan `doble filtrado — alta presión`, grey `agua de enfriamiento`. The two filtered fluids are both blue because both are clean fluid; they are told apart by three signals at once, not by hue alone — pipe diameter (low pressure is the thickest run in the plant, high pressure the thinnest), flow speed (high pressure runs about three times faster) and route (they never share a trace). That palette is deliberate and matches the other two diagrams on the site; the printed commercial diagram uses greens and red instead.
+
+**The legend is the control**: hover previews a circuit, click pins it, click again releases. Real `<button>`s with `aria-pressed`.
+
+**Labels.** Six equipment names plus the two fluid tags, as HTML projected from the scene each frame — they translate through `landings.ts`, stay horizontal and selectable at any angle. Placement is resolved, not just projected: labels are sorted by depth, pushed apart when they collide, clamped inside the frame, and any that still cannot be placed is faded out rather than left overlapping. Verified at zero overlaps across 3 locales × 8 widths and a full 12-step orbit.
+
+**Dependencies.** three.js 0.184 and OrbitControls, and nothing else — no GSAP, no post-processing, no model loaders.
+
+**Three constraints worth knowing before editing:**
+
+1. **three.js is served from `/vendor/three/`, not a CDN.** The handoff pinned unpkg with integrity hashes; this landing is opened by industrial plants, and a corporate firewall blocking unpkg would leave the diagram blank with no warning. The files come from `npm i three@0.184.0` (a devDependency, kept for provenance) — to update, bump the version and re-copy the five files. `public/vendor` is excluded from `tsconfig` so third-party code doesn't pollute `astro check`.
+2. **The import map must stay inline and before any module script.** It is ~1 KB. What is deferred is the ~400 KB (gzipped) of three.js that `plant3d.js` pulls in: an IntersectionObserver boots the scene only when the frame is within 500px of the viewport, so a visitor who never scrolls that far pays nothing.
+3. **`plant3d.js` does `await stage.ready`, which only exists once the custom element is defined.** Injected scripts are async, so the boot waits on `customElements.whenDefined('three-d-stage')` before importing the plant. Without that wait the plant can start before the viewer and fails destructuring `THREE` — which happens in the production build, not in dev.
+
+**Phones (≤860px)** get no projected labels at all: on a 348px canvas eight text boxes leave no drawing to look at. The six equipment names move to a fixed two-column list under the canvas, the frame goes to `3 / 2` (with `min-height` released, which otherwise overrides the aspect ratio), the circuit legend goes two-up, and the camera pulls back in proportion to the missing width — the approved framing is calculated for 16/9 and the FOV is vertical, so a narrower frame would crop the plant. The pull-back stops the moment the visitor touches the camera.
+
+**`prefers-reduced-motion`** freezes the scene on a single frame — the static arrowheads still carry the flow direction — and the status light settles. Measured at zero moving geometry.
 
 ## Tech section: bento on desktop, accordion on mobile
 
@@ -270,6 +295,7 @@ The form is accessibility-correct: `role=alert` on field errors, `aria-required`
 - **Below-the-fold media**: bullet thumbnails are `loading="lazy"` + `decoding="async"`. Tech-section videos are IO-gated (only the tile actively in viewport — ≥50% visible after a 10% rootMargin inset — plays).
 - **Counter SSR**: `useCountUp` renders the final value in HTML; client rewinds + animates on intersect. JS-off readers don't see "0 años de operación". Patterns like `24/7` short-circuit so the literal text renders.
 - **View Transitions**: `<ClientRouter />` keeps the document alive across ES ↔ EN swaps.
+- **The 3D diagram loads on approach**: `three.js` is not requested at page load at all — an IntersectionObserver injects the viewer and the plant module when the frame is within 500px of the viewport. Verified: 0 vendor files fetched on load, 3 after scrolling down.
 - **Applications CSS is component-scoped**: the section's ~600 lines live in `AplicacionesSection.astro` / `FlowDiagram.astro` / `MachineDiagram.astro` rather than `global.css`, so the campaign landings — which never render it — stop downloading them (`global.css` −4 KB, and the landing bundle no longer carries the flow/diagram rules at all).
 - **Nothing animates off-screen**: an IntersectionObserver puts `is-idle` on the flow figure and each machine diagram when it leaves the viewport, which pauses every loop. Measured: 97 running animations with the section in view, 0 once it scrolls away. The pause rules need `!important` because the entry rules re-declare the `animation` shorthand, which resets `animation-play-state`.
 - **Assets re-encoded** (see commits `eda68b8`, `5cb3ba0`, `a2f682a`):
@@ -286,6 +312,7 @@ The form is accessibility-correct: `role=alert` on field errors, `aria-required`
   - hero parallax disabled when `(prefers-reduced-motion: reduce)` matches (gated on top of viewport + pointer checks; listens to `change` events on both media queries),
   - magnetic CTA effect skipped entirely,
   - process reveal, tech transitions, scroll-behavior, marquee tilt, accordion chevron, applications chevron all neutered,
+  - the 3D machine diagram holds a single frame: no flow, no spinning rolls or fans, no blinking status light,
   - the landing schematic drops its `380vh` pin entirely — hijacking three screens of scroll is itself motion nobody asked for — and shows every stage at full ink, navigable from the rail,
   - the whole applications section holds its final frame: no scan, no rotations, no particle loops, no cursor light. The flow figure swaps its moving particles for a parked set (`.tf-fl-still`) so the dirty → filtered → clean story still reads as a static drawing. Verified at 0 running animations.
 - `font-variant-numeric: tabular-nums + slashed-zero` on stats, years, codes, coords.
@@ -297,13 +324,14 @@ The form is accessibility-correct: `role=alert` on field errors, `aria-required`
 
 ## Open follow-ups
 
-1. **Applications section vs. the V7 prototype** — the rebuild was specified by a written handoff that referenced a prototype file (`transfil-applications-animation-v7.html`) which was not in the repo and could not be found anywhere in the working environment. Composition, motion and the diagrams were built from the written spec plus the site's own tokens, so they match the description rather than the prototype frame-for-frame. If that file turns up, diff it against the section before making further changes.
-2. **Landing OG image** — `/conformado` shares `/img/t03-fluids-cover.webp` (1800×900, real filtration hardware, correct `alt`). A purpose-built 1200×630 JPG with campaign framing would be better; the repo has no image tooling, so it needs to come from design. Swap it in the `ogImage` prop in `src/layouts/LandingLayout.astro`.
-3. **og-image per locale** — the site-wide `og-image.jpg` works for all three; could add locale-specific overlay text.
-4. **Contact form ops** — live via the Resend endpoint (`/api/contact`); to actually send, set `RESEND_API_KEY` in Vercel and publish the GTM container. The landing subject tag (`[Conformado][es] …`) and the UTM rows are worth verifying with one real send after deploy. See `docs/contacto-email.md`.
-5. **GTM triggers for the landings** — `generate_lead` now carries `page` / `locale` / `lead_type`, and `whatsapp_click` is new. Note `click_whatsapp` (the site-wide delegated listener) still fires on the same clicks: don't mark both as key events or campaign WhatsApp leads get counted twice.
-6. **PT catalogs** — `/pt/` serves the English PDFs with a caveat under the subtitle. Replace with Portuguese editions when they exist (`catalogs.items[].file` + `.img`, and drop `catalogs.note`).
-7. **EN / PT copy review** — the Spanish copy was reviewed against SEO targets; the English and Brazilian-Portuguese versions are professional translations the client should review before those locales are promoted.
-8. **Final imagery review** — bullet photos and service photos are an evolving mix of real shots and AI renders. Replace anything still looking placeholder-y when better assets arrive. All paths live in `src/i18n/content.ts`.
-9. **Tech section hero per-tech cover** — currently the bento's "hero" tile shows the first bullet's image, not the tech's `t.img` cover. The cover photos exist in `content.tech[i].img` but are unused in the current layout. Decide whether to surface them somewhere (e.g., on a future overview state) or remove from the schema.
-10. **Hero LCP further** — the lazy video helps but a dedicated `<link rel="preload" as="image" href="/img/hero-poster.webp" fetchpriority="high">` would shave more time off the first paint.
+1. **Repo weight from vendored three.js** — `public/vendor/three/` is ~2.2 MB of third-party source (about 400 KB gzipped on the wire, lazy-loaded). That is the price of not depending on a public CDN; if it ever becomes a problem, importing `three` through Vite instead of an import map would let the bundler tree-shake it, at the cost of restructuring the component's inline scripts.
+2. **Applications section vs. the V7 prototype** — the rebuild was specified by a written handoff that referenced a prototype file (`transfil-applications-animation-v7.html`) which was not in the repo and could not be found anywhere in the working environment. Composition, motion and the diagrams were built from the written spec plus the site's own tokens, so they match the description rather than the prototype frame-for-frame. If that file turns up, diff it against the section before making further changes.
+3. **Landing OG image** — `/conformado` shares `/img/t03-fluids-cover.webp` (1800×900, real filtration hardware, correct `alt`). A purpose-built 1200×630 JPG with campaign framing would be better; the repo has no image tooling, so it needs to come from design. Swap it in the `ogImage` prop in `src/layouts/LandingLayout.astro`.
+4. **og-image per locale** — the site-wide `og-image.jpg` works for all three; could add locale-specific overlay text.
+5. **Contact form ops** — live via the Resend endpoint (`/api/contact`); to actually send, set `RESEND_API_KEY` in Vercel and publish the GTM container. The landing subject tag (`[Conformado][es] …`) and the UTM rows are worth verifying with one real send after deploy. See `docs/contacto-email.md`.
+6. **GTM triggers for the landings** — `generate_lead` now carries `page` / `locale` / `lead_type`, and `whatsapp_click` is new. Note `click_whatsapp` (the site-wide delegated listener) still fires on the same clicks: don't mark both as key events or campaign WhatsApp leads get counted twice.
+7. **PT catalogs** — `/pt/` serves the English PDFs with a caveat under the subtitle. Replace with Portuguese editions when they exist (`catalogs.items[].file` + `.img`, and drop `catalogs.note`).
+8. **EN / PT copy review** — the Spanish copy was reviewed against SEO targets; the English and Brazilian-Portuguese versions are professional translations the client should review before those locales are promoted.
+9. **Final imagery review** — bullet photos and service photos are an evolving mix of real shots and AI renders. Replace anything still looking placeholder-y when better assets arrive. All paths live in `src/i18n/content.ts`.
+10. **Tech section hero per-tech cover** — currently the bento's "hero" tile shows the first bullet's image, not the tech's `t.img` cover. The cover photos exist in `content.tech[i].img` but are unused in the current layout. Decide whether to surface them somewhere (e.g., on a future overview state) or remove from the schema.
+11. **Hero LCP further** — the lazy video helps but a dedicated `<link rel="preload" as="image" href="/img/hero-poster.webp" fetchpriority="high">` would shave more time off the first paint.

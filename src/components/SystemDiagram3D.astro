@@ -1,0 +1,318 @@
+---
+/**
+ * Diagrama de máquinas en 3D — sección 03 de las landings de aplicación
+ * (/conformado). Vista orbitable de la planta completa: línea de
+ * conformado, back de transferencia en pozo, central de filtración con
+ * centrífuga de entrada, torre de enfriamiento, y los cuatro circuitos de
+ * fluido con su sentido de flujo.
+ *
+ * Reparto de responsabilidades:
+ *   · este archivo   → markup, estilos y copy localizado (bloque JSON)
+ *   · /js/three-d-stage.js → renderer, luces, órbita, sombra, export OBJ/GLB
+ *   · /js/plant3d.js → geometría de la planta, circuitos, flujo, etiquetas
+ *
+ * Tres detalles que no son negociables, cada uno por una razón:
+ *
+ * 1. El import map de three.js va ANTES de cualquier script de módulo, y
+ *    con `is:inline` para que Astro no lo toque. Si Astro lo procesa, o si
+ *    queda después del módulo, three.js no resuelve.
+ *    three.js se sirve desde `/vendor/three/` y no desde un CDN público:
+ *    esta landing la abren plantas industriales, y un firewall corporativo
+ *    que bloquee unpkg dejaría el diagrama en blanco sin aviso. Los
+ *    archivos salen de `npm i three@0.184.0` (devDependency) — para
+ *    actualizarlos, subir la versión y volver a copiar los cinco archivos.
+ * 2. Los scripts van con `is:inline`: `import 'three'` dentro de un
+ *    <script> normal de Astro se bundlea y el import map queda sin efecto.
+ * 3. Los estilos van en `<style is:global>` bajo `.tf-p3d`. Las etiquetas y
+ *    los botones de la leyenda los crea plant3d.js en tiempo de ejecución,
+ *    así que no llevan el atributo de scoping de Astro: con un <style>
+ *    scopeado quedarían sin estilo. El prefijo `.tf-p3d` hace de scope.
+ */
+interface Props {
+  /** Copy ya localizado (landings.ts → machineDiagram). */
+  copy: {
+    caption: string;
+    hint: string;
+    alt: string;
+    eq: {
+      back: string; centrifuge: string; line: string;
+      appl: string; central: string; tower: string;
+    };
+    tags: { lp: string; hp: string };
+    circuits: { name: string; sub: string }[];
+  };
+}
+const { copy } = Astro.props;
+---
+
+<div class="tf-p3d">
+  <div class="tf-p3d-cap">
+    <span>{copy.caption}</span>
+    <span class="tf-p3d-hint">{copy.hint}</span>
+  </div>
+
+  <div class="tf-p3d-frame">
+    <three-d-stage
+      name="transfil-diagrama-maquinas"
+      background="#0b0b0e"
+      role="img"
+      aria-label={copy.alt}
+    ></three-d-stage>
+    <div class="tf-p3d-labels" aria-hidden="true"></div>
+  </div>
+
+  {/* Nombres de los equipos para teléfonos, donde el lienzo es demasiado
+      angosto para proyectarlos encima sin tapar la planta. En desktop la
+      etiqueta va sobre cada máquina y esta lista no se muestra. */}
+  <ul class="tf-p3d-eq">
+    {[copy.eq.line, copy.eq.back, copy.eq.centrifuge, copy.eq.central, copy.eq.appl, copy.eq.tower].map((n) => (
+      <li>{n}</li>
+    ))}
+  </ul>
+
+  <div class="tf-p3d-legend" role="group" aria-label={copy.caption}></div>
+
+  <script type="application/json" id="plant3d-copy" set:html={JSON.stringify(copy)} is:inline></script>
+</div>
+
+<script type="importmap" is:inline>
+{
+  "imports": {
+    "three": "/vendor/three/three.module.js",
+    "three/addons/controls/OrbitControls.js": "/vendor/three/OrbitControls.js",
+    "three/addons/exporters/OBJExporter.js": "/vendor/three/OBJExporter.js",
+    "three/addons/exporters/GLTFExporter.js": "/vendor/three/GLTFExporter.js"
+  }
+}
+</script>
+<script is:inline>
+  /**
+   * Arranque diferido. Este bloque cierra una landing larga y three.js son
+   * ~600 KB desde un CDN: no se baja nada hasta que el marco se acerca al
+   * viewport. El import map de arriba queda inline a propósito — pesa 1 KB
+   * y tiene que estar en el documento antes de que corra cualquier módulo.
+   *
+   * Con View Transitions el DOM se reemplaza y plant3d.js, que es un
+   * módulo, no se vuelve a evaluar. En esas navegaciones se lo importa con
+   * un sufijo distinto para forzar una instancia nueva; three.js resuelve
+   * a la misma URL, así que sigue cacheado y no se vuelve a bajar.
+   */
+  (() => {
+    const boot = () => {
+      const root = document.querySelector('.tf-p3d');
+      if (!root || root.dataset.booted === '1') return;
+      const frame = root.querySelector('.tf-p3d-frame');
+      if (!frame) return;
+
+      const start = () => {
+        if (root.dataset.booted === '1') return;
+        root.dataset.booted = '1';
+        if (!customElements.get('three-d-stage')) {
+          const el = document.createElement('script');
+          el.src = '/js/three-d-stage.js';
+          document.head.appendChild(el);
+        }
+        // plant3d.js hace `await stage.ready`, que sólo existe una vez que
+        // el custom element está definido. Los scripts inyectados son
+        // async, así que sin esta espera la planta puede arrancar antes que
+        // el visor — y falla al desestructurar THREE.
+        customElements.whenDefined('three-d-stage').then(() => {
+          const n = (window.__tfP3dRuns = (window.__tfP3dRuns || 0) + 1);
+          import(n === 1 ? '/js/plant3d.js' : '/js/plant3d.js?n=' + n);
+        });
+      };
+
+      if (!('IntersectionObserver' in window)) { start(); return; }
+      const io = new IntersectionObserver(
+        (entries) => {
+          if (entries.some((e) => e.isIntersecting)) {
+            io.disconnect();
+            start();
+          }
+        },
+        { rootMargin: '500px 0px' }
+      );
+      io.observe(frame);
+    };
+    document.addEventListener('astro:page-load', boot);
+  })();
+</script>
+
+<style is:global>
+  .tf-p3d {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .tf-p3d three-d-stage:not(:defined) { visibility: hidden; }
+  /* La barra de descarga (OBJ / GLB) es una herramienta para modeladores y
+     va sin traducir: fuera de una landing comercial en tres idiomas. Los
+     exportadores son imports dinámicos, así que ocultarla no deja peso
+     muerto. Quitar esta regla para volver a ofrecerla. */
+  .tf-p3d three-d-stage::part(toolbar) { display: none; }
+  /* El starter trae su propia ayuda de interacción, en inglés y fija. La
+     nuestra ya está arriba del marco y traducida. */
+  .tf-p3d three-d-stage::part(note) { display: none; }
+
+  .tf-p3d-cap {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--fg-3);
+  }
+  .tf-p3d-hint {
+    color: var(--fg-4);
+    text-transform: none;
+    letter-spacing: 0.06em;
+  }
+
+  .tf-p3d-frame {
+    position: relative;
+    border: 1px solid var(--line);
+    background:
+      radial-gradient(120% 90% at 50% 118%, rgba(58, 134, 255, 0.08), transparent 62%),
+      linear-gradient(180deg, #121217 0%, #0b0b0e 100%);
+    aspect-ratio: 16 / 9;
+    min-height: 320px;
+  }
+  .tf-p3d-frame three-d-stage {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Etiquetas de equipo: HTML proyectado desde la escena. Traducen con el
+     sitio, se seleccionan y quedan legibles en cualquier ángulo. */
+  .tf-p3d-labels {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .tf-p3d-labels b {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    transform: translate(-50%, -100%);
+    font-family: var(--font-mono);
+    font-weight: 400;
+    font-size: 11.5px;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    color: var(--fg);
+    background: rgba(11, 11, 14, 0.72);
+    border: 1px solid var(--line);
+    padding: 3px 8px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .tf-p3d-labels b::before {
+    content: '';
+    width: 5px;
+    height: 5px;
+    background: var(--dot, var(--accent));
+    flex: 0 0 auto;
+  }
+  .tf-p3d-labels b::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    width: 1px;
+    height: 14px;
+    background: var(--fg-4);
+  }
+  .tf-p3d-labels u {
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .tf-p3d-legend {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .tf-p3d-legend button {
+    appearance: none;
+    text-align: left;
+    cursor: pointer;
+    background: var(--bg);
+    border: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    min-width: 0;
+    font: inherit;
+    color: inherit;
+    transition: background 0.25s, opacity 0.3s;
+  }
+  .tf-p3d-legend button:hover { background: var(--bg-2); }
+  .tf-p3d-legend .sw { height: 3px; }
+  .tf-p3d-legend .bd {
+    padding: 0 13px 13px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+  }
+  .tf-p3d-legend .nm { font-size: 12.5px; line-height: 1.35; color: var(--fg); }
+  .tf-p3d-legend .sb { font-size: 11.5px; line-height: 1.4; color: var(--fg-3); }
+
+  /* Teléfonos: el lienzo se hace más alto (la planta es ancha y con menos
+     ancho conviene más altura), y la leyenda pasa a dos columnas. */
+  /* La lista de equipos es el reemplazo de los rótulos en teléfonos. */
+  .tf-p3d-eq { display: none; }
+
+  @media (max-width: 860px) {
+    /* 3/2 y no 4/3: con los rótulos fuera del lienzo ya no hace falta
+       margen vertical para ellos, y un marco más bajo deja menos negro
+       arriba y menos piso vacío abajo. */
+    /* min-height sin bajar pisaba el aspect-ratio: a 348 px de ancho el
+       marco quedaba casi cuadrado. */
+    .tf-p3d-frame {
+      aspect-ratio: 3 / 2;
+      min-height: 0;
+    }
+    .tf-p3d-legend { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .tf-p3d-cap { gap: 4px 12px; font-size: 10px; }
+    .tf-p3d-eq {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px 14px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.05em;
+      line-height: 1.35;
+      color: var(--fg-3);
+    }
+    .tf-p3d-eq li {
+      display: flex;
+      align-items: baseline;
+      gap: 7px;
+      min-width: 0;
+    }
+    .tf-p3d-eq li::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      background: var(--accent);
+      flex: 0 0 auto;
+    }
+  }
+</style>

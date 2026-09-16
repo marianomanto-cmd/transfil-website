@@ -15,6 +15,7 @@ import { Header } from '../components/Header';
 import { ContactSection } from '../components/ContactSection';
 import Footer from '../components/Footer.astro';
 import SystemDiagram from '../components/SystemDiagram.astro';
+import SystemDiagram3D from '../components/SystemDiagram3D.astro';
 import { WhatsAppFAB } from '../components/WhatsAppFAB';
 import { BackToTop } from '../components/BackToTop';
 
@@ -262,6 +263,8 @@ const navItems = [
           </article>
         ))}
       </div>
+
+      <SystemDiagram3D copy={l.machineDiagram} />
     </section>
 
     <!-- ── 03 Why here ───────────────────────────────────────────── -->

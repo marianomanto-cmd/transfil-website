@@ -81,6 +81,21 @@ export type LandingContent = {
     };
     blocks: { code: string; title: string; desc: string; media: LandingMedia }[];
   };
+  /** Copy for the 3D machine diagram that closes the section. Every string
+      is on screen, so all three locales carry their own. The `\n` in `tags`
+      is the label's line break — keep it in every translation. */
+  machineDiagram: {
+    caption: string;
+    hint: string;
+    /** Screen-reader description of the whole installation. */
+    alt: string;
+    eq: {
+      back: string; centrifuge: string; line: string;
+      appl: string; central: string; tower: string;
+    };
+    tags: { lp: string; hp: string };
+    circuits: { name: string; sub: string }[];
+  };
   why: {
     eyebrow: string;
     title: string;
@@ -222,6 +237,26 @@ export const LANDINGS: Record<LandingSlug, Record<Lang, LandingContent>> = {
             desc: 'Estación de bombeo, presurización y temperado que alimenta la línea completa. Mantiene caudal y temperatura estables con independencia del consumo de cada puesto, con monitoreo de presión y nivel y alarmas configurables.',
             media: { ...MEDIA.central, alt: 'Central de filtración Trans-Fil: skid de bombeo, filtros, intercambiador y tanque' },
           },
+        ],
+      },
+      machineDiagram: {
+        caption: 'Diagrama de máquinas / Operación de conformado de tubos',
+        hint: 'Arrastre para orbitar · rueda para acercar · toque un circuito para aislarlo',
+        alt: 'Diagrama tridimensional de una operación de conformado de tubos con filtración Trans-Fil: la línea de conformado devuelve el soluble a filtrar al back de transferencia, que lo impulsa a la centrífuga montada sobre la central de filtración; de la central salen el soluble filtrado de baja presión hacia las estaciones de conformado y el soluble doble filtrado de alta presión hacia el aplicador protectivo y el calibrado, y un circuito de agua la conecta con la torre de enfriamiento.',
+        eq: {
+          back: 'Back de Transferencia',
+          centrifuge: 'Centrífuga',
+          line: 'Línea de conformado',
+          appl: 'Aplicador protectivo',
+          central: 'Central de filtración',
+          tower: 'Torre de enfriamiento',
+        },
+        tags: { lp: 'Soluble filtrado\nBaja presión', hp: 'Soluble doble filtrado\nAlta presión' },
+        circuits: [
+          { name: 'Soluble a filtrar', sub: 'Retorno de cada estación a la central' },
+          { name: 'Soluble filtrado — baja presión', sub: 'Caño grueso, caudal lento — riega las estaciones de conformado' },
+          { name: 'Soluble doble filtrado — alta presión', sub: 'Caño fino, caudal rápido — aplicador protectivo y calibrado' },
+          { name: 'Agua de enfriamiento', sub: 'Circuito central ↔ torre' },
         ],
       },
       why: {
@@ -382,6 +417,26 @@ export const LANDINGS: Record<LandingSlug, Record<Lang, LandingContent>> = {
           },
         ],
       },
+      machineDiagram: {
+        caption: 'Machine diagram / Tube forming operation',
+        hint: 'Drag to orbit · scroll to zoom · tap a circuit to isolate it',
+        alt: 'Three-dimensional diagram of a tube-forming operation with Trans-Fil filtration: the forming line returns coolant to the transfer back, which pumps it to the centrifuge mounted on the central filtration station; the station feeds low-pressure filtered coolant to the forming stations and high-pressure double-filtered coolant to the protective applicator and the sizing section, and a water loop connects it to the cooling tower.',
+        eq: {
+          back: 'Transfer back',
+          centrifuge: 'Centrifuge',
+          line: 'Forming line',
+          appl: 'Protective applicator',
+          central: 'Central filtration station',
+          tower: 'Cooling tower',
+        },
+        tags: { lp: 'Filtered coolant\nLow pressure', hp: 'Double-filtered coolant\nHigh pressure' },
+        circuits: [
+          { name: 'Coolant to filter', sub: 'Return from every station to the central unit' },
+          { name: 'Filtered coolant — low pressure', sub: 'Wide pipe, slow flow — floods the forming stations' },
+          { name: 'Double-filtered coolant — high pressure', sub: 'Narrow pipe, fast flow — applicator and sizing section' },
+          { name: 'Cooling water', sub: 'Central unit ↔ tower loop' },
+        ],
+      },
       why: {
         eyebrow: '[ 03 — Why Trans-Fil ]',
         title: 'Manufactured in our own Córdoba workshop, serviced across the region.',
@@ -538,6 +593,26 @@ export const LANDINGS: Record<LandingSlug, Record<Lang, LandingContent>> = {
             desc: 'Estação de bombeamento, pressurização e controle de temperatura que alimenta a linha inteira. Mantém vazão e temperatura estáveis independentemente do consumo de cada posto, com monitoramento de pressão e nível e alarmes configuráveis.',
             media: { ...MEDIA.central, alt: 'Central de filtragem Trans-Fil: skid de bombeamento, filtros, trocador e tanque' },
           },
+        ],
+      },
+      machineDiagram: {
+        caption: 'Diagrama de máquinas / Operação de conformação de tubos',
+        hint: 'Arraste para orbitar · role para aproximar · toque em um circuito para isolá-lo',
+        alt: 'Diagrama tridimensional de uma operação de conformação de tubos com filtragem Trans-Fil: a linha de conformação devolve o fluido a filtrar ao back de transferência, que o bombeia para a centrífuga montada sobre a central de filtragem; da central saem o fluido filtrado de baixa pressão para as estações de conformação e o fluido duplamente filtrado de alta pressão para o aplicador protetor e a calibragem, e um circuito de água a conecta à torre de resfriamento.',
+        eq: {
+          back: 'Back de transferência',
+          centrifuge: 'Centrífuga',
+          line: 'Linha de conformação',
+          appl: 'Aplicador protetor',
+          central: 'Central de filtragem',
+          tower: 'Torre de resfriamento',
+        },
+        tags: { lp: 'Fluido filtrado\nBaixa pressão', hp: 'Fluido duplamente filtrado\nAlta pressão' },
+        circuits: [
+          { name: 'Fluido a filtrar', sub: 'Retorno de cada estação à central' },
+          { name: 'Fluido filtrado — baixa pressão', sub: 'Tubo grosso, vazão lenta — rega as estações de conformação' },
+          { name: 'Fluido duplamente filtrado — alta pressão', sub: 'Tubo fino, vazão rápida — aplicador protetor e calibragem' },
+          { name: 'Água de resfriamento', sub: 'Circuito central ↔ torre' },
         ],
       },
       why: {
