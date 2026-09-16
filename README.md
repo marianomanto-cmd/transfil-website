@@ -50,7 +50,7 @@ The landing page has 8 numbered sections + one unnumbered side-story:
 |----|-----------------|---------------------------------|----------------------------------------------------------------------|
 | 01 | `#top`          | `Hero.tsx`                      | Workshop video bg + display headline + 4 hero stats                  |
 | 02 | `#tech`         | `TechSection.tsx`               | 4 tech groups × 4 bullets, bento on desktop / accordion on mobile    |
-| 03 | `#applications` | `AplicacionesSection.astro`     | Symptom → solution → benefit, A01–A04 collapsible on mobile          |
+| 03 | `#applications` | `AplicacionesSection.astro`     | Diagnostic panel + dirty→filter→clean figure + A01–A04 machine diagrams |
 | –  | `#process`      | `ProcessSection.astro`          | 5 step cards over darkened workshop bg (unnumbered side-story)       |
 | 04 | `#catalogs`     | `CatalogsSection.tsx`           | 3 PDF covers + in-page viewer modal                                  |
 | 05 | `#services`     | `ServicesSection.astro`         | 4 services as a "stepper" grid of icon cards (S01–S04)               |
@@ -73,6 +73,8 @@ src/
     Hero.tsx                  workshop video bg + display headline + stats
     TechSection.tsx           bento grid of 4 tech groups × 4 bullets
     AplicacionesSection.astro symptom-cost-solution cards + metrics + CTA
+    FlowDiagram.astro         dirty fluid → filtration cassette → stable flow
+    MachineDiagram.astro      the four A01–A04 process microdiagrams
     ProcessSection.astro      5 step cards over darkened workshop bg
     CatalogsSection.tsx       3 PDF covers + in-page viewer modal
     ServicesSection.astro     4 services as icon stepper (S01–S04)
@@ -158,15 +160,27 @@ State (active tech / selected bullet per tech) is managed in React and persists 
 
 ## Applications section (A01–A04)
 
-`AplicacionesSection.astro` is the commercial-educational block sitting between Tech and Catalogs. Five stacked sub-blocks:
+`AplicacionesSection.astro` is the commercial-educational block sitting between Tech and Catalogs. It reads as one narrative — *problem → diagnosis → contamination → filtration → stable flow → applications* — built from six stacked sub-blocks:
 
-1. **Symptoms checklist** — 6 diagnostic items in a 2-col grid (1-col on mobile) + closing line.
-2. **Four application cards** (`A01–A04`) in a 2×2 grid — each carries a `SÍNTOMA`, `SOLUCIÓN` and `BENEFICIO` block. The `BENEFICIO` block gets a left accent border + `--accent-soft` background. A card with a `link` in `content.ts` (today only `A01` → `/conformado`) also renders a "Ver solución" button and gets a footer link, in all three locales.
-3. **Custom-design editorial block** — branded TRANS-FIL conveyor photo as a heavily-shadowed backdrop on the right 65% of the block; on mobile it covers the whole block at lower opacity behind a near-solid overlay.
-4. **Metrics strip** — 5 numeric callouts (2–4× coolant life, −50/70% changes, +10/30% tool life, etc.) with an italic caveat.
-5. **Closing CTA banner** — single primary button pointing at `#contact`.
+0. **Kicker rail** — `FILTRACIÓN · RECUPERACIÓN · VIDA ÚTIL` under the section head (from `applications.kicker`, localized).
+1. **Diagnostic panel** — the 6 symptoms in a 2-col grid (1-col on mobile). On entry a blue scan sweeps the panel once, the items stagger in, two demonstration checks draw themselves and a `UMBRAL 02 / 06` readout plus a meter fill to ⅓. The 02/06 is the threshold the closing line states ("two or more"), *not* a claim about the reader's plant — that framing is deliberate.
+2. **Flow figure** (`FlowDiagram.astro`) — contaminated fluid (blue + industrial brown, scattered heights) → an isometric filtration cassette → recovered fluid (blue only, collapsed onto the centreline). Inside the cassette blue passes through three stages while brown is caught at the plates and settles into the bed. Pure HTML/CSS/SVG: no WebGL, no canvas, no per-particle JS. Each rail particle is a full-width track element whose single `translateX(100%)` keyframe resolves against the rail width, with a negative `animation-delay` that spreads the particles at t=0 *and* doubles as the static position under reduced motion.
+3. **Four application cards** (`A01–A04`) in a 2×2 grid — each carries `SÍNTOMA`, `SOLUCIÓN`, `BENEFICIO` and its own process microdiagram (`MachineDiagram.astro`: rolls + tube, lathe + chips, wheel + coolant, tunnel + spray). The four share one visual language (graphite structure, grey technical lines, blue for flow, brown for contamination, same viewBox / stroke weights / blueprint grid). The `BENEFICIO` block gets a left accent border, a deep blue bed and one light sweep on entry. A card with a `link` in `content.ts` (today only `A01` → `/conformado`) also renders a "Ver solución" button, in all three locales.
+4. **Custom-design editorial block** — branded TRANS-FIL conveyor photo as a heavily-shadowed backdrop on the right 65%; on mobile it covers the whole block at lower opacity behind a near-solid overlay.
+5. **Metrics strip** — 5 numeric callouts with an italic caveat.
+6. **Closing CTA banner** — single primary button pointing at `#contact`.
 
-**Mobile behaviour:** the four `A0X` cards are collapsed by default at ≤640px. A small inline `<script>` (progressive enhancement, attached to `astro:page-load`) wraps the head + title in a `.tf-app-toggle` that gets `role="button"` / `aria-expanded` / `aria-controls`, plus click + keyboard handlers. Desktop is untouched — `.tf-app-toggle` uses `display: contents` so head and title flow as direct flex children of `.tf-app`, the chevron is `display: none`, and the body is always visible.
+**Layout rule for the diagrams:** the microdiagram always gets its own grid cell — its own column beside the text at ≥1360px, its own full-width row directly under the title below that. It is never absolutely positioned over the copy, at any width.
+
+**Motion orchestration:** one inline `<script>` on `astro:page-load`, no framework, no animation library.
+- `is-active` fires the one-shot entry sequences (panel scan, flow assembly, per-card cascade `rule → code → title → symptom → solution → benefit`). Added once per block, never removed.
+- `is-idle` pauses **every** mechanical loop while a figure is off screen; scrolled away, the section runs zero animations.
+- The cursor light over the card grid (`--mx` / `--my` on `.tf-apps-grid`, rAF-throttled `pointermove`) only binds on fine pointers when the visitor hasn't asked for reduced motion.
+- The safety net that reveals a block whose observer never reported is deliberately limited to what is already on screen — revealing the whole section on a timer would burn every entry sequence before the visitor scrolled down to it.
+
+**CSS location:** the section's ~600 lines live in the components themselves (Astro-scoped), not `global.css`, so the campaign landings — which never render it — don't download them. The shared blocks below it (custom / metrics / CTA) keep their rules in `global.css`.
+
+**Mobile behaviour:** the four `A0X` cards are collapsed by default at ≤640px. The head, title and the machine diagram stay visible (so a collapsed card still has a visual identity); only the three text blocks toggle, via a `.tf-app-collapse` region wired with `role="button"` / `aria-expanded` / `aria-controls` on the head. The diagram viewport is capped at 150px tall on phones, the flow figure stacks to one column with the chevrons turned downward, and the particle count per rail drops.
 
 All four cards' text content stays in the server-rendered HTML, so the FAQ-adjacent keyword density is unaffected by the collapse.
 
@@ -245,7 +259,8 @@ The form is accessibility-correct: `role=alert` on field errors, `aria-required`
 - `prefers-reduced-motion` respected globally:
   - hero parallax disabled when `(prefers-reduced-motion: reduce)` matches (gated on top of viewport + pointer checks; listens to `change` events on both media queries),
   - magnetic CTA effect skipped entirely,
-  - process reveal, tech transitions, scroll-behavior, marquee tilt, accordion chevron, applications chevron all neutered.
+  - process reveal, tech transitions, scroll-behavior, marquee tilt, accordion chevron, applications chevron all neutered,
+  - the whole applications section holds its final frame: no scan, no rotations, no particle loops, no cursor light. The flow figure swaps its moving particles for a parked set (`.tf-fl-still`) so the dirty → filtered → clean story still reads as a static drawing. Verified at 0 running animations.
 - `font-variant-numeric: tabular-nums + slashed-zero` on stats, years, codes, coords.
 - `data-active` scroll-spy on nav links via `IntersectionObserver` (includes the new `#applications` id).
 - **Header burger**: 44×44, `type="button"`, `aria-expanded`, `aria-controls` wired to `id="tf-mobile-nav"`. The mobile drawer itself is a focus-trapped `role="dialog"` / `aria-modal="true"` region — Escape closes and returns focus to the burger; body scroll is locked while open.

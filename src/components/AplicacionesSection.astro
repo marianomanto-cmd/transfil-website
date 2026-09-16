@@ -2,26 +2,55 @@
 import type { Content } from '../i18n/content';
 import { pathFor } from '../i18n/routes';
 import Section from './Section.astro';
+import FlowDiagram from './FlowDiagram.astro';
+import MachineDiagram from './MachineDiagram.astro';
 
 interface Props { content: Content }
 const { content } = Astro.props;
 const c = content.applications;
+
+// The two symptoms that light up in the diagnostic panel. This is a
+// demonstration of the threshold the closing line states ("two or more"),
+// not a claim about the reader's plant — hence the UMBRAL / 02 / 06
+// readout next to it rather than a "your answers" framing.
+const DEMO_HITS = [1, 4];
 ---
-<Section id="applications" eyebrow={c.eyebrow} title={c.title} sub={c.intro} screenLabel="03 Applications" num="03">
+<Section
+  id="applications"
+  class="tf-apps-sec"
+  eyebrow={c.eyebrow}
+  title={c.title}
+  sub={c.intro}
+  screenLabel="03 Applications"
+  num="03"
+>
   <div class="tf-apps">
+    <!-- 0. Technical kicker — reads as the section's index rail. -->
+    <ul class="tf-apps-kicker">
+      {c.kicker.map((k, i) => (
+        <li style={`--i:${i}`}>{k}</li>
+      ))}
+    </ul>
+
     <!-- 1. Symptoms checklist — diagnostic block -->
     <aside class="tf-apps-symptoms" aria-labelledby="apps-symptoms-h">
+      <span class="tf-apps-scan" aria-hidden="true"></span>
       <header class="tf-apps-symptoms-head">
         <span class="tf-mono">CHECK</span>
         <h3 id="apps-symptoms-h" class="tf-apps-symptoms-title">{c.symptoms.title}</h3>
+        <div class="tf-apps-readout" aria-hidden="true">
+          <span class="tf-mono tf-apps-readout-l">{c.symptoms.threshold}</span>
+          <span class="tf-apps-count"><b>02</b><i>/</i>06</span>
+        </div>
       </header>
+      <div class="tf-apps-meter" aria-hidden="true"><span></span></div>
       <ul class="tf-apps-symptoms-list">
-        {c.symptoms.items.map((s) => (
-          <li>
+        {c.symptoms.items.map((s, i) => (
+          <li style={`--i:${i}`} data-hit={DEMO_HITS.includes(i) ? 'true' : undefined}>
             <span class="tf-apps-symptoms-mark" aria-hidden="true">
               <svg viewBox="0 0 14 14" width="12" height="12">
-                <rect x="1" y="1" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.2" />
-                <path d="M4 7l2.2 2.2L10 5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+                <rect class="tf-chk-box" x="1" y="1" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.2" />
+                <path class="tf-chk-tick" pathLength="1" d="M4 7l2.2 2.2L10 5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
             </span>
             <span>{s}</span>
@@ -31,19 +60,24 @@ const c = content.applications;
       <p class="tf-apps-symptoms-close">{c.symptoms.close}</p>
     </aside>
 
-    {/* 2. 4 application cards (2×2 grid). On mobile each card is
-        collapsible: head + title stay visible, the three symptom /
-        solution / benefit blocks live inside .tf-app-body and toggle
-        via a script below (progressive enhancement). An expression
-        comment, not an HTML one, so the Spanish labels don't ship
-        inside the PT and EN pages. */}
+    <!-- 2. Dirty fluid → filtration → stable flow -->
+    <FlowDiagram flow={c.flow} />
+
+    {/* 3. 4 application cards (2×2 grid). On mobile each card collapses:
+        head, title and the machine diagram stay visible, the three
+        symptom / solution / benefit blocks live inside .tf-app-collapse
+        and toggle via the script below (progressive enhancement). An
+        expression comment, not an HTML one, so the Spanish labels don't
+        ship inside the PT and EN pages. */}
     <div class="tf-apps-grid">
+      <span class="tf-apps-glow" aria-hidden="true"></span>
       {c.cards.map((card) => (
         <article
           id={`app-${card.code.toLowerCase()}`}
           class="tf-app"
           style="scroll-margin-top: calc(var(--header-h) + 24px);"
         >
+          <span class="tf-app-ghost" aria-hidden="true">{card.code.replace(/\D/g, '')}</span>
           <div class="tf-app-toggle">
             <header class="tf-app-head">
               <span class="tf-mono tf-app-code">{card.code}</span>
@@ -56,42 +90,50 @@ const c = content.applications;
             </header>
             <h3 class="tf-app-title">{card.title}</h3>
           </div>
+
           <div class="tf-app-body">
-            <div class="tf-app-block">
-              <span class="tf-mono tf-app-label" data-kind="problem">
-                {content.ui.symptom}
-              </span>
-              <p class="tf-app-text">{card.problem}</p>
+            <div class="tf-app-figure">
+              <MachineDiagram code={card.code} label={content.ui.diagram} caption={card.diagram} />
             </div>
 
-            <div class="tf-app-block">
-              <span class="tf-mono tf-app-label" data-kind="install">
-                {content.ui.solution}
-              </span>
-              <p class="tf-app-text">{card.install}</p>
-            </div>
+            <div class="tf-app-collapse">
+              <div class="tf-app-block" style="--seq: 3">
+                <span class="tf-mono tf-app-label" data-kind="problem">
+                  {content.ui.symptom}
+                </span>
+                <p class="tf-app-text">{card.problem}</p>
+              </div>
 
-            <div class="tf-app-block is-benefit">
-              <span class="tf-mono tf-app-label" data-kind="benefit">
-                {content.ui.benefit}
-              </span>
-              <p class="tf-app-text">{card.benefit}</p>
-            </div>
+              <div class="tf-app-block" style="--seq: 4">
+                <span class="tf-mono tf-app-label" data-kind="install">
+                  {content.ui.solution}
+                </span>
+                <p class="tf-app-text">{card.install}</p>
+              </div>
 
-            {card.link && (
-              <a class="tf-app-link" href={pathFor(card.link.page, content.lang)}>
-                <span>{card.link.label}</span>
-                <svg viewBox="0 0 16 16" width="13" height="13" aria-hidden="true">
-                  <path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" />
-                </svg>
-              </a>
-            )}
+              <div class="tf-app-block is-benefit" style="--seq: 5">
+                <span class="tf-app-sweep" aria-hidden="true"></span>
+                <span class="tf-mono tf-app-label" data-kind="benefit">
+                  {content.ui.benefit}
+                </span>
+                <p class="tf-app-text">{card.benefit}</p>
+              </div>
+
+              {card.link && (
+                <a class="tf-app-link" style="--seq: 6" href={pathFor(card.link.page, content.lang)}>
+                  <span>{card.link.label}</span>
+                  <svg viewBox="0 0 16 16" width="13" height="13" aria-hidden="true">
+                    <path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" />
+                  </svg>
+                </a>
+              )}
+            </div>
           </div>
         </article>
       ))}
     </div>
 
-    <!-- 3. Custom-design editorial block — branded conveyor photo as
+    <!-- 4. Custom-design editorial block — branded conveyor photo as
          heavily-shadowed backdrop so the brand presence is subtle. -->
     <aside class="tf-apps-custom" aria-labelledby="apps-custom-h">
       <div class="tf-apps-custom-bg" aria-hidden="true">
@@ -104,7 +146,7 @@ const c = content.applications;
       </div>
     </aside>
 
-    <!-- 4. Metrics strip -->
+    <!-- 5. Metrics strip -->
     <section class="tf-apps-metrics-wrap" aria-labelledby="apps-metrics-h">
       <header class="tf-apps-metrics-head">
         <span class="tf-mono">METRICS</span>
@@ -126,7 +168,7 @@ const c = content.applications;
       <p class="tf-apps-metrics-note">{c.metrics.note}</p>
     </section>
 
-    <!-- 5. CTA banner -->
+    <!-- 6. CTA banner -->
     <aside class="tf-apps-cta">
       <p class="tf-apps-cta-text">{c.cta.text}</p>
       <a href="#contact" class="tf-btn tf-btn-primary tf-btn-lg">
@@ -139,16 +181,652 @@ const c = content.applications;
   </div>
 </Section>
 
+<style>
+  /* ═══════════════════════════════════════════════════════════════════
+     Applications — diagnostic panel, flow figure and the A01–A04 cards.
+     Everything here is scoped to this component so the ~500 lines of
+     section-specific CSS don't ride along on the landing pages, which
+     never render it. The shared blocks below it (custom / metrics / CTA)
+     keep their rules in global.css.
+     ══════════════════════════════════════════════════════════════════ */
+  .tf-apps {
+    --ap-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+    --ap-dirt: #8f5c2d;
+    position: relative;
+  }
+
+  /* ── 0 · Kicker rail ─────────────────────────────────────────────── */
+  .tf-apps-kicker {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 18px;
+    margin: -24px 0 clamp(36px, 4vw, 52px);
+    padding: 0 0 12px;
+    border-bottom: 1px solid var(--line);
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--fg-3);
+  }
+  .tf-apps-kicker li {
+    display: inline-flex;
+    align-items: center;
+    gap: 18px;
+    opacity: 0;
+    transform: translateY(6px);
+    transition:
+      opacity 0.5s var(--ap-ease) calc(var(--i) * 90ms),
+      transform 0.5s var(--ap-ease) calc(var(--i) * 90ms);
+  }
+  .tf-apps-kicker li::before {
+    content: "";
+    width: 5px;
+    height: 5px;
+    background: var(--accent);
+    opacity: 0.85;
+    flex-shrink: 0;
+  }
+  .tf-apps-kicker li:not(:last-child)::after {
+    content: "";
+    width: 22px;
+    height: 1px;
+    background: var(--line-strong);
+  }
+  .tf-apps.is-active .tf-apps-kicker li {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* ── 1 · Diagnostic panel ────────────────────────────────────────── */
+  .tf-apps-symptoms {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(180deg, #16161c 0%, var(--bg-2) 60%);
+    border: 1px solid var(--line);
+    padding: clamp(28px, 3.2vw, 44px);
+  }
+  /* One pass of a blue scan across the panel when it comes into view. */
+  .tf-apps-scan {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 38%;
+    pointer-events: none;
+    background: linear-gradient(90deg, transparent 0%, rgba(58, 134, 255, 0.09) 55%, rgba(58, 134, 255, 0.02) 100%);
+    border-right: 1px solid rgba(58, 134, 255, 0.4);
+    transform: translateX(-105%);
+    opacity: 0;
+  }
+  .tf-apps-symptoms.is-active .tf-apps-scan {
+    animation: tf-apps-scan 1.15s var(--ap-ease) 0.1s 1;
+  }
+  @keyframes tf-apps-scan {
+    0% { transform: translateX(-105%); opacity: 0; }
+    12% { opacity: 1; }
+    88% { opacity: 1; }
+    100% { transform: translateX(270%); opacity: 0; }
+  }
+
+  .tf-apps-symptoms-head {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 14px;
+  }
+  .tf-apps-symptoms-head .tf-mono { color: var(--accent); flex-shrink: 0; }
+  .tf-apps-symptoms-title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(22px, 1.9vw, 28px);
+    letter-spacing: -0.01em;
+    margin: 0;
+    min-width: 0;
+  }
+  /* Instrument readout: names the threshold the closing line states. */
+  .tf-apps-readout {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: opacity 0.5s var(--ap-ease) 0.85s, transform 0.5s var(--ap-ease) 0.85s;
+  }
+  .tf-apps-readout-l { font-size: 9.5px; color: var(--fg-4); }
+  .tf-apps-count {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    color: var(--fg-3);
+    font-variant-numeric: tabular-nums slashed-zero;
+  }
+  .tf-apps-count b { color: var(--accent); font-weight: 500; }
+  .tf-apps-count i { color: var(--line-strong); font-style: normal; margin: 0 2px; }
+  .tf-apps-symptoms.is-active .tf-apps-readout { opacity: 1; transform: none; }
+
+  /* Threshold meter — fills to 2 of 6. */
+  .tf-apps-meter {
+    position: relative;
+    height: 2px;
+    background: var(--line);
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .tf-apps-meter > span {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 33.33%;
+    background: linear-gradient(90deg, var(--accent-2), var(--accent));
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.7s var(--ap-ease) 0.95s;
+  }
+  .tf-apps-symptoms.is-active .tf-apps-meter > span { transform: scaleX(1); }
+
+  .tf-apps-symptoms-list {
+    list-style: none;
+    margin: 0 0 24px;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px 32px;
+  }
+  .tf-apps-symptoms-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--fg-2);
+    opacity: 0;
+    transform: translateY(6px);
+    transition:
+      opacity 0.45s var(--ap-ease) calc(0.2s + var(--i) * 0.07s),
+      transform 0.45s var(--ap-ease) calc(0.2s + var(--i) * 0.07s);
+  }
+  .tf-apps-symptoms.is-active .tf-apps-symptoms-list li {
+    opacity: 1;
+    transform: none;
+  }
+  .tf-apps-symptoms-mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--fg-4);
+    margin-top: 2px;
+    flex-shrink: 0;
+    transition: color 0.4s var(--ap-ease);
+  }
+  .tf-chk-tick {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+  }
+  /* The two demonstration hits: box lights up, tick draws itself. */
+  .tf-apps-symptoms-list li[data-hit] .tf-apps-symptoms-mark { color: var(--accent); }
+  .tf-apps-symptoms.is-active li[data-hit] .tf-chk-tick {
+    animation: tf-chk 0.42s var(--ap-ease) calc(0.75s + var(--i) * 0.12s) forwards;
+  }
+  .tf-apps-symptoms.is-active li[data-hit] .tf-apps-symptoms-mark {
+    filter: drop-shadow(0 0 5px rgba(58, 134, 255, 0.5));
+  }
+  @keyframes tf-chk {
+    to { stroke-dashoffset: 0; }
+  }
+
+  .tf-apps-symptoms-close {
+    margin: 0;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--fg-2);
+    font-style: italic;
+    max-width: 70ch;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.5s var(--ap-ease) 1s, transform 0.5s var(--ap-ease) 1s;
+  }
+  .tf-apps-symptoms.is-active .tf-apps-symptoms-close { opacity: 1; transform: none; }
+
+  /* ── 3 · Application cards ───────────────────────────────────────── */
+  .tf-apps-grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  /* Cursor light — a barely-there blue lift that follows the pointer
+     across the card block. Opacity stays at 0 until JS says the pointer
+     is fine and the user hasn't asked for less motion. */
+  .tf-apps-glow {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.45s var(--ap-ease);
+    background: radial-gradient(
+      340px circle at var(--mx, 50%) var(--my, 50%),
+      rgba(58, 134, 255, 0.055),
+      transparent 68%
+    );
+    mix-blend-mode: plus-lighter;
+  }
+  .tf-apps-grid.is-lit .tf-apps-glow { opacity: 1; }
+
+  .tf-app {
+    position: relative;
+    overflow: hidden;
+    background: var(--bg-2);
+    padding: clamp(24px, 2.6vw, 36px);
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    transition: background 0.25s;
+  }
+  .tf-app::before {
+    /* Top-edge luminance break — the "metal seam" between cards. */
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(58, 134, 255, 0.35), transparent 45%);
+    opacity: 0;
+    transition: opacity 0.35s var(--ap-ease);
+  }
+  .tf-app:hover { background: var(--bg-3); }
+  .tf-app:hover::before { opacity: 1; }
+
+  .tf-app-ghost {
+    position: absolute;
+    right: -4px;
+    bottom: -26px;
+    z-index: 0;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(88px, 8.5vw, 132px);
+    line-height: 0.8;
+    letter-spacing: -0.04em;
+    color: var(--fg);
+    opacity: 0.035;
+    pointer-events: none;
+    user-select: none;
+    font-variant-numeric: tabular-nums;
+  }
+  .tf-app > *:not(.tf-app-ghost) { position: relative; z-index: 1; }
+
+  /* Desktop: the toggle wrapper is a pass-through — head + title flow as
+     direct flex children of .tf-app. Mobile turns it into the tap target. */
+  .tf-app-toggle { display: contents; }
+  .tf-app-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .tf-app-code {
+    color: var(--fg-3);
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.45s var(--ap-ease) 60ms, transform 0.45s var(--ap-ease) 60ms;
+  }
+  .tf-app-rule {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--accent) 0 34px, var(--line-strong) 34px);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.55s var(--ap-ease);
+  }
+  .tf-app-chev { display: none; }
+  .tf-app-title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(22px, 1.8vw, 26px);
+    letter-spacing: -0.01em;
+    margin: 0;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.5s var(--ap-ease) 140ms, transform 0.5s var(--ap-ease) 140ms;
+  }
+  .tf-app.is-active .tf-app-code,
+  .tf-app.is-active .tf-app-title { opacity: 1; transform: none; }
+  .tf-app.is-active .tf-app-rule { transform: scaleX(1); }
+
+  /* Body grid: the diagram gets its own column at wide desktop and its
+     own row everywhere else. It is never positioned over the text. */
+  .tf-app-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+    flex: 1;
+  }
+  .tf-app-figure {
+    min-width: 0;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.55s var(--ap-ease) 240ms, transform 0.55s var(--ap-ease) 240ms;
+  }
+  .tf-app.is-active .tf-app-figure { opacity: 1; transform: none; }
+  .tf-app-collapse {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    min-width: 0;
+  }
+
+  .tf-app-block {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    opacity: 0;
+    transform: translateY(8px);
+    transition:
+      opacity 0.5s var(--ap-ease) calc(var(--seq, 3) * 90ms),
+      transform 0.5s var(--ap-ease) calc(var(--seq, 3) * 90ms);
+  }
+  .tf-app.is-active .tf-app-block { opacity: 1; transform: none; }
+  .tf-app-label {
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    color: var(--fg-3);
+  }
+  .tf-app-label[data-kind="benefit"] { color: var(--accent); }
+  .tf-app-text {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--fg-2);
+  }
+
+  /* The payoff block: deep blue bed, blue keyline, one sweep on entry. */
+  .tf-app-block.is-benefit {
+    margin-top: auto;
+    overflow: hidden;
+    padding: 14px 16px;
+    border-left: 2px solid var(--accent);
+    background:
+      linear-gradient(135deg, rgba(58, 134, 255, 0.14) 0%, rgba(58, 134, 255, 0.05) 42%, rgba(58, 134, 255, 0.09) 100%),
+      #101827;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  }
+  .tf-app-block.is-benefit .tf-app-text { color: var(--fg); }
+  .tf-app-sweep {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 45%;
+    pointer-events: none;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.07), transparent);
+    transform: translateX(-120%);
+  }
+  .tf-app.is-active .tf-app-sweep {
+    animation: tf-app-sweep 0.9s var(--ap-ease) 720ms 1;
+  }
+  @keyframes tf-app-sweep {
+    to { transform: translateX(260%); }
+  }
+
+  /* Deep link to the card's own landing page (A01 → /conformado). */
+  .tf-app-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    align-self: flex-start;
+    padding: 10px 14px;
+    border: 1px solid var(--line-strong);
+    color: var(--fg);
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    opacity: 0;
+    transform: translateY(8px);
+    transition:
+      opacity 0.5s var(--ap-ease) calc(var(--seq, 6) * 90ms),
+      transform 0.5s var(--ap-ease) calc(var(--seq, 6) * 90ms),
+      background 0.2s,
+      border-color 0.2s;
+  }
+  .tf-app.is-active .tf-app-link { opacity: 1; transform: none; }
+  .tf-app-link:hover {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
+  .tf-app-link svg { transition: transform 0.2s; }
+  .tf-app-link:hover svg { transform: translateX(3px); }
+
+  /* ── Responsive ──────────────────────────────────────────────────── */
+  /* Wide desktop only: the diagram takes its own column beside the text.
+     Below this the card is too narrow to split without squeezing the
+     paragraphs, so the diagram becomes a full-width viewport instead. */
+  @media (min-width: 1360px) {
+    .tf-app-body {
+      grid-template-columns: minmax(0, 1fr) 172px;
+      grid-template-areas: "text fig";
+      column-gap: 22px;
+      align-items: start;
+    }
+    .tf-app-figure { grid-area: fig; }
+    .tf-app-collapse { grid-area: text; }
+  }
+
+  @media (max-width: 1080px) {
+    .tf-apps-symptoms-list { gap: 12px 24px; }
+  }
+
+  @media (max-width: 860px) {
+    .tf-apps-symptoms-head { flex-wrap: wrap; }
+    .tf-apps-readout {
+      margin-left: 0;
+      width: 100%;
+      order: 3;
+      justify-content: flex-start;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .tf-apps-symptoms-list { grid-template-columns: 1fr; }
+    .tf-apps-grid { grid-template-columns: 1fr; }
+  }
+
+  /* Mobile: A01..A04 collapse. Head, title and the machine diagram stay
+     visible; the SÍNTOMA / SOLUCIÓN / BENEFICIO blocks toggle. JS sets
+     data-open. */
+  @media (max-width: 640px) {
+    .tf-apps-kicker {
+      gap: 0 12px;
+      font-size: 9.5px;
+      letter-spacing: 0.12em;
+    }
+    .tf-apps-kicker li { gap: 12px; }
+    .tf-apps-kicker li:not(:last-child)::after { width: 12px; }
+
+    .tf-app-toggle {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+    .tf-app-toggle:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 4px;
+    }
+    .tf-app-chev {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      color: var(--fg-3);
+      flex-shrink: 0;
+      transition: transform 0.25s ease, color 0.2s;
+    }
+    .tf-app-toggle:hover .tf-app-chev { color: var(--fg-2); }
+    .tf-app[data-open="true"] .tf-app-chev { transform: rotate(180deg); }
+    /* Snap rather than animate height — cheap and predictable on mobile. */
+    .tf-app[data-open="false"] .tf-app-collapse { display: none; }
+    .tf-app[data-open="false"] { gap: 14px; }
+    .tf-app[data-open="false"] .tf-app-toggle { gap: 10px; }
+    .tf-app-ghost { font-size: 96px; bottom: -20px; }
+  }
+  @media (max-width: 640px) and (prefers-reduced-motion: reduce) {
+    .tf-app-chev { transition: none; }
+  }
+
+  /* ── Reduced motion: everything lands on its final frame ─────────── */
+  @media (prefers-reduced-motion: reduce) {
+    .tf-apps :where(
+      .tf-apps-kicker li,
+      .tf-apps-symptoms-list li,
+      .tf-apps-symptoms-close,
+      .tf-apps-readout,
+      .tf-app-code,
+      .tf-app-title,
+      .tf-app-figure,
+      .tf-app-block,
+      .tf-app-link
+    ) {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+    .tf-app-rule { transform: scaleX(1); transition: none; }
+    .tf-apps-meter > span { transform: scaleX(1); transition: none; }
+    .tf-apps-scan { display: none; }
+    .tf-app-sweep { display: none; }
+    .tf-chk-tick { stroke-dashoffset: 0; }
+    .tf-apps-symptoms li:not([data-hit]) .tf-chk-tick { opacity: 0; }
+    .tf-apps-symptoms.is-active .tf-apps-scan,
+    .tf-apps-symptoms.is-active li[data-hit] .tf-chk-tick,
+    .tf-app.is-active .tf-app-sweep { animation: none; }
+    .tf-apps-glow { display: none; }
+  }
+</style>
+
 <script>
-  // Progressive enhancement: on small screens turn each .tf-app into a
-  // collapsible card (head + title visible; body toggles). Desktop is
-  // untouched — body is always visible via CSS regardless of data-open.
-  function initAppsCollapse() {
+  /**
+   * Applications section: entry choreography, loop gating and the mobile
+   * collapse. All of it is progressive enhancement over server-rendered
+   * markup — no framework, one observer per job.
+   *
+   * · `is-active` fires the one-shot entry sequences (panel scan, card
+   *   cascades). Added once, never removed.
+   * · `is-idle` pauses every mechanical loop while a diagram is off
+   *   screen, so nothing animates where nobody is looking.
+   * · The cursor light only binds on fine pointers when the visitor
+   *   hasn't asked for reduced motion.
+   */
+  type AppsWin = typeof window & {
+    __tfAppsObs?: IntersectionObserver[];
+    __tfAppsTimers?: number[];
+  };
+
+  function initApps() {
+    const w = window as AppsWin;
+    // ClientRouter keeps the document alive across locale swaps: tear the
+    // previous page's observers down instead of stacking new ones.
+    w.__tfAppsObs?.forEach((o) => o.disconnect());
+    w.__tfAppsTimers?.forEach((t) => window.clearTimeout(t));
+    w.__tfAppsObs = [];
+    w.__tfAppsTimers = [];
+
+    const root = document.querySelector<HTMLElement>('.tf-apps');
+    if (!root) return;
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // ── Entry: one class, once, per orchestrated block ───────────────
+    const entries = [
+      root,
+      ...root.querySelectorAll<HTMLElement>('.tf-apps-symptoms, .tf-flow, .tf-app'),
+    ];
+    const activate = (el: Element) => el.classList.add('is-active');
+    // "On screen right now, or already scrolled past" — the two cases a
+    // reveal must cover even if the observer never reports them.
+    const seen = (el: Element) => {
+      const r = el.getBoundingClientRect();
+      return r.bottom <= 0 || (r.top < window.innerHeight && r.bottom > 0);
+    };
+
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(
+        (recs) => {
+          for (const r of recs) {
+            if (r.isIntersecting) {
+              activate(r.target);
+              io.unobserve(r.target);
+            }
+          }
+        },
+        { threshold: 0.15, rootMargin: '0px 0px -8% 0px' }
+      );
+      entries.forEach((el) => {
+        // Already scrolled past (deep link to #app-a01): reveal outright.
+        if (el.getBoundingClientRect().bottom <= 0) activate(el);
+        else io.observe(el);
+      });
+      w.__tfAppsObs.push(io);
+
+      // ── Loops: pause whatever isn't on screen ─────────────────────
+      const loops = root.querySelectorAll<HTMLElement>('.tf-flow, .tf-md');
+      if (loops.length) {
+        const liveIo = new IntersectionObserver(
+          (recs) => {
+            for (const r of recs) r.target.classList.toggle('is-idle', !r.isIntersecting);
+          },
+          { threshold: 0 }
+        );
+        loops.forEach((el) => {
+          el.classList.add('is-idle');
+          liveIo.observe(el);
+        });
+        w.__tfAppsObs.push(liveIo);
+      }
+
+      // Safety net for a missed callback — deliberately limited to what
+      // the visitor can already see. Revealing the whole section on a
+      // timer would burn every entry sequence before anyone scrolled
+      // down to it.
+      w.__tfAppsTimers.push(
+        window.setTimeout(() => entries.filter(seen).forEach(activate), 2500)
+      );
+    } else {
+      entries.forEach(activate);
+    }
+
+    // ── Cursor light over the card block ────────────────────────────
+    const grid = root.querySelector<HTMLElement>('.tf-apps-grid');
+    if (grid && !reduced && window.matchMedia('(pointer: fine)').matches) {
+      let raf = 0;
+      grid.addEventListener(
+        'pointermove',
+        (e: PointerEvent) => {
+          if (raf) return;
+          raf = requestAnimationFrame(() => {
+            raf = 0;
+            const r = grid.getBoundingClientRect();
+            grid.style.setProperty('--mx', `${e.clientX - r.left}px`);
+            grid.style.setProperty('--my', `${e.clientY - r.top}px`);
+          });
+        },
+        { passive: true }
+      );
+      grid.addEventListener('pointerenter', () => grid.classList.add('is-lit'), { passive: true });
+      grid.addEventListener('pointerleave', () => grid.classList.remove('is-lit'), { passive: true });
+    }
+
+    // ── Mobile collapse ─────────────────────────────────────────────
     const isMobile = window.matchMedia('(max-width: 640px)').matches;
-    const articles = document.querySelectorAll<HTMLElement>('.tf-app');
-    articles.forEach((article) => {
+    root.querySelectorAll<HTMLElement>('.tf-app').forEach((article) => {
       const toggle = article.querySelector<HTMLElement>('.tf-app-toggle');
-      const body = article.querySelector<HTMLElement>('.tf-app-body');
+      const body = article.querySelector<HTMLElement>('.tf-app-collapse');
       if (!toggle || !body) return;
       if (!body.id) body.id = `${article.id}-body`;
 
@@ -177,5 +855,5 @@ const c = content.applications;
     });
   }
 
-  document.addEventListener('astro:page-load', initAppsCollapse);
+  document.addEventListener('astro:page-load', initApps);
 </script>

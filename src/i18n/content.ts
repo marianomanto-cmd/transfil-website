@@ -67,14 +67,37 @@ export type Content = {
     eyebrow: string;
     title: string;
     intro: string;
+    /** Three-word technical kicker rendered as a rail under the section head. */
+    kicker: [string, string, string];
     symptoms: {
       title: string;
       items: string[];
       close: string;
+      /** Mono label over the demonstrative "02 / 06" readout — it names the
+          threshold stated in `close`, not an answer the visitor gave. */
+      threshold: string;
+    };
+    /** Labels for the dirty → filtration → clean flow figure. Every one of
+        them is on screen, so all three locales carry their own. */
+    flow: {
+      dirty: string;
+      filter: string;
+      clean: string;
+      stages: string;
+      /** Colour-key terms under the rails: blue = fluid, brown = solids. */
+      fluid: string;
+      solids: string;
+      retained: string;
+      separation: string;
+      /** Text alternative for the figure — the animation never carries
+          information that isn't also written down somewhere. */
+      caption: string;
     };
     cards: {
       code: string;
       title: string;
+      /** Two-word caption under the card's machine diagram. */
+      diagram: string;
       problem: string;
       install: string;
       benefit: string;
@@ -135,6 +158,8 @@ export type Content = {
     symptom: string;
     solution: string;
     benefit: string;
+    /** Mono chip over each card's machine diagram. */
+    diagram: string;
     metricsTitle: string;
     download: string;
     close: string;
@@ -234,6 +259,7 @@ export const CONTENT: Record<Lang, Content> = {
       eyebrow: '[ 03 — Aplicaciones ]',
       title: 'El costo que no se ve.',
       intro: 'Muchas plantas descartan el refrigerante cuando se ensucia — después de que ya desgastó las herramientas, dañó la bomba y frenó la línea. La filtración, el transporte de viruta y el lavado no son accesorios: protegen los activos que ya pagó.',
+      kicker: ['Filtración', 'Recuperación', 'Vida útil'],
       symptoms: {
         title: '¿Reconoce estos síntomas en su planta?',
         items: [
@@ -245,11 +271,24 @@ export const CONTENT: Record<Lang, Content> = {
           'La bomba o el husillo fallan antes de tiempo.',
         ],
         close: 'Si reconoce dos o más, no es mala suerte: es un costo oculto con solución de ingeniería.',
+        threshold: 'Umbral',
+      },
+      flow: {
+        dirty: 'Fluido sucio',
+        filter: 'Filtración',
+        clean: 'Flujo estable',
+        stages: '03 etapas',
+        fluid: 'fluido',
+        solids: 'sólidos',
+        retained: 'sólidos retenidos',
+        separation: 'separación controlada',
+        caption: 'Esquema del proceso: el fluido entra cargado de finos metálicos y suciedad, el módulo de filtración retiene los sólidos en sus tres etapas, y el fluido sale limpio y con caudal estable.',
       },
       cards: [
         {
           code: 'A01',
           title: 'Conformado de tubos',
+      diagram: 'Rodillos + tubo',
           problem: 'El lubricante se carga de finos metálicos y aceite atrapado. El fluido degradado lubrica peor y acelera el desgaste de rodillos y matrices; aparecen marcas en la superficie del tubo y aumenta el scrap.',
           install: 'Filtración centralizada + separación magnética + recuperación de aceite.',
           benefit: 'Protege el herramental de conformado · multiplica la vida del fluido.',
@@ -258,6 +297,7 @@ export const CONTENT: Record<Lang, Content> = {
         {
           code: 'A02',
           title: 'Mecanizado y torneado',
+      diagram: 'Torno + viruta',
           problem: 'La viruta se acumula y los finos recirculan en el refrigerante; el aceite de guías lo contamina. El resultado: desgaste de herramienta, daño en bombas y husillos, y paros para limpiar a mano.',
           install: 'Transporte de viruta centralizado + filtro de banda + separador magnético.',
           benefit: 'Más vida de herramienta · menos paros · refrigerante limpio.',
@@ -265,6 +305,7 @@ export const CONTENT: Record<Lang, Content> = {
         {
           code: 'A03',
           title: 'Rectificado de precisión',
+      diagram: 'Muela + refrigeración',
           problem: 'La viruta abrasiva fina es casi invisible, pero arruina el acabado y desgasta la muela si no se retira del fluido. La tolerancia se vuelve inestable lote a lote.',
           install: 'Filtración fina (banda o papel) + separación magnética de alta eficiencia.',
           benefit: 'Acabado estable · más vida de muela · refrigerante claro.',
@@ -272,6 +313,7 @@ export const CONTENT: Record<Lang, Content> = {
         {
           code: 'A04',
           title: 'Lavado y preparación de piezas',
+      diagram: 'Túnel + spray',
           problem: 'Las piezas llegan con aceite y viruta al ensamble, la soldadura o el pintado. El lavado manual es inconsistente y se vuelve un cuello de botella en la línea.',
           install: 'Lavadora industrial (pasante, rotativa o cabina) con filtración integrada y control PLC.',
           benefit: 'Limpieza repetible · más throughput · baño de mayor vida.',
@@ -393,6 +435,7 @@ export const CONTENT: Record<Lang, Content> = {
       symptom: 'SÍNTOMA',
       solution: 'SOLUCIÓN',
       benefit: 'BENEFICIO',
+      diagram: 'Diagrama',
       metricsTitle: 'Resultados típicos de la inversión',
       download: 'Descargar',
       close: 'Cerrar',
@@ -529,6 +572,7 @@ export const CONTENT: Record<Lang, Content> = {
       eyebrow: '[ 03 — Applications ]',
       title: 'The cost you don\'t see.',
       intro: 'Many plants discard coolant once it gets dirty — after it has already worn the tooling, damaged the pump and stopped the line. Filtration, chip transport and washing aren\'t accessories: they protect the assets you\'ve already paid for.',
+      kicker: ['Filtration', 'Recovery', 'Service life'],
       symptoms: {
         title: 'Do you recognize these symptoms on your plant floor?',
         items: [
@@ -540,11 +584,24 @@ export const CONTENT: Record<Lang, Content> = {
           'Pumps or spindles fail earlier than expected.',
         ],
         close: 'If two or more of these ring true, it isn\'t bad luck — it\'s a hidden cost with an engineering fix.',
+        threshold: 'Threshold',
+      },
+      flow: {
+        dirty: 'Dirty fluid',
+        filter: 'Filtration',
+        clean: 'Stable flow',
+        stages: '03 stages',
+        fluid: 'fluid',
+        solids: 'solids',
+        retained: 'solids retained',
+        separation: 'controlled separation',
+        caption: 'Process diagram: fluid comes in loaded with metal fines and dirt, the filtration module holds the solids back across its three stages, and the fluid leaves clean and at a stable flow rate.',
       },
       cards: [
         {
           code: 'A01',
           title: 'Tube forming',
+      diagram: 'Rolls + tube',
           problem: 'The lubricant loads up with metal fines and tramp oil. The degraded fluid lubricates worse and accelerates roll and die wear; marks appear on the tube surface and scrap climbs.',
           install: 'Centralized filtration + magnetic separation + oil recovery.',
           benefit: 'Protects forming tooling · multiplies fluid life.',
@@ -553,6 +610,7 @@ export const CONTENT: Record<Lang, Content> = {
         {
           code: 'A02',
           title: 'Machining and turning',
+      diagram: 'Lathe + chips',
           problem: 'Chips build up and the fines recirculate in the coolant; way-lube contaminates it further. The result: tool wear, damage to pumps and spindles, and stoppages to clean by hand.',
           install: 'Centralized chip transport + belt filter + magnetic separator.',
           benefit: 'Longer tool life · fewer stoppages · clean coolant.',
@@ -560,6 +618,7 @@ export const CONTENT: Record<Lang, Content> = {
         {
           code: 'A03',
           title: 'Precision grinding',
+      diagram: 'Wheel + coolant',
           problem: 'Fine abrasive swarf is nearly invisible, but it ruins the finish and wears the wheel if it isn\'t taken out of the fluid. Tolerance drifts batch to batch.',
           install: 'Fine filtration (belt or paper) + high-efficiency magnetic separation.',
           benefit: 'Stable finish · longer wheel life · clear coolant.',
@@ -567,6 +626,7 @@ export const CONTENT: Record<Lang, Content> = {
         {
           code: 'A04',
           title: 'Parts washing and prep',
+      diagram: 'Tunnel + spray',
           problem: 'Parts reach assembly, welding or paint with oil and chips still on them. Manual washing is inconsistent and becomes a bottleneck on the line.',
           install: 'Industrial washer (pass-through, rotary or cabinet) with integrated filtration and PLC control.',
           benefit: 'Repeatable cleanliness · higher throughput · longer bath life.',
@@ -688,6 +748,7 @@ export const CONTENT: Record<Lang, Content> = {
       symptom: 'SYMPTOM',
       solution: 'SOLUTION',
       benefit: 'BENEFIT',
+      diagram: 'Machine diagram',
       metricsTitle: 'Typical investment results',
       download: 'Download',
       close: 'Close',
@@ -824,6 +885,7 @@ export const CONTENT: Record<Lang, Content> = {
       eyebrow: '[ 03 — Aplicações ]',
       title: 'O custo que não se vê.',
       intro: 'Muitas plantas descartam o fluido de corte quando ele suja — depois de já ter desgastado as ferramentas, danificado a bomba e parado a linha. Filtragem, transporte de cavaco e lavagem não são acessórios: protegem os ativos que você já pagou.',
+      kicker: ['Filtragem', 'Recuperação', 'Vida útil'],
       symptoms: {
         title: 'Você reconhece estes sintomas na sua planta?',
         items: [
@@ -835,11 +897,24 @@ export const CONTENT: Record<Lang, Content> = {
           'A bomba ou o eixo-árvore falham antes do previsto.',
         ],
         close: 'Se você reconhece dois ou mais, não é azar: é um custo oculto com solução de engenharia.',
+        threshold: 'Limiar',
+      },
+      flow: {
+        dirty: 'Fluido sujo',
+        filter: 'Filtragem',
+        clean: 'Fluxo estável',
+        stages: '03 etapas',
+        fluid: 'fluido',
+        solids: 'sólidos',
+        retained: 'sólidos retidos',
+        separation: 'separação controlada',
+        caption: 'Esquema do processo: o fluido entra carregado de finos metálicos e sujeira, o módulo de filtragem retém os sólidos nas suas três etapas, e o fluido sai limpo e com vazão estável.',
       },
       cards: [
         {
           code: 'A01',
           title: 'Conformação de tubos',
+      diagram: 'Roletes + tubo',
           problem: 'O lubrificante se carrega de finos metálicos e óleo tramp. O fluido degradado lubrifica pior e acelera o desgaste de roletes e matrizes; aparecem marcas na superfície do tubo e a sucata aumenta.',
           install: 'Filtragem centralizada + separação magnética + recuperação de óleo.',
           benefit: 'Protege o ferramental de conformação · multiplica a vida do fluido.',
@@ -848,6 +923,7 @@ export const CONTENT: Record<Lang, Content> = {
         {
           code: 'A02',
           title: 'Usinagem e torneamento',
+      diagram: 'Torno + cavaco',
           problem: 'O cavaco se acumula e os finos recirculam no fluido de corte; o óleo de barramento o contamina. O resultado: desgaste de ferramenta, dano em bombas e eixos-árvore, e paradas para limpeza manual.',
           install: 'Transporte de cavaco centralizado + filtro de esteira + separador magnético.',
           benefit: 'Mais vida de ferramenta · menos paradas · fluido limpo.',
@@ -855,6 +931,7 @@ export const CONTENT: Record<Lang, Content> = {
         {
           code: 'A03',
           title: 'Retificação de precisão',
+      diagram: 'Rebolo + refrigeração',
           problem: 'O cavaco abrasivo fino é quase invisível, mas arruína o acabamento e desgasta o rebolo se não for retirado do fluido. A tolerância fica instável de lote a lote.',
           install: 'Filtragem fina (esteira ou papel) + separação magnética de alta eficiência.',
           benefit: 'Acabamento estável · mais vida de rebolo · fluido limpo.',
@@ -862,6 +939,7 @@ export const CONTENT: Record<Lang, Content> = {
         {
           code: 'A04',
           title: 'Lavagem e preparação de peças',
+      diagram: 'Túnel + spray',
           problem: 'As peças chegam com óleo e cavaco à montagem, à solda ou à pintura. A lavagem manual é inconsistente e vira gargalo na linha.',
           install: 'Lavadora industrial (passagem contínua, rotativa ou cabine) com filtragem integrada e controle CLP.',
           benefit: 'Limpeza repetível · mais throughput · banho de maior vida.',
@@ -984,6 +1062,7 @@ export const CONTENT: Record<Lang, Content> = {
       symptom: 'SINTOMA',
       solution: 'SOLUÇÃO',
       benefit: 'BENEFÍCIO',
+      diagram: 'Diagrama',
       metricsTitle: 'Resultados típicos do investimento',
       download: 'Baixar',
       close: 'Fechar',

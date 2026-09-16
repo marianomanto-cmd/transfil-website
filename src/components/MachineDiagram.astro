@@ -1,0 +1,598 @@
+---
+/**
+ * Process microdiagram for one application card (A01–A04).
+ *
+ * Four hand-drawn SVGs sharing one visual language: graphite structure,
+ * mid-grey technical lines, TRANS-FIL blue for whatever is flowing or
+ * active, industrial brown for contamination. Same 200×120 viewBox, same
+ * stroke weights and the same faint blueprint grid behind all of them, so
+ * the four read as one instrument panel rather than four illustrations.
+ *
+ * Everything here is decorative: the card's own SÍNTOMA / SOLUCIÓN /
+ * BENEFICIO text is the semantic content, so the <svg> is aria-hidden and
+ * the caption below it is the only readable string.
+ *
+ * Motion is CSS-only (transform / opacity keyframes). The parent toggles
+ * `is-idle` on the root when the card leaves the viewport, which pauses
+ * every loop — nothing animates off-screen.
+ */
+interface Props {
+  /** A01 | A02 | A03 | A04 — picks the drawing. */
+  code: string;
+  /** Mono chip over the frame (localized, e.g. "Diagrama"). */
+  label: string;
+  /** Two-word caption under the frame (localized, e.g. "Rodillos + tubo"). */
+  caption: string;
+}
+const { code, label, caption } = Astro.props;
+const k = code.toUpperCase();
+// Pattern ids have to be unique per instance — four of these render on one page.
+const grid = `md-grid-${k.toLowerCase()}`;
+---
+
+<figure class="tf-md" data-code={k}>
+  <figcaption class="tf-md-cap">
+    <span class="tf-mono tf-md-chip">{label}</span>
+    <span class="tf-md-desc">{caption}</span>
+  </figcaption>
+
+  <div class="tf-md-view">
+    <svg viewBox="0 0 200 120" class="tf-md-svg" aria-hidden="true" focusable="false" preserveAspectRatio="xMidYMid meet">
+      <defs>
+        <pattern id={grid} width="10" height="10" patternUnits="userSpaceOnUse">
+          <path d="M10 0H0v10" fill="none" stroke="currentColor" stroke-width="0.4" />
+        </pattern>
+      </defs>
+      <rect class="tf-md-grid" width="200" height="120" fill={`url(#${grid})`} />
+
+      {k === 'A01' && (
+        <g class="tf-md-scene">
+          {/* Tube in section — two walls around a bore. Enters flat, leaves
+              deflected: the forming pass itself. */}
+          <path class="tf-md-bore" d="M0 52H86C104 52 108 46 126 46H200V62H126C108 62 104 68 86 68H0Z" />
+          <path class="tf-md-wall" d="M0 48H86C104 48 108 42 126 42H200V46H126C108 46 104 52 86 52H0Z" />
+          <path class="tf-md-wall" d="M0 68H86C104 68 108 62 126 62H200V66H126C108 66 104 72 86 72H0Z" />
+          {/* Lubricant film on the outer wall, where the rolls touch it */}
+          <path class="tf-md-film" d="M0 46H86C104 46 108 40 126 40H200" />
+
+          {/* Roll stand: two below the pass line, one above, counter-rotating. */}
+          <g class="tf-md-roll" style="--md-dur: 3.4s">
+            <circle class="tf-md-body" cx="70" cy="84" r="12" />
+            <g class="tf-md-spin">
+              <circle class="tf-md-ghost" cx="70" cy="84" r="12" />
+              <circle class="tf-md-rim" cx="70" cy="84" r="8" />
+              <path class="tf-md-spoke" d="M70 74v20M60 84h20M63 77l14 14M77 77l-14 14" />
+            </g>
+            <circle class="tf-md-hub" cx="70" cy="84" r="3" />
+          </g>
+          <g class="tf-md-roll" style="--md-dur: 3.8s">
+            <circle class="tf-md-body" cx="148" cy="78" r="12" />
+            <g class="tf-md-spin">
+              <circle class="tf-md-ghost" cx="148" cy="78" r="12" />
+              <circle class="tf-md-rim" cx="148" cy="78" r="8" />
+              <path class="tf-md-spoke" d="M148 68v20M138 78h20M141 71l14 14M155 71l-14 14" />
+            </g>
+            <circle class="tf-md-hub" cx="148" cy="78" r="3" />
+          </g>
+          <g class="tf-md-roll is-rev" style="--md-dur: 3.1s">
+            <circle class="tf-md-body" cx="108" cy="30" r="13" />
+            <g class="tf-md-spin">
+              <circle class="tf-md-ghost" cx="108" cy="30" r="13" />
+              <circle class="tf-md-rim" cx="108" cy="30" r="8.5" />
+              <path class="tf-md-spoke" d="M108 19v22M97 30h22M100 22l16 16M116 22l-16 16" />
+            </g>
+            <circle class="tf-md-hub" cx="108" cy="30" r="3" />
+          </g>
+
+          {/* Lubrication fed into the contact points */}
+          <circle class="tf-md-drop" cx="88" cy="16" r="1.8" style="--md-d: 0s" />
+          <circle class="tf-md-drop" cx="126" cy="14" r="1.6" style="--md-d: 0.9s" />
+          <circle class="tf-md-drop" cx="58" cy="15" r="1.7" style="--md-d: 1.5s" />
+
+          {/* Travel: a dashed highlight sliding down the bore */}
+          <path class="tf-md-travel" d="M0 60H86C104 60 108 54 126 54H200" />
+        </g>
+      )}
+
+      {k === 'A02' && (
+        <g class="tf-md-scene">
+          {/* Chuck + rotating jaws */}
+          <rect class="tf-md-body" x="2" y="34" width="20" height="52" rx="1" />
+          <circle class="tf-md-body" cx="38" cy="60" r="21" />
+          <g class="tf-md-spin" style="--md-dur: 2.6s">
+            <circle class="tf-md-ghost" cx="38" cy="60" r="21" />
+            <path class="tf-md-jaw" d="M38 43v13M23.3 68.5l11.3-6.5M52.7 68.5l-11.3-6.5" />
+          </g>
+          <circle class="tf-md-hub" cx="38" cy="60" r="4" />
+
+          {/* Workpiece — spun stock, with a hatch that streams to read as rotation */}
+          <rect class="tf-md-part" x="56" y="49" width="96" height="22" />
+          <path class="tf-md-edge" d="M56 49h96M56 71h96" />
+          <path class="tf-md-hatch" d="M60 49v22M70 49v22M80 49v22M90 49v22M100 49v22M110 49v22M120 49v22M130 49v22M140 49v22M150 49v22" />
+          {/* Tailstock */}
+          <path class="tf-md-body" d="M152 50h10l6 5v10l-6 5h-10z" />
+
+          {/* Coolant delivered to the cut zone */}
+          <path class="tf-md-nozzle" d="M150 24h14v9h-14z" />
+          <path class="tf-md-jet" d="M154 33L128 66" />
+          <circle class="tf-md-bead" cx="0" cy="0" r="1.6" style="--md-d: 0s" />
+          <circle class="tf-md-bead" cx="0" cy="0" r="1.4" style="--md-d: 0.5s" />
+          <circle class="tf-md-bead" cx="0" cy="0" r="1.5" style="--md-d: 1s" />
+
+          {/* Tool: creeps in and out of the cut by a couple of pixels */}
+          <g class="tf-md-tool">
+            <path class="tf-md-insert" d="M118 84h14l-4-13h-6z" />
+            <rect class="tf-md-body" x="119" y="84" width="12" height="30" />
+          </g>
+
+          {/* Chips thrown off the cut */}
+          <path class="tf-md-chip-p" d="M0 0c2-2 4-1 5 1s-1 4-3 3" style="--md-d: 0s" />
+          <path class="tf-md-chip-p" d="M0 0c2-2 4-1 5 1s-1 4-3 3" style="--md-d: 0.9s" />
+          <path class="tf-md-chip-p" d="M0 0c2-2 4-1 5 1s-1 4-3 3" style="--md-d: 1.7s" />
+        </g>
+      )}
+
+      {k === 'A03' && (
+        <g class="tf-md-scene">
+          {/* Grinding wheel */}
+          <circle class="tf-md-body" cx="74" cy="42" r="31" />
+          <g class="tf-md-spin" style="--md-dur: 1.8s">
+            <circle class="tf-md-ghost" cx="74" cy="42" r="31" />
+            <path
+              class="tf-md-grit"
+              d="M74 11v7M74 66v7M43 42h7M98 42h7M52 20l5 5M91 59l5 5M96 20l-5 5M57 59l-5 5"
+            />
+            <circle class="tf-md-rim" cx="74" cy="42" r="24" />
+          </g>
+          <circle class="tf-md-hub" cx="74" cy="42" r="6" />
+          <path class="tf-md-axis" d="M74 4v14M74 66v14" />
+
+          {/* Workpiece — oscillates a couple of pixels under the wheel */}
+          <g class="tf-md-osc">
+            <rect class="tf-md-part" x="18" y="76" width="150" height="17" />
+            <path class="tf-md-edge" d="M18 76h150" />
+            <path class="tf-md-tick" d="M34 93v5M64 93v5M94 93v5M124 93v5M154 93v5" />
+          </g>
+
+          {/* Coolant nozzle aimed at the contact line */}
+          <path class="tf-md-nozzle" d="M150 44h14v9h-14z" />
+          <g class="tf-md-spray">
+            <path class="tf-md-jet" d="M150 46L86 70" style="--md-d: 0s" />
+            <path class="tf-md-jet" d="M150 49L88 74" style="--md-d: 0.25s" />
+            <path class="tf-md-jet" d="M150 52L92 76" style="--md-d: 0.5s" />
+          </g>
+
+          {/* Swarf lifted off the contact point */}
+          <circle class="tf-md-fine" cx="70" cy="74" r="1.1" style="--md-d: 0s; --md-x: -13px" />
+          <circle class="tf-md-fine" cx="74" cy="74" r="0.9" style="--md-d: 0.6s; --md-x: 12px" />
+          <circle class="tf-md-fine is-dirt" cx="72" cy="74" r="1.1" style="--md-d: 1.1s; --md-x: -8px" />
+          <circle class="tf-md-fine" cx="76" cy="74" r="0.8" style="--md-d: 1.6s; --md-x: 9px" />
+          <circle class="tf-md-fine is-dirt" cx="73" cy="74" r="1" style="--md-d: 2.1s; --md-x: -16px" />
+        </g>
+      )}
+
+      {k === 'A04' && (
+        <g class="tf-md-scene">
+          {/* Wash tunnel — open at both ends, part passes straight through */}
+          <path class="tf-md-body" d="M34 20h132v62H34z" />
+          <path class="tf-md-edge" d="M34 20h132M34 82h132M52 20v62M148 20v62" />
+          <path class="tf-md-mouth" d="M34 20v62M166 20v62" />
+
+          {/* Nozzle manifolds */}
+          <path class="tf-md-edge" d="M60 26h80M60 76h80" />
+          {[68, 90, 112, 134].map((x, i) => (
+            <g class="tf-md-jetgroup" style={`--md-d: ${i * 0.35}s`}>
+              <rect class="tf-md-nozzle" x={x - 3} y="26" width="6" height="5" />
+              <path class="tf-md-cone" d={`M${x - 3} 31L${x - 9} 58H${x + 9}L${x + 3} 31Z`} />
+            </g>
+          ))}
+          {[80, 124].map((x, i) => (
+            <g class="tf-md-jetgroup" style={`--md-d: ${0.55 + i * 0.4}s`}>
+              <rect class="tf-md-nozzle" x={x - 3} y="71" width="6" height="5" />
+              <path class="tf-md-cone" d={`M${x - 3} 71L${x - 8} 52H${x + 8}L${x + 3} 71Z`} />
+            </g>
+          ))}
+
+          {/* Conveyor: the belt line streams, the part rides on it */}
+          <path class="tf-md-belt" d="M0 92h200" />
+          <path class="tf-md-belt-run" d="M0 97h200" />
+          <g class="tf-md-carry">
+            <path class="tf-md-part" d="M-9 74h18v14h-18z" />
+            <path class="tf-md-edge" d="M-9 74h18" />
+          </g>
+
+          {/* Bath level at the tunnel floor */}
+          <path class="tf-md-level" d="M40 86h120" />
+        </g>
+      )}
+    </svg>
+  </div>
+</figure>
+
+<style>
+  /* ── Shared language ───────────────────────────────────────────────
+     One palette, one set of stroke weights, one grid density for all
+     four diagrams. Anything that changes per-diagram is a custom prop
+     set inline on the element (--md-dur, --md-d, --md-x).            */
+  .tf-md {
+    --md-struct: #303037;
+    --md-struct-2: #212127;
+    --md-line: #6d6d77;
+    --md-line-soft: #474751;
+    --md-fluid: var(--accent);
+    --md-dirt: #8f5c2d;
+    --md-ease: cubic-bezier(0.4, 0, 0.2, 1);
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  /* Caption sits above the frame — never over the drawing. */
+  .tf-md-cap {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 2px 8px;
+    min-width: 0;
+  }
+  .tf-md-chip {
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
+    color: var(--fg-4);
+    flex-shrink: 0;
+  }
+  .tf-md-desc {
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    line-height: 1.35;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--fg-4);
+    min-width: 0;
+  }
+  .tf-md-desc::before {
+    content: "/ ";
+    color: var(--line-strong);
+  }
+
+  /* Technical viewport: hairline box with corner ticks and a hint of
+     localized blue light behind the drawing. */
+  .tf-md-view {
+    position: relative;
+    border: 1px solid var(--line);
+    background:
+      radial-gradient(120% 90% at 50% 120%, rgba(58, 134, 255, 0.07), transparent 62%),
+      linear-gradient(180deg, #121217 0%, #0b0b0e 100%);
+    padding: 8px;
+    overflow: hidden;
+  }
+  .tf-md-view::before,
+  .tf-md-view::after {
+    content: "";
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    border: 1px solid var(--line-strong);
+    pointer-events: none;
+  }
+  .tf-md-view::before {
+    top: 4px;
+    left: 4px;
+    border-right: 0;
+    border-bottom: 0;
+  }
+  .tf-md-view::after {
+    right: 4px;
+    bottom: 4px;
+    border-left: 0;
+    border-top: 0;
+  }
+  .tf-md-svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+  .tf-md-grid {
+    color: #ffffff;
+    opacity: 0.035;
+  }
+
+  /* ── Common element roles ──────────────────────────────────────── */
+  .tf-md-body {
+    fill: var(--md-struct);
+    stroke: var(--md-line-soft);
+    stroke-width: 1.1;
+  }
+  .tf-md-part {
+    fill: var(--md-struct-2);
+    stroke: none;
+  }
+  .tf-md-edge {
+    fill: none;
+    stroke: var(--md-line);
+    stroke-width: 1.1;
+  }
+  .tf-md-hub {
+    fill: var(--md-struct-2);
+    stroke: var(--md-line);
+    stroke-width: 1;
+  }
+  .tf-md-ghost {
+    fill: none;
+    stroke: none;
+  }
+  .tf-md-nozzle {
+    fill: var(--md-struct);
+    stroke: var(--md-line-soft);
+    stroke-width: 1;
+  }
+  .tf-md-scene {
+    /* The drawing is clipped by the viewport box, not by the svg. */
+    isolation: isolate;
+  }
+
+  /* Rotation: the invisible .tf-md-ghost circle pins the bbox so
+     fill-box origin lands exactly on the axis. */
+  .tf-md-spin {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: tf-md-spin var(--md-dur, 3s) linear infinite;
+  }
+  .tf-md-roll.is-rev .tf-md-spin {
+    animation-direction: reverse;
+  }
+  @keyframes tf-md-spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* ── A01 · rolls + tube ────────────────────────────────────────── */
+  .tf-md-spoke,
+  .tf-md-jaw {
+    fill: none;
+    stroke: var(--md-line);
+    stroke-width: 1;
+    opacity: 0.75;
+  }
+  .tf-md-jaw {
+    stroke-width: 2.4;
+    stroke-linecap: round;
+    opacity: 0.9;
+  }
+  .tf-md-bore {
+    fill: #0c0c10;
+    stroke: var(--md-line-soft);
+    stroke-width: 0.7;
+  }
+  .tf-md-wall {
+    fill: var(--md-struct);
+    stroke: var(--md-line);
+    stroke-width: 0.8;
+  }
+  .tf-md-film {
+    fill: none;
+    stroke: var(--md-fluid);
+    stroke-width: 1.2;
+    opacity: 0.4;
+    animation: tf-md-pulse 2.4s var(--md-ease) infinite;
+  }
+  .tf-md-travel {
+    fill: none;
+    stroke: var(--md-fluid);
+    stroke-width: 1.4;
+    stroke-dasharray: 14 26;
+    opacity: 0.55;
+    animation: tf-md-run 2.6s linear infinite;
+  }
+  @keyframes tf-md-run {
+    to { stroke-dashoffset: -80; }
+  }
+  @keyframes tf-md-pulse {
+    0%, 100% { opacity: 0.22; }
+    50% { opacity: 0.55; }
+  }
+  .tf-md-drop {
+    fill: var(--md-fluid);
+    opacity: 0;
+    animation: tf-md-drop 2.2s var(--md-ease) var(--md-d, 0s) infinite;
+  }
+  @keyframes tf-md-drop {
+    0% { transform: translateY(0); opacity: 0; }
+    18% { opacity: 0.85; }
+    70% { opacity: 0.7; }
+    100% { transform: translateY(15px); opacity: 0; }
+  }
+
+  /* ── A02 · lathe + chips ───────────────────────────────────────── */
+  .tf-md-hatch {
+    fill: none;
+    stroke: var(--md-line-soft);
+    stroke-width: 0.8;
+    stroke-dasharray: 3 5;
+    opacity: 0.8;
+    animation: tf-md-hatch 1.4s linear infinite;
+  }
+  @keyframes tf-md-hatch {
+    to { stroke-dashoffset: -8; }
+  }
+  .tf-md-insert {
+    fill: var(--md-line);
+    stroke: none;
+  }
+  .tf-md-tool {
+    animation: tf-md-feed 3.6s var(--md-ease) infinite;
+  }
+  @keyframes tf-md-feed {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(-1.5px, -2px); }
+  }
+  .tf-md-jet {
+    fill: none;
+    stroke: var(--md-fluid);
+    stroke-width: 1.1;
+    opacity: 0.3;
+    animation: tf-md-pulse 1.8s var(--md-ease) var(--md-d, 0s) infinite;
+  }
+  .tf-md-bead {
+    fill: var(--md-fluid);
+    opacity: 0;
+    /* Rides the nozzle → cut-zone line drawn above. */
+    animation: tf-md-bead 1.5s linear var(--md-d, 0s) infinite;
+  }
+  @keyframes tf-md-bead {
+    0% { transform: translate(154px, 33px); opacity: 0; }
+    15% { opacity: 0.9; }
+    85% { opacity: 0.8; }
+    100% { transform: translate(128px, 66px); opacity: 0; }
+  }
+  .tf-md-chip-p {
+    fill: none;
+    stroke: var(--md-dirt);
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    opacity: 0;
+    animation: tf-md-chip 2.6s var(--md-ease) var(--md-d, 0s) infinite;
+  }
+  @keyframes tf-md-chip {
+    0% { transform: translate(124px, 68px) rotate(0deg); opacity: 0; }
+    12% { opacity: 0.95; }
+    100% { transform: translate(150px, 106px) rotate(150deg); opacity: 0; }
+  }
+
+  /* ── A03 · wheel + coolant ─────────────────────────────────────── */
+  .tf-md-grit {
+    fill: none;
+    stroke: var(--md-line);
+    stroke-width: 1.4;
+    stroke-linecap: round;
+    opacity: 0.55;
+  }
+  .tf-md-rim {
+    fill: none;
+    stroke: var(--md-line-soft);
+    stroke-width: 0.8;
+    stroke-dasharray: 2 4;
+  }
+  .tf-md-axis {
+    fill: none;
+    stroke: var(--md-line-soft);
+    stroke-width: 0.7;
+    stroke-dasharray: 3 3;
+  }
+  .tf-md-tick {
+    fill: none;
+    stroke: var(--md-line-soft);
+    stroke-width: 0.7;
+  }
+  .tf-md-osc {
+    animation: tf-md-osc 3.2s ease-in-out infinite alternate;
+  }
+  @keyframes tf-md-osc {
+    from { transform: translateX(-3px); }
+    to { transform: translateX(3px); }
+  }
+  .tf-md-fine {
+    fill: #9aa7bd;
+    opacity: 0;
+    animation: tf-md-fine 2.4s var(--md-ease) var(--md-d, 0s) infinite;
+  }
+  .tf-md-fine.is-dirt { fill: var(--md-dirt); }
+  @keyframes tf-md-fine {
+    0% { transform: translate(0, 0); opacity: 0; }
+    20% { opacity: 0.9; }
+    100% { transform: translate(var(--md-x, 10px), -16px); opacity: 0; }
+  }
+
+  /* ── A04 · tunnel + spray ──────────────────────────────────────── */
+  .tf-md-mouth {
+    fill: none;
+    stroke: var(--md-line);
+    stroke-width: 2;
+    opacity: 0.85;
+  }
+  .tf-md-cone {
+    fill: var(--md-fluid);
+    opacity: 0.12;
+    animation: tf-md-cone 1.6s var(--md-ease) var(--md-d, 0s) infinite;
+  }
+  @keyframes tf-md-cone {
+    0%, 100% { opacity: 0.06; transform: scaleY(0.94); }
+    45% { opacity: 0.26; transform: scaleY(1); }
+  }
+  .tf-md-jetgroup {
+    transform-box: fill-box;
+    transform-origin: center top;
+  }
+  .tf-md-belt {
+    fill: none;
+    stroke: var(--md-line);
+    stroke-width: 1.4;
+  }
+  .tf-md-belt-run {
+    fill: none;
+    stroke: var(--md-line-soft);
+    stroke-width: 2.4;
+    stroke-dasharray: 8 7;
+    animation: tf-md-belt 1.6s linear infinite;
+  }
+  @keyframes tf-md-belt {
+    to { stroke-dashoffset: -30; }
+  }
+  .tf-md-carry {
+    animation: tf-md-carry 6s linear infinite;
+  }
+  @keyframes tf-md-carry {
+    from { transform: translateX(6px); }
+    to { transform: translateX(200px); }
+  }
+  .tf-md-level {
+    fill: none;
+    stroke: var(--md-fluid);
+    stroke-width: 1.2;
+    opacity: 0.3;
+    animation: tf-md-pulse 3s var(--md-ease) infinite;
+  }
+
+  /* Phones: cap the viewport height so four collapsed cards still fit
+     on a reasonable scroll. preserveAspectRatio centres the drawing. */
+  @media (max-width: 640px) {
+    .tf-md-view {
+      height: 150px;
+      display: flex;
+      align-items: center;
+    }
+    .tf-md-svg { height: 100%; }
+  }
+
+  /* ── Off-screen: every loop stops ──────────────────────────────── */
+  .tf-md.is-idle :where(.tf-md-svg *) {
+    animation-play-state: paused;
+  }
+
+  /* ── Reduced motion: hold the first frame ──────────────────────── */
+  @media (prefers-reduced-motion: reduce) {
+    .tf-md-svg :where(*) {
+      animation: none !important;
+    }
+    /* Particles are mid-flight in their keyframes, so park them where
+       they read correctly as a static drawing instead of at 0,0. */
+    .tf-md-drop,
+    .tf-md-bead,
+    .tf-md-chip-p,
+    .tf-md-fine {
+      display: none;
+    }
+    .tf-md-film,
+    .tf-md-travel,
+    .tf-md-jet,
+    .tf-md-cone,
+    .tf-md-level {
+      opacity: 0.4;
+    }
+    .tf-md-carry {
+      transform: translateX(100px);
+    }
+  }
+</style>

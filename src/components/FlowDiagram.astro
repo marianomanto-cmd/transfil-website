@@ -1,0 +1,770 @@
+---
+import type { Content } from '../i18n/content';
+
+/**
+ * "Dirty fluid → filtration → stable flow", the one figure in the section
+ * that has to land in three seconds without being read.
+ *
+ * Left rail  : blue fluid mixed with brown contamination, scattered heights.
+ * Centre     : a pseudo-3D filter cassette drawn as an isometric SVG —
+ *              blue passes through three stages, brown is caught at the
+ *              plates and settles into the bed at the bottom.
+ * Right rail : blue only, tightly aligned — the flow is stable again.
+ *
+ * No WebGL, no canvas, no per-particle JS. Each particle is a full-width
+ * track element animated with a single transform keyframe (translateX of
+ * 100% resolves against the rail width, so it stays fluid at any size) and
+ * a negative animation-delay that both spreads the particles out at t=0 and
+ * gives reduced-motion a sane static position.
+ */
+interface Props {
+  flow: Content['applications']['flow'];
+}
+const { flow } = Astro.props;
+
+type P = { x0: number; y: number; s: number; dur: number; dirt?: boolean };
+
+// Contaminated side: wide spread in height and size, uneven speeds.
+const IN: P[] = [
+  { x0: 4, y: 18, s: 5, dur: 3.0 },
+  { x0: 10, y: 31, s: 5, dur: 3.3, dirt: true },
+  { x0: 16, y: 63, s: 4, dur: 3.4 },
+  { x0: 23, y: 74, s: 4, dur: 3.6, dirt: true },
+  { x0: 29, y: 35, s: 6, dur: 2.7 },
+  { x0: 36, y: 52, s: 6, dur: 3.0, dirt: true },
+  { x0: 42, y: 79, s: 5, dur: 3.2 },
+  { x0: 49, y: 21, s: 4, dur: 3.4, dirt: true },
+  { x0: 56, y: 47, s: 4, dur: 2.9 },
+  { x0: 62, y: 83, s: 5, dur: 3.2, dirt: true },
+  { x0: 68, y: 25, s: 5, dur: 3.5 },
+  { x0: 75, y: 44, s: 5, dur: 3.7, dirt: true },
+  { x0: 81, y: 69, s: 6, dur: 3.1 },
+  { x0: 87, y: 57, s: 5, dur: 3.3, dirt: true },
+  { x0: 92, y: 40, s: 4, dur: 2.8 },
+  { x0: 96, y: 76, s: 5, dur: 3.5 },
+];
+
+// Recovered side: blue only, heights collapse toward the centreline.
+const OUT: P[] = [
+  { x0: 4, y: 44, s: 5, dur: 2.7 },
+  { x0: 12, y: 52, s: 4, dur: 2.8 },
+  { x0: 20, y: 39, s: 5, dur: 2.7 },
+  { x0: 28, y: 57, s: 4, dur: 2.9 },
+  { x0: 36, y: 46, s: 6, dur: 2.7 },
+  { x0: 44, y: 54, s: 5, dur: 2.8 },
+  { x0: 52, y: 41, s: 4, dur: 2.7 },
+  { x0: 60, y: 50, s: 5, dur: 2.9 },
+  { x0: 68, y: 58, s: 4, dur: 2.7 },
+  { x0: 76, y: 45, s: 5, dur: 2.8 },
+  { x0: 84, y: 53, s: 4, dur: 2.7 },
+  { x0: 92, y: 48, s: 5, dur: 2.9 },
+];
+
+// Negative delay = start the loop mid-cycle, so t=0 already looks like a
+// running line instead of a burst leaving the gate together.
+const style = (p: P) =>
+  `--y:${p.y}%;--s:${p.s}px;--dur:${p.dur}s;--d:${(-(p.x0 / 100) * p.dur).toFixed(2)}s;--x0:${p.x0}%`;
+---
+
+<figure class="tf-flow" aria-labelledby="tf-flow-cap">
+  <figcaption id="tf-flow-cap" class="tf-sr-only">{flow.caption}</figcaption>
+
+  <div class="tf-flow-grid">
+    {/* ── Inlet ─────────────────────────────────────────────────── */}
+    <div class="tf-flow-head" data-area="ih">
+      <span class="tf-mono tf-flow-step">01</span>
+      <span class="tf-flow-label">{flow.dirty}</span>
+    </div>
+    <div class="tf-flow-rail" data-area="ir" data-side="in" aria-hidden="true">
+      <span class="tf-flow-guide" data-g="in"></span>
+      {IN.map((p) => (
+        <span class="tf-flow-p" data-t={p.dirt ? 'dirt' : 'fluid'} style={style(p)}><i></i></span>
+      ))}
+    </div>
+    <p class="tf-flow-legend" data-area="il">
+      <span class="tf-flow-note"><span class="tf-flow-key" data-k="fluid"></span>{flow.fluid}</span>
+      <span class="tf-flow-note"><span class="tf-flow-key" data-k="dirt"></span>{flow.solids}</span>
+    </p>
+
+    <span class="tf-flow-arrow" data-area="a1" aria-hidden="true"></span>
+
+    {/* ── Filtration module ─────────────────────────────────────── */}
+    <div class="tf-flow-head is-module" data-area="mh">
+      <span class="tf-mono tf-flow-step">02</span>
+      <span class="tf-flow-label">{flow.filter}</span>
+      <span class="tf-mono tf-flow-stages">{flow.stages}</span>
+    </div>
+
+    <div class="tf-flow-module" data-area="mo">
+      <svg viewBox="0 38 300 142" class="tf-flow-svg" aria-hidden="true" focusable="false">
+        <defs>
+          <clipPath id="tf-fl-win"><rect x="80" y="76" width="116" height="64" /></clipPath>
+          <linearGradient id="tf-fl-top" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#25252c" />
+            <stop offset="1" stop-color="#1a1a20" />
+          </linearGradient>
+        </defs>
+
+        {/* Ports */}
+        <g class="tf-fl-fill">
+          <rect class="tf-fl-pipe" x="26" y="96" width="42" height="22" />
+          <rect class="tf-fl-flange" x="24" y="91" width="8" height="32" />
+          <path class="tf-fl-pipe" d="M232 78h44v22h-44z" />
+          <rect class="tf-fl-flange" x="270" y="73" width="8" height="32" />
+        </g>
+
+        {/* Chassis — front / top / right faces */}
+        <ellipse class="tf-fl-shadow" cx="140" cy="158" rx="80" ry="8" />
+        <g class="tf-fl-fill">
+          <path class="tf-fl-face-front" d="M66 62H210V152H66Z" />
+          <path class="tf-fl-face-top" d="M66 62L88 44H232L210 62Z" />
+          <path class="tf-fl-face-side" d="M210 62L232 44V134L210 152Z" />
+        </g>
+
+        <path class="tf-fl-bevel" d="M67 63L89 45H231" />
+
+        {/* Silhouette + inner edges, drawn on entry (pathLength=1) */}
+        <path class="tf-fl-draw" pathLength="1" d="M66 152V62L88 44H232V134L210 152Z" />
+        <path class="tf-fl-draw is-soft" pathLength="1" d="M66 62H210V152M210 62L232 44" />
+
+        {/* Media chamber */}
+        <rect class="tf-fl-window" x="80" y="76" width="116" height="64" />
+
+        <g clip-path="url(#tf-fl-win)">
+          {/* Flow axis through the housing */}
+          <path class="tf-fl-axis" d="M76 108H200" />
+
+          {/* Three stages, coarse → fine, each breathing a hair */}
+          <g class="tf-fl-plate" style="--d:0s">
+            <path class="tf-fl-mesh" style="--w:3.2;--dash:6 5" d="M106 78V138" />
+            <path class="tf-fl-frame" d="M106 76V140" />
+          </g>
+          <g class="tf-fl-plate" style="--d:0.9s">
+            <path class="tf-fl-mesh" style="--w:2.6;--dash:4 3.5" d="M138 78V138" />
+            <path class="tf-fl-frame" d="M138 76V140" />
+          </g>
+          <g class="tf-fl-plate" style="--d:1.7s">
+            <path class="tf-fl-mesh" style="--w:2;--dash:2 2" d="M170 78V138" />
+            <path class="tf-fl-frame" d="M170 76V140" />
+          </g>
+
+          {/* Retained solids, settled against the plates */}
+          <path
+            class="tf-fl-bed"
+            d="M80 140H196V133C190 131 184 133 178 132C172 131 172 124 166 125C160 126 158 131 150 132C142 133 142 122 134 123C126 124 126 131 118 132C110 133 110 120 102 121C94 122 92 131 80 132Z"
+          />
+
+          {/* Fluid that gets through */}
+          <circle class="tf-fl-p" cx="76" cy="88" r="2.6" style="--dur:2.6s;--d:-0.2s" />
+          <circle class="tf-fl-p" cx="76" cy="100" r="2.2" style="--dur:3s;--d:-1.1s" />
+          <circle class="tf-fl-p" cx="76" cy="112" r="2.8" style="--dur:2.8s;--d:-1.9s" />
+          <circle class="tf-fl-p" cx="76" cy="124" r="2.2" style="--dur:3.2s;--d:-0.6s" />
+          <circle class="tf-fl-p" cx="76" cy="94" r="2.4" style="--dur:2.9s;--d:-2.3s" />
+          <circle class="tf-fl-p" cx="76" cy="118" r="2.6" style="--dur:3.1s;--d:-1.5s" />
+
+          {/* Contamination stopped at a plate, then dropped into the bed */}
+          <circle class="tf-fl-c" cx="76" cy="92" r="2.6" style="--dur:3.4s;--d:-0.3s;--catch:26px;--fall:36px" />
+          <circle class="tf-fl-c" cx="76" cy="116" r="2.2" style="--dur:3.8s;--d:-1.6s;--catch:26px;--fall:12px" />
+          <circle class="tf-fl-c" cx="76" cy="104" r="2.8" style="--dur:4s;--d:-2.6s;--catch:58px;--fall:24px" />
+          <circle class="tf-fl-c" cx="76" cy="126" r="2.2" style="--dur:3.6s;--d:-0.9s;--catch:58px;--fall:4px" />
+          <circle class="tf-fl-c" cx="76" cy="98" r="2.4" style="--dur:4.2s;--d:-3.1s;--catch:90px;--fall:30px" />
+
+          {/* Static stand-in for prefers-reduced-motion */}
+          <g class="tf-fl-still">
+            <circle class="tf-fl-p" cx="120" cy="92" r="2.6" />
+            <circle class="tf-fl-p" cx="156" cy="112" r="2.4" />
+            <circle class="tf-fl-p" cx="186" cy="100" r="2.6" />
+            <circle class="tf-fl-c" cx="100" cy="126" r="2.4" />
+            <circle class="tf-fl-c" cx="132" cy="128" r="2.2" />
+          </g>
+        </g>
+
+        {/* Stage indicators over the chamber */}
+        <rect class="tf-fl-led" x="103.5" y="65" width="5" height="5" style="--d:0s" />
+        <rect class="tf-fl-led" x="135.5" y="65" width="5" height="5" style="--d:0.35s" />
+        <rect class="tf-fl-led" x="167.5" y="65" width="5" height="5" style="--d:0.7s" />
+
+        {/* Fasteners */}
+        <g class="tf-fl-bolts">
+          <circle cx="73" cy="69" r="2" /><circle cx="203" cy="69" r="2" />
+          <circle cx="73" cy="145" r="2" /><circle cx="203" cy="145" r="2" />
+        </g>
+
+        {/* Line tying the ports to the rails on either side */}
+        <path class="tf-fl-line" d="M26 107H80M196 107H210L232 89H276" />
+      </svg>
+    </div>
+
+    <p class="tf-flow-notes" data-area="mf">
+      <span class="tf-flow-note"><span class="tf-flow-key" data-k="dirt"></span>{flow.retained}</span>
+      <span class="tf-flow-note"><span class="tf-flow-key" data-k="fluid"></span>{flow.separation}</span>
+    </p>
+
+    <span class="tf-flow-arrow" data-area="a2" aria-hidden="true"></span>
+
+    {/* ── Outlet ────────────────────────────────────────────────── */}
+    <div class="tf-flow-head" data-area="oh">
+      <span class="tf-mono tf-flow-step">03</span>
+      <span class="tf-flow-label">{flow.clean}</span>
+    </div>
+    <div class="tf-flow-rail" data-area="or" data-side="out" aria-hidden="true">
+      <span class="tf-flow-guide" data-g="out"></span>
+      {OUT.map((p) => (
+        <span class="tf-flow-p" data-t="fluid" style={style(p)}><i></i></span>
+      ))}
+    </div>
+    <p class="tf-flow-legend" data-area="ol">
+      <span class="tf-flow-note"><span class="tf-flow-key" data-k="fluid"></span>{flow.fluid}</span>
+    </p>
+  </div>
+</figure>
+
+<style>
+  .tf-flow {
+    --fl-dirt: #8f5c2d;
+    --fl-dirt-2: #6b4522;
+    --fl-line: #6d6d77;
+    --fl-line-soft: #43434c;
+    --fl-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+    margin: 0;
+    padding: clamp(24px, 3vw, 40px) clamp(20px, 3vw, 40px);
+    border: 1px solid var(--line);
+    background:
+      radial-gradient(70% 120% at 50% 0%, rgba(58, 134, 255, 0.05), transparent 60%),
+      var(--bg-2);
+  }
+
+  /* One grid for all three zones, so header / object / footer rows line
+     up across dirty → filter → clean. That alignment is what keeps the
+     labels off the drawing. */
+  .tf-flow-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 26px minmax(250px, 420px) 26px minmax(0, 1fr);
+    grid-template-rows: auto auto auto;
+    grid-template-areas:
+      "ih .  mh .  oh"
+      "ir a1 mo a2 or"
+      "il .  mf .  ol";
+    align-items: center;
+    column-gap: clamp(10px, 1.4vw, 20px);
+    row-gap: 12px;
+  }
+  [data-area="ih"] { grid-area: ih; }
+  [data-area="ir"] { grid-area: ir; }
+  [data-area="il"] { grid-area: il; }
+  [data-area="a1"] { grid-area: a1; }
+  [data-area="mh"] { grid-area: mh; }
+  [data-area="mo"] { grid-area: mo; }
+  [data-area="mf"] { grid-area: mf; }
+  [data-area="a2"] { grid-area: a2; }
+  [data-area="oh"] { grid-area: oh; }
+  [data-area="or"] { grid-area: or; }
+  [data-area="ol"] { grid-area: ol; }
+
+  /* ── Headers ───────────────────────────────────────────────────── */
+  .tf-flow-head {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    min-width: 0;
+    align-self: end;
+  }
+  .tf-flow-step {
+    font-size: 10px;
+    color: var(--fg-4);
+    flex-shrink: 0;
+  }
+  .tf-flow-label {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(13px, 1.1vw, 16px);
+    letter-spacing: 0.01em;
+    color: var(--fg-2);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .tf-flow-head.is-module {
+    justify-content: flex-start;
+  }
+  .tf-flow-head.is-module .tf-flow-label {
+    color: var(--fg);
+  }
+  .tf-flow-stages {
+    margin-left: auto;
+    font-size: 9.5px;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  /* ── Rails ─────────────────────────────────────────────────────── */
+  .tf-flow-rail {
+    position: relative;
+    height: clamp(104px, 14vw, 196px);
+    overflow: hidden;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    background: linear-gradient(180deg, #0c0c10 0%, #101016 50%, #0c0c10 100%);
+    box-shadow:
+      inset 0 7px 12px -8px rgba(0, 0, 0, 0.9),
+      inset 0 -7px 12px -8px rgba(0, 0, 0, 0.9);
+  }
+  /* Flow guides: absent on the contaminated side, evenly spaced on the
+     recovered side — the channel itself says "stabilised". */
+  .tf-flow-guide {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .tf-flow-guide[data-g="out"] {
+    background-image: repeating-linear-gradient(
+      to right,
+      rgba(58, 134, 255, 0.16) 0 10px,
+      transparent 10px 22px
+    );
+    background-size: 100% 1px;
+    background-repeat: no-repeat;
+    background-position: 0 38%, 0 50%, 0 62%;
+    box-shadow: none;
+  }
+  /* Three guide lines via layered backgrounds. */
+  .tf-flow-guide[data-g="out"] {
+    background-image:
+      repeating-linear-gradient(to right, rgba(58, 134, 255, 0.14) 0 10px, transparent 10px 22px),
+      repeating-linear-gradient(to right, rgba(58, 134, 255, 0.14) 0 10px, transparent 10px 22px),
+      repeating-linear-gradient(to right, rgba(58, 134, 255, 0.14) 0 10px, transparent 10px 22px);
+    background-size: 100% 1px, 100% 1px, 100% 1px;
+    background-position: 0 38%, 0 50%, 0 62%;
+    background-repeat: no-repeat;
+  }
+  .tf-flow-guide[data-g="in"] {
+    background-image:
+      repeating-linear-gradient(to right, rgba(143, 92, 45, 0.16) 0 6px, transparent 6px 26px),
+      repeating-linear-gradient(to right, rgba(255, 255, 255, 0.05) 0 4px, transparent 4px 30px);
+    background-size: 100% 1px, 100% 1px;
+    background-position: 0 28%, 0 72%;
+    background-repeat: no-repeat;
+  }
+
+  /* Each particle is a full-width track: translateX(100%) == rail width,
+     so one keyframe covers every viewport. The dot lives inside. */
+  .tf-flow-p {
+    position: absolute;
+    left: -6px;
+    top: var(--y, 50%);
+    width: 100%;
+    height: 0;
+    transform: translateX(var(--x0, 0));
+    animation: tf-flow-run var(--dur, 3s) linear var(--d, 0s) infinite;
+    /* No will-change: a running transform animation is composited anyway,
+       and pinning 28 layers for good would outlive the is-idle pause. */
+  }
+  .tf-flow-p > i {
+    display: block;
+    width: var(--s, 5px);
+    height: var(--s, 5px);
+    border-radius: 50%;
+    animation: tf-flow-bob calc(var(--dur, 3s) / 2) ease-in-out var(--d, 0s) infinite alternate;
+  }
+  .tf-flow-p[data-t="fluid"] > i {
+    background: var(--accent);
+    box-shadow: 0 0 6px rgba(58, 134, 255, 0.45);
+  }
+  .tf-flow-p[data-t="dirt"] > i {
+    background: var(--fl-dirt);
+    border-radius: 40% 55% 45% 50%;
+    box-shadow: 0 0 4px rgba(143, 92, 45, 0.3);
+  }
+  @keyframes tf-flow-run {
+    from { transform: translateX(0); }
+    to { transform: translateX(calc(100% + 12px)); }
+  }
+  @keyframes tf-flow-bob {
+    from { transform: translateY(-2px); }
+    to { transform: translateY(2px); }
+  }
+  /* The recovered side barely moves off its line. */
+  .tf-flow-rail[data-side="out"] .tf-flow-p > i {
+    animation-name: tf-flow-bob-tight;
+  }
+  @keyframes tf-flow-bob-tight {
+    from { transform: translateY(-0.5px); }
+    to { transform: translateY(0.5px); }
+  }
+
+  /* ── Legends / annotations ─────────────────────────────────────── */
+  .tf-flow-legend,
+  .tf-flow-notes {
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 16px;
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--fg-4);
+    align-self: start;
+    min-height: 14px;
+  }
+  .tf-flow-note {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .tf-flow-key {
+    width: 6px;
+    height: 6px;
+    flex-shrink: 0;
+    margin-right: 6px;
+    background: var(--accent);
+  }
+  .tf-flow-note .tf-flow-key { margin-right: 0; }
+  .tf-flow-key[data-k="dirt"] { background: var(--fl-dirt); }
+
+  /* ── Connector chevrons ────────────────────────────────────────── */
+  .tf-flow-arrow {
+    position: relative;
+    display: block;
+    height: 100%;
+    min-height: 26px;
+  }
+  .tf-flow-arrow::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 7px;
+    height: 7px;
+    border-top: 1px solid var(--accent);
+    border-right: 1px solid var(--accent);
+    transform: translate(-50%, -50%) rotate(45deg);
+    opacity: 0.55;
+    animation: tf-flow-nudge 2.4s var(--fl-ease) infinite;
+  }
+  @keyframes tf-flow-nudge {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.8; }
+  }
+
+  /* ── Cassette ──────────────────────────────────────────────────── */
+  .tf-flow-module {
+    position: relative;
+  }
+  .tf-flow-svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .tf-fl-shadow {
+    fill: #000;
+    opacity: 0.45;
+    filter: blur(4px);
+  }
+  .tf-fl-bevel {
+    fill: none;
+    stroke: #6f6f7d;
+    stroke-width: 1;
+    opacity: 0.35;
+  }
+  .tf-fl-face-front { fill: #17171d; }
+  .tf-fl-face-top { fill: url(#tf-fl-top); }
+  .tf-fl-shadow,
+  .tf-fl-bevel { opacity: 0; }
+  .tf-flow.is-active .tf-fl-shadow { animation: tf-fl-in-45 0.6s var(--fl-ease) 0.55s forwards; }
+  .tf-flow.is-active .tf-fl-bevel { animation: tf-fl-in-35 0.6s var(--fl-ease) 0.7s forwards; }
+  @keyframes tf-fl-in-45 { to { opacity: 0.45; } }
+  @keyframes tf-fl-in-35 { to { opacity: 0.35; } }
+  .tf-fl-face-side { fill: #0f0f13; }
+  .tf-fl-pipe {
+    fill: #1b1b21;
+    stroke: var(--fl-line-soft);
+    stroke-width: 1;
+  }
+  .tf-fl-flange {
+    fill: #24242b;
+    stroke: var(--fl-line-soft);
+    stroke-width: 1;
+  }
+  .tf-fl-draw {
+    fill: none;
+    stroke: var(--fl-line);
+    stroke-width: 1.3;
+    stroke-linejoin: round;
+  }
+  .tf-fl-draw.is-soft {
+    stroke: var(--fl-line-soft);
+    stroke-width: 1;
+  }
+  .tf-fl-window {
+    fill: #08080b;
+    stroke: var(--fl-line-soft);
+    stroke-width: 1;
+  }
+  .tf-fl-axis {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 1;
+    stroke-dasharray: 3 5;
+    opacity: 0.22;
+  }
+  .tf-fl-frame {
+    fill: none;
+    stroke: var(--fl-line-soft);
+    stroke-width: 0.8;
+    opacity: 0.8;
+  }
+  .tf-fl-mesh {
+    fill: none;
+    stroke: var(--fl-line);
+    stroke-width: var(--w, 2.4);
+    stroke-dasharray: var(--dash, 4 4);
+    opacity: 0.9;
+  }
+  .tf-fl-plate {
+    animation: tf-fl-mesh 2.8s ease-in-out var(--d, 0s) infinite alternate;
+  }
+  @keyframes tf-fl-mesh {
+    from { transform: translateY(-0.8px); }
+    to { transform: translateY(0.8px); }
+  }
+  .tf-fl-bed {
+    fill: var(--fl-dirt-2);
+    stroke: var(--fl-dirt);
+    stroke-width: 0.6;
+    opacity: 0.9;
+    transform-box: fill-box;
+    transform-origin: center bottom;
+    animation: tf-fl-bed 6s ease-in-out infinite alternate;
+  }
+  @keyframes tf-fl-bed {
+    from { transform: scaleY(0.94); }
+    to { transform: scaleY(1.04); }
+  }
+  .tf-fl-p {
+    fill: var(--accent);
+    animation: tf-fl-pass var(--dur, 3s) cubic-bezier(0.35, 0.05, 0.6, 0.95) var(--d, 0s) infinite;
+  }
+  @keyframes tf-fl-pass {
+    0% { transform: translateX(0); opacity: 0; }
+    10% { opacity: 1; }
+    88% { opacity: 1; }
+    100% { transform: translateX(134px); opacity: 0; }
+  }
+  .tf-fl-c {
+    fill: var(--fl-dirt);
+    animation: tf-fl-catch var(--dur, 3.5s) var(--fl-ease) var(--d, 0s) infinite;
+  }
+  @keyframes tf-fl-catch {
+    0% { transform: translate(0, 0); opacity: 0; }
+    10% { opacity: 1; }
+    48% { transform: translate(var(--catch, 30px), 0); opacity: 1; }
+    60% { transform: translate(var(--catch, 30px), 0); opacity: 1; }
+    92% { transform: translate(var(--catch, 30px), var(--fall, 20px)); opacity: 0.85; }
+    100% { transform: translate(var(--catch, 30px), var(--fall, 20px)); opacity: 0; }
+  }
+  .tf-fl-still { display: none; }
+  .tf-fl-led {
+    fill: var(--accent);
+    opacity: 0.25;
+    animation: tf-fl-led 2.1s var(--fl-ease) var(--d, 0s) infinite;
+  }
+  @keyframes tf-fl-led {
+    0%, 60%, 100% { opacity: 0.2; }
+    20% { opacity: 1; }
+  }
+  .tf-fl-bolts circle {
+    fill: #0d0d11;
+    stroke: var(--fl-line-soft);
+    stroke-width: 0.8;
+  }
+  .tf-fl-line {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 1.2;
+    stroke-dasharray: 10 8;
+    opacity: 0.4;
+    animation: tf-fl-line 1.6s linear infinite;
+  }
+  @keyframes tf-fl-line {
+    to { stroke-dashoffset: -36; }
+  }
+
+  /* ── Entry choreography ────────────────────────────────────────── */
+  .tf-flow :where(.tf-flow-head, .tf-flow-legend, .tf-flow-notes) {
+    opacity: 0;
+    transform: translateY(8px);
+    transition:
+      opacity 0.5s var(--fl-ease) var(--in-d, 0ms),
+      transform 0.5s var(--fl-ease) var(--in-d, 0ms);
+  }
+  .tf-flow-rail {
+    clip-path: inset(0 100% 0 0);
+    transition: clip-path 0.7s var(--fl-ease) 0.15s;
+  }
+  .tf-flow-rail[data-side="out"] { transition-delay: 0.45s; }
+  .tf-flow-arrow::before { opacity: 0; }
+  .tf-fl-draw {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+  }
+  .tf-fl-fill,
+  .tf-fl-window,
+  .tf-fl-bolts,
+  .tf-fl-led,
+  .tf-fl-line,
+  .tf-fl-plate,
+  .tf-fl-bed,
+  .tf-fl-axis,
+  .tf-fl-p,
+  .tf-fl-c {
+    opacity: 0;
+  }
+  .tf-flow-p { visibility: hidden; }
+
+  .tf-flow.is-active :where(.tf-flow-head, .tf-flow-legend, .tf-flow-notes) {
+    opacity: 1;
+    transform: none;
+  }
+  .tf-flow.is-active [data-area="ih"] { --in-d: 0ms; }
+  .tf-flow.is-active [data-area="mh"] { --in-d: 160ms; }
+  .tf-flow.is-active [data-area="oh"] { --in-d: 320ms; }
+  .tf-flow.is-active [data-area="il"] { --in-d: 700ms; }
+  .tf-flow.is-active [data-area="mf"] { --in-d: 900ms; }
+  .tf-flow.is-active [data-area="ol"] { --in-d: 1000ms; }
+  .tf-flow.is-active .tf-flow-rail { clip-path: inset(0 0 0 0); }
+  .tf-flow.is-active .tf-flow-p { visibility: visible; }
+  .tf-flow.is-active .tf-flow-arrow::before {
+    animation: tf-flow-nudge 2.4s var(--fl-ease) 0.9s infinite;
+  }
+  .tf-flow.is-active .tf-fl-draw {
+    animation: tf-fl-draw 1.1s var(--fl-ease) 0.2s forwards;
+  }
+  @keyframes tf-fl-draw {
+    to { stroke-dashoffset: 0; }
+  }
+  .tf-flow.is-active :where(.tf-fl-fill, .tf-fl-window, .tf-fl-bolts) {
+    animation: tf-fl-in 0.6s var(--fl-ease) 0.55s forwards;
+  }
+  .tf-flow.is-active :where(.tf-fl-plate, .tf-fl-axis) {
+    animation: tf-fl-in 0.5s var(--fl-ease) 0.85s forwards;
+  }
+  .tf-flow.is-active .tf-fl-bed {
+    animation:
+      tf-fl-in 0.6s var(--fl-ease) 1.15s forwards,
+      tf-fl-bed 6s ease-in-out 1.75s infinite alternate;
+  }
+  .tf-flow.is-active .tf-fl-led {
+    animation: tf-fl-led 2.1s var(--fl-ease) calc(var(--d, 0s) + 1s) infinite;
+  }
+  .tf-flow.is-active .tf-fl-line {
+    animation:
+      tf-fl-in-40 0.5s var(--fl-ease) 0.9s forwards,
+      tf-fl-line 1.6s linear 0.9s infinite;
+  }
+  .tf-flow.is-active .tf-fl-p {
+    animation:
+      tf-fl-pass var(--dur, 3s) cubic-bezier(0.35, 0.05, 0.6, 0.95) calc(var(--d, 0s) + 1s) infinite;
+  }
+  .tf-flow.is-active .tf-fl-c {
+    animation: tf-fl-catch var(--dur, 3.5s) var(--fl-ease) calc(var(--d, 0s) + 1s) infinite;
+  }
+  @keyframes tf-fl-in {
+    to { opacity: 1; }
+  }
+  @keyframes tf-fl-in-40 {
+    to { opacity: 0.4; }
+  }
+
+  /* Off-screen: stop every loop. !important because the entry rules
+     above re-declare the `animation` shorthand, which resets
+     animation-play-state to running and outranks this selector. */
+  .tf-flow.is-idle .tf-flow-p,
+  .tf-flow.is-idle .tf-flow-p > i,
+  .tf-flow.is-idle .tf-flow-svg *,
+  .tf-flow.is-idle .tf-flow-arrow::before {
+    animation-play-state: paused !important;
+  }
+
+  /* ── Below 900px: one column, chevrons turn downward ───────────── */
+  @media (max-width: 900px) {
+    .tf-flow-grid {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas: "ih" "ir" "il" "a1" "mh" "mo" "mf" "a2" "oh" "or" "ol";
+      row-gap: 10px;
+    }
+    .tf-flow-module {
+      max-width: 440px;
+      margin-inline: auto;
+    }
+    .tf-flow-arrow {
+      min-height: 30px;
+      margin-block: 2px;
+    }
+    .tf-flow-arrow::before {
+      transform: translate(-50%, -50%) rotate(135deg);
+    }
+    .tf-flow-head { align-self: start; }
+  }
+
+  /* Fewer particles where the rail is short and the CPU is small. */
+  @media (max-width: 640px) {
+    .tf-flow-rail { height: 86px; }
+    .tf-flow-module { max-width: 340px; }
+    .tf-flow-rail[data-side="in"] .tf-flow-p:nth-of-type(n + 11),
+    .tf-flow-rail[data-side="out"] .tf-flow-p:nth-of-type(n + 9) {
+      display: none;
+    }
+    .tf-flow-legend,
+    .tf-flow-notes { font-size: 9px; }
+  }
+
+  /* ── Reduced motion: the same picture, held still ──────────────── */
+  @media (prefers-reduced-motion: reduce) {
+    .tf-flow :where(.tf-flow-head, .tf-flow-legend, .tf-flow-notes) {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+    .tf-flow-rail {
+      clip-path: none;
+      transition: none;
+    }
+    .tf-flow-p {
+      visibility: visible;
+      animation: none;
+      transform: translateX(var(--x0, 0));
+    }
+    .tf-flow-p > i { animation: none; }
+    .tf-flow-arrow::before,
+    .tf-flow.is-active .tf-flow-arrow::before {
+      opacity: 0.6;
+      animation: none;
+    }
+    .tf-flow-svg :where(*) { animation: none !important; }
+    .tf-fl-draw {
+      stroke-dasharray: none;
+      stroke-dashoffset: 0;
+    }
+    /* Plain class selectors, not :where() — :where() carries no
+       specificity and would lose to the entry rules that park these at
+       opacity 0 until their animation runs. */
+    .tf-fl-fill,
+    .tf-fl-window,
+    .tf-fl-bolts,
+    .tf-fl-plate,
+    .tf-fl-bed,
+    .tf-fl-axis {
+      opacity: 1;
+    }
+    .tf-fl-line { opacity: 0.4; }
+    .tf-fl-led { opacity: 0.6; }
+    .tf-fl-shadow { opacity: 0.45; }
+    .tf-fl-bevel { opacity: 0.35; }
+    .tf-fl-p,
+    .tf-fl-c { opacity: 0; }
+    .tf-fl-still { display: block; }
+    .tf-fl-still :where(.tf-fl-p, .tf-fl-c) { opacity: 1; }
+  }
+</style>
