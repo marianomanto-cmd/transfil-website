@@ -14,7 +14,7 @@ import { SITE, pathFor, urlFor } from '../i18n/routes';
 import { Header } from '../components/Header';
 import { ContactSection } from '../components/ContactSection';
 import Footer from '../components/Footer.astro';
-import SystemDiagram from '../components/SystemDiagram.astro';
+import CentralDiagram3D from '../components/CentralDiagram3D.astro';
 import SystemDiagram3D from '../components/SystemDiagram3D.astro';
 import { WhatsAppFAB } from '../components/WhatsAppFAB';
 import { BackToTop } from '../components/BackToTop';
@@ -216,12 +216,12 @@ const navItems = [
         <p class="tf-section-sub">{l.system.intro}</p>
       </header>
 
-      <SystemDiagram
-        labels={l.system.diagram.labels}
+      {/* El riel del visor y las tarjetas de abajo nombran las mismas cuatro
+          etapas, así que salen de la misma fuente: `blocks`. */}
+      <CentralDiagram3D
+        copy={l.centralDiagram}
         stages={l.system.blocks.map((b) => b.title)}
-        caption={l.system.diagram.caption}
-        scaleNote={l.system.diagram.scaleNote}
-        alt={l.system.diagram.alt}
+        codes={l.system.blocks.map((b) => b.code)}
       />
 
       <div class="tf-lp-stages">

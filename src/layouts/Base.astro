@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import { ClientRouter } from 'astro:transitions';
+import ThreeImportMap from '../components/ThreeImportMap.astro';
 import type { Content, Lang } from '../i18n/content';
 import {
   SITE,
@@ -166,6 +167,9 @@ const faqJsonLd = {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    {/* Primero de todo: tiene que preceder a cualquier <script type="module">. */}
+    <ThreeImportMap />
 
     <!-- Google Tag Manager -->
     <script is:inline>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':

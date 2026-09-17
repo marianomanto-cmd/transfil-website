@@ -63,30 +63,36 @@ export type LandingContent = {
     eyebrow: string;
     title: string;
     intro: string;
-    /** Labels for the process schematic that opens the section. Every one
-        of them is on screen, so all three locales carry their own. */
-    diagram: {
-      caption: string;
-      scaleNote: string;
-      /** The schematic's only screen-reader text — the reference overlay is
-          aria-hidden so nobody hears fourteen loose fragments. Keep the
-          order of the run if this is edited. */
-      alt: string;
-      labels: {
-        dirty: string; attenuator: string; magnetic: string; gravity: string;
-        skimmer: string; level: string; lowOut: string; highOut: string;
-        clean: string; waste: string; tank: string; exchanger: string;
-        bag: string; cabinet: string;
-      };
-    };
+    /** The four stages of the station, in process order. They name the
+        rail of the 3D viewer above and the cards below it. */
     blocks: { code: string; title: string; desc: string; media: LandingMedia }[];
+  };
+  /** Copy for the 3D filtration station that opens section 02. `fluids[].k`
+      are colour identifiers, not copy — only `t` is translated. */
+  centralDiagram: {
+    caption: string;
+    /** Interaction hint. The gestures are not the same with a mouse as with
+        a finger, and promising one the device doesn't have is worse than
+        saying nothing — the component shows one or the other by pointer
+        type. Both are on screen, so all three locales carry their own. */
+    hint: { pointer: string; touch: string };
+    /** Screen-reader description of the whole station. */
+    alt: string;
+    labels: {
+      dirty: string; centrifuge: string; magnetic: string; waste: string;
+      gravity: string; skimmer: string; level: string; tank: string;
+      exchanger: string; bag: string; cabinet: string;
+      lowOut: string; highOut: string;
+    };
+    fluids: { k: string; t: string }[];
   };
   /** Copy for the 3D machine diagram that closes the section. Every string
       is on screen, so all three locales carry their own. The `\n` in `tags`
       is the label's line break — keep it in every translation. */
   machineDiagram: {
     caption: string;
-    hint: string;
+    /** See `centralDiagram.hint`. */
+    hint: { pointer: string; touch: string };
     /** Screen-reader description of the whole installation. */
     alt: string;
     eq: {
@@ -200,18 +206,6 @@ export const LANDINGS: Record<LandingSlug, Record<Lang, LandingContent>> = {
         title: 'Tres etapas de filtración y una central de proceso.',
         intro:
           'Cada etapa remueve un contaminante distinto. Instaladas en serie sobre la pileta de la línea, el fluido que retorna a la formadora no arrastra finos ferrosos, sólidos ni aceite atrapado.',
-        diagram: {
-          caption: 'Esquema de funcionamiento / Central de filtración',
-          scaleNote: 'Esquema — no a escala',
-          alt: 'Esquema de la central de filtración Trans-Fil: entrada de soluble contaminado, atenuador, separador magnético, filtro de gravedad, depósito de líquido, skimmer, sensor de nivel, intercambiador de calor, filtro bolsa, gabinete eléctrico y salidas de soluble limpio.',
-          labels: {
-            dirty: 'Soluble contaminado', attenuator: 'Atenuador', magnetic: 'Separador magnético',
-            gravity: 'Filtro de gravedad', skimmer: 'Skimmer', level: 'Sensor de nivel',
-            lowOut: 'Salida baja presión', highOut: 'Salida alta presión', clean: 'Soluble limpio',
-            waste: 'Depósito de residuos', tank: 'Depósito de líquido', exchanger: 'Intercambiador de calor',
-            bag: 'Filtro bolsa', cabinet: 'Gabinete eléctrico',
-          },
-        },
         blocks: [
           {
             code: 'F01',
@@ -239,9 +233,35 @@ export const LANDINGS: Record<LandingSlug, Record<Lang, LandingContent>> = {
           },
         ],
       },
+      centralDiagram: {
+        caption: 'Central de filtración / Recorrido del fluido',
+        hint: {
+          pointer: 'Pase el mouse o haga clic en una etapa · arrastre para orbitar · rueda para acercar',
+          touch: 'Toque una etapa · dos dedos para orbitar',
+        },
+        alt: 'Vista tridimensional de la central de filtración Trans-Fil, recorrida en cuatro etapas: entrada de soluble contaminado, centrífuga sobre el separador magnético y depósito de residuos; filtro de gravedad con su banda y rollo de tela; skimmer y sensor de nivel sobre el depósito de líquido; e integración con intercambiador de calor, filtros bolsa, gabinete eléctrico y las salidas de soluble limpio de baja y alta presión.',
+        labels: {
+          dirty: 'Soluble contaminado', centrifuge: 'Centrífuga', magnetic: 'Separador magnético',
+          waste: 'Depósito de residuos', gravity: 'Filtro de gravedad', skimmer: 'Skimmer',
+          level: 'Sensor de nivel', tank: 'Depósito de líquido', exchanger: 'Intercambiador de calor',
+          bag: 'Filtro bolsa', cabinet: 'Gabinete eléctrico',
+          lowOut: 'Salida baja presión', highOut: 'Salida alta presión',
+        },
+        fluids: [
+          { k: 'dirty', t: 'Soluble contaminado' },
+          { k: 'semi', t: 'Sin finos ferrosos' },
+          { k: 'clean', t: 'Soluble limpio' },
+          { k: 'oil', t: 'Aceite sobrenadante' },
+          { k: 'ferrous', t: 'Finos ferrosos' },
+          { k: 'cloth', t: 'Tela filtrante' },
+        ],
+      },
       machineDiagram: {
         caption: 'Diagrama de máquinas / Operación de conformado de tubos',
-        hint: 'Arrastre para orbitar · rueda para acercar · toque un circuito para aislarlo',
+        hint: {
+          pointer: 'Arrastre para orbitar · rueda para acercar · clic en un circuito para aislarlo',
+          touch: 'Toque un circuito para aislarlo · dos dedos para orbitar',
+        },
         alt: 'Diagrama tridimensional de una operación de conformado de tubos con filtración Trans-Fil: la línea de conformado devuelve el soluble a filtrar al back de transferencia, que lo impulsa a la centrífuga montada sobre la central de filtración; de la central salen el soluble filtrado de baja presión hacia las estaciones de conformado y el soluble doble filtrado de alta presión hacia el aplicador protectivo y el calibrado, y un circuito de agua la conecta con la torre de enfriamiento.',
         eq: {
           back: 'Back de Transferencia',
@@ -378,18 +398,6 @@ export const LANDINGS: Record<LandingSlug, Record<Lang, LandingContent>> = {
         title: 'Three filtration stages and one process station.',
         intro:
           'Each stage removes a different contaminant. Installed in series on the line’s tank, the fluid returning to the mill carries no ferrous fines, solids or tramp oil.',
-        diagram: {
-          caption: 'Process schematic / Central filtration station',
-          scaleNote: 'Schematic — not to scale',
-          alt: 'Schematic of the Trans-Fil central filtration station: contaminated coolant inlet, attenuator, magnetic separator, gravity filter, liquid tank, skimmer, level sensor, heat exchanger, bag filter, electrical cabinet and clean-coolant outlets.',
-          labels: {
-            dirty: 'Contaminated coolant', attenuator: 'Attenuator', magnetic: 'Magnetic separator',
-            gravity: 'Gravity filter', skimmer: 'Skimmer', level: 'Level sensor',
-            lowOut: 'Low-pressure outlet', highOut: 'High-pressure outlet', clean: 'Clean coolant',
-            waste: 'Waste tank', tank: 'Liquid tank', exchanger: 'Heat exchanger',
-            bag: 'Bag filter', cabinet: 'Electrical cabinet',
-          },
-        },
         blocks: [
           {
             code: 'F01',
@@ -417,9 +425,35 @@ export const LANDINGS: Record<LandingSlug, Record<Lang, LandingContent>> = {
           },
         ],
       },
+      centralDiagram: {
+        caption: 'Central filtration station / Fluid path',
+        hint: {
+          pointer: 'Hover or click a stage · drag to orbit · scroll to zoom',
+          touch: 'Tap a stage · two fingers to orbit',
+        },
+        alt: 'Three-dimensional view of the Trans-Fil central filtration station, walked through in four stages: contaminated coolant inlet, centrifuge above the magnetic separator and waste tank; gravity filter with its belt and cloth roll; skimmer and level sensor over the liquid tank; and integration with the heat exchanger, bag filters, electrical cabinet and the low- and high-pressure clean-coolant outlets.',
+        labels: {
+          dirty: 'Contaminated coolant', centrifuge: 'Centrifuge', magnetic: 'Magnetic separator',
+          waste: 'Waste tank', gravity: 'Gravity filter', skimmer: 'Skimmer',
+          level: 'Level sensor', tank: 'Liquid tank', exchanger: 'Heat exchanger',
+          bag: 'Bag filter', cabinet: 'Electrical cabinet',
+          lowOut: 'Low-pressure outlet', highOut: 'High-pressure outlet',
+        },
+        fluids: [
+          { k: 'dirty', t: 'Contaminated coolant' },
+          { k: 'semi', t: 'Ferrous fines removed' },
+          { k: 'clean', t: 'Clean coolant' },
+          { k: 'oil', t: 'Tramp oil' },
+          { k: 'ferrous', t: 'Ferrous fines' },
+          { k: 'cloth', t: 'Filter cloth' },
+        ],
+      },
       machineDiagram: {
         caption: 'Machine diagram / Tube forming operation',
-        hint: 'Drag to orbit · scroll to zoom · tap a circuit to isolate it',
+        hint: {
+          pointer: 'Drag to orbit · scroll to zoom · click a circuit to isolate it',
+          touch: 'Tap a circuit to isolate it · two fingers to orbit',
+        },
         alt: 'Three-dimensional diagram of a tube-forming operation with Trans-Fil filtration: the forming line returns coolant to the transfer back, which pumps it to the centrifuge mounted on the central filtration station; the station feeds low-pressure filtered coolant to the forming stations and high-pressure double-filtered coolant to the protective applicator and the sizing section, and a water loop connects it to the cooling tower.',
         eq: {
           back: 'Transfer back',
@@ -556,18 +590,6 @@ export const LANDINGS: Record<LandingSlug, Record<Lang, LandingContent>> = {
         title: 'Três etapas de filtragem e uma central de processo.',
         intro:
           'Cada etapa remove um contaminante diferente. Instaladas em série sobre o tanque da linha, o fluido que retorna à formadora não carrega finos ferrosos, sólidos nem óleo tramp.',
-        diagram: {
-          caption: 'Esquema de funcionamento / Central de filtragem',
-          scaleNote: 'Esquema — fora de escala',
-          alt: 'Esquema da central de filtragem Trans-Fil: entrada de fluido contaminado, atenuador, separador magnético, filtro de gravidade, depósito de líquido, skimmer, sensor de nível, trocador de calor, filtro de saco, painel elétrico e saídas de fluido limpo.',
-          labels: {
-            dirty: 'Fluido contaminado', attenuator: 'Atenuador', magnetic: 'Separador magnético',
-            gravity: 'Filtro de gravidade', skimmer: 'Skimmer', level: 'Sensor de nível',
-            lowOut: 'Saída de baixa pressão', highOut: 'Saída de alta pressão', clean: 'Fluido limpo',
-            waste: 'Depósito de resíduos', tank: 'Depósito de líquido', exchanger: 'Trocador de calor',
-            bag: 'Filtro de saco', cabinet: 'Painel elétrico',
-          },
-        },
         blocks: [
           {
             code: 'F01',
@@ -595,9 +617,35 @@ export const LANDINGS: Record<LandingSlug, Record<Lang, LandingContent>> = {
           },
         ],
       },
+      centralDiagram: {
+        caption: 'Central de filtragem / Percurso do fluido',
+        hint: {
+          pointer: 'Passe o mouse ou clique em uma etapa · arraste para orbitar · role para aproximar',
+          touch: 'Toque em uma etapa · dois dedos para orbitar',
+        },
+        alt: 'Vista tridimensional da central de filtragem Trans-Fil, percorrida em quatro etapas: entrada de fluido contaminado, centrífuga sobre o separador magnético e depósito de resíduos; filtro de gravidade com sua esteira e rolo de manta; skimmer e sensor de nível sobre o depósito de líquido; e integração com trocador de calor, filtros de saco, painel elétrico e as saídas de fluido limpo de baixa e alta pressão.',
+        labels: {
+          dirty: 'Fluido contaminado', centrifuge: 'Centrífuga', magnetic: 'Separador magnético',
+          waste: 'Depósito de resíduos', gravity: 'Filtro de gravidade', skimmer: 'Skimmer',
+          level: 'Sensor de nível', tank: 'Depósito de líquido', exchanger: 'Trocador de calor',
+          bag: 'Filtro de saco', cabinet: 'Painel elétrico',
+          lowOut: 'Saída de baixa pressão', highOut: 'Saída de alta pressão',
+        },
+        fluids: [
+          { k: 'dirty', t: 'Fluido contaminado' },
+          { k: 'semi', t: 'Sem finos ferrosos' },
+          { k: 'clean', t: 'Fluido limpo' },
+          { k: 'oil', t: 'Óleo sobrenadante' },
+          { k: 'ferrous', t: 'Finos ferrosos' },
+          { k: 'cloth', t: 'Manta filtrante' },
+        ],
+      },
       machineDiagram: {
         caption: 'Diagrama de máquinas / Operação de conformação de tubos',
-        hint: 'Arraste para orbitar · role para aproximar · toque em um circuito para isolá-lo',
+        hint: {
+          pointer: 'Arraste para orbitar · role para aproximar · clique em um circuito para isolá-lo',
+          touch: 'Toque em um circuito para isolá-lo · dois dedos para orbitar',
+        },
         alt: 'Diagrama tridimensional de uma operação de conformação de tubos com filtragem Trans-Fil: a linha de conformação devolve o fluido a filtrar ao back de transferência, que o bombeia para a centrífuga montada sobre a central de filtragem; da central saem o fluido filtrado de baixa pressão para as estações de conformação e o fluido duplamente filtrado de alta pressão para o aplicador protetor e a calibragem, e um circuito de água a conecta à torre de resfriamento.',
         eq: {
           back: 'Back de transferência',

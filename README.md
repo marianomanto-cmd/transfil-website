@@ -75,8 +75,9 @@ src/
     AplicacionesSection.astro diagnostic panel + A01–A04 cards + metrics + CTA
     FlowDiagram.astro         dirty fluid → filtration cassette → stable flow
     MachineDiagram.astro      the four A01–A04 process microdiagrams
-    SystemDiagram.astro       scroll-driven schematic of the filtration station
+    CentralDiagram3D.astro    orbitable 3D filtration station, walked F01→F04
     SystemDiagram3D.astro     orbitable 3D machine diagram of the whole plant
+    ThreeImportMap.astro      the three.js import map, emitted once in <head>
     ProcessSection.astro      5 step cards over darkened workshop bg
     CatalogsSection.tsx       3 PDF covers + in-page viewer modal
     ServicesSection.astro     4 services as icon stepper (S01–S04)
@@ -105,6 +106,12 @@ src/
     hooks.ts             useReveal / useScrollY / useCountUp
   styles/global.css      design tokens + section styles
 public/
+  js/
+    three-d-stage.js     <three-d-stage>: renderer, lights, orbit, OBJ/GLB export
+    central3d.js         the filtration station: geometry, flow, cutaway, rail
+    plant3d.js           the machine diagram: plant, circuits, flow, labels
+    stage-scroll.js      scroll policy shared by both viewers (page first)
+  vendor/three/          pinned three.js 0.184 + OrbitControls + exporters
   favicon-16/32/48.png   favicons, generated from the brand logo
   apple-touch-icon.png   180×180 for iOS homescreen
   favicon-192/512.png    larger icons (PWA / manifest, social)
@@ -146,31 +153,54 @@ To change wording, image paths, country lists, milestones, contact info or FAQ e
 - Pages: `src/pages/conformado.astro`, `src/pages/en/conformado.astro`, `src/pages/pt/conformado.astro` — six lines each.
 - Own SEO: canonical, reciprocal hreflang, page-specific OG, and `WebPage` + `Service` + `FAQPage` + `BreadcrumbList` JSON-LD. The home's FAQ is *not* emitted here.
 - Deep-linked from the home: the `A01` card carries `link: { page: 'conformado', … }`, which renders both the card's "Ver solución" button and the footer link.
-- Section `02 — El sistema` opens with `SystemDiagram.astro`, then the four `F01–F04` cards, and closes with `SystemDiagram3D.astro` (both below).
+- Section `02 — El sistema` opens with `CentralDiagram3D.astro`, then the four `F01–F04` cards, and closes with `SystemDiagram3D.astro` (both below).
 - 301s from the legacy campaign URLs (`/filtracion-conformado-tubos`, `/filtracao-conformacao-tubos`) in `astro.config.mjs`.
 
 The full pattern, the roadmap (`/lavado`, `/transporte`, `/hornos` — not implemented) and the step-by-step recipe for a new landing are in [`docs/LANDINGS.md`](docs/LANDINGS.md).
 
-## Filtration-station schematic (`SystemDiagram.astro`)
+## The two 3D viewers: what they share
 
-Opens section `02 — El sistema` on every application landing: one SVG plan of the central filtration station (viewBox `1320 × 680`), walked stage by stage. It replaces the line-art PNG that used to circulate — same content, redrawn in the site's dark language, with every reference as translatable text.
+Both diagrams on the landing (`CentralDiagram3D.astro` and `SystemDiagram3D.astro`) sit on the same three pieces, and all three are shared on purpose:
 
-**The run.** The outer block is `380vh`; the inner one is `position: sticky` and the scroll advances `F01 → F02 → F03 → F04`. Each quarter lights its equipment group to full ink (the rest sit at `0.4`), moves a plan-style focus (four corner ticks + a blue halo, redrawn from a `{x,y,w,h}` model so the tick arms keep their length as the box changes shape) and pulls the tub's gradient from brown toward blue as the fluid gets clean. The effective run is `380vh − 100vh ≈ 2520px` at a 900px viewport — about 630px, or six wheel notches, per stage.
+- **`<three-d-stage>`** (`public/js/three-d-stage.js`) — the web component: renderer, lights, ground shadow, orbit, OBJ/GLB export. Its `toolbar` and `note` parts are hidden by both components (the export bar is a modeller's tool, and the starter's own interaction note is fixed English next to our translated one).
+- **`ThreeImportMap.astro`** — the import map, emitted **once, in `<head>`, from `Base.astro`**. See below; this is not a detail.
+- **`stage-scroll.js`** — the scroll policy. See "The page owns the scroll".
 
-**References are HTML, not `<text>`.** Fourteen `<span>`s positioned in percentages over the plan, in an `aria-hidden` overlay. They translate through `landings.ts` like any other string, scale with the container via `cqw`, and can be selected. The SVG carries the whole description in `role="img"` + `aria-label` so a screen reader gets one coherent sentence instead of fourteen fragments.
+**The import map lives in `<head>`, not next to the component.** A browser only honours an import map that it parses *before the first module script starts loading*, and Astro injects its own module scripts (React islands, `ClientRouter`) into the head. An import map emitted from the component's markup lands in the `<body>`, hundreds of lines too late, and the browser silently ignores it: `import 'three'` then dies with *Failed to resolve module specifier 'three'*. In dev the injection order differs and it appears to work — this only shows up on the deployed build. The map is also the reason both viewers can share a page at all: browsers without multiple-import-map support keep the first and reject the second, so one map per document is the rule. It carries `data-astro-transition-persist` so the View Transitions swap keeps the parsed node instead of re-inserting a duplicate.
 
-**The rail** below the plan is real navigation: four buttons with `aria-current="step"`. With the pin active a click scrolls to that stage; without it (phones, reduced motion) the click *is* the navigation and renders the stage directly.
+**three.js is served from `/vendor/three/`, not a CDN.** The handoffs pinned unpkg with integrity hashes; this landing is opened by industrial plants, and a corporate firewall blocking unpkg would leave both diagrams blank with no warning. The files come from `npm i three@0.184.0` (a devDependency, kept for provenance) — to update, bump the version and re-copy the five files. `public/vendor` is excluded from `tsconfig` so third-party code doesn't pollute `astro check`.
 
-**Dependencies: none.** Loops are CSS. The stage progress is one `scroll` listener (capture + `requestAnimationFrame`, torn down on view transitions). GSAP is used for the focus tween *only if* `window.gsap` already exists; it isn't installed, so the focus snaps — which the group cross-fade covers.
+**Both viewers boot lazily and survive view transitions.** An IntersectionObserver starts the scene only when the frame is within 500px of the viewport, so a visitor who never scrolls that far pays nothing for the ~400 KB (gzipped) of three.js. Because the modules are ES modules they are not re-evaluated when `ClientRouter` swaps the DOM, so a navigation re-imports them with a cache-busting suffix; three.js resolves to the same URL and stays cached. And because injected scripts are async, the boot waits on `customElements.whenDefined('three-d-stage')` before importing the scene — without it the scene can start before the viewer and fail destructuring `THREE`, which happens in the production build and not in dev.
 
-**Phones (≤860px)** drop the pin: 380vh of hijacked scroll on a handset is a trap. The plan becomes a normal block that pans horizontally inside its frame, the rail goes 2×2, and selecting a stage scrolls the frame so the lit zone is actually on screen. `prefers-reduced-motion` gets the same treatment — no pin, no loops, every group at full ink.
+## The page owns the scroll (`stage-scroll.js`)
 
-**Two constraints worth knowing before editing:**
+OrbitControls, as shipped, takes the gesture: it sets `touch-action: none` on the canvas (one finger orbits, the page does not move) and calls `preventDefault` on every `wheel` (the wheel over the canvas never scrolls). On a long landing that is a trap — the visitor reaches the diagram and the page stops responding. `letPageScroll()` inverts the priority for both viewers:
 
-1. `.tf-sd-stage` has `min-width: 1030px`. That is where `max(10.5px, 1.02cqw)` meets its floor: below it the labels stop shrinking with the drawing, and the bottom reference row starts colliding. Holding the container above that point keeps the plan at the proportions it was drawn in at every viewport. Lower it and the labels overlap on phones.
-2. `body` must not be `overflow-x: hidden` — see the note in `global.css`. `hidden` makes the body a scroll container and silently kills `position: sticky` for every descendant, which is exactly how this schematic pins. `clip` crops identically without creating a scrollport.
+- **Touch** — one finger scrolls the page (`touch-action: pan-y`, `touches.ONE = null`), two fingers orbit. The stage walk is on the rail, which needs no gesture at all.
+- **Wheel** — if a page scroll is in flight (the page moved less than 420ms ago) the wheel is not captured, so scrolling *through* the section never catches. With the page at rest and the pointer over the canvas, the wheel zooms.
+- **Limits** — at minimum or maximum zoom the wheel is released, so carrying on in the same direction hands the scroll back to the page. It can never stay locked.
 
-Label positions live inline on each `<span>`. If the copy changes, re-check the bottom row: `waste`, `tank`, `exchanger`, `bag` and `cabinet` share one baseline and the Spanish strings are the longest in the set.
+All of it works by flipping `controls.enableZoom` in a **capture-phase** listener on the host (the canvas lives in the shadow root), before OrbitControls' own handler runs: with zoom off, OrbitControls returns without `preventDefault` and the browser scrolls normally. `onEngage` tells the scene that the visitor took the camera, so whatever was animating it lets go — otherwise the next frame would undo the zoom.
+
+## Filtration station in 3D (`CentralDiagram3D.astro`)
+
+Opens section `02 — El sistema` on every application landing: the whole station as geometry — contaminated-coolant inlet, centrifuge over the magnetic separator, waste tank, gravity belt filter with its cloth roll, liquid tank, skimmer, level sensor, plate heat exchanger, bag filters, electrical cabinet and the two clean-coolant outlets. It replaces the SVG schematic that used to open the section: same content, in three dimensions, and without the pinned scroll that came with it.
+
+Nothing is a 3D asset: metres, y-up, resting on `y = 0`, every mesh and material named in Spanish, so the exported OBJ/GLB opens in Blender at real scale with its hierarchy intact.
+
+**The fluid is the subject.** Six states, each its own colour and its own run of pipe with emissive drops moving along it: contaminated coolant, ferrous fines removed, clean coolant, tramp oil, ferrous fines, filter cloth. The state changes exactly where the equipment does its work. The colour key sits inside the frame, next to the lines it names.
+
+**The rail is the whole navigation.** Four buttons, `F01 → F04`, with `aria-current="step"`, naming the same four stages as the cards below — both read from `system.blocks`, so they cannot drift apart. **Hover, focus or click** flies the camera to that stage, frames its zone, opens the matching housing in cutaway (centrifuge and drum, filter cloth, tank and level sensor, bag filters) and brings that stage's references to full ink. Hover waits 130ms so crossing the rail doesn't fire four flights, and is ignored while the page is scrolling — otherwise dragging the rail under a motionless cursor would yank the camera.
+
+**No pinned scroll, by explicit request.** The handoff shipped a `pinned` mode driven by a sticky block over `postMessage`; it is gone, not disabled. The page scrolls freely past the diagram at all times.
+
+**Framing is computed, not hard-coded.** Each stage keeps the prototype's camera *direction* and its distance as a floor — in 16/9 the approved framing is used exactly as designed. From there the camera only ever pulls back, and only as far as needed for the eight corners of the stage's zone to fit the frustum (`|lateral| ≤ tan · (depth + d)`, evaluated on both axes). three.js' FOV is vertical, so without this a narrower frame crops the station sideways: stage F04, which covers the whole unit, lost both outlets. It is recomputed when the frame changes width, unless the visitor has already moved the camera.
+
+**Labels.** Thirteen equipment names as HTML projected from the scene each frame — translated through `landings.ts`, horizontal and selectable at any angle. Placement is resolved, not just projected: sorted by depth, pushed apart on collision, clamped inside the frame, and any that still cannot be placed is faded rather than left overlapping. The colour key is fed into the same collision set, so no label ever lands on it. Verified at zero overlaps across 3 locales × 5 widths × the densest stages, and on phones at all four stages.
+
+**Phones.** Below 560px the projected labels are switched off — six 145px text boxes over a 350px canvas hide the station they are naming — and the active stage's equipment moves to a two-column list **under the rail** (under, not over: stage F04 names six items and F02 names one, and with the list above, the rail would jump out from under the finger). The frame goes to `3 / 2` with `min-height` released, which would otherwise override the aspect ratio, and the colour key becomes a bottom strip across the frame instead of a column eating the left third. Between 560 and 860px the labels stay but only for the active stage.
+
+**`prefers-reduced-motion`** stops the flow and the rotating parts, and the camera *snaps* to each stage instead of flying. The cutaway, the focus frame and the arrowheads still say everything the motion said.
 
 ## Machine diagram in 3D (`SystemDiagram3D.astro`)
 
@@ -184,13 +214,7 @@ Nothing is a 3D asset: the plant is ~230 meshes built from primitives, in metres
 
 **Labels.** Six equipment names plus the two fluid tags, as HTML projected from the scene each frame — they translate through `landings.ts`, stay horizontal and selectable at any angle. Placement is resolved, not just projected: labels are sorted by depth, pushed apart when they collide, clamped inside the frame, and any that still cannot be placed is faded out rather than left overlapping. Verified at zero overlaps across 3 locales × 8 widths and a full 12-step orbit.
 
-**Dependencies.** three.js 0.184 and OrbitControls, and nothing else — no GSAP, no post-processing, no model loaders.
-
-**Three constraints worth knowing before editing:**
-
-1. **three.js is served from `/vendor/three/`, not a CDN.** The handoff pinned unpkg with integrity hashes; this landing is opened by industrial plants, and a corporate firewall blocking unpkg would leave the diagram blank with no warning. The files come from `npm i three@0.184.0` (a devDependency, kept for provenance) — to update, bump the version and re-copy the five files. `public/vendor` is excluded from `tsconfig` so third-party code doesn't pollute `astro check`.
-2. **The import map must stay inline and before any module script.** It is ~1 KB. What is deferred is the ~400 KB (gzipped) of three.js that `plant3d.js` pulls in: an IntersectionObserver boots the scene only when the frame is within 500px of the viewport, so a visitor who never scrolls that far pays nothing.
-3. **`plant3d.js` does `await stage.ready`, which only exists once the custom element is defined.** Injected scripts are async, so the boot waits on `customElements.whenDefined('three-d-stage')` before importing the plant. Without that wait the plant can start before the viewer and fails destructuring `THREE` — which happens in the production build, not in dev.
+**Dependencies.** three.js 0.184 and OrbitControls, and nothing else — no GSAP, no post-processing, no model loaders. Where it is served from, how it boots and how the wheel and touch behave are shared with the filtration station: see the two chapters above.
 
 **Phones (≤860px)** get no projected labels at all: on a 348px canvas eight text boxes leave no drawing to look at. The six equipment names move to a fixed two-column list under the canvas, the frame goes to `3 / 2` (with `min-height` released, which otherwise overrides the aspect ratio), the circuit legend goes two-up, and the camera pulls back in proportion to the missing width — the approved framing is calculated for 16/9 and the FOV is vertical, so a narrower frame would crop the plant. The pull-back stops the moment the visitor touches the camera.
 
@@ -295,7 +319,7 @@ The form is accessibility-correct: `role=alert` on field errors, `aria-required`
 - **Below-the-fold media**: bullet thumbnails are `loading="lazy"` + `decoding="async"`. Tech-section videos are IO-gated (only the tile actively in viewport — ≥50% visible after a 10% rootMargin inset — plays).
 - **Counter SSR**: `useCountUp` renders the final value in HTML; client rewinds + animates on intersect. JS-off readers don't see "0 años de operación". Patterns like `24/7` short-circuit so the literal text renders.
 - **View Transitions**: `<ClientRouter />` keeps the document alive across ES ↔ EN swaps.
-- **The 3D diagram loads on approach**: `three.js` is not requested at page load at all — an IntersectionObserver injects the viewer and the plant module when the frame is within 500px of the viewport. Verified: 0 vendor files fetched on load, 3 after scrolling down.
+- **The 3D diagrams load on approach**: `three.js` is not requested at page load at all — an IntersectionObserver injects the viewer and each scene module when its frame is within 500px of the viewport. The two diagrams on the landing share one copy of the library and one import map. Verified: 0 vendor files fetched on load, 3 after scrolling down.
 - **Applications CSS is component-scoped**: the section's ~600 lines live in `AplicacionesSection.astro` / `FlowDiagram.astro` / `MachineDiagram.astro` rather than `global.css`, so the campaign landings — which never render it — stop downloading them (`global.css` −4 KB, and the landing bundle no longer carries the flow/diagram rules at all).
 - **Nothing animates off-screen**: an IntersectionObserver puts `is-idle` on the flow figure and each machine diagram when it leaves the viewport, which pauses every loop. Measured: 97 running animations with the section in view, 0 once it scrolls away. The pause rules need `!important` because the entry rules re-declare the `animation` shorthand, which resets `animation-play-state`.
 - **Assets re-encoded** (see commits `eda68b8`, `5cb3ba0`, `a2f682a`):
@@ -313,7 +337,7 @@ The form is accessibility-correct: `role=alert` on field errors, `aria-required`
   - magnetic CTA effect skipped entirely,
   - process reveal, tech transitions, scroll-behavior, marquee tilt, accordion chevron, applications chevron all neutered,
   - the 3D machine diagram holds a single frame: no flow, no spinning rolls or fans, no blinking status light,
-  - the landing schematic drops its `380vh` pin entirely — hijacking three screens of scroll is itself motion nobody asked for — and shows every stage at full ink, navigable from the rail,
+  - the 3D filtration station stops its flow and its rotating parts, and the camera snaps to each stage instead of flying there; the cutaway, the focus frame and the arrowheads carry what the motion carried,
   - the whole applications section holds its final frame: no scan, no rotations, no particle loops, no cursor light. The flow figure swaps its moving particles for a parked set (`.tf-fl-still`) so the dirty → filtered → clean story still reads as a static drawing. Verified at 0 running animations.
 - `font-variant-numeric: tabular-nums + slashed-zero` on stats, years, codes, coords.
 - `data-active` scroll-spy on nav links via `IntersectionObserver` (includes the new `#applications` id).
@@ -321,6 +345,8 @@ The form is accessibility-correct: `role=alert` on field errors, `aria-required`
 - 44px minimum tap targets across all primary tappables (burger, language switcher, CTA button, FAB, catalog viewer buttons, app collapse toggles); `touch-action: manipulation` to drop the 300ms tap delay.
 - `safe-area-inset` padding on the fixed header padding and the WhatsApp FAB so they clear the iPhone notch and home indicator.
 - Mobile grain overlay (`body::before`) skipped at ≤640px to save paint cost.
+- **Neither 3D viewer traps the page.** One finger scrolls on touch, the wheel is only captured with the page at rest and is released at the zoom limits, and both stage walks (the `F01–F04` rail, the circuit legend) are real `<button>`s reachable by keyboard: `Tab` through the rail walks the station stage by stage, with `aria-current="step"` on the active one. See "The page owns the scroll".
+- **Interaction hints match the device.** Promising a gesture the device doesn't have is worse than saying nothing, so each viewer ships two hint strings per locale and shows the pointer one or the touch one via `@media (hover: none)`.
 
 ## Open follow-ups
 
@@ -334,4 +360,5 @@ The form is accessibility-correct: `role=alert` on field errors, `aria-required`
 8. **EN / PT copy review** — the Spanish copy was reviewed against SEO targets; the English and Brazilian-Portuguese versions are professional translations the client should review before those locales are promoted.
 9. **Final imagery review** — bullet photos and service photos are an evolving mix of real shots and AI renders. Replace anything still looking placeholder-y when better assets arrive. All paths live in `src/i18n/content.ts`.
 10. **Tech section hero per-tech cover** — currently the bento's "hero" tile shows the first bullet's image, not the tech's `t.img` cover. The cover photos exist in `content.tech[i].img` but are unused in the current layout. Decide whether to surface them somewhere (e.g., on a future overview state) or remove from the schema.
-11. **Hero LCP further** — the lazy video helps but a dedicated `<link rel="preload" as="image" href="/img/hero-poster.webp" fetchpriority="high">` would shave more time off the first paint.
+11. **Two-finger orbit on phones is the trade-off for free scrolling** — with `touch-action: pan-y` the browser keeps vertical panning, so a two-finger *vertical* drag scrolls the page instead of orbiting; horizontal two-finger drags reach the viewer. The rail and the legend cover everything a visitor needs on a phone, so this was accepted rather than fought. If orbiting on touch ever has to be first-class, it needs an explicit "orbit mode" toggle, not a `touch-action` change.
+12. **Hero LCP further** — the lazy video helps but a dedicated `<link rel="preload" as="image" href="/img/hero-poster.webp" fetchpriority="high">` would shave more time off the first paint.

@@ -2,10 +2,12 @@
  * Diagrama de máquinas en 3D — operación de conformado de tubos.
  * Trans-Fil · sección 03 de las landings de aplicación (/conformado).
  *
- * Carga: <script type="module" is:inline src="/js/plant3d.js"> después del
- * import map pineado de three.js y de three-d-stage.js. Lee el copy ya
- * localizado del bloque <script type="application/json" id="plant3d-copy">
- * que imprime SystemDiagram3D.astro — acá no hay ni un string de contenido.
+ * Carga: import dinámico desde SystemDiagram3D.astro cuando el marco se
+ * acerca al viewport. El import map pineado de three.js lo emite Base.astro
+ * en el <head>; three-d-stage.js se inyecta antes que este módulo. El copy
+ * llega ya localizado en el bloque
+ * <script type="application/json" id="plant3d-copy"> — acá no hay ni un
+ * string de contenido.
  *
  * Unidades en metros, y arriba, la planta apoyada en y = 0: el exportador
  * OBJ/GLB del stage entrega un modelo usable en Blender tal cual.
@@ -22,6 +24,8 @@
  * Unidades en metros, y arriba, la planta apoyada en y = 0 — así el
  * exportador OBJ/GLB del stage entrega un modelo usable en Blender.
  */
+
+import { letPageScroll } from '/js/stage-scroll.js';
 
 /** El copy llega ya localizado desde Astro, en un bloque JSON. */
 const T = JSON.parse(document.getElementById('plant3d-copy').textContent);
@@ -414,9 +418,14 @@ stage.scene.traverse((o) => {
 // Vista por defecto: tres cuartos alto, FOV corto para que lea axonométrica.
 stage.camera.fov = 32;
 stage.camera.updateProjectionMatrix();
-stage.controls.minDistance = 8;
-stage.controls.maxDistance = 60;
 stage.controls.maxPolarAngle = Math.PI * 0.49;
+// La página manda el scroll; el visor sólo toma el gesto cuando el visitante
+// lo pide, y los topes de zoom son además los que devuelven la rueda a la
+// página (ver /js/stage-scroll.js). Con View Transitions este módulo se
+// vuelve a importar y convive un instante con el anterior: hay que bajarle
+// los listeners de window al que se va.
+if (window.__tfP3dCleanup) window.__tfP3dCleanup();
+window.__tfP3dCleanup = letPageScroll(stage, THREE, { min: 8, max: 60, onEngage: () => { touched = true; } }).dispose;
 
 // El encuadre aprobado está calculado sobre un marco 16/9. En uno más
 // angosto —el 4/3 de los teléfonos— el mismo encaje recorta la planta por

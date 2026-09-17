@@ -1,0 +1,391 @@
+---
+/**
+ * Central de filtración en 3D — apertura de la sección 02 (El sistema) en
+ * las landings de aplicación (/conformado).
+ *
+ * Recorrido F01 → F04 sobre el equipo completo: entrada de soluble
+ * contaminado, centrífuga, separador magnético, filtro de gravedad,
+ * depósito de líquido, skimmer, sensor de nivel, intercambiador de placas,
+ * filtros bolsa, gabinete eléctrico y las dos salidas de soluble limpio.
+ * Cada etapa abre una vista en corte de su equipo y las líneas de flujo
+ * cambian de color según el estado real del fluido.
+ *
+ * Reparto de responsabilidades:
+ *   · este archivo          → markup, estilos y copy localizado
+ *   · /js/three-d-stage.js  → renderer, luces, órbita, sombra, export OBJ/GLB
+ *   · /js/central3d.js      → geometría, flujo, corte, etiquetas y riel
+ *   · /js/stage-scroll.js   → la página se scrollea; el visor no la traba
+ *
+ * Tres detalles que no son negociables:
+ *
+ * 1. El import map de three.js NO va acá: lo emite Base.astro en el <head>,
+ *    que es donde el navegador lo tiene que ver —antes de que arranque
+ *    cualquier script de módulo del documento— para que `import 'three'`
+ *    resuelva. Y va una sola vez por página: con dos, el segundo anula al
+ *    primero en los navegadores sin soporte de import maps múltiples.
+ * 2. Los scripts van con `is:inline`: `import 'three'` dentro de un <script>
+ *    normal de Astro se bundlea y el import map queda sin efecto.
+ * 3. Los estilos van en `<style is:global>` bajo `.tf-c3d`. Las etiquetas, el
+ *    riel y la clave de colores los crea central3d.js en tiempo de ejecución,
+ *    así que no llevan el atributo de scoping de Astro: con un <style>
+ *    scopeado quedarían sin estilo. El prefijo `.tf-c3d` hace de scope.
+ *
+ * El avance de etapa es del riel y nada más —hover, foco o clic—. No hay
+ * modo anclado al scroll: la página tiene que poder bajar de largo.
+ */
+interface Props {
+  /** Copy ya localizado (landings.ts → centralDiagram). */
+  copy: {
+    caption: string;
+    hint: { pointer: string; touch: string };
+    /** Descripción de la central entera para lectores de pantalla. */
+    alt: string;
+    labels: Record<string, string>;
+    fluids: { k: string; t: string }[];
+  };
+  /** Nombre de cada etapa del riel — los mismos que las tarjetas de abajo. */
+  stages: string[];
+  /** Código de cada etapa (F01…F04), en el mismo orden. */
+  codes: string[];
+}
+const { copy, stages, codes } = Astro.props;
+---
+
+<div class="tf-c3d">
+  <div class="tf-c3d-cap">
+    <span>{copy.caption}</span>
+    <span class="tf-c3d-hint" data-when="pointer">{copy.hint.pointer}</span>
+    <span class="tf-c3d-hint" data-when="touch">{copy.hint.touch}</span>
+  </div>
+
+  <div class="tf-c3d-frame">
+    <three-d-stage
+      name="transfil-central-filtracion"
+      background="#0b0b0e"
+      role="img"
+      aria-label={copy.alt}
+    ></three-d-stage>
+    <div class="tf-c3d-labels" aria-hidden="true"></div>
+    <div class="tf-c3d-key" aria-hidden="true"></div>
+  </div>
+
+  <div class="tf-c3d-rail" role="group" aria-label={copy.caption}></div>
+
+  {/* Nombres del equipo de la etapa activa, para teléfonos: ahí el lienzo es
+      demasiado chico para proyectar los rótulos encima sin tapar la central
+      que nombran. Los llena central3d.js y cambian con el riel. Va DEBAJO
+      del riel: la etapa 4 nombra seis equipos y la 2 uno solo, y con la
+      lista arriba el riel saltaría debajo del dedo al cambiar de etapa. */}
+  <ul class="tf-c3d-eq"></ul>
+
+  <script
+    type="application/json"
+    id="central3d-copy"
+    set:html={JSON.stringify({ ...copy, stages, codes })}
+    is:inline
+  ></script>
+</div>
+
+<script is:inline>
+  /**
+   * Arranque diferido. Esto abre una landing larga y three.js son ~600 KB:
+   * no se baja nada hasta que el marco se acerca al viewport.
+   * El import map lo emite Base.astro en el <head>.
+   *
+   * Con View Transitions el DOM se reemplaza y central3d.js, que es un
+   * módulo, no se vuelve a evaluar. En esas navegaciones se lo importa con
+   * un sufijo distinto para forzar una instancia nueva; three.js resuelve
+   * a la misma URL, así que sigue cacheado y no se vuelve a bajar.
+   */
+  (() => {
+    const boot = () => {
+      const root = document.querySelector('.tf-c3d');
+      if (!root || root.dataset.booted === '1') return;
+      const frame = root.querySelector('.tf-c3d-frame');
+      if (!frame) return;
+
+      const start = () => {
+        if (root.dataset.booted === '1') return;
+        root.dataset.booted = '1';
+        if (!customElements.get('three-d-stage')) {
+          const el = document.createElement('script');
+          el.src = '/js/three-d-stage.js';
+          document.head.appendChild(el);
+        }
+        // central3d.js hace `await stage.ready`, que sólo existe una vez
+        // que el custom element está definido. Los scripts inyectados son
+        // async, así que sin esta espera la central puede arrancar antes
+        // que el visor — y falla al desestructurar THREE.
+        customElements.whenDefined('three-d-stage').then(() => {
+          const n = (window.__tfC3dRuns = (window.__tfC3dRuns || 0) + 1);
+          import(n === 1 ? '/js/central3d.js' : '/js/central3d.js?n=' + n);
+        });
+      };
+
+      if (!('IntersectionObserver' in window)) { start(); return; }
+      const io = new IntersectionObserver(
+        (entries) => {
+          if (entries.some((e) => e.isIntersecting)) {
+            io.disconnect();
+            start();
+          }
+        },
+        { rootMargin: '500px 0px' }
+      );
+      io.observe(frame);
+    };
+    document.addEventListener('astro:page-load', boot);
+  })();
+</script>
+
+<style is:global>
+  .tf-c3d { display: flex; flex-direction: column; gap: 14px; }
+  .tf-c3d three-d-stage:not(:defined) { visibility: hidden; }
+  /* La barra de descarga (OBJ / GLB) es una herramienta para modeladores y
+     va sin traducir: fuera de una landing comercial en tres idiomas. Los
+     exportadores son imports dinámicos, así que ocultarla no deja peso
+     muerto. Quitar esta regla para volver a ofrecerla. */
+  .tf-c3d three-d-stage::part(toolbar) { display: none; }
+  /* El starter trae su propia ayuda de interacción, en inglés y fija. La
+     nuestra ya está arriba del marco y traducida. */
+  .tf-c3d three-d-stage::part(note) { display: none; }
+
+  .tf-c3d-cap {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--fg-3);
+  }
+  .tf-c3d-hint {
+    color: var(--fg-4);
+    text-transform: none;
+    letter-spacing: 0.06em;
+  }
+  /* Un gesto que el dispositivo no tiene es peor que ninguno: con mouse se
+     lee la variante de mouse, con dedo la de dedo. `hover: none` cubre los
+     teléfonos; el híbrido (portátil con pantalla táctil) se queda con la de
+     mouse, que es la que tiene el puntero fino. */
+  .tf-c3d-hint[data-when='touch'] { display: none; }
+  @media (hover: none) {
+    .tf-c3d-hint[data-when='pointer'] { display: none; }
+    .tf-c3d-hint[data-when='touch'] { display: inline; }
+  }
+
+  .tf-c3d-frame {
+    position: relative;
+    border: 1px solid var(--line);
+    background:
+      radial-gradient(120% 90% at 50% 118%, rgba(58, 134, 255, 0.08), transparent 62%),
+      linear-gradient(180deg, #121217 0%, #0b0b0e 100%);
+    aspect-ratio: 16 / 9;
+    min-height: 320px;
+  }
+  .tf-c3d-frame three-d-stage {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Referencias: HTML proyectado desde la escena. Traducen con el sitio y
+     quedan legibles y horizontales en cualquier ángulo. La etapa activa va
+     a tinta plena; las demás retroceden. */
+  .tf-c3d-labels {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .tf-c3d-labels b {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    transform: translate(-50%, -100%);
+    font-family: var(--font-mono);
+    font-weight: 400;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    color: var(--fg-3);
+    background: rgba(11, 11, 14, 0.72);
+    border: 1px solid var(--line);
+    padding: 3px 8px;
+    opacity: 0;
+    transition: opacity 0.3s ease, color 0.45s ease, border-color 0.45s ease;
+  }
+  .tf-c3d-labels b.is-on { color: var(--fg); border-color: #3a3a42; }
+  .tf-c3d-labels b::before {
+    content: '';
+    width: 5px;
+    height: 5px;
+    background: var(--dot, var(--fg-4));
+    flex: 0 0 auto;
+    transition: background 0.45s ease;
+  }
+  .tf-c3d-labels b.is-on::before { background: var(--dot, var(--accent)); }
+  .tf-c3d-labels b::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    width: 1px;
+    height: 13px;
+    background: var(--fg-4);
+  }
+
+  /* Clave de estados del fluido. Va DENTRO del marco: se lee sobre el
+     equipo, que es lo que está nombrando, y no roba alto a la sección. */
+  .tf-c3d-key {
+    position: absolute;
+    left: 12px;
+    bottom: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 9px 11px;
+    background: rgba(11, 11, 14, 0.74);
+    border: 1px solid var(--line);
+    pointer-events: none;
+  }
+  .tf-c3d-key div {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    color: var(--fg-2);
+    white-space: nowrap;
+  }
+  .tf-c3d-key i { width: 14px; height: 3px; flex: 0 0 auto; }
+
+  .tf-c3d-eq { display: none; }
+
+  .tf-c3d-rail {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .tf-c3d-rail button {
+    appearance: none;
+    text-align: left;
+    cursor: pointer;
+    background: var(--bg);
+    border: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    min-width: 0;
+    font: inherit;
+    color: inherit;
+    transition: background 0.25s;
+  }
+  .tf-c3d-rail button:hover { background: var(--bg-2); }
+  .tf-c3d-rail button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+    background: var(--bg-2);
+  }
+  .tf-c3d-rail .sw {
+    height: 3px;
+    background: var(--accent);
+    opacity: 0.12;
+    transition: opacity 0.4s ease;
+  }
+  .tf-c3d-rail button[aria-current='step'] .sw { opacity: 1; }
+  .tf-c3d-rail .bd {
+    padding: 0 13px 13px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+  }
+  .tf-c3d-rail .cd {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    color: var(--accent);
+  }
+  .tf-c3d-rail .nm { font-size: 12.5px; line-height: 1.4; color: var(--fg-2); }
+
+  /* Teléfonos: lienzo más alto (el equipo es ancho), riel a dos columnas y
+     la clave de colores compacta. */
+  @media (max-width: 860px) {
+    /* `min-height` fijo le gana al aspect-ratio en pantallas angostas y
+       deja el marco achatado: acá manda la proporción. */
+    .tf-c3d-frame { aspect-ratio: 4 / 3; min-height: 0; }
+    .tf-c3d-rail { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .tf-c3d-labels b { font-size: 10px; padding: 2px 6px; }
+    .tf-c3d-key { left: 8px; bottom: 8px; padding: 7px 9px; gap: 4px; }
+    .tf-c3d-key div { font-size: 9px; }
+  }
+
+  /* Teléfonos: marco cuadrado. El ancho del equipo lo fija la pantalla de
+     todos modos; el alto de más es aire para los rótulos y la clave, que en
+     un 4/3 de 350 px se disputan el mismo rincón. */
+  @media (max-width: 560px) {
+    /* Seis rótulos de 145 px sobre un lienzo de 350 px tapan la central que
+       están nombrando. Acá salen del marco y van debajo, en lista — y sin
+       ellos el marco no necesita alto de más: 3/2, igual que el diagrama de
+       máquinas. */
+    .tf-c3d-frame { aspect-ratio: 3 / 2; }
+    .tf-c3d-labels { display: none; }
+    /* En columna, la clave se come el tercio izquierdo del lienzo y tapa la
+       entrada y el depósito de residuos. Como banda inferior ocupa el piso,
+       que es donde no hay equipo. */
+    .tf-c3d-key {
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      gap: 1px 10px;
+      padding: 5px 6px;
+      border: 0;
+      border-top: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(11, 11, 14, 0.4), rgba(11, 11, 14, 0.88));
+    }
+    .tf-c3d-key div { font-size: 8px; gap: 4px; letter-spacing: 0.02em; }
+    .tf-c3d-key i { width: 9px; height: 2px; }
+    .tf-c3d-rail .bd { padding: 0 10px 11px; }
+    .tf-c3d-rail .nm { font-size: 11.5px; }
+
+    .tf-c3d-eq {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px 14px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.05em;
+      line-height: 1.35;
+      color: var(--fg-3);
+    }
+    .tf-c3d-eq li {
+      display: flex;
+      align-items: baseline;
+      gap: 7px;
+      min-width: 0;
+    }
+    .tf-c3d-eq li::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      background: var(--dot, var(--accent));
+      flex: 0 0 auto;
+    }
+  }
+</style>

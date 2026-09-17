@@ -13,9 +13,9 @@
  *
  * Tres detalles que no son negociables, cada uno por una razón:
  *
- * 1. El import map de three.js va ANTES de cualquier script de módulo, y
- *    con `is:inline` para que Astro no lo toque. Si Astro lo procesa, o si
- *    queda después del módulo, three.js no resuelve.
+ * 1. El import map de three.js NO va acá: lo emite Base.astro en el <head>,
+ *    antes de cualquier script de módulo, que es donde el navegador lo tiene
+ *    que ver para que `import 'three'` resuelva — y una sola vez por página.
  *    three.js se sirve desde `/vendor/three/` y no desde un CDN público:
  *    esta landing la abren plantas industriales, y un firewall corporativo
  *    que bloquee unpkg dejaría el diagrama en blanco sin aviso. Los
@@ -32,7 +32,7 @@ interface Props {
   /** Copy ya localizado (landings.ts → machineDiagram). */
   copy: {
     caption: string;
-    hint: string;
+    hint: { pointer: string; touch: string };
     alt: string;
     eq: {
       back: string; centrifuge: string; line: string;
@@ -48,7 +48,8 @@ const { copy } = Astro.props;
 <div class="tf-p3d">
   <div class="tf-p3d-cap">
     <span>{copy.caption}</span>
-    <span class="tf-p3d-hint">{copy.hint}</span>
+    <span class="tf-p3d-hint" data-when="pointer">{copy.hint.pointer}</span>
+    <span class="tf-p3d-hint" data-when="touch">{copy.hint.touch}</span>
   </div>
 
   <div class="tf-p3d-frame">
@@ -75,22 +76,12 @@ const { copy } = Astro.props;
   <script type="application/json" id="plant3d-copy" set:html={JSON.stringify(copy)} is:inline></script>
 </div>
 
-<script type="importmap" is:inline>
-{
-  "imports": {
-    "three": "/vendor/three/three.module.js",
-    "three/addons/controls/OrbitControls.js": "/vendor/three/OrbitControls.js",
-    "three/addons/exporters/OBJExporter.js": "/vendor/three/OBJExporter.js",
-    "three/addons/exporters/GLTFExporter.js": "/vendor/three/GLTFExporter.js"
-  }
-}
-</script>
 <script is:inline>
   /**
    * Arranque diferido. Este bloque cierra una landing larga y three.js son
-   * ~600 KB desde un CDN: no se baja nada hasta que el marco se acerca al
-   * viewport. El import map de arriba queda inline a propósito — pesa 1 KB
-   * y tiene que estar en el documento antes de que corra cualquier módulo.
+   * ~600 KB: no se baja nada hasta que el marco se acerca al viewport.
+   * El import map lo emite Base.astro en el <head> — ahí tiene que estar,
+   * antes de que arranque cualquier script de módulo del documento.
    *
    * Con View Transitions el DOM se reemplaza y plant3d.js, que es un
    * módulo, no se vuelve a evaluar. En esas navegaciones se lo importa con
@@ -170,6 +161,15 @@ const { copy } = Astro.props;
     color: var(--fg-4);
     text-transform: none;
     letter-spacing: 0.06em;
+  }
+  /* Un gesto que el dispositivo no tiene es peor que ninguno: con mouse se
+     lee la variante de mouse, con dedo la de dedo. `hover: none` cubre los
+     teléfonos; el híbrido (portátil con pantalla táctil) se queda con la de
+     mouse, que es la que tiene el puntero fino. */
+  .tf-p3d-hint[data-when='touch'] { display: none; }
+  @media (hover: none) {
+    .tf-p3d-hint[data-when='pointer'] { display: none; }
+    .tf-p3d-hint[data-when='touch'] { display: inline; }
   }
 
   .tf-p3d-frame {

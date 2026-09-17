@@ -1,0 +1,38 @@
+---
+/**
+ * Import map de three.js — va en el <head> de todas las páginas.
+ *
+ * Por qué acá y no junto a los componentes 3D: un import map sólo tiene
+ * efecto si el navegador lo procesa ANTES de que arranque la carga del
+ * primer script de módulo del documento. Astro inyecta sus módulos
+ * (islas de React, ClientRouter) en el <head>, así que un import map
+ * declarado en el <body> — como estaba — llega tarde y el navegador lo
+ * ignora: `import 'three'` falla con "Failed to resolve module specifier".
+ * En dev no se notaba porque el orden de inyección es otro.
+ *
+ * Además el spec permite un único import map por documento en los
+ * navegadores que todavía no soportan varios: si dos componentes 3D caen
+ * en la misma página, el segundo rompe al primero. Emitirlo una sola vez
+ * desde el layout elimina las dos trampas.
+ *
+ * `is:inline` para que Astro no lo trate como script propio, y
+ * `data-astro-transition-persist` para que el swap de View Transitions
+ * conserve este nodo en lugar de volver a insertarlo (re-insertarlo
+ * después de la carga inicial es un error de consola en los navegadores
+ * sin soporte de import maps múltiples).
+ *
+ * three.js está vendorizado en /public/vendor/three (ver README): unpkg
+ * es un punto único de falla y muchas redes industriales lo bloquean.
+ */
+---
+
+<script type="importmap" is:inline data-astro-transition-persist="three-importmap">
+{
+  "imports": {
+    "three": "/vendor/three/three.module.js",
+    "three/addons/controls/OrbitControls.js": "/vendor/three/OrbitControls.js",
+    "three/addons/exporters/OBJExporter.js": "/vendor/three/OBJExporter.js",
+    "three/addons/exporters/GLTFExporter.js": "/vendor/three/GLTFExporter.js"
+  }
+}
+</script>
