@@ -126,7 +126,9 @@ export type Content = {
     eyebrow: string; title: string; title2: string; sub: string;
     tabs: Tab[];
     coverage: string[];
-    hoverPause: string;
+    /** Marquee toggle: moving content needs a pause control (WCAG 2.2.2). */
+    pause: string;
+    play: string;
   };
   history: { eyebrow: string; title: string; body: string; milestones: Milestone[] };
   contact: {
@@ -387,7 +389,8 @@ export const CONTENT: Record<Lang, Content> = {
         'Ecuador', 'México', 'Estados Unidos', 'R. Dominicana',
         'Puerto Rico', 'España',
       ],
-      hoverPause: '← HOVER PARA PAUSAR →',
+      pause: 'Pausar',
+      play: 'Reanudar',
     },
     history: {
       eyebrow: '[ 07 — Historia ]',
@@ -700,7 +703,8 @@ export const CONTENT: Record<Lang, Content> = {
         'Ecuador', 'Mexico', 'United States', 'Dominican Rep.',
         'Puerto Rico', 'Spain',
       ],
-      hoverPause: '← HOVER TO PAUSE →',
+      pause: 'Pause',
+      play: 'Play',
     },
     history: {
       eyebrow: '[ 07 — History ]',
@@ -1014,7 +1018,8 @@ export const CONTENT: Record<Lang, Content> = {
         'Equador', 'México', 'Estados Unidos', 'Rep. Dominicana',
         'Porto Rico', 'Espanha',
       ],
-      hoverPause: '← PASSE O MOUSE PARA PAUSAR →',
+      pause: 'Pausar',
+      play: 'Retomar',
     },
     history: {
       eyebrow: '[ 07 — História ]',

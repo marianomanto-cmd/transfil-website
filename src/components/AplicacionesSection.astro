@@ -2,6 +2,7 @@
 import type { Content } from '../i18n/content';
 import { pathFor } from '../i18n/routes';
 import Section from './Section.astro';
+import { srcSet } from '../lib/img';
 import FlowDiagram from './FlowDiagram.astro';
 import MachineDiagram from './MachineDiagram.astro';
 
@@ -144,7 +145,14 @@ const DEMO_HITS = [1, 4];
          heavily-shadowed backdrop so the brand presence is subtle. -->
     <aside class="tf-apps-custom" aria-labelledby="apps-custom-h">
       <div class="tf-apps-custom-bg" aria-hidden="true">
-        <img src="/img/apps-custom-bg.webp" alt="" loading="lazy" decoding="async" />
+        <img
+          src="/img/apps-custom-bg.webp"
+          srcset={srcSet('/img/apps-custom-bg.webp')}
+          sizes="(max-width: 640px) 90vw, 60vw"
+          alt=""
+          loading="lazy"
+          decoding="async"
+        />
       </div>
       <div class="tf-apps-custom-body-wrap">
         <span class="tf-mono">CUSTOM</span>

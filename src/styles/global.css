@@ -15,17 +15,28 @@
   --fg: #f4f1ec;
   --fg-2: #c9c6c0;
   --fg-3: #8a8780;
-  --fg-4: #4d4a45;
+  /* --fg-4 is the dimmest TEXT tone: 4.8:1 on --bg, 4.55:1 on --bg-2, so
+     small mono labels still pass WCAG AA. --fg-dim keeps the old, darker
+     value for decoration only (leader lines, dots) — never for text. */
+  --fg-4: #827f78;
+  --fg-dim: #4d4a45;
   --line: #2a2a2e;
   --line-strong: #3a3a3f;
   --accent: #3a86ff;
   --accent-2: #1f4fb3;
   --accent-soft: rgba(58, 134, 255, 0.12);
+  /* Fills that carry white text. --accent itself gives white only 3.5:1,
+     so primary buttons and the skip-link sit on a deeper blue of the
+     same hue (4.7:1), and darken further on hover (6.1:1). */
+  --accent-fill: #2b6cf0;
+  --accent-fill-hover: #2159d4;
   --warn: #ff6b1a;
 
-  --font-display: 'Space Grotesk', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  /* Self-hosted variable faces (see Base.astro); the static names stay as
+     a fallback for machines that have them installed. */
+  --font-display: 'Space Grotesk Variable', 'Space Grotesk', 'Inter Variable', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Inter Variable', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
 
   --maxw: 100%;
   --pad-x: clamp(20px, 4vw, 96px);
@@ -566,8 +577,8 @@ button { font-family: inherit; }
   transition: all 0.25s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 .tf-btn-primary {
-  background: var(--accent);
-  border-color: var(--accent);
+  background: var(--accent-fill);
+  border-color: var(--accent-fill);
   color: #fff;
   position: relative;
   overflow: hidden;
@@ -582,8 +593,8 @@ button { font-family: inherit; }
   pointer-events: none;
 }
 .tf-btn-primary:hover {
-  background: #5e9bff;
-  border-color: #5e9bff;
+  background: var(--accent-fill-hover);
+  border-color: var(--accent-fill-hover);
   transform: translateY(-1px);
 }
 .tf-btn-primary:hover::after { transform: translateX(100%); }
@@ -961,10 +972,6 @@ button { font-family: inherit; }
   }
 }
 
-/* Touch users can't hover the marquee — hide the 'hover to pause' hint. */
-@media (hover: none) {
-  .tf-marquee-hint { display: none; }
-}
 /* Keep keyboard-focus parity for the A/B reveal (general :hover already
    covers pointer users via the .tf-tech-tile:hover rule above). */
 .tf-tech-tile[data-pos="a"]:focus-within .tf-tech-tile-overlay,
@@ -1577,7 +1584,7 @@ button { font-family: inherit; }
 .tf-catalog-card:hover .tf-catalog-cta {
   background: var(--cat-c);
   border-color: var(--cat-c);
-  color: #fff;
+  color: var(--bg);
 }
 
 @media (max-width: 1080px) {
@@ -1956,7 +1963,8 @@ button { font-family: inherit; }
   width: max-content;
   animation-play-state: running;
 }
-.tf-marquee:hover .tf-marquee-track {
+.tf-marquee:hover .tf-marquee-track,
+.tf-marquee[data-paused="true"] .tf-marquee-track {
   animation-play-state: paused;
 }
 .tf-marquee-item {
@@ -1972,7 +1980,7 @@ button { font-family: inherit; }
   letter-spacing: 0.06em;
   color: var(--fg-3);
   filter: grayscale(1);
-  opacity: 0.6;
+  opacity: 0.8;
   transform: rotate(0deg);
   transform-origin: center;
   transition: opacity 0.3s var(--ease, cubic-bezier(0.2, 0.7, 0.2, 1)),
@@ -2048,7 +2056,7 @@ button { font-family: inherit; }
   z-index: 1;
 }
 .tf-tl-card { padding: 0 0 0 8px; }
-.tf-tl-card h4 {
+.tf-tl-card h3 {
   font-family: var(--font-display);
   font-weight: 500;
   font-size: 18px;
@@ -2626,7 +2634,7 @@ button { font-family: inherit; }
   min-height: 44px;
   border-radius: 999px;
   background: #25d366;
-  color: #fff;
+  color: var(--bg);
   font-family: var(--font-display);
   font-weight: 500;
   font-size: 14px;
@@ -2751,6 +2759,12 @@ html { scrollbar-color: var(--line-strong) var(--bg); scrollbar-width: thin; }
 .tf-btn:focus-visible,
 .tf-cta-mini:focus-visible,
 .tf-tab:focus-visible{ outline-offset: -2px; }
+/* An inset accent ring on an accent fill is invisible: the primary button
+   gets a light ring outside its edge instead. */
+.tf-btn-primary:focus-visible { outline-color: var(--fg); outline-offset: 3px; }
+/* Anchor targets (sections, <main>) take focus programmatically so the
+   next Tab continues from there; they are not controls, so no ring. */
+[tabindex="-1"]:focus { outline: none; }
 .tf-lang a:focus-visible { outline-offset: 4px; }
 
 /* ── Skip-to-content — visible only on keyboard focus ───────────── */
@@ -2760,7 +2774,7 @@ html { scrollbar-color: var(--line-strong) var(--bg); scrollbar-width: thin; }
   left: 12px;
   z-index: 200;
   padding: 10px 16px;
-  background: var(--accent);
+  background: var(--accent-fill);
   color: #fff;
   font-family: var(--font-display);
   font-size: 13px;
@@ -3363,7 +3377,7 @@ body {
 }
 .tf-contact-wa:hover {
   background: #25d366;
-  color: #fff;
+  color: var(--bg);
 }
 .tf-contact-hours {
   display: flex;
@@ -3486,6 +3500,45 @@ p { text-wrap: pretty; }
 .tf-industries-count b {
   color: var(--accent);
   font-weight: 500;
+}
+/* Pause / play for the client marquee — hover pauses too, but touch and
+   keyboard users need a real control (WCAG 2.2.2). */
+.tf-marquee-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--line-strong);
+  background: transparent;
+  color: var(--fg-3);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: border-color 0.2s, color 0.2s;
+}
+.tf-marquee-toggle:hover { border-color: var(--fg-3); color: var(--fg); }
+
+/* Reduced motion: the marquee becomes a static, wrapped list of names
+   (the visual duplicate goes), and the coverage map drops its travelling
+   pulses and HQ rings — the arcs are drawn from the start. */
+@media (prefers-reduced-motion: reduce) {
+  .tf-marquee { mask-image: none; -webkit-mask-image: none; }
+  .tf-marquee-track {
+    animation: none;
+    width: auto;
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: 20px;
+  }
+  .tf-marquee-item.is-dup,
+  .tf-marquee-item::after,
+  .tf-marquee-toggle { display: none; }
+  .tf-radar-pulses,
+  .tf-radar-hq-pulse { display: none; }
+  .tf-radar-links path { animation: none; stroke-dashoffset: 0; }
 }
 
 /* ╔══════════════════════════════════════════════════════════════════╗
@@ -4079,6 +4132,15 @@ button.tf-catalog-card {
   position: fixed;
   inset: 0;
   z-index: 250;
+  /* It's a native <dialog> (showModal): undo the UA box so the overlay
+     still covers the viewport edge to edge. */
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  border: 0;
+  color: inherit;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -4105,6 +4167,7 @@ button.tf-catalog-card {
   transform: translateY(12px);
   animation: tf-catalog-viewer-in 0.3s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
 }
+.tf-catalog-viewer::backdrop { background: transparent; }
 @keyframes tf-catalog-viewer-in {
   to { transform: translateY(0); }
 }

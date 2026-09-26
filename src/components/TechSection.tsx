@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { cx } from '../lib/cx';
 import { useReveal } from '../lib/hooks';
+import { srcSet } from '../lib/img';
 import type { Content } from '../i18n/content';
 
 const TILE_POS = ['hero', 'a', 'b', 'c'] as const;
 const VIDEO_EXT_RE = /\.(mp4|webm|mov)(\?|$)/i;
 
-function TileMedia({ src, poster, kind, label }: { src: string; poster?: string; kind: 'photo' | 'video'; label: string }) {
+function TileMedia({ src, poster, kind, label, sizes }: { src: string; poster?: string; kind: 'photo' | 'video'; label: string; sizes: string }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const isVideo = kind === 'video' && VIDEO_EXT_RE.test(src);
 
@@ -49,12 +50,18 @@ function TileMedia({ src, poster, kind, label }: { src: string; poster?: string;
       />
     );
   }
-  return <img src={src} alt={label} loading="lazy" decoding="async" />;
+  return <img src={src} srcSet={srcSet(src)} sizes={sizes} alt={label} loading="lazy" decoding="async" />;
 }
 
-export function TechSection({ content }: { content: Content }) {
-  const c = content.capabilities;
-  const items = content.tech;
+type Props = {
+  // Narrow props, like Header and ContactSection: an island serialises
+  // everything it receives into the page's HTML, and the whole `Content`
+  // dictionary is ~32 KB per island.
+  capabilities: Content['capabilities'];
+  tech: Content['tech'];
+};
+
+export function TechSection({ capabilities: c, tech: items }: Props) {
   const [sectionRef, vis] = useReveal(0.1);
   // Mobile accordion state: at most one tech expanded at a time + a remembered
   // bullet selection per tech (-1 = no selection, show the tech's default cover).
@@ -134,7 +141,7 @@ export function TechSection({ content }: { content: Content }) {
                   onClick={() => toggleTech(ti)}
                 />
                 <div className="tf-tech-bento-cover-media" aria-hidden="true">
-                  <TileMedia src={t.img} kind="photo" label={t.title} />
+                  <TileMedia src={t.img} kind="photo" label={t.title} sizes="60vw" />
                 </div>
                 <div className="tf-tech-bento-cover-overlay" aria-hidden="true" />
                 <div className="tf-tech-bento-cover-body">
@@ -161,7 +168,7 @@ export function TechSection({ content }: { content: Content }) {
                         key={b.name}
                       >
                         <div className="tf-tech-tile-media" aria-hidden="true">
-                          <TileMedia src={b.img} poster={b.poster} kind={b.kind} label={b.name} />
+                          <TileMedia src={b.img} poster={b.poster} kind={b.kind} label={b.name} sizes="(max-width: 1080px) 92vw, 46vw" />
                         </div>
                         <div className="tf-tech-tile-overlay" aria-hidden="true" />
                         <div className="tf-tech-tile-body">
@@ -187,7 +194,7 @@ export function TechSection({ content }: { content: Content }) {
                   onClick={() => toggleTech(ti)}
                 >
                   <div className="tf-tech-acc-head-media" aria-hidden="true">
-                    <TileMedia src={headerImg} poster={headerPoster} kind={headerKind} label={headerName} />
+                    <TileMedia src={headerImg} poster={headerPoster} kind={headerKind} label={headerName} sizes="112px" />
                   </div>
                   <div className="tf-tech-acc-head-body">
                     <span className="tf-mono tf-tech-acc-head-code">{headerCode}</span>
@@ -220,7 +227,7 @@ export function TechSection({ content }: { content: Content }) {
                           onClick={() => pickBullet(ti, bi)}
                         >
                           <div className="tf-tech-acc-bullet-media" aria-hidden="true">
-                            <TileMedia src={b.img} poster={b.poster} kind={b.kind} label={b.name} />
+                            <TileMedia src={b.img} poster={b.poster} kind={b.kind} label={b.name} sizes="100vw" />
                           </div>
                           <div className="tf-tech-acc-bullet-body">
                             <span className="tf-mono">

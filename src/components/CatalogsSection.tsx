@@ -1,17 +1,35 @@
-import { useEffect, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { cx } from '../lib/cx';
 import { useReveal } from '../lib/hooks';
+import { srcSet } from '../lib/img';
 import type { CatalogItem, Content } from '../i18n/content';
 
 const LOGO_PATH =
   'M1341 2247 l-18 -43 -8 -33 -7 -32 -14 -27 -14 -27 0 -17 0 -17 -14 -33 -14 -33 -57 -180 -57 -180 -8 -20 -9 -20 -6 -25 -6 -25 -13 -35 -13 -35 -38 -120 -37 -120 -14 -33 -14 -33 0 -15 0 -16 -14 -31 -14 -32 -28 -88 -27 -89 -24 -9 -24 -9 -340 0 -339 0 2 -247 3 -248 565 0 565 0 17 37 18 37 9 38 10 38 15 50 15 50 10 30 10 30 22 75 21 75 13 35 12 35 16 55 16 55 22 75 21 75 13 35 13 35 22 75 22 75 13 35 12 35 7 38 7 38 15 6 15 6 10 -10 9 -9 9 -44 9 -45 12 -50 13 -50 17 -65 17 -65 13 -50 12 -50 8 -35 8 -35 22 -88 23 -89 24 -9 24 -9 252 0 252 0 14 9 14 9 -17 59 -17 58 -10 30 -10 30 -14 45 -13 45 -16 55 -17 55 -13 50 -14 50 -9 25 -10 25 -16 55 -16 55 -22 75 -21 75 -13 35 -13 35 -21 75 -22 75 -16 55 -15 55 -14 33 -14 33 0 12 0 12 -21 70 -22 70 -15 43 -15 42 -329 0 -329 0 -18 -43z';
 
-export function CatalogsSection({ content }: { content: Content }) {
-  const c = content.catalogs;
+/**
+ * Whether to show a catalog in the in-page viewer or hand it to the
+ * browser. Chrome on Android reports `pdfViewerEnabled === false` and draws
+ * an iframe'd PDF as an empty box; and on any phone the browser's own viewer
+ * (pinch-zoom, save, share) beats a 350px-wide frame. Both open the file.
+ */
+function viewInline() {
+  return navigator.pdfViewerEnabled !== false && !window.matchMedia('(max-width: 640px)').matches;
+}
+
+type Props = {
+  // Narrow props, like Header and ContactSection: an island serialises
+  // everything it receives into the page's HTML, and the whole `Content`
+  // dictionary is ~32 KB per island.
+  catalogs: Content['catalogs'];
+  ui: Pick<Content['ui'], 'download' | 'close'>;
+};
+
+export function CatalogsSection({ catalogs: c, ui }: Props) {
   const [active, setActive] = useState<CatalogItem | null>(null);
   const [sectionRef, vis] = useReveal(0.1);
-  const downloadLabel = content.ui.download;
-  const closeLabel = content.ui.close;
+  const downloadLabel = ui.download;
+  const closeLabel = ui.close;
 
   return (
     <section
@@ -33,14 +51,17 @@ export function CatalogsSection({ content }: { content: Content }) {
             type="button"
             className="tf-catalog-card"
             style={{ ['--cat-c' as never]: it.color }}
-            onClick={() => setActive(it)}
+            onClick={() => {
+              if (viewInline()) setActive(it);
+              else window.open(it.file, '_blank', 'noopener');
+            }}
             aria-label={`${c.cta} — ${it.title}`}
           >
             <span className="tf-catalog-spine" aria-hidden="true">
               TRANS·FIL · {it.title.toUpperCase()}
             </span>
             <div className="tf-catalog-cover" aria-hidden="true">
-              <img className="tf-catalog-cover-img" src={it.img} alt={`${it.title} — Trans-Fil`} width="800" height="1131" loading="lazy" decoding="async" />
+              <img className="tf-catalog-cover-img" src={it.img} srcSet={srcSet(it.img)} sizes="(max-width: 640px) 88px, (max-width: 1080px) 42vw, 28vw" alt={`${it.title} — Trans-Fil`} width="800" height="1131" loading="lazy" decoding="async" />
               <div className="tf-catalog-cover-grid" />
               <div className="tf-catalog-cover-tag">
                 <span className="tf-mono">{`C0${i + 1}`}</span>
@@ -105,25 +126,41 @@ function CatalogViewer({
   closeLabel: string;
   onClose: () => void;
 }) {
-  // Lock body scroll + Esc-to-close while the viewer is open.
-  useEffect(() => {
-    const prev = document.body.style.overflow;
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
+  const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
+
+  // A native modal: showModal() makes the rest of the page inert, so focus
+  // can't wander behind the viewer and screen readers stay inside it. Focus
+  // starts on the close button and goes back to the card that opened the
+  // viewer when it unmounts. Layout effect so it is modal before first paint.
+  useLayoutEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+    const opener = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
+    // Esc fires `cancel`; let React state close it so both paths match.
+    const onCancel = (e: Event) => {
+      e.preventDefault();
+      onCloseRef.current();
     };
-    document.addEventListener('keydown', onKey);
+    dialog.addEventListener('cancel', onCancel);
+    if (!dialog.open) dialog.showModal();
+    closeRef.current?.focus();
     return () => {
-      document.body.style.overflow = prev;
-      document.removeEventListener('keydown', onKey);
+      dialog.removeEventListener('cancel', onCancel);
+      document.body.style.overflow = prevOverflow;
+      if (dialog.open) dialog.close();
+      opener?.focus({ preventScroll: true });
     };
-  }, [onClose]);
+  }, []);
 
   return (
-    <div
+    <dialog
+      ref={dialogRef}
       className="tf-catalog-viewer is-open"
-      role="dialog"
-      aria-modal="true"
       aria-label={catalog.title}
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
@@ -166,6 +203,7 @@ function CatalogViewer({
               <span className="tf-catalog-viewer-btn-text">{downloadLabel}</span>
             </a>
             <button
+              ref={closeRef}
               type="button"
               className="tf-catalog-viewer-close"
               onClick={onClose}
@@ -190,6 +228,6 @@ function CatalogViewer({
           title={catalog.title}
         />
       </div>
-    </div>
+    </dialog>
   );
 }
