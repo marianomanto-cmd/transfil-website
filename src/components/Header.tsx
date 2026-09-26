@@ -1,5 +1,7 @@
 import { Fragment, useEffect, useRef, useState } from 'react';
 import { cx } from '../lib/cx';
+import { goToAnchor } from '../lib/anchor';
+import { srcSet } from '../lib/img';
 import type { Content, Lang } from '../i18n/content';
 import { LOCALES, LOCALE_META, pathFor, type PageKey } from '../i18n/routes';
 
@@ -138,8 +140,7 @@ export function Header({ lang, nav, langSwitch, page = 'home', navItems, cta }: 
   const onNav = (e: React.MouseEvent, href: string) => {
     e.preventDefault();
     setOpen(false);
-    const el = document.querySelector(href);
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    goToAnchor(href);
   };
 
   return (
@@ -147,7 +148,7 @@ export function Header({ lang, nav, langSwitch, page = 'home', navItems, cta }: 
       <div className="tf-header-inner">
         <a href={pathFor('home', lang)} className="tf-logo" aria-label="Trans-Fil">
           <span className="tf-logo-mark" aria-hidden="true">
-            <img src="/img/logo-mark.png" width="34" height="28" alt="" />
+            <img src="/img/logo-mark.png" srcSet={srcSet('/img/logo-mark.png')} sizes="34px" width="34" height="28" alt="" />
           </span>
           <span className="tf-logo-text">
             <b>TRANS·FIL</b>

@@ -235,6 +235,11 @@ uno solo: **no agregues otro**.
   landing de pauta.
 - Toda imagen lleva `width` / `height` y `alt` real desde el diccionario. El
   fondo del masthead es decorativo (`aria-hidden`), así que no lleva alt.
+- Las imágenes de las etapas salen con `srcset` (copias de 480/800/1200 px).
+  Si una landing usa una imagen nueva, que su nombre entre en los grupos de
+  `scripts/responsive-images.mjs` (hoy `t0X-*` / `s0X-*`), corré
+  `npm run images` y commiteá las copias y `src/lib/responsive-images.json`.
+  Sin eso la imagen igual se ve, pero en tamaño completo en el celular.
 
 ### Preparar un loop de masthead
 

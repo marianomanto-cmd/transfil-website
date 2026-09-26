@@ -1,9 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
 import { useScrollY, useCountUp } from '../lib/hooks';
+import { goToAnchor } from '../lib/anchor';
 import type { Content } from '../i18n/content';
 
 type Props = {
-  content: Content;
+  // Narrow props, like Header and ContactSection: an island serialises
+  // everything it receives into the page's HTML, and the whole `Content`
+  // dictionary is ~32 KB per island.
+  hero: Content['hero'];
+  chips: Content['chips'];
+  workshopActive: string;
 };
 
 function Stat({ idx, v, l }: { idx: number; v: string; l: string }) {
@@ -22,7 +28,7 @@ function Stat({ idx, v, l }: { idx: number; v: string; l: string }) {
 function HeroCTAs({ ctaPrimary, ctaSecondary }: { ctaPrimary: string; ctaSecondary: string }) {
   const scrollTo = (e: React.MouseEvent, sel: string) => {
     e.preventDefault();
-    document.querySelector(sel)?.scrollIntoView({ behavior: 'smooth' });
+    goToAnchor(sel);
   };
   return (
     <div className="tf-hero-ctas">
@@ -43,8 +49,7 @@ function HeroCTAs({ ctaPrimary, ctaSecondary }: { ctaPrimary: string; ctaSeconda
   );
 }
 
-export function Hero({ content }: Props) {
-  const c = content.hero;
+export function Hero({ hero: c, chips, workshopActive }: Props) {
   const scrollY = useScrollY();
   // Detect parallax-eligible environment on mount so SSR + first hydration
   // render are identical (was reading window during render → hydration warn).
@@ -84,6 +89,10 @@ export function Hero({ content }: Props) {
     big.addEventListener?.('change', updateParallax);
     reduce.addEventListener?.('change', updateParallax);
     const pick = () => {
+      // Reduced motion shows the poster (CSS hides the <video>), and
+      // Save-Data asks us not to spend the bytes: don't fetch the loop.
+      const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
+      if (reduce.matches || saveData) return;
       const isMobile = window.matchMedia('(max-width: 768px)').matches;
       setVideoSrc(isMobile ? '/video/hero-mobile.mp4' : '/video/hero-desktop.mp4');
     };
@@ -132,12 +141,12 @@ export function Hero({ content }: Props) {
         <span className="tf-mono tf-hero-meta-line">
           <span className="tf-hero-meta-num">01</span>
           <span className="tf-hero-meta-divider" aria-hidden="true" />
-          <span className="tf-hero-meta-chip">{content.chips.established}</span>
+          <span className="tf-hero-meta-chip">{chips.established}</span>
           <span className="tf-hero-meta-sep" aria-hidden="true">·</span>
-          <span className="tf-hero-meta-chip">{content.chips.argentina}</span>
+          <span className="tf-hero-meta-chip">{chips.argentina}</span>
         </span>
         <span className="tf-mono tf-hero-status">
-          <i className="tf-dot" /> {content.workshopActive}
+          <i className="tf-dot" /> {workshopActive}
         </span>
       </div>
 

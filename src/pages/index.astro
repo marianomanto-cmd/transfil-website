@@ -20,13 +20,27 @@ const content = CONTENT.es;
 <Base lang="es" content={content} page="home">
   <Header lang="es" nav={content.nav} langSwitch={content.langSwitch} client:load />
   <main id="main">
-    <Hero content={content} client:load />
-    <TechSection content={content} client:visible />
+    <Hero
+      hero={content.hero}
+      chips={content.chips}
+      workshopActive={content.workshopActive}
+      client:load
+    />
+    <TechSection capabilities={content.capabilities} tech={content.tech} client:visible />
     <AplicacionesSection content={content} />
-    <CatalogsSection content={content} client:visible />
+    <CatalogsSection
+      catalogs={content.catalogs}
+      ui={{ download: content.ui.download, close: content.ui.close }}
+      client:visible
+    />
     <ProcessSection content={content} />
     <ServicesSection content={content} />
-    <IndustriesSection content={content} client:visible />
+    <IndustriesSection
+      industries={content.industries}
+      lang={content.lang}
+      ui={{ coverage: content.ui.coverage, countriesReached: content.ui.countriesReached }}
+      client:visible
+    />
     <HistorySection content={content} />
     <ContactSection
       contact={content.contact}

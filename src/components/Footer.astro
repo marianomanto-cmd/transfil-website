@@ -1,6 +1,7 @@
 ---
 import type { Content, Lang } from '../i18n/content';
 import { pathFor, type PageKey } from '../i18n/routes';
+import { srcSet } from '../lib/img';
 
 interface Props {
   content: Content;
@@ -23,7 +24,7 @@ const landingCards = content.applications.cards.filter((c) => c.link);
   <div class="tf-footer-grid">
     <div class="tf-footer-brand">
       <div class="tf-logo-mark" aria-hidden="true">
-        <img src="/img/logo-mark.png" width="48" height="40" alt="" />
+        <img src="/img/logo-mark.png" srcset={srcSet('/img/logo-mark.png')} sizes="48px" width="48" height="40" alt="" />
       </div>
       <div>
         <div class="tf-footer-name">TRANS·FIL S.R.L.</div>

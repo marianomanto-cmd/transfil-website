@@ -1,6 +1,7 @@
 ---
 import type { Content } from '../i18n/content';
 import Section from './Section.astro';
+import { srcSet } from '../lib/img';
 
 interface Props { content: Content }
 const { content } = Astro.props;
@@ -37,7 +38,14 @@ const icons: Record<string, string> = {
         style="scroll-margin-top: calc(var(--header-h) + 24px);"
       >
         <div class="tf-svc-thumb" aria-hidden="true">
-          <img src={s.img} alt="" loading="lazy" decoding="async" />
+          <img
+            src={s.img}
+            srcset={srcSet(s.img)}
+            sizes="(max-width: 640px) 32vw, (max-width: 1080px) 47vw, 24vw"
+            alt=""
+            loading="lazy"
+            decoding="async"
+          />
         </div>
         <div class="tf-svc-body">
           <div class="tf-service-hd">

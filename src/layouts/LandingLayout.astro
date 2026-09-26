@@ -18,6 +18,7 @@ import CentralDiagram3D from '../components/CentralDiagram3D.astro';
 import SystemDiagram3D from '../components/SystemDiagram3D.astro';
 import { WhatsAppFAB } from '../components/WhatsAppFAB';
 import { BackToTop } from '../components/BackToTop';
+import { srcSet } from '../lib/img';
 
 interface Props {
   lang: Lang;
@@ -247,6 +248,8 @@ const navItems = [
               ) : (
                 <img
                   src={b.media.src}
+                  srcset={srcSet(b.media.src)}
+                  sizes="(max-width: 640px) 90vw, 45vw"
                   alt={b.media.alt}
                   width="1200"
                   height="800"

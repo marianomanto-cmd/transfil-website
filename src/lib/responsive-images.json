@@ -1,0 +1,194 @@
+{
+  "/img/apps-custom-bg.webp": {
+    "w": 1200,
+    "variants": [
+      480,
+      800
+    ]
+  },
+  "/img/catalog-filtration-en.webp": {
+    "w": 800,
+    "variants": [
+      240,
+      480
+    ]
+  },
+  "/img/catalog-filtration.webp": {
+    "w": 800,
+    "variants": [
+      240,
+      480
+    ]
+  },
+  "/img/catalog-general-en.webp": {
+    "w": 800,
+    "variants": [
+      240,
+      480
+    ]
+  },
+  "/img/catalog-general.webp": {
+    "w": 800,
+    "variants": [
+      240,
+      480
+    ]
+  },
+  "/img/catalog-washing-en.webp": {
+    "w": 800,
+    "variants": [
+      240,
+      480
+    ]
+  },
+  "/img/catalog-washing.webp": {
+    "w": 800,
+    "variants": [
+      240,
+      480
+    ]
+  },
+  "/img/logo-mark.png": {
+    "w": 265,
+    "variants": [
+      96
+    ]
+  },
+  "/img/s01-repairs.webp": {
+    "w": 1600,
+    "variants": [
+      480,
+      800,
+      1200
+    ]
+  },
+  "/img/s02-retrofitting.webp": {
+    "w": 1600,
+    "variants": [
+      480,
+      800,
+      1200
+    ]
+  },
+  "/img/s03-maintenance.webp": {
+    "w": 1920,
+    "variants": [
+      480,
+      800,
+      1200
+    ]
+  },
+  "/img/s04-engineering.webp": {
+    "w": 1600,
+    "variants": [
+      480,
+      800,
+      1200
+    ]
+  },
+  "/img/t01-chip-transport.webp": {
+    "w": 704,
+    "variants": [
+      480
+    ]
+  },
+  "/img/t01-conveyors.webp": {
+    "w": 1800,
+    "variants": [
+      480,
+      800,
+      1200
+    ]
+  },
+  "/img/t01-custom.webp": {
+    "w": 1200,
+    "variants": [
+      480,
+      800
+    ]
+  },
+  "/img/t01-drying.webp": {
+    "w": 820,
+    "variants": [
+      480,
+      800
+    ]
+  },
+  "/img/t02-band-filters.webp": {
+    "w": 1344,
+    "variants": [
+      480,
+      800,
+      1200
+    ]
+  },
+  "/img/t02-cabin.webp": {
+    "w": 1168,
+    "variants": [
+      480,
+      800
+    ]
+  },
+  "/img/t02-filtration.webp": {
+    "w": 976,
+    "variants": [
+      480,
+      800
+    ]
+  },
+  "/img/t02-oil-recovery.webp": {
+    "w": 1600,
+    "variants": [
+      480,
+      800,
+      1200
+    ]
+  },
+  "/img/t02-plc.webp": {
+    "w": 1600,
+    "variants": [
+      480,
+      800,
+      1200
+    ]
+  },
+  "/img/t02-washing.webp": {
+    "w": 1800,
+    "variants": [
+      480,
+      800,
+      1200
+    ]
+  },
+  "/img/t03-advanced-filtration.webp": {
+    "w": 1168,
+    "variants": [
+      480,
+      800
+    ]
+  },
+  "/img/t03-fluids-cover.webp": {
+    "w": 1800,
+    "variants": [
+      480,
+      800,
+      1200
+    ]
+  },
+  "/img/t04-metalwork-cover.webp": {
+    "w": 1800,
+    "variants": [
+      480,
+      800,
+      1200
+    ]
+  },
+  "/img/t04-serial-production.webp": {
+    "w": 1360,
+    "variants": [
+      480,
+      800,
+      1200
+    ]
+  }
+}

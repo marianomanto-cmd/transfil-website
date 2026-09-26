@@ -1,5 +1,18 @@
 ---
+// Fonts are self-hosted (@fontsource-variable, the same variable woff2 files
+// Google Fonts served): no third-party stylesheet blocking first paint, no
+// extra DNS + TLS to two Google hosts, and no visitor IP sent to Google
+// before consent. Each family ships per-script subsets behind unicode-range,
+// so a page only downloads the ones its text uses.
+import '@fontsource-variable/space-grotesk';
+import '@fontsource-variable/inter';
+import '@fontsource-variable/jetbrains-mono';
 import '../styles/global.css';
+// Latin subsets of the two faces above the fold (body copy + display
+// headline), preloaded so first text paints in the right face. `?url`
+// resolves to the same hashed file the @font-face rules point at.
+import interLatin from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
+import groteskLatin from '@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2?url';
 import { ClientRouter } from 'astro:transitions';
 import ThreeImportMap from '../components/ThreeImportMap.astro';
 import type { Content, Lang } from '../i18n/content';
@@ -270,12 +283,8 @@ const faqJsonLd = {
       })();
     </script>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
+    <link rel="preload" as="font" type="font/woff2" href={interLatin} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={groteskLatin} crossorigin />
     <ClientRouter />
   </head>
   <body>
@@ -305,6 +314,8 @@ const faqJsonLd = {
 
     <slot />
     <script>
+      import { goToAnchor } from '../lib/anchor';
+
       function init() {
         // Reveal-on-scroll
         const sections = document.querySelectorAll('.tf-section');
@@ -382,9 +393,15 @@ const faqJsonLd = {
         }
       }
 
-      // Smooth scroll for in-page anchors — bound once. With ClientRouter the
-      // <script> in the body re-executes on each transition, so guard with a
-      // window flag to avoid stacking listeners.
+      // In-page anchors (skip-link included) — bound once. With ClientRouter
+      // the <script> in the body re-executes on each transition, so guard
+      // with a window flag to avoid stacking listeners. `goToAnchor` moves
+      // focus along with the scroll and honours reduced motion.
+      // Deliberately not skipped when defaultPrevented: ClientRouter's own
+      // listener runs first and prevents every same-origin link (it then
+      // sets the hash itself, which the tech accordion's hashchange deep
+      // links rely on). Islands that handle their anchors (Header, Hero)
+      // call goToAnchor too; running it twice on one target is harmless.
       if (!(window as any).__tfClickBound) {
         (window as any).__tfClickBound = true;
         document.addEventListener('click', (e) => {
@@ -393,10 +410,10 @@ const faqJsonLd = {
           if (!a) return;
           const href = a.getAttribute('href');
           if (!href || href === '#') return;
-          const el = document.querySelector(href);
+          const el = document.getElementById(decodeURIComponent(href.slice(1)));
           if (!el) return;
           e.preventDefault();
-          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          goToAnchor(el);
         });
       }
 
