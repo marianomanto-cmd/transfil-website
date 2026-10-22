@@ -77,7 +77,7 @@ src/
     AplicacionesSection.astro diagnostic panel + A01–A04 cards + metrics + CTA
     FlowDiagram.astro         dirty fluid → filtration cassette → stable flow
     MachineDiagram.astro      the four A01–A04 process microdiagrams
-    CentralDiagram3D.astro    orbitable 3D filtration station, walked F01→F04
+    CentralDiagram3D.astro    fixed-view 3D filtration station, walked F01→F04
     SystemDiagram3D.astro     orbitable 3D machine diagram of the whole plant
     ThreeImportMap.astro      the three.js import map, emitted once in <head>
     ProcessSection.astro      5 step cards over darkened workshop bg
@@ -117,7 +117,7 @@ public/
     three-d-stage.js     <three-d-stage>: renderer, lights, orbit, OBJ/GLB export
     central3d.js         the filtration station: geometry, flow, cutaway, rail
     plant3d.js           the machine diagram: plant, circuits, flow, labels
-    stage-scroll.js      scroll policy shared by both viewers (page first)
+    stage-scroll.js      scroll policy of the machine diagram (page first)
   vendor/three/          pinned three.js 0.184 + OrbitControls + exporters
   favicon-16/32/48.png   favicons, generated from the brand logo
   apple-touch-icon.png   180×180 for iOS homescreen
@@ -167,11 +167,11 @@ The full pattern, the roadmap (`/lavado`, `/transporte`, `/hornos` — not imple
 
 ## The two 3D viewers: what they share
 
-Both diagrams on the landing (`CentralDiagram3D.astro` and `SystemDiagram3D.astro`) sit on the same three pieces, and all three are shared on purpose:
+Both diagrams on the landing (`CentralDiagram3D.astro` and `SystemDiagram3D.astro`) sit on the same base pieces, shared on purpose:
 
 - **`<three-d-stage>`** (`public/js/three-d-stage.js`) — the web component: renderer, lights, ground shadow, orbit, OBJ/GLB export. Its `toolbar` and `note` parts are hidden by both components (the export bar is a modeller's tool, and the starter's own interaction note is fixed English next to our translated one).
 - **`ThreeImportMap.astro`** — the import map, emitted **once, in `<head>`, from `Base.astro`**. See below; this is not a detail.
-- **`stage-scroll.js`** — the scroll policy. See "The page owns the scroll".
+- **`stage-scroll.js`** — the scroll policy for the orbitable machine diagram. See "The page owns the scroll". The filtration station doesn't use it: its camera is fixed and its canvas takes no gesture at all.
 
 **The import map lives in `<head>`, not next to the component.** A browser only honours an import map that it parses *before the first module script starts loading*, and Astro injects its own module scripts (React islands, `ClientRouter`) into the head. An import map emitted from the component's markup lands in the `<body>`, hundreds of lines too late, and the browser silently ignores it: `import 'three'` then dies with *Failed to resolve module specifier 'three'*. In dev the injection order differs and it appears to work — this only shows up on the deployed build. The map is also the reason both viewers can share a page at all: browsers without multiple-import-map support keep the first and reject the second, so one map per document is the rule. It carries `data-astro-transition-persist` so the View Transitions swap keeps the parsed node instead of re-inserting a duplicate.
 
@@ -181,7 +181,7 @@ Both diagrams on the landing (`CentralDiagram3D.astro` and `SystemDiagram3D.astr
 
 ## The page owns the scroll (`stage-scroll.js`)
 
-OrbitControls, as shipped, takes the gesture: it sets `touch-action: none` on the canvas (one finger orbits, the page does not move) and calls `preventDefault` on every `wheel` (the wheel over the canvas never scrolls). On a long landing that is a trap — the visitor reaches the diagram and the page stops responding. `letPageScroll()` inverts the priority for both viewers:
+OrbitControls, as shipped, takes the gesture: it sets `touch-action: none` on the canvas (one finger orbits, the page does not move) and calls `preventDefault` on every `wheel` (the wheel over the canvas never scrolls). On a long landing that is a trap — the visitor reaches the diagram and the page stops responding. `letPageScroll()` inverts the priority for the machine diagram (the filtration station sidesteps the problem entirely: `controls.enabled = false` and `touch-action: auto`, so it never takes the gesture):
 
 - **Touch** — one finger scrolls the page (`touch-action: pan-y`, `touches.ONE = null`), two fingers orbit. The stage walk is on the rail, which needs no gesture at all.
 - **Wheel** — if a page scroll is in flight (the page moved less than 420ms ago) the wheel is not captured, so scrolling *through* the section never catches. With the page at rest and the pointer over the canvas, the wheel zooms.
@@ -197,17 +197,21 @@ Nothing is a 3D asset: metres, y-up, resting on `y = 0`, every mesh and material
 
 **The fluid is the subject.** Six states, each its own colour and its own run of pipe with emissive drops moving along it: contaminated coolant, ferrous fines removed, clean coolant, tramp oil, ferrous fines, filter cloth. The state changes exactly where the equipment does its work. The colour key sits inside the frame, next to the lines it names.
 
-**The rail is the whole navigation.** Four buttons, `F01 → F04`, with `aria-current="step"`, naming the same four stages as the cards below — both read from `system.blocks`, so they cannot drift apart. **Hover, focus or click** flies the camera to that stage, frames its zone, opens the matching housing in cutaway (centrifuge and drum, filter cloth, tank and level sensor, bag filters) and brings that stage's references to full ink. Hover waits 130ms so crossing the rail doesn't fire four flights, and is ignored while the page is scrolling — otherwise dragging the rail under a motionless cursor would yank the camera.
+**Fixed view, by explicit request.** The station used to fly the camera to each stage and let the visitor orbit and zoom; on a sales page that was more awkward than useful (the camera ended up at odd angles, half the frame empty). Now one camera frames the whole unit, front-on and slightly from the right so the process reads left to right — dirty inlet to clean outlets — with a short 30° FOV so it reads almost axonometric, like the machine diagram. OrbitControls is switched off (`controls.enabled = false`, which also makes it skip `preventDefault` on the wheel) and the canvas gets `touch-action: auto` back, so the page scrolls over it like over an image.
+
+**The rail is the whole navigation.** Four buttons, `F01 → F04`, with `aria-current="step"`, naming the same four stages as the cards below — both read from `system.blocks`, so they cannot drift apart. **Hover, focus or click** moves the focus box to that stage's zone, opens the matching housing in cutaway (centrifuge and drum, filter cloth, tank and level sensor, bag filters) and brings that stage's references to full ink. The camera never moves. Hover waits 130ms so crossing the rail doesn't flicker four cutaways, and is ignored while the page is scrolling — otherwise dragging the rail under a motionless cursor would switch stages nobody asked for.
 
 **No pinned scroll, by explicit request.** The handoff shipped a `pinned` mode driven by a sticky block over `postMessage`; it is gone, not disabled. The page scrolls freely past the diagram at all times.
 
-**Framing is computed, not hard-coded.** Each stage keeps the prototype's camera *direction* and its distance as a floor — in 16/9 the approved framing is used exactly as designed. From there the camera only ever pulls back, and only as far as needed for the eight corners of the stage's zone to fit the frustum (`|lateral| ≤ tan · (depth + d)`, evaluated on both axes). three.js' FOV is vertical, so without this a narrower frame crops the station sideways: stage F04, which covers the whole unit, lost both outlets. It is recomputed when the frame changes width, unless the visitor has already moved the camera.
+**Framing is computed, not hard-coded.** The direction is fixed (`VIEW` in `central3d.js`); distance and aim are measured on the real frame. The equipment — floor, grid and focus box excluded — is reduced to the corners of each mesh's bounding box, projected, and corrected in four passes: distance for size, aim for centring, inside a window that keeps a small margin, 30px of headroom for the topmost labels (dropped where CSS hides the labels) and the height of the colour-key strip at the bottom. three.js' FOV is vertical, so a fixed distance would crop the station sideways in a narrow frame; measuring on the frame itself avoids that. It re-runs whenever the camera's aspect or the key's height changes, checked per frame: the stage updates the aspect in its own ResizeObserver, which runs *after* window `resize`, so listening to `resize` would frame with the stale aspect.
 
-**Labels.** Thirteen equipment names as HTML projected from the scene each frame — translated through `landings.ts`, horizontal and selectable at any angle. Placement is resolved, not just projected: sorted by depth, pushed apart on collision, clamped inside the frame, and any that still cannot be placed is faded rather than left overlapping. The colour key is fed into the same collision set, so no label ever lands on it. Verified at zero overlaps across 3 locales × 5 widths × the densest stages, and on phones at all four stages.
+**Labels.** Thirteen equipment names as HTML projected from the scene each frame — translated through `landings.ts`. Placement is resolved, not just projected: sorted by depth, pushed apart on collision, clamped inside the frame, and any that still cannot be placed is faded rather than left overlapping. The colour key is fed into the same collision set, so no label ever lands on it. Verified with the fixed view at zero overlaps, zero labels on the key and zero outside the frame across 3 locales × 4 widths (1440, 1100, 900, 700) × 4 stages.
 
-**Phones.** Below 560px the projected labels are switched off — six 145px text boxes over a 350px canvas hide the station they are naming — and the active stage's equipment moves to a two-column list **under the rail** (under, not over: stage F04 names six items and F02 names one, and with the list above, the rail would jump out from under the finger). The frame goes to `3 / 2` with `min-height` released, which would otherwise override the aspect ratio, and the colour key becomes a bottom strip across the frame instead of a column eating the left third. Between 560 and 860px the labels stay but only for the active stage.
+**Colour key.** A strip along the bottom of the frame at every width, over the floor where there is no equipment. It used to be a column in the bottom-left corner; with the camera fixed edge to edge, that box covered the inlet or the tank depending on the width.
 
-**`prefers-reduced-motion`** stops the flow and the rotating parts, and the camera *snaps* to each stage instead of flying. The cutaway, the focus frame and the arrowheads still say everything the motion said.
+**Narrow screens.** Below 860px the frame goes to `3 / 2` with `min-height` released, which would otherwise override the aspect ratio — not taller: the view is fixed and the unit is long, so extra height would only be empty floor. Between 560 and 860px the labels stay but only for the active stage. Below 560px they are switched off — six 145px text boxes over a 350px canvas hide the station they are naming — and the active stage's equipment moves to a two-column list **under the rail** (under, not over: stage F04 names six items and F02 names one, and with the list above, the rail would jump out from under the finger).
+
+**`prefers-reduced-motion`** stops the flow and the rotating parts, and the focus box jumps to each stage instead of sliding. The cutaway, the focus frame and the arrowheads still say everything the motion said.
 
 ## Machine diagram in 3D (`SystemDiagram3D.astro`)
 
@@ -384,5 +388,5 @@ The form is accessibility-correct: `role=alert` on field errors, `aria-required`
 8. **EN / PT copy review** — the Spanish copy was reviewed against SEO targets; the English and Brazilian-Portuguese versions are professional translations the client should review before those locales are promoted.
 9. **Final imagery review** — bullet photos and service photos are an evolving mix of real shots and AI renders. Replace anything still looking placeholder-y when better assets arrive. All paths live in `src/i18n/content.ts`.
 10. **Tech section hero per-tech cover** — currently the bento's "hero" tile shows the first bullet's image, not the tech's `t.img` cover. The cover photos exist in `content.tech[i].img` but are unused in the current layout. Decide whether to surface them somewhere (e.g., on a future overview state) or remove from the schema.
-11. **Two-finger orbit on phones is the trade-off for free scrolling** — with `touch-action: pan-y` the browser keeps vertical panning, so a two-finger *vertical* drag scrolls the page instead of orbiting; horizontal two-finger drags reach the viewer. The rail and the legend cover everything a visitor needs on a phone, so this was accepted rather than fought. If orbiting on touch ever has to be first-class, it needs an explicit "orbit mode" toggle, not a `touch-action` change.
+11. **Two-finger orbit on phones is the trade-off for free scrolling** (machine diagram only — the filtration station doesn't orbit) — with `touch-action: pan-y` the browser keeps vertical panning, so a two-finger *vertical* drag scrolls the page instead of orbiting; horizontal two-finger drags reach the viewer. The rail and the legend cover everything a visitor needs on a phone, so this was accepted rather than fought. If orbiting on touch ever has to be first-class, it needs an explicit "orbit mode" toggle, not a `touch-action` change.
 12. **Hero LCP further** — the lazy video helps but a dedicated `<link rel="preload" as="image" href="/img/hero-poster.webp" fetchpriority="high">` would shave more time off the first paint.

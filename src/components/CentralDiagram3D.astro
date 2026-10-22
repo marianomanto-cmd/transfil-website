@@ -10,11 +10,16 @@
  * Cada etapa abre una vista en corte de su equipo y las líneas de flujo
  * cambian de color según el estado real del fluido.
  *
+ * Vista fija: la cámara encuadra la central entera y no se mueve —sin
+ * órbita, sin zoom, sin vuelos entre etapas—. El lienzo no toma ningún
+ * gesto, así que la página scrollea por encima como sobre una imagen.
+ *
  * Reparto de responsabilidades:
  *   · este archivo          → markup, estilos y copy localizado
- *   · /js/three-d-stage.js  → renderer, luces, órbita, sombra, export OBJ/GLB
- *   · /js/central3d.js      → geometría, flujo, corte, etiquetas y riel
- *   · /js/stage-scroll.js   → la página se scrollea; el visor no la traba
+ *   · /js/three-d-stage.js  → renderer, luces, sombra, export OBJ/GLB (su
+ *                             órbita queda apagada)
+ *   · /js/central3d.js      → geometría, flujo, corte, encuadre, etiquetas
+ *                             y riel
  *
  * Tres detalles que no son negociables:
  *
@@ -241,17 +246,24 @@ const { copy, stages, codes } = Astro.props;
   }
 
   /* Clave de estados del fluido. Va DENTRO del marco: se lee sobre el
-     equipo, que es lo que está nombrando, y no roba alto a la sección. */
+     equipo, que es lo que está nombrando, y no roba alto a la sección.
+     Como franja inferior y no como columna: la cámara es fija y encuadra
+     la central de borde a borde, así que una caja en una esquina terminaba
+     tapando la entrada o el tanque según el ancho. La franja ocupa el piso,
+     que es donde no hay equipo, y central3d.js le reserva su alto al
+     encuadrar. */
   .tf-c3d-key {
     position: absolute;
-    left: 12px;
-    bottom: 12px;
+    left: 0;
+    right: 0;
+    bottom: 0;
     display: flex;
-    flex-direction: column;
-    gap: 6px;
-    padding: 9px 11px;
-    background: rgba(11, 11, 14, 0.74);
-    border: 1px solid var(--line);
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px 20px;
+    padding: 8px 12px;
+    border-top: 1px solid var(--line);
+    background: linear-gradient(180deg, rgba(11, 11, 14, 0.4), rgba(11, 11, 14, 0.88));
     pointer-events: none;
   }
   .tf-c3d-key div {
@@ -318,44 +330,26 @@ const { copy, stages, codes } = Astro.props;
   }
   .tf-c3d-rail .nm { font-size: 12.5px; line-height: 1.4; color: var(--fg-2); }
 
-  /* Teléfonos: lienzo más alto (el equipo es ancho), riel a dos columnas y
-     la clave de colores compacta. */
+  /* Pantallas angostas: lienzo más alto (el equipo es ancho), riel a dos
+     columnas y la clave de colores más chica. */
   @media (max-width: 860px) {
     /* `min-height` fijo le gana al aspect-ratio en pantallas angostas y
-       deja el marco achatado: acá manda la proporción. */
-    .tf-c3d-frame { aspect-ratio: 4 / 3; min-height: 0; }
+       deja el marco achatado: acá manda la proporción. 3/2 y no más alto:
+       la vista es fija y la central es larga, así que el alto de más sería
+       piso vacío. */
+    .tf-c3d-frame { aspect-ratio: 3 / 2; min-height: 0; }
     .tf-c3d-rail { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .tf-c3d-labels b { font-size: 10px; padding: 2px 6px; }
-    .tf-c3d-key { left: 8px; bottom: 8px; padding: 7px 9px; gap: 4px; }
+    .tf-c3d-key { gap: 2px 14px; padding: 6px 8px; }
     .tf-c3d-key div { font-size: 9px; }
   }
 
-  /* Teléfonos: marco cuadrado. El ancho del equipo lo fija la pantalla de
-     todos modos; el alto de más es aire para los rótulos y la clave, que en
-     un 4/3 de 350 px se disputan el mismo rincón. */
+  /* Teléfonos: los rótulos salen del marco y van en lista, debajo del riel. */
   @media (max-width: 560px) {
     /* Seis rótulos de 145 px sobre un lienzo de 350 px tapan la central que
-       están nombrando. Acá salen del marco y van debajo, en lista — y sin
-       ellos el marco no necesita alto de más: 3/2, igual que el diagrama de
-       máquinas. */
-    .tf-c3d-frame { aspect-ratio: 3 / 2; }
+       están nombrando. Acá salen del marco y van debajo, en lista. */
     .tf-c3d-labels { display: none; }
-    /* En columna, la clave se come el tercio izquierdo del lienzo y tapa la
-       entrada y el depósito de residuos. Como banda inferior ocupa el piso,
-       que es donde no hay equipo. */
-    .tf-c3d-key {
-      flex-direction: row;
-      flex-wrap: wrap;
-      justify-content: center;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      gap: 1px 10px;
-      padding: 5px 6px;
-      border: 0;
-      border-top: 1px solid var(--line);
-      background: linear-gradient(180deg, rgba(11, 11, 14, 0.4), rgba(11, 11, 14, 0.88));
-    }
+    .tf-c3d-key { gap: 1px 10px; padding: 5px 6px; }
     .tf-c3d-key div { font-size: 8px; gap: 4px; letter-spacing: 0.02em; }
     .tf-c3d-key i { width: 9px; height: 2px; }
     .tf-c3d-rail .bd { padding: 0 10px 11px; }

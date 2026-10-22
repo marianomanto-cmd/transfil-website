@@ -4,9 +4,11 @@
  *
  * Es la versión tridimensional del esquema de proceso: el equipo completo,
  * de la entrada de soluble contaminado a las dos salidas de soluble limpio.
- * Cada etapa tiene su zona; la cámara vuela hasta ella, un marco de foco la
- * encuadra, la carcasa del equipo se abre en corte y las trece referencias
- * de esa etapa pasan a tinta plena.
+ *
+ * Vista fija, como una lámina: una sola cámara encuadra la central entera
+ * y no se mueve —ni órbita, ni zoom, ni vuelos entre etapas—. Cada etapa
+ * tiene su zona: al elegirla, un marco de foco la encuadra, la carcasa del
+ * equipo se abre en corte y sus referencias pasan a tinta plena.
  *
  * Carga: import dinámico desde CentralDiagram3D.astro cuando el marco se
  * acerca al viewport. El import map pineado de three.js lo emite
@@ -15,13 +17,12 @@
  * <script type="application/json" id="central3d-copy"> — acá no hay ni un
  * string de contenido.
  *
- * Avance de etapa: sólo el riel F01–F04 (hover, foco o clic). El diagrama
- * no toca el scroll de la página; ver /js/stage-scroll.js.
+ * Avance de etapa: sólo el riel F01–F04 (hover, foco o clic). El lienzo no
+ * toma ningún gesto, así que la página scrollea por encima como sobre una
+ * imagen.
  *
  * Metros, y arriba, apoyado en y = 0: el OBJ/GLB sale a escala real.
  */
-
-import { letPageScroll } from '/js/stage-scroll.js';
 
 /** El copy llega ya localizado desde Astro, en un bloque JSON. */
 const T = JSON.parse(document.getElementById('central3d-copy').textContent);
@@ -452,36 +453,48 @@ stage.scene.traverse((o) => {
   if (o.isDirectionalLight) o.intensity = o.castShadow ? 2.5 : 0.95;
 });
 
-/* ── La página manda el scroll; el visor sólo toma el gesto cuando el
-      visitante lo pide. Los topes de zoom son además los que devuelven la
-      rueda a la página. Va antes del primer encuadre, que los usa de tope.
-      Ver /js/stage-scroll.js. ───────────────────────────────────────── */
+/* ── Vista fija: el lienzo no toma ningún gesto ──────────────────────────
+   OrbitControls apagado: sin órbita, sin zoom, sin paneo. Apagado, además,
+   sale de sus handlers sin preventDefault, así que la rueda pasa derecho a
+   la página. El `touch-action: none` que pone al conectarse sí hay que
+   deshacerlo a mano: con él, un dedo sobre el lienzo no scrollea. */
+stage.controls.enabled = false;
+if (stage.renderer) stage.renderer.domElement.style.touchAction = 'auto';
+
 // Con View Transitions este módulo se vuelve a importar con otro sufijo y
 // convive un instante con el anterior: hay que bajarle los listeners de
 // window al que se va, o cada navegación deja una escena entera viva.
 if (window.__tfC3dCleanup) window.__tfC3dCleanup();
-const pageScroll = letPageScroll(stage, THREE, { min: 3.2, max: 30, onEngage: () => { manual = true; } });
-window.__tfC3dCleanup = pageScroll.dispose;
+// Momento del último scroll de página. El hover del riel lo consulta: si la
+// página se acaba de mover, el pointerenter no fue un gesto.
+let lastScroll = 0;
+const onScroll = () => { lastScroll = performance.now(); };
+window.addEventListener('scroll', onScroll, { passive: true });
+window.__tfC3dCleanup = () => window.removeEventListener('scroll', onScroll);
+const pageScrolling = () => performance.now() - lastScroll < 420;
 
-/* ── Etapas: zona de foco y encuadre de cámara ───────────────────────── */
+/* ── Etapas: la zona que encuadra el marco de foco ───────────────────── */
 const STAGES = [
-  {
-    zone: { min: [-6.0, 0, -1.0], max: [-1.2, 4.6, 1.0] },
-    cam: [-1.6, 4.8, 7.2], tgt: [-3.4, 2.1, 0],
-  },
-  {
-    zone: { min: [-1.6, 0.9, -1.0], max: [2.1, 2.0, 1.0] },
-    cam: [0.6, 3.5, 5.2], tgt: [0.1, 1.45, 0],
-  },
-  {
-    zone: { min: [1.3, 0.7, -1.1], max: [2.9, 2.2, 0.9] },
-    cam: [4.3, 3.1, 4.6], tgt: [2.2, 1.3, -0.2],
-  },
-  {
-    zone: { min: [-6.0, 0, -1.2], max: [8.0, 4.6, 1.3] },
-    cam: [6.6, 6.2, 11.0], tgt: [0.9, 1.7, 0],
-  },
+  { zone: { min: [-6.0, 0, -1.0], max: [-1.2, 4.6, 1.0] } },
+  { zone: { min: [-1.6, 0.9, -1.0], max: [2.1, 2.0, 1.0] } },
+  { zone: { min: [1.3, 0.7, -1.1], max: [2.9, 2.2, 0.9] } },
+  { zone: { min: [-6.0, 0, -1.2], max: [8.0, 4.6, 1.3] } },
 ];
+
+/* ── La cámara ───────────────────────────────────────────────────────────
+   De frente y apenas desde la derecha, alta lo justo para ver dentro de la
+   cuba abierta: el proceso se lee de izquierda a derecha —entrada sucia,
+   salidas limpias—, como en el esquema de papel. FOV corto para que lea
+   casi axonométrica, igual que el diagrama de máquinas. */
+const VIEW = {
+  dir: [0.3, 0.42, 1],
+  fov: 30,
+  /** Márgenes del equipo al borde del marco, en fracción del marco. */
+  pad: { x: 0.03, top: 0.05, bottom: 0.05 },
+  /** Aire extra arriba, en px, para los rótulos más altos (centrífuga y
+      entrada): sin él, el clamp los bajaría encima del equipo. */
+  labelRoom: 30,
+};
 
 /* ── Referencias, agrupadas por etapa ────────────────────────────────── */
 const ANCHORS = [
@@ -527,9 +540,9 @@ function paintEq(i) {
 /* ── Riel de etapas ──────────────────────────────────────────────────────
    Tres formas de recorrerlo, ninguna atada al scroll: pasar el mouse por
    encima, tabular hasta el botón, o tocarlo. El hover espera un instante
-   para que cruzar el riel de punta a punta no dispare cuatro vuelos de
-   cámara seguidos; el clic y el foco entran sin demora. Al salir no se
-   vuelve atrás: la etapa que el visitante miró último es la que queda. */
+   para que cruzar el riel de punta a punta no haga parpadear cuatro cortes
+   seguidos; el clic y el foco entran sin demora. Al salir no se vuelve
+   atrás: la etapa que el visitante miró último es la que queda. */
 const rail = root.querySelector('.tf-c3d-rail');
 const HOVER_DELAY = 130;
 let hoverTimer = 0;
@@ -539,7 +552,7 @@ const buttons = T.stages.map((name, i) => {
   b.innerHTML = '<span class="sw"></span><span class="bd"><span class="cd"></span><span class="nm"></span></span>';
   b.querySelector('.cd').textContent = T.codes[i];
   b.querySelector('.nm').textContent = name;
-  const go = () => { clearTimeout(hoverTimer); setStage(i, true); };
+  const go = () => { clearTimeout(hoverTimer); setStage(i); };
   b.addEventListener('click', go);
   b.addEventListener('focus', go);
   b.addEventListener('pointerenter', (e) => {
@@ -547,9 +560,9 @@ const buttons = T.stages.map((name, i) => {
     // Bajando la página, el riel pasa por debajo de un mouse quieto y el
     // navegador manda un pointerenter que nadie pidió. Si la página se
     // acaba de mover, no es un gesto: se ignora.
-    if (pageScroll.scrolling()) return;
+    if (pageScrolling()) return;
     clearTimeout(hoverTimer);
-    hoverTimer = setTimeout(() => setStage(i, true), HOVER_DELAY);
+    hoverTimer = setTimeout(() => setStage(i), HOVER_DELAY);
   });
   b.addEventListener('pointerleave', () => clearTimeout(hoverTimer));
   rail.appendChild(b);
@@ -557,59 +570,104 @@ const buttons = T.stages.map((name, i) => {
 });
 
 /* ── Estado del recorrido ────────────────────────────────────────────── */
-const camPos = new THREE.Vector3().fromArray(STAGES[0].cam);
-const camTgt = new THREE.Vector3().fromArray(STAGES[0].tgt);
 const zoneCtr = new THREE.Vector3();
 const zoneSize = new THREE.Vector3(1, 1, 1);
 let current = -1;
-let manual = false;
 
-/* Encuadre: el ángulo de cada etapa es el del diseño, pero la distancia se
-   calcula. Los valores del prototipo están hechos para un marco 16/9; en el
-   4/3 de un teléfono el mismo encaje recorta el equipo por los costados,
-   porque el FOV de three.js es vertical. Acá se conserva la dirección de la
-   cámara y se la aleja hasta que la zona de la etapa entra entera —por el
-   lado que quede más ajustado, alto o ancho—. Así la etapa 4, que abarca la
-   central completa, muestra también las dos salidas del extremo derecho. */
-const FIT = 1.07;
-const corner = new THREE.Vector3();
-const dir = new THREE.Vector3();
-const fwd = new THREE.Vector3();
-const right = new THREE.Vector3();
-const up = new THREE.Vector3();
-const UP_AXIS = new THREE.Vector3(0, 1, 0);
-function fitStage(i) {
-  const st = STAGES[i];
-  const { min, max } = st.zone;
-  camTgt.fromArray(st.tgt);
+/* Encuadre: la dirección es fija; la distancia y el punto de mira se
+   calculan sobre el marco real. Lo que tiene que entrar es el equipo —sin
+   piso, grilla ni marco de foco—, medido por la caja de cada pieza. Se
+   proyecta todo, se mide cuánto sobra o falta y hacia dónde quedó corrido,
+   y se corrige: la distancia para el tamaño, el punto de mira para el
+   centrado. Cuatro pasadas alcanzan. Como se mide en el marco tal cual es,
+   el 3/2 de un teléfono no recorta la central por los costados (el FOV de
+   three.js es vertical). Se rehace cuando cambia la proporción del marco. */
+const FIT_PTS = [];
+{
+  const skip = new Set(['piso', 'grilla', 'foco-etapa']);
+  const bb = new THREE.Box3();
+  unit.updateMatrixWorld(true);
+  unit.traverse((o) => {
+    if (!o.isMesh) return;
+    for (let q = o; q && q !== unit; q = q.parent) if (skip.has(q.name)) return;
+    if (!o.geometry.boundingBox) o.geometry.computeBoundingBox();
+    bb.copy(o.geometry.boundingBox).applyMatrix4(o.matrixWorld);
+    for (let c = 0; c < 8; c++) {
+      FIT_PTS.push(new THREE.Vector3(
+        c & 1 ? bb.max.x : bb.min.x,
+        c & 2 ? bb.max.y : bb.min.y,
+        c & 4 ? bb.max.z : bb.min.z,
+      ));
+    }
+  });
+}
+const FIT_CENTER = new THREE.Box3().setFromPoints(FIT_PTS).getCenter(new THREE.Vector3());
 
-  // Base de la cámara para la dirección de diseño de esta etapa.
-  dir.fromArray(st.cam).sub(camTgt).normalize();
-  fwd.copy(dir).negate();
-  right.copy(fwd).cross(UP_AXIS).normalize();
-  up.copy(right).cross(fwd).normalize();
-
+const dir = new THREE.Vector3().fromArray(VIEW.dir).normalize();
+const right = new THREE.Vector3().copy(dir).negate().cross(new THREE.Vector3(0, 1, 0)).normalize();
+const up = new THREE.Vector3().copy(right).cross(dir).negate().normalize();
+const ndc = new THREE.Vector3();
+const viewTgt = new THREE.Vector3();
+let fittedAspect = 0;
+let fittedKey = -1;
+/** @param {number} keyH  alto en px de la franja de la clave, abajo. */
+function fitView(keyH) {
   const cam = stage.camera;
-  const tanV = Math.tan(((cam.fov * Math.PI) / 180) / 2) / FIT;
-  const tanH = tanV * (cam.aspect || 16 / 9);
+  // El visor, no la capa de rótulos: en teléfonos esa capa va oculta y mide 0.
+  const W = stage.clientWidth;
+  const H = stage.clientHeight;
+  if (!W || !H) return; // marco sin medir todavía: el frame siguiente reintenta
 
-  // La distancia del prototipo es el piso: en 16/9 el encuadre es el que se
-  // aprobó, tal cual. De ahí para atrás sólo se aleja, y sólo lo necesario
-  // para que las ocho esquinas de la zona entren en el frustum —para cada
-  // una, |lateral| ≤ tan · (profundidad + d)—. Así un marco angosto nunca
-  // recorta el equipo y uno ancho nunca lo achica.
-  let d = corner.fromArray(st.cam).distanceTo(camTgt);
-  for (let c = 0; c < 8; c++) {
-    corner.set(c & 1 ? max[0] : min[0], c & 2 ? max[1] : min[1], c & 4 ? max[2] : min[2]).sub(camTgt);
-    const z = corner.dot(fwd);
-    d = Math.max(d, Math.abs(corner.dot(right)) / tanH - z, Math.abs(corner.dot(up)) / tanV - z);
+  // Ventana útil en coordenadas de pantalla normalizadas (−1…1, y arriba).
+  // Abajo se descuenta la franja de la clave; arriba, el aire de los
+  // rótulos, salvo donde el CSS los apaga.
+  const { pad, labelRoom } = VIEW;
+  const room = getComputedStyle(labelBox).display === 'none' ? 0 : labelRoom;
+  const xL = -1 + 2 * pad.x;
+  const xR = 1 - 2 * pad.x;
+  const yT = 1 - 2 * pad.top - (2 * room) / H;
+  // Tope por si el marco fuera tan bajo que la clave se comiera la ventana.
+  const yB = Math.min(-1 + 2 * pad.bottom + (2 * keyH) / H, yT - 0.5);
+
+  // Las pasadas proyectan con la matriz de la cámara: tiene que estar al día
+  // con el FOV y la proporción que se usan abajo.
+  cam.updateProjectionMatrix();
+  const tanV = Math.tan(((cam.fov * Math.PI) / 180) / 2);
+  const tanH = tanV * cam.aspect;
+  viewTgt.copy(FIT_CENTER);
+  let d = 20;
+  for (let pass = 0; pass < 4; pass++) {
+    cam.position.copy(viewTgt).addScaledVector(dir, d);
+    cam.lookAt(viewTgt);
+    cam.updateMatrixWorld();
+    let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
+    for (const p of FIT_PTS) {
+      ndc.copy(p).project(cam);
+      if (ndc.x < x0) x0 = ndc.x;
+      if (ndc.x > x1) x1 = ndc.x;
+      if (ndc.y < y0) y0 = ndc.y;
+      if (ndc.y > y1) y1 = ndc.y;
+    }
+    // Corrimiento del centro, pasado a metros en el plano del punto de mira;
+    // después, la distancia en proporción a lo que sobra o falta.
+    viewTgt
+      .addScaledVector(right, ((x0 + x1) / 2 - (xL + xR) / 2) * tanH * d)
+      .addScaledVector(up, ((y0 + y1) / 2 - (yB + yT) / 2) * tanV * d);
+    d *= Math.max((x1 - x0) / (xR - xL), (y1 - y0) / (yT - yB));
   }
 
-  camPos.copy(camTgt).addScaledVector(
-    dir,
-    Math.min(Math.max(d, stage.controls.minDistance), stage.controls.maxDistance),
-  );
+  cam.position.copy(viewTgt).addScaledVector(dir, d);
+  // Mismo criterio que el visor en setObject.
+  cam.near = Math.max(d / 100, 0.01);
+  cam.far = d * 100;
+  cam.updateProjectionMatrix();
+  stage.controls.target.copy(viewTgt);
+  stage.controls.update();
+  fittedAspect = cam.aspect;
+  fittedKey = keyH;
 }
+// El primer encuadre lo hace el primer frame, con la clave ya armada.
+stage.camera.fov = VIEW.fov;
 
 /** Qué carcasa se abre en cada etapa para ver el fluido por dentro. */
 const CUTAWAY = [
@@ -630,13 +688,9 @@ function cutaway(i) {
   }
 }
 
-stage.controls.addEventListener('start', () => { manual = true; });
-
-function setStage(i, fly) {
-  if (i === current && !fly) return;
+function setStage(i) {
+  if (i === current) return;
   current = i;
-  if (fly) manual = false;
-  fitStage(i);
   const { min, max } = STAGES[i].zone;
   zoneCtr.set((min[0] + max[0]) / 2, (min[1] + max[1]) / 2, (min[2] + max[2]) / 2);
   zoneSize.set(max[0] - min[0], max[1] - min[1], max[2] - min[2]);
@@ -647,12 +701,8 @@ function setStage(i, fly) {
 }
 // Un pase por la etapa 4 deja materiales y foco inicializados; el visor
 // abre en la 1, que es donde empieza el recorrido del fluido.
-setStage(STAGES.length - 1, true);
-setStage(0, true);
-
-// Cambia el ancho del marco (rotar el teléfono, arrastrar la ventana) y el
-// encaje se rehace. Si el visitante ya movió la cámara, no se le pisa.
-window.addEventListener('resize', () => { if (!manual && current >= 0) fitStage(current); });
+setStage(STAGES.length - 1);
+setStage(0);
 
 const COLOR_OF = { dirty: DIRTY, semi: SEMI, clean: CLEAN, oil: OIL, ferrous: FERROUS, cloth: CLOTH };
 const keyBox = root.querySelector('.tf-c3d-key');
@@ -664,11 +714,11 @@ T.fluids.forEach((f) => {
   keyBox.appendChild(row);
 });
 
-/* ── Frame: vuelo de cámara, foco, giros y etiquetas ─────────────────── */
+/* ── Frame: encuadre, foco, giros y etiquetas ────────────────────────── */
 const v = new THREE.Vector3();
 
-// Con «menos movimiento» la central queda quieta y la cámara no vuela: se
-// planta en la etapa de una. Las flechas siguen diciendo el sentido del
+// Con «menos movimiento» la central queda quieta y el marco de foco salta
+// de etapa en vez de deslizarse. Las flechas siguen diciendo el sentido del
 // flujo y el corte sigue abriendo la carcasa, así que no se pierde nada de
 // lo que el diagrama tiene para contar.
 const still = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -688,12 +738,14 @@ let lastH = 0;
 
 stage.addFrameHook((t) => {
   const cam = stage.camera;
-  const ctl = stage.controls;
   const snap = still.matches;
-  if (!manual) {
-    cam.position.lerp(camPos, snap ? 1 : 0.055);
-    ctl.target.lerp(camTgt, snap ? 1 : 0.055);
-  }
+  // El visor ajusta la proporción en su ResizeObserver, que corre después
+  // del evento `resize` de window: escuchar ese evento encuadraría con la
+  // proporción vieja. Mirarla acá, frame a frame, no se pierde ningún cambio
+  // —rotar el teléfono, arrastrar la ventana, un cambio de breakpoint—. La
+  // clave puede pasar a dos renglones con el ancho o con la fuente: también.
+  const keyH = keyBox.offsetHeight;
+  if (cam.aspect !== fittedAspect || keyH !== fittedKey) fitView(keyH);
   FOCUS.position.lerp(zoneCtr, snap ? 1 : 0.08);
   FOCUS.scale.lerp(zoneSize, snap ? 1 : 0.08);
 

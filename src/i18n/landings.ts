@@ -236,8 +236,8 @@ export const LANDINGS: Record<LandingSlug, Record<Lang, LandingContent>> = {
       centralDiagram: {
         caption: 'Central de filtración / Recorrido del fluido',
         hint: {
-          pointer: 'Pase el mouse o haga clic en una etapa · arrastre para orbitar · rueda para acercar',
-          touch: 'Toque una etapa · dos dedos para orbitar',
+          pointer: 'Pase el mouse o haga clic en una etapa',
+          touch: 'Toque una etapa',
         },
         alt: 'Vista tridimensional de la central de filtración Trans-Fil, recorrida en cuatro etapas: entrada de soluble contaminado, centrífuga sobre el separador magnético y depósito de residuos; filtro de gravedad con su banda y rollo de tela; skimmer y sensor de nivel sobre el depósito de líquido; e integración con intercambiador de calor, filtros bolsa, gabinete eléctrico y las salidas de soluble limpio de baja y alta presión.',
         labels: {
@@ -428,8 +428,8 @@ export const LANDINGS: Record<LandingSlug, Record<Lang, LandingContent>> = {
       centralDiagram: {
         caption: 'Central filtration station / Fluid path',
         hint: {
-          pointer: 'Hover or click a stage · drag to orbit · scroll to zoom',
-          touch: 'Tap a stage · two fingers to orbit',
+          pointer: 'Hover or click a stage',
+          touch: 'Tap a stage',
         },
         alt: 'Three-dimensional view of the Trans-Fil central filtration station, walked through in four stages: contaminated coolant inlet, centrifuge above the magnetic separator and waste tank; gravity filter with its belt and cloth roll; skimmer and level sensor over the liquid tank; and integration with the heat exchanger, bag filters, electrical cabinet and the low- and high-pressure clean-coolant outlets.',
         labels: {
@@ -620,8 +620,8 @@ export const LANDINGS: Record<LandingSlug, Record<Lang, LandingContent>> = {
       centralDiagram: {
         caption: 'Central de filtragem / Percurso do fluido',
         hint: {
-          pointer: 'Passe o mouse ou clique em uma etapa · arraste para orbitar · role para aproximar',
-          touch: 'Toque em uma etapa · dois dedos para orbitar',
+          pointer: 'Passe o mouse ou clique em uma etapa',
+          touch: 'Toque em uma etapa',
         },
         alt: 'Vista tridimensional da central de filtragem Trans-Fil, percorrida em quatro etapas: entrada de fluido contaminado, centrífuga sobre o separador magnético e depósito de resíduos; filtro de gravidade com sua esteira e rolo de manta; skimmer e sensor de nível sobre o depósito de líquido; e integração com trocador de calor, filtros de saco, painel elétrico e as saídas de fluido limpo de baixa e alta pressão.',
         labels: {

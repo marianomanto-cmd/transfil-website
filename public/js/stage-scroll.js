@@ -1,5 +1,7 @@
 /**
- * Política de scroll de los visores 3D — Trans-Fil.
+ * Política de scroll de los visores 3D orbitables — Trans-Fil. Hoy, el
+ * diagrama de máquinas: la central de filtración tiene la cámara fija y su
+ * lienzo no toma ningún gesto, así que no la necesita.
  *
  * OrbitControls, tal como viene, se queda con el gesto: pone
  * `touch-action: none` en el lienzo (un dedo orbita y la página no baja) y
@@ -11,8 +13,8 @@
  * sólo cuando es evidente que el visitante lo quiso:
  *
  *   · Táctil — un dedo scrollea la página (`touch-action: pan-y`), dos
- *     dedos orbitan. El recorrido por etapas se maneja con el riel, que no
- *     depende del gesto.
+ *     dedos orbitan. Lo demás se maneja con botones (la leyenda de
+ *     circuitos), que no dependen del gesto.
  *   · Rueda — si hay un scroll de página en curso (la página se movió hace
  *     menos de GRACE ms) la rueda no se captura y el visitante atraviesa el
  *     diagrama sin frenos. Con la página quieta y el puntero encima, la
