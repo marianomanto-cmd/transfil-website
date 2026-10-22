@@ -341,6 +341,42 @@ const { copy, stages, codes } = Astro.props;
   }
   .tf-c3d-rail .nm { font-size: 12.5px; line-height: 1.4; color: var(--fg-2); }
 
+  /* Pantallas anchas: el riel entra al marco, abajo a la izquierda, sobre
+     el piso libre que deja la vista fija. Es un panel compacto: una etapa
+     por renglón, código y nombre en la misma línea. central3d.js encuadra
+     la central para que ninguna pieza quede debajo, aparta los rótulos y
+     publica en --c3d-key-h el alto de la clave, que el riel tiene que
+     esquivar. Por debajo de 1200 px el marco es chico para tapar un rincón:
+     el riel vuelve a ir debajo. */
+  @media (min-width: 1200px) {
+    .tf-c3d { position: relative; }
+    .tf-c3d-rail {
+      position: absolute;
+      left: 12px;
+      bottom: calc(var(--c3d-key-h, 30px) + 12px);
+      z-index: 1;
+      grid-template-columns: 1fr;
+      width: max-content;
+      max-width: min(34%, 360px);
+    }
+    .tf-c3d-rail button {
+      flex-direction: row;
+      gap: 0;
+      background: rgba(11, 11, 14, 0.84);
+    }
+    .tf-c3d-rail button:hover,
+    .tf-c3d-rail button:focus-visible { background: rgba(28, 28, 34, 0.94); }
+    .tf-c3d-rail .sw { width: 3px; height: auto; flex: 0 0 auto; }
+    .tf-c3d-rail .bd {
+      flex-direction: row;
+      align-items: baseline;
+      gap: 10px;
+      padding: 9px 14px 9px 11px;
+    }
+    .tf-c3d-rail .nm { font-size: 12px; line-height: 1.35; }
+    .tf-c3d-rail button[aria-current='step'] .nm { color: var(--fg); }
+  }
+
   /* Pantallas angostas: lienzo más alto (el equipo es ancho), riel a dos
      columnas y la clave de colores más chica. */
   @media (max-width: 860px) {

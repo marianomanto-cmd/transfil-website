@@ -608,10 +608,16 @@ const right = new THREE.Vector3().copy(dir).negate().cross(new THREE.Vector3(0, 
 const up = new THREE.Vector3().copy(right).cross(dir).negate().normalize();
 const ndc = new THREE.Vector3();
 const viewTgt = new THREE.Vector3();
-let fittedAspect = 0;
-let fittedKey = -1;
-/** @param {number} keyH  alto en px de la franja de la clave, abajo. */
-function fitView(keyH) {
+let fittedSig = '';
+// Riel superpuesto (pantallas anchas, ver el CSS): lo usa el frame para
+// apartar los rótulos. Lo decide fitView, que es quien mide.
+let railOver = false;
+/**
+ * @param {number} keyH  alto en px de la franja de la clave, abajo.
+ * @param {string} sig   firma del layout que se encuadra (proporción,
+ *                       clave y riel); si cambia, el frame vuelve a llamar.
+ */
+function fitView(keyH, sig) {
   const cam = stage.camera;
   // El visor, no la capa de rótulos: en teléfonos esa capa va oculta y mide 0.
   const W = stage.clientWidth;
@@ -629,6 +635,19 @@ function fitView(keyH) {
   // Tope por si el marco fuera tan bajo que la clave se comiera la ventana.
   const yB = Math.min(-1 + 2 * pad.bottom + (2 * keyH) / H, yT - 0.5);
 
+  // El riel, cuando va adentro del marco, ocupa el rincón de abajo a la
+  // izquierda: lo que quede a su izquierda tiene que quedar por encima de él.
+  // railX1 / railY1 = su borde derecho y su borde de arriba, con aire.
+  railOver = getComputedStyle(rail).position === 'absolute';
+  let railX1 = -Infinity;
+  let railY1 = -Infinity;
+  if (railOver) {
+    const sr = stage.getBoundingClientRect();
+    const rr = rail.getBoundingClientRect();
+    railX1 = ((rr.right + 16 - sr.left) / W) * 2 - 1;
+    railY1 = 1 - ((rr.top - 14 - sr.top) / H) * 2;
+  }
+
   // Las pasadas proyectan con la matriz de la cámara: tiene que estar al día
   // con el FOV y la proporción que se usan abajo.
   cam.updateProjectionMatrix();
@@ -636,24 +655,37 @@ function fitView(keyH) {
   const tanH = tanV * cam.aspect;
   viewTgt.copy(FIT_CENTER);
   let d = 20;
-  for (let pass = 0; pass < 4; pass++) {
+  for (let pass = 0; pass < 5; pass++) {
     cam.position.copy(viewTgt).addScaledVector(dir, d);
     cam.lookAt(viewTgt);
     cam.updateMatrixWorld();
     let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
+    let yLow = Infinity; // punto más bajo de lo que cae sobre la columna del riel
     for (const p of FIT_PTS) {
       ndc.copy(p).project(cam);
       if (ndc.x < x0) x0 = ndc.x;
       if (ndc.x > x1) x1 = ndc.x;
       if (ndc.y < y0) y0 = ndc.y;
       if (ndc.y > y1) y1 = ndc.y;
+      if (ndc.x < railX1 && ndc.y < yLow) yLow = ndc.y;
     }
-    // Corrimiento del centro, pasado a metros en el plano del punto de mira;
-    // después, la distancia en proporción a lo que sobra o falta.
+    // Escala: lo que entra en la ventana y, con el riel adentro, lo que deja
+    // a la izquierda del equipo por encima del riel. Al alejar la cámara,
+    // todo se achica hacia el centro de la pantalla en la proporción k.
+    let k = Math.min((xR - xL) / (x1 - x0), (yT - yB) / (y1 - y0));
+    if (yLow < Infinity) k = Math.min(k, (yT - railY1) / (y1 - yLow));
+    // Altura: centrado si se puede; si no, lo justo para despejar el riel.
+    let top = (yB + yT) / 2 + ((y1 - y0) * k) / 2;
+    if (yLow < Infinity) top = Math.max(top, railY1 + (y1 - yLow) * k);
+    top = Math.min(top, yT);
+    // Distancia nueva y corrimiento del punto de mira, en metros sobre su
+    // plano, para que el centro horizontal y el borde de arriba caigan donde
+    // tienen que caer.
+    const dNew = d / k;
     viewTgt
-      .addScaledVector(right, ((x0 + x1) / 2 - (xL + xR) / 2) * tanH * d)
-      .addScaledVector(up, ((y0 + y1) / 2 - (yB + yT) / 2) * tanV * d);
-    d *= Math.max((x1 - x0) / (xR - xL), (y1 - y0) / (yT - yB));
+      .addScaledVector(right, ((k * (x0 + x1)) / 2 - (xL + xR) / 2) * tanH * dNew)
+      .addScaledVector(up, (k * y1 - top) * tanV * dNew);
+    d = dNew;
   }
 
   cam.position.copy(viewTgt).addScaledVector(dir, d);
@@ -663,8 +695,7 @@ function fitView(keyH) {
   cam.updateProjectionMatrix();
   stage.controls.target.copy(viewTgt);
   stage.controls.update();
-  fittedAspect = cam.aspect;
-  fittedKey = keyH;
+  fittedSig = sig;
 }
 // El primer encuadre lo hace el primer frame, con la clave ya armada.
 stage.camera.fov = VIEW.fov;
@@ -744,8 +775,15 @@ stage.addFrameHook((t) => {
   // proporción vieja. Mirarla acá, frame a frame, no se pierde ningún cambio
   // —rotar el teléfono, arrastrar la ventana, un cambio de breakpoint—. La
   // clave puede pasar a dos renglones con el ancho o con la fuente: también.
+  // El riel cambia de forma con el breakpoint (fila debajo del marco o panel
+  // adentro), y su tamaño depende de la fuente: también entra en la firma.
   const keyH = keyBox.offsetHeight;
-  if (cam.aspect !== fittedAspect || keyH !== fittedKey) fitView(keyH);
+  const sig = cam.aspect + '|' + keyH + '|' + rail.offsetWidth + 'x' + rail.offsetHeight;
+  if (sig !== fittedSig) {
+    // El riel superpuesto se apoya sobre la clave: el CSS lee su alto de acá.
+    root.style.setProperty('--c3d-key-h', keyH + 'px');
+    fitView(keyH, sig);
+  }
   FOCUS.position.lerp(zoneCtr, snap ? 1 : 0.08);
   FOCUS.scale.lerp(zoneSize, snap ? 1 : 0.08);
 
@@ -782,16 +820,13 @@ stage.addFrameHook((t) => {
   // encima de ella. En un marco de teléfono es la mitad del alto útil, y sin
   // esto los dos bloques de texto se pisan.
   const placed = [];
-  const kb = keyBox.getBoundingClientRect();
-  if (kb.width) {
-    const fb = labelBox.getBoundingClientRect();
-    placed.push({
-      x: kb.left - fb.left + kb.width / 2,
-      y: kb.bottom - fb.top,
-      w: kb.width + 8,
-      h: kb.height + 8,
-    });
-  }
+  const fb = labelBox.getBoundingClientRect();
+  const block = (r) => {
+    if (r.width) placed.push({ x: r.left - fb.left + r.width / 2, y: r.bottom - fb.top, w: r.width + 8, h: r.height + 8 });
+  };
+  block(keyBox.getBoundingClientRect());
+  // Con el riel adentro del marco, tampoco se apoya ningún rótulo encima.
+  if (railOver) block(rail.getBoundingClientRect());
   labels
     .map((l) => {
       v.copy(l.v).project(cam);
