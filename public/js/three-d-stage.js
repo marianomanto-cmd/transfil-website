@@ -195,6 +195,7 @@
         if (this._renderer) {
           this._renderer.setAnimationLoop(this._loop);
           this._ro && this._ro.observe(this);
+          this._listen && this._listen();
         }
         return;
       }
@@ -226,7 +227,7 @@
         alpha: true,
         preserveDrawingBuffer: true,
       });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      // Pixel ratio: set by fit() below, and kept in step with the screen.
       renderer.shadowMap.enabled = true;
       renderer.shadowMap.type = THREE.PCFSoftShadowMap;
       this._renderer = renderer;
@@ -274,15 +275,66 @@
         controls.autoRotate = false;
       });
 
+      // Render resolution follows the screen, not the moment the page
+      // loaded. Browser zoom, moving the window to another display and
+      // pinch-zoom all change how many device pixels a CSS pixel covers; a
+      // ratio frozen at boot leaves the canvas stretched — blurry 3D under
+      // crisp HTML. Capped at 3x and at 4096² pixels of canvas, so a huge
+      // frame or a deep pinch never asks the GPU for an absurd buffer.
+      const MAX_RATIO = 3;
+      const MAX_PIXELS = 4096 * 4096;
+      const targetRatio = (w, h) => {
+        const vv = window.visualViewport;
+        const pinch = vv && vv.scale > 1 ? vv.scale : 1;
+        const want = Math.min((window.devicePixelRatio || 1) * pinch, MAX_RATIO);
+        return Math.min(want, Math.sqrt(MAX_PIXELS / (w * h)));
+      };
       const fit = () => {
         const w = this.clientWidth || 1;
         const h = this.clientHeight || 1;
+        const pr = targetRatio(w, h);
+        if (Math.abs(renderer.getPixelRatio() - pr) > 0.01) renderer.setPixelRatio(pr);
         renderer.setSize(w, h);
         camera.aspect = w / h;
         camera.updateProjectionMatrix();
       };
       fit();
       this._ro = new ResizeObserver(fit);
+
+      // Zoom and display changes don't always resize the element (a frame
+      // with a max-width keeps its CSS size when the page zooms out), so the
+      // ratio gets its own listeners. matchMedia on the current resolution
+      // fires once when it stops matching; re-arm it on the new value.
+      let dprQuery = null;
+      const onDpr = () => { fit(); watchDpr(); };
+      const watchDpr = () => {
+        if (dprQuery) dprQuery.removeEventListener('change', onDpr);
+        dprQuery = window.matchMedia('(resolution: ' + (window.devicePixelRatio || 1) + 'dppx)');
+        dprQuery.addEventListener('change', onDpr);
+      };
+      // Pinch-zoom only scales the visual viewport. Wait for the gesture to
+      // settle, and refit only if the ratio would really change: on phones
+      // the visual viewport also resizes whenever the URL bar slides.
+      let pinchTimer = 0;
+      const onViewport = () => {
+        clearTimeout(pinchTimer);
+        pinchTimer = setTimeout(() => {
+          const w = this.clientWidth || 1;
+          const h = this.clientHeight || 1;
+          if (Math.abs(renderer.getPixelRatio() - targetRatio(w, h)) > 0.01) fit();
+        }, 180);
+      };
+      this._listen = () => {
+        watchDpr();
+        if (window.visualViewport) window.visualViewport.addEventListener('resize', onViewport);
+      };
+      this._unlisten = () => {
+        if (dprQuery) dprQuery.removeEventListener('change', onDpr);
+        dprQuery = null;
+        clearTimeout(pinchTimer);
+        if (window.visualViewport) window.visualViewport.removeEventListener('resize', onViewport);
+      };
+
       this._loop = () => {
         controls.update();
         renderer.render(scene, camera);
@@ -292,6 +344,7 @@
       // reattach.
       if (this.isConnected) {
         this._ro.observe(this);
+        this._listen();
         renderer.setAnimationLoop(this._loop);
       }
 
@@ -304,6 +357,7 @@
       // document must not rebuild the scene.)
       if (this._renderer) this._renderer.setAnimationLoop(null);
       if (this._ro) this._ro.disconnect();
+      if (this._unlisten) this._unlisten();
     }
 
     /** Read-only handles for pages that drive the scene themselves —

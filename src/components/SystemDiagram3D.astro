@@ -130,10 +130,13 @@ const { copy } = Astro.props;
 </script>
 
 <style is:global>
+  /* Tope de ancho: ver el de la central de filtración (CentralDiagram3D). */
   .tf-p3d {
     display: flex;
     flex-direction: column;
     gap: 14px;
+    max-width: 1760px;
+    margin-inline: auto;
   }
   .tf-p3d three-d-stage:not(:defined) { visibility: hidden; }
   /* La barra de descarga (OBJ / GLB) es una herramienta para modeladores y
