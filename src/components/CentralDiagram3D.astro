@@ -144,7 +144,18 @@ const { copy, stages, codes } = Astro.props;
 </script>
 
 <style is:global>
-  .tf-c3d { display: flex; flex-direction: column; gap: 14px; }
+  /* Tope de ancho: en un monitor grande la sección mide 2.600 px y el
+     visor, a 16/9, no entraba en pantalla — y un lienzo de ese tamaño es
+     una carga enorme para la GPU. 1760 px deja intactas las pantallas de
+     1920 y centra el visor en las más anchas. Mismo tope que el diagrama de
+     máquinas. */
+  .tf-c3d {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    max-width: 1760px;
+    margin-inline: auto;
+  }
   .tf-c3d three-d-stage:not(:defined) { visibility: hidden; }
   /* La barra de descarga (OBJ / GLB) es una herramienta para modeladores y
      va sin traducir: fuera de una landing comercial en tres idiomas. Los

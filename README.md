@@ -169,7 +169,8 @@ The full pattern, the roadmap (`/lavado`, `/transporte`, `/hornos` — not imple
 
 Both diagrams on the landing (`CentralDiagram3D.astro` and `SystemDiagram3D.astro`) sit on the same base pieces, shared on purpose:
 
-- **`<three-d-stage>`** (`public/js/three-d-stage.js`) — the web component: renderer, lights, ground shadow, orbit, OBJ/GLB export. Its `toolbar` and `note` parts are hidden by both components (the export bar is a modeller's tool, and the starter's own interaction note is fixed English next to our translated one).
+- **`<three-d-stage>`** (`public/js/three-d-stage.js`) — the web component: renderer, lights, ground shadow, orbit, OBJ/GLB export. Its `toolbar` and `note` parts are hidden by both components (the export bar is a modeller's tool, and the starter's own interaction note is fixed English next to our translated one). **Render resolution follows the screen**: the pixel ratio is `devicePixelRatio` × pinch-zoom scale, re-evaluated on every resize, on a `matchMedia` resolution change (browser zoom, moving the window to another display) and on visual-viewport resize (pinch), capped at 3× and 4096² canvas pixels. It used to be read once at boot: zoom in after the page loaded, or load it on a 1× screen and move it to a retina one, and the canvas stayed stretched — blurry 3D under crisp HTML labels.
+- **Width cap** — both components stop at `max-width: 1760px`, centred. Sections are full-bleed, so on a 27" display the 16/9 frame was ~2,700 px wide: taller than the window and a 16-megapixel canvas per viewer. 1760 leaves 1920 screens untouched.
 - **`ThreeImportMap.astro`** — the import map, emitted **once, in `<head>`, from `Base.astro`**. See below; this is not a detail.
 - **`stage-scroll.js`** — the scroll policy for the orbitable machine diagram. See "The page owns the scroll". The filtration station doesn't use it: its camera is fixed and its canvas takes no gesture at all.
 
