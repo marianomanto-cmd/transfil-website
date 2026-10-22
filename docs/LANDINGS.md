@@ -78,7 +78,8 @@ está subiendo el scrap". Mandar tráfico pago al home tira la conversión y
 mezcla la atribución.
 
 Campaña de Search de `/conformado` (plan + archivos para Google Ads Editor):
-[`campanas/conformado-search.md`](./campanas/conformado-search.md).
+[`campanas/conformado-search.md`](./campanas/conformado-search.md). Mercados
+y ubicaciones salen de [`campanas/conformado-geo-latam.md`](./campanas/conformado-geo-latam.md).
 
 Redirects 301 ya configurados en `astro.config.mjs` para las URLs viejas
 de campaña:

@@ -1,0 +1,49 @@
+Campaign,Ubicación (buscar por nombre),Tipo,Nivel,Ajuste de puja (%),Plantas que lo justifican
+TF | Search | Conformado | AR | ES,"Campana, Buenos Aires",Partido,Núcleo,+30,Tenaris Siderca (sin costura y OCTG)
+TF | Search | Conformado | AR | ES,"Zárate, Buenos Aires",Partido,Núcleo,+30,Corredor Campana–Zárate
+TF | Search | Conformado | AR | ES,"San Nicolás de los Arroyos, Buenos Aires",Partido,Núcleo,+30,Sidersa y obra de Sidersa+; Acindar San Nicolás
+TF | Search | Conformado | AR | ES,"Ramallo, Buenos Aires",Partido,Núcleo,+30,Ternium General Savio
+TF | Search | Conformado | AR | ES,"Villa Constitución, Santa Fe",Ciudad,Núcleo,+30,Acindar (trefilado)
+TF | Search | Conformado | AR | ES,"Rosario, Santa Fe",Ciudad,Núcleo,+30,Acindar Rosario
+TF | Search | Conformado | AR | ES,"Pérez, Santa Fe",Ciudad,Núcleo,+30,Gerdau Pérez
+TF | Search | Conformado | AR | ES,"Lanús, Buenos Aires",Partido,Núcleo,+30,Tenaris SIAT (tubo con costura de gran diámetro)
+TF | Search | Conformado | AR | ES,"Tigre, Buenos Aires",Partido,Núcleo,+30,TASA/Ternium El Talar (tubo y perfiles)
+TF | Search | Conformado | AR | ES,"La Matanza, Buenos Aires",Partido,Núcleo,+30,Acindar La Tablada (alambre)
+TF | Search | Conformado | AR | ES,"Vicente López, Buenos Aires",Partido,Núcleo,+30,Hunter Douglas Villa Martelli (perfilado)
+TF | Search | Conformado | AR | ES,"Justo Daract, San Luis",Ciudad,Núcleo,+30,TASA/Ternium Justo Daract (tubo y perfiles)
+TF | Search | Conformado | AR | ES,"Villa Mercedes, San Luis",Ciudad,Núcleo,+30,Acindar Villa Mercedes (clavos y alambre)
+TF | Search | Conformado | AR | ES,Provincia de Buenos Aires,Provincia,Secundario,+15,Conarco–ESAB Chascomús; trefiladores y pymes sin relevar
+TF | Search | Conformado | AR | ES,Provincia de Santa Fe,Provincia,Secundario,+15,"Pymes de caño, perfil y trefilado sin relevar"
+TF | Search | Conformado | AR | ES,Provincia de Córdoba,Provincia,Secundario,+15,Cercanía de servicio
+TF | Search | Conformado | AR | ES,Ciudad Autónoma de Buenos Aires,Ciudad,Secundario,+15,Sedes y compras
+TF | Search | Conformado | MX | ES,Nuevo León,Estado,Núcleo,+30,Prolamsa (Escobedo); Ternium (Monterrey y Pesquería); Tubacero; Villacero; Maquilacero; Regiomontana de Perfiles y Tubos
+TF | Search | Conformado | MX | ES,Coahuila,Estado,Núcleo,+30,Tubos Samuel; DeAcero Ramos Arizpe y Ramos II; Waelzholz; Conduit RYMCO
+TF | Search | Conformado | MX | ES,Guanajuato,Estado,Núcleo,+30,"Mubea (tubo de precisión, 2025); DeAcero Celaya"
+TF | Search | Conformado | MX | ES,Veracruz,Estado,Secundario,+15,Tenaris Tamsa (sin costura y roscado OCTG)
+TF | Search | Conformado | MX | ES,Ciudad de México,Estado,Secundario,+15,Ex Aceros Cuatro Caminos; Grupo Collado; sedes y compras
+TF | Search | Conformado | MX | ES,Estado de México,Estado,Secundario,+15,Ex Aceros Cuatro Caminos; sedes y compras
+TF | Search | Conformado | LATAM | ES,"Lima, Perú",Departamento,Núcleo,+30,Tupemesa/Cintac; Aceros Arequipa; Precor (Chilca)
+TF | Search | Conformado | LATAM | ES,"Callao, Perú",Región,Núcleo,+30,Aceros Arequipa (Lima–Callao)
+TF | Search | Conformado | LATAM | ES,"Atlántico, Colombia",Departamento,Núcleo,+30,Acesco (Malambo); Corpacero; Ternium
+TF | Search | Conformado | LATAM | ES,"Bolívar, Colombia",Departamento,Núcleo,+30,Tenaris TuboCaribe (Cartagena)
+TF | Search | Conformado | LATAM | ES,"Cauca, Colombia",Departamento,Secundario,+15,"Ternium ""Cali unit"""
+TF | Search | Conformado | LATAM | ES,"Valle del Cauca, Colombia",Departamento,Secundario,+15,Gerdau Diaco (Yumbo)
+TF | Search | Conformado | LATAM | ES,"Cundinamarca, Colombia",Departamento,Secundario,+15,Proalco-Bekaert (Sibaté); Diaco
+TF | Search | Conformado | LATAM | ES,"Bogotá, Colombia",Ciudad,Secundario,+15,Sedes y compras
+TF | Search | Conformado | LATAM | ES,"Guayas, Ecuador",Provincia,Núcleo,+30,IPAC (tres plantas); Novacero
+TF | Search | Conformado | LATAM | ES,"Pichincha, Ecuador",Provincia,Secundario,+15,Novacero (Quito)
+TF | Search | Conformado | LATAM | ES,"Cotopaxi, Ecuador",Provincia,Secundario,+15,Novacero (Lasso)
+TF | Search | Conformado | LATAM | ES,"Región Metropolitana de Santiago, Chile",Región,Núcleo,+30,Cintac; Formac; VH Acero; Hunter Douglas
+TF | Search | Conformado | LATAM | ES,"Biobío, Chile",Región,Secundario,+15,Inchalam (Talcahuano)
+TF | Search | Conformado | LATAM | ES,"Central, Paraguay",Departamento,Núcleo,+30,Schussmuller (planta nueva); L'Acerie; Barbieri
+TF | Search | Conformado | LATAM | ES,"Asunción, Paraguay",Ciudad,Núcleo,+30,Gran Asunción
+TF | Search | Conformado | LATAM | ES,"Santa Cruz, Bolivia",Departamento,Núcleo,+30,Aceros Arequipa (planta nueva)
+TF | Search | Conformado | LATAM | ES,"Distrito Nacional, República Dominicana",Provincia,Secundario,+15,Metaldom (línea de tubo de 60 kt/año)
+TF | Search | Conformado | LATAM | ES,"Santo Domingo, República Dominicana",Provincia,Secundario,+15,Metaldom
+TF | Search | Conformado | BR | PT,"São Paulo (estado), Brasil",Estado,Núcleo,+30,Tenaris Confab; Apolo Tubulars; Aperam; Belgo Arames; pymes de tubo soldado
+TF | Search | Conformado | BR | PT,"Minas Gerais, Brasil",Estado,Núcleo,+30,Vallourec Barreiro y Jeceaba; Belgo Arames; Cofer
+TF | Search | Conformado | BR | PT,"Santa Catarina, Brasil",Estado,Núcleo,+30,Tuper/ArcelorMittal; Marcegaglia; Steelmast
+TF | Search | Conformado | BR | PT,"Espírito Santo, Brasil",Estado,Núcleo,+30,Perfilados Rio Doce (planta nueva); TSA; Vallourec Serra
+TF | Search | Conformado | BR | PT,"Rio de Janeiro (estado), Brasil",Estado,Secundario,+15,MVal (planta nueva sin confirmar); sede de Apolo
+TF | Search | Conformado | BR | PT,"Rio Grande do Sul, Brasil",Estado,Secundario,+15,Panatlântica (perfilado)
+TF | Search | Conformado | BR | PT,"Bahia, Brasil",Estado,Secundario,+15,Belgo Feira de Santana

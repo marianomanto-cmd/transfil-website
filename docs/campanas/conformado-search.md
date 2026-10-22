@@ -14,15 +14,21 @@ pausa y se activan después del checklist (§11).
 
 ## 0. Resumen
 
-| Campaña | Ubicación | URL final | Idiomas | Horario (hora de la cuenta) | Presupuesto inicial* |
-|---|---|---|---|---|---|
-| `TF \| Search \| Conformado \| AR \| ES` | Argentina | `transfil.com.ar/conformado` | Español + inglés | lun–vie 07–20 · sáb 08–13 | USD 10/día |
-| `TF \| Search \| Conformado \| LATAM \| ES` | Chile, Perú, Bolivia, Paraguay, Uruguay, Colombia, Ecuador, México | `transfil.com.ar/conformado` | Español + inglés | lun–vie 08–21 · sáb 09–15 (hora AR, cubre de CDMX a Montevideo) | USD 8/día |
-| `TF \| Search \| Conformado \| BR \| PT` | Brasil | `transfil.com.ar/pt/conformado` | Portugués + inglés | lun–vie 07–20 · sáb 08–13 (Brasília = hora AR) | USD 12/día |
+| Campaña | Ubicación | URL final | Horario (hora de la cuenta) | Presupuesto inicial* |
+|---|---|---|---|---|
+| `TF \| Search \| Conformado \| AR \| ES` | Argentina | `transfil.com.ar/conformado` | lun–vie 07–20 · sáb 08–13 | USD 6/día |
+| `TF \| Search \| Conformado \| MX \| ES` | México | `transfil.com.ar/conformado` | lun–vie 10–23 · sáb 11–16 (07–20 y 08–13 en Monterrey y CDMX) | USD 9/día |
+| `TF \| Search \| Conformado \| LATAM \| ES` | Perú, Colombia, Chile, Ecuador, Bolivia, Paraguay, Uruguay, República Dominicana | `transfil.com.ar/conformado` | lun–vie 09–22 · sáb 09–16 (07–20 en Lima, Bogotá y Quito) | USD 6/día |
+| `TF \| Search \| Conformado \| BR \| PT` | Brasil | `transfil.com.ar/pt/conformado` | lun–vie 07–20 · sáb 08–13 (Brasília = hora AR) | USD 9/día |
 
 \* Punto de partida en USD, **a validar en el Planificador de palabras clave
-antes de lanzar** (§9). Horarios en la zona horaria de la cuenta (se asume
-Argentina, UTC−3).
+antes de lanzar** (§9): USD 30/día entre las cuatro. Horarios en la zona
+horaria de la cuenta (se asume Argentina, UTC−3).
+
+Mercados, ubicaciones y presupuesto salen del informe
+[Geo targeting: conformadoras de tubos en Latinoamérica](./conformado-geo-latam.md):
+dónde están las plantas de tubo, perfilado y trefilado, y dónde se invirtió
+en 2023–2026.
 
 ---
 
@@ -121,7 +127,7 @@ Primero sirve para reportes (qué keyword trae leads buenos). Pujar por
 El formulario ya empuja `user_data` (mail y teléfono hasheados con
 SHA-256) junto con `generate_lead`. Falta activarlo en la acción de
 conversión y en la etiqueta de GTM ([`MEDICION.md`](../MEDICION.md) §3,
-paso 4). Mejora la atribución; no es requisito para lanzar.
+paso 5). Mejora la atribución; no es requisito para lanzar.
 
 ---
 
@@ -140,25 +146,31 @@ La próxima landing (lavado, transporte, hornos) repite el formato.
 
 ### 3.2 Campañas
 
-Tres campañas, cada una con presupuesto propio para que un mercado no se
+Cuatro campañas, cada una con presupuesto propio para que un mercado no se
 coma al otro:
 
 - **AR (ES)** → `/conformado`. Mercado local: repuestos sin importación,
   servicio directo, llamada.
-- **LATAM (ES)** → `/conformado`. Mismos grupos, keywords y negativas que
-  AR; cambian un título, la descripción de confianza, un sitelink y un
-  texto destacado (§6.2), porque para ellos un repuesto desde Córdoba sí es
-  importación.
+- **MX (ES)** → `/conformado`. México tiene la base de molinos ERW más
+  densa de la región y la mayor inversión nueva, y está en UTC−6: con
+  campaña propia tiene presupuesto aislado, horario local e informes
+  limpios. Mismo contenido que LATAM.
+- **LATAM (ES)** → `/conformado`. Perú, Colombia, Chile, Ecuador, Bolivia,
+  Paraguay, Uruguay y República Dominicana. Mismos grupos, keywords y
+  negativas que AR; cambian un título, la descripción de confianza, un
+  sitelink y un texto destacado (§6.2), porque para ellos un repuesto desde
+  Córdoba sí es importación.
 - **BR (PT)** → `/pt/conformado`. Keywords propias: en Brasil
   "refrigerante" es gaseosa (§4.2).
 
 | Campaña | Países (ID de criterio) |
 |---|---|
 | `TF \| Search \| Conformado \| AR \| ES` | Argentina (2032) |
-| `TF \| Search \| Conformado \| LATAM \| ES` | Chile (2152), Perú (2604), Bolivia (2068), Paraguay (2600), Uruguay (2858), Colombia (2170), Ecuador (2218), México (2484) |
+| `TF \| Search \| Conformado \| MX \| ES` | México (2484) |
+| `TF \| Search \| Conformado \| LATAM \| ES` | Perú (2604), Colombia (2170), Chile (2152), Ecuador (2218), Bolivia (2068), Paraguay (2600), Uruguay (2858), República Dominicana (2214) |
 | `TF \| Search \| Conformado \| BR \| PT` | Brasil (2076) |
 
-### 3.3 Grupos — ES (AR y LATAM)
+### 3.3 Grupos — ES (AR, MX y LATAM)
 
 | Grupo | Intención | Frase | Exacta | Índice de puja | utm_content |
 |---|---|---|---|---|---|
@@ -190,9 +202,105 @@ coma al otro:
 | Keywords sueltas ambiguas: "filtro de banda", "skimmer", "refrigerante", "conformado", "formadora" | Traen electrónica, piletas, autos y formadoras de hamburguesas. Siempre con el contexto del fluido. |
 | Campaña EN (`/en/conformado`) | Fase 2. El mercado en inglés (EE. UU.) tiene fabricantes locales con servicio en planta, CPC más altos, y no hay red de servicio declarada allá. Hoy la landing EN sirve para LinkedIn o contacto directo; se revisa si aparece un distribuidor. |
 | España | Fase 2: otro vocabulario ("taladrina") y otro mercado. |
-| República Dominicana, Puerto Rico, EE. UU. | Están entre los 14 países, no en esta tanda. Se suman a LATAM si hay pedido. |
+| Centroamérica, Puerto Rico, Venezuela | Entre diez y quince plantas en ocho países, ninguno en la lista de 14 de Trans-Fil, y volumen mínimo; en Venezuela y Puerto Rico no se verificó ninguna tubera activa. Centroamérica se trabaja por contacto directo (ACESCO Panamá, Metalco, Tubac) y se puede probar dentro de MX a las 8 semanas (mismo huso). |
+| EE. UU. | Fase 2, con la campaña EN. |
 | Marca ("trans-fil", "transfil") | La búsqueda de marca la resuelve el orgánico, al home. Ni keyword ni negativa. |
 | Marcas de competidores | No se puja por ellas (la landing tampoco los nombra). |
+
+### 3.6 Geo targeting por clúster
+
+En un nicho con pocas búsquedas, el límite es la demanda, no la geografía.
+Por eso cada campaña segmenta **el país entero** con "Presencia" y pone
+**recargos de puja donde están las plantas**. Quien busca tampoco está
+siempre en la planta: compras e ingeniería suelen estar en otra ciudad.
+
+| Nivel | Ajuste | Cuándo |
+|---|---|---|
+| Núcleo | +30% | Al menos dos plantas verificadas de tubo, perfilado o trefilado, o una inversión en tubo de 2023–2026 |
+| Secundario | +15% | Una sola planta, proyectos sin confirmar, sedes y compras, o la provincia alrededor de un núcleo |
+| Base | 0% | El resto del país (la segmentación por país) |
+
+- Cuando las ubicaciones se superponen, Google aplica el ajuste de la más
+  específica: el país es la base y cada clúster, el recargo.
+- **Solo rigen con CPC manual.** Con Maximizar conversiones (Smart
+  Bidding) se ignoran; ver §9.
+- **Cómo cargarlos:** en la web de Google Ads, campaña → *Ubicaciones* →
+  *Búsqueda avanzada* → *Ubicaciones masivas* → pegá la columna
+  "Ubicación" de [`11-ubicaciones-clusters.csv`](./conformado-search/11-ubicaciones-clusters.csv)
+  → confirmá cada coincidencia → *Agregar*; después, el ajuste en la tabla
+  de ubicaciones. Los IDs no se verificaron. Si un partido o municipio no
+  aparece, se reemplaza por un radio de 20–30 km que cubra el área
+  metropolitana.
+- Se corrige con datos: el informe de **ubicaciones coincidentes** (60–90
+  días acumulados, leído por estado) dice qué subir y qué bajar.
+
+**AR**
+
+| Nivel | Ubicación | Tipo | Plantas que lo justifican |
+|---|---|---|---|
+| Núcleo +30% | Campana, Buenos Aires | Partido | Tenaris Siderca (sin costura y OCTG) |
+| Núcleo +30% | Zárate, Buenos Aires | Partido | Corredor Campana–Zárate |
+| Núcleo +30% | San Nicolás de los Arroyos, Buenos Aires | Partido | Sidersa y obra de Sidersa+; Acindar San Nicolás |
+| Núcleo +30% | Ramallo, Buenos Aires | Partido | Ternium General Savio |
+| Núcleo +30% | Villa Constitución, Santa Fe | Ciudad | Acindar (trefilado) |
+| Núcleo +30% | Rosario, Santa Fe | Ciudad | Acindar Rosario |
+| Núcleo +30% | Pérez, Santa Fe | Ciudad | Gerdau Pérez |
+| Núcleo +30% | Lanús, Buenos Aires | Partido | Tenaris SIAT (tubo con costura de gran diámetro) |
+| Núcleo +30% | Tigre, Buenos Aires | Partido | TASA/Ternium El Talar (tubo y perfiles) |
+| Núcleo +30% | La Matanza, Buenos Aires | Partido | Acindar La Tablada (alambre) |
+| Núcleo +30% | Vicente López, Buenos Aires | Partido | Hunter Douglas Villa Martelli (perfilado) |
+| Núcleo +30% | Justo Daract, San Luis | Ciudad | TASA/Ternium Justo Daract (tubo y perfiles) |
+| Núcleo +30% | Villa Mercedes, San Luis | Ciudad | Acindar Villa Mercedes (clavos y alambre) |
+| Secundario +15% | Provincia de Buenos Aires | Provincia | Conarco–ESAB Chascomús; trefiladores y pymes sin relevar |
+| Secundario +15% | Provincia de Santa Fe | Provincia | Pymes de caño, perfil y trefilado sin relevar |
+| Secundario +15% | Provincia de Córdoba | Provincia | Cercanía de servicio |
+| Secundario +15% | Ciudad Autónoma de Buenos Aires | Ciudad | Sedes y compras |
+
+**MX**
+
+| Nivel | Ubicación | Tipo | Plantas que lo justifican |
+|---|---|---|---|
+| Núcleo +30% | Nuevo León | Estado | Prolamsa (Escobedo); Ternium (Monterrey y Pesquería); Tubacero; Villacero; Maquilacero; Regiomontana de Perfiles y Tubos |
+| Núcleo +30% | Coahuila | Estado | Tubos Samuel; DeAcero Ramos Arizpe y Ramos II; Waelzholz; Conduit RYMCO |
+| Núcleo +30% | Guanajuato | Estado | Mubea (tubo de precisión, 2025); DeAcero Celaya |
+| Secundario +15% | Veracruz | Estado | Tenaris Tamsa (sin costura y roscado OCTG) |
+| Secundario +15% | Ciudad de México | Estado | Ex Aceros Cuatro Caminos; Grupo Collado; sedes y compras |
+| Secundario +15% | Estado de México | Estado | Ex Aceros Cuatro Caminos; sedes y compras |
+
+**BR**
+
+| Nivel | Ubicación | Tipo | Plantas que lo justifican |
+|---|---|---|---|
+| Núcleo +30% | São Paulo (estado), Brasil | Estado | Tenaris Confab; Apolo Tubulars; Aperam; Belgo Arames; pymes de tubo soldado |
+| Núcleo +30% | Minas Gerais, Brasil | Estado | Vallourec Barreiro y Jeceaba; Belgo Arames; Cofer |
+| Núcleo +30% | Santa Catarina, Brasil | Estado | Tuper/ArcelorMittal; Marcegaglia; Steelmast |
+| Núcleo +30% | Espírito Santo, Brasil | Estado | Perfilados Rio Doce (planta nueva); TSA; Vallourec Serra |
+| Secundario +15% | Rio de Janeiro (estado), Brasil | Estado | MVal (planta nueva sin confirmar); sede de Apolo |
+| Secundario +15% | Rio Grande do Sul, Brasil | Estado | Panatlântica (perfilado) |
+| Secundario +15% | Bahia, Brasil | Estado | Belgo Feira de Santana |
+
+**LATAM** (cada país entra completo en base)
+
+| Nivel | Ubicación | Tipo | Plantas que lo justifican |
+|---|---|---|---|
+| Núcleo +30% | Lima, Perú | Departamento | Tupemesa/Cintac; Aceros Arequipa; Precor (Chilca) |
+| Núcleo +30% | Callao, Perú | Región | Aceros Arequipa (Lima–Callao) |
+| Núcleo +30% | Atlántico, Colombia | Departamento | Acesco (Malambo); Corpacero; Ternium |
+| Núcleo +30% | Bolívar, Colombia | Departamento | Tenaris TuboCaribe (Cartagena) |
+| Núcleo +30% | Guayas, Ecuador | Provincia | IPAC (tres plantas); Novacero |
+| Núcleo +30% | Región Metropolitana de Santiago, Chile | Región | Cintac; Formac; VH Acero; Hunter Douglas |
+| Núcleo +30% | Central, Paraguay | Departamento | Schussmuller (planta nueva); L'Acerie; Barbieri |
+| Núcleo +30% | Asunción, Paraguay | Ciudad | Gran Asunción |
+| Núcleo +30% | Santa Cruz, Bolivia | Departamento | Aceros Arequipa (planta nueva) |
+| Secundario +15% | Cauca, Colombia | Departamento | Ternium "Cali unit" |
+| Secundario +15% | Valle del Cauca, Colombia | Departamento | Gerdau Diaco (Yumbo) |
+| Secundario +15% | Cundinamarca, Colombia | Departamento | Proalco-Bekaert (Sibaté); Diaco |
+| Secundario +15% | Bogotá, Colombia | Ciudad | Sedes y compras |
+| Secundario +15% | Pichincha, Ecuador | Provincia | Novacero (Quito) |
+| Secundario +15% | Cotopaxi, Ecuador | Provincia | Novacero (Lasso) |
+| Secundario +15% | Biobío, Chile | Región | Inchalam (Talcahuano) |
+| Secundario +15% | Distrito Nacional, República Dominicana | Provincia | Metaldom (línea de tubo de 60 kt/año) |
+| Secundario +15% | Santo Domingo, República Dominicana | Provincia | Metaldom |
 
 ---
 
@@ -203,7 +311,7 @@ bajo y sin historial de conversiones, la amplia trae búsquedas que no
 tienen nada que ver. Google suele ofrecer activar "concordancia amplia" a
 nivel campaña: **dejala apagada**.
 
-### 4.1 ES (AR y LATAM)
+### 4.1 ES (AR, MX y LATAM)
 
 Vocabulario: "soluble", "aceite soluble", "refrigerante", "emulsión",
 "fluido de corte" — siempre junto a filtración o a un equipo.
@@ -217,6 +325,12 @@ Vocabulario: "soluble", "aceite soluble", "refrigerante", "emulsión",
 | 05 \| Filtro de banda | filtro de banda para refrigerante · filtro de banda para soluble · filtro de banda por gravedad · filtro de banda de papel · filtro de papel para refrigerante · filtro de papel para soluble · filtro de lecho de papel · filtro de gravedad para soluble · filtro de tela para soluble · filtro de papel para emulsión | filtro de banda para refrigerante · filtro de papel para soluble · filtro de banda por gravedad |
 | 06 \| Skimmer aceite | skimmer de aceite · skimmer industrial · skimmer de banda · skimmer para soluble · skimmer para refrigerante · oil skimmer · separador de aceite atrapado · separador coalescente de aceite · desnatador de aceite · recuperador de aceite industrial · separador de aceite para soluble | skimmer de aceite · skimmer industrial · separador de aceite atrapado · oil skimmer |
 | 07 \| Síntoma (test) | soluble con olor · olor del soluble · olor en el soluble · soluble huele mal · bacterias en el soluble · vida útil del soluble · vida útil del aceite soluble · cambio de soluble · soluble contaminado · aceite en el soluble · mantenimiento del soluble | — |
+
+México usa además su propio léxico. Antes de lanzar, buscá en el
+Planificador, con ubicación México, "tubería", "molino de tubo" y
+"refrigerante soluble" junto a filtración o a un equipo (p. ej.
+"filtración molino de tubo", "filtro refrigerante soluble"), y sumá como
+exactas en la campaña MX las variantes que tengan volumen.
 
 ### 4.2 PT (BR)
 
@@ -248,7 +362,7 @@ grupo 06; "agua" solo en el grupo 03.
 
 Validado: ninguna negativa bloquea una keyword propia.
 
-### 5.1 ES — nivel campaña (AR y LATAM)
+### 5.1 ES — nivel campaña (AR, MX y LATAM)
 
 | Tema | Términos (concordancia de frase) |
 |---|---|
@@ -307,9 +421,9 @@ Validado: ninguna negativa bloquea una keyword propia.
 | 05 \| Filtro de papel | passa banda · passa-banda · passa faixa · áudio · audio · sinal · equalizador · arduino · circuito · rádio · radio · frequência · frequencia · rf · prensa · lodo · desaguamento |
 | 06 \| Skimmer óleo | peixe · peixes · derramamento · mar · mancha · manchas · piso · tecido · roupa |
 
-AR y LATAM comparten las negativas de campaña. Si preferís, armá una
+AR, MX y LATAM comparten las negativas de campaña. Si preferís, armá una
 **lista de negativas compartida** en la Biblioteca compartida y aplicala a
-las dos.
+las tres.
 
 ---
 
@@ -374,9 +488,9 @@ Reglas:
 | Adaptamos la pileta existente o dimensionamos la central según el caudal de la línea. | 85 | 03, 05 |
 | Separación magnética, filtro de banda y skimmer integrados en una central a medida. | 83 | 04 |
 
-Diferencias de LATAM (todo lo demás es igual a AR):
+Diferencias de MX y LATAM (todo lo demás es igual a AR):
 
-| Elemento | AR | LATAM |
+| Elemento | AR | MX y LATAM |
 |---|---|---|
 | Título | Repuestos sin importación | Servicio en la región |
 | Descripción de confianza | Fabricación propia en Córdoba desde 1989. Repuestos sin plazos de importación. | Fabricación propia en Córdoba, Argentina, desde 1989. Clientes en 14 países. |
@@ -433,7 +547,7 @@ Diferencias de LATAM (todo lo demás es igual a AR):
 Apuntan a las anclas de la landing (los `id` de `LandingLayout.astro`, que
 son iguales en los tres idiomas).
 
-ES (AR; en LATAM cambia la línea 2 de "Por qué Trans-Fil", §6.2):
+ES (AR; en MX y LATAM cambia la línea 2 de "Por qué Trans-Fil", §6.2):
 
 | Texto | Línea 1 | Línea 2 | URL |
 |---|---|---|---|
@@ -465,7 +579,7 @@ origen: en ese caso se resuelve en la landing, no en la campaña.
 
 ES (AR): `Fabricación propia` · `Relevamiento en planta` · `Respuesta en 24 h hábiles` · `Adaptamos su pileta` · `Repuestos sin importación` · `Desde 1989 en Córdoba` · `Clientes en 14 países` · `Ingeniería a medida` · `Un solo interlocutor` · `Servicio en la región`
 
-LATAM: los mismos, sin "Repuestos sin importación".
+MX y LATAM: los mismos, sin "Repuestos sin importación".
 
 PT: `Fabricação própria` · `Levantamento em planta` · `Resposta em 24 h úteis` · `Aproveitamos seu tanque` · `Desde 1989 em Córdoba` · `Clientes em 14 países` · `Engenharia sob medida` · `Um único interlocutor` · `Serviço na região`
 
@@ -473,8 +587,8 @@ PT: `Fabricação própria` · `Levantamento em planta` · `Resposta em 24 h út
 
 | Campaña | Encabezado | Valores |
 |---|---|---|
-| ES (AR y LATAM) | Tipos (Types) | Separador magnético · Filtro de banda · Skimmer de aceite · Central de filtrado · Filtro bolsa · Intercambiador de calor |
-| ES (AR y LATAM) | Servicios (Service catalog) | Relevamiento en planta · Ingeniería a medida · Retrofitting · Mantenimiento · Repuestos |
+| ES (AR, MX y LATAM) | Tipos (Types) | Separador magnético · Filtro de banda · Skimmer de aceite · Central de filtrado · Filtro bolsa · Intercambiador de calor |
+| ES (AR, MX y LATAM) | Servicios (Service catalog) | Relevamiento en planta · Ingeniería a medida · Retrofitting · Mantenimiento · Repuestos |
 | PT (BR) | Tipos (Types) | Separador magnético · Filtro de esteira · Skimmer de óleo · Central de filtragem · Filtro de saco · Trocador de calor |
 | PT (BR) | Serviços (Service catalog) | Levantamento em planta · Engenharia sob medida · Retrofit · Manutenção · Peças de reposição |
 
@@ -524,12 +638,12 @@ Fotos reales del repo — nada de stock:
 |---|---|---|
 | Tipo / objetivo | Búsqueda · Clientes potenciales | |
 | Redes | Solo Búsqueda de Google. **Sin Display, sin socios de búsqueda** al inicio | Socios se prueba después de la semana 6 si falta volumen |
-| AI Max para Search | **Apagado.** Viene activado por defecto en campañas nuevas ([ayuda de Google](https://support.google.com/google-ads/answer/15910187)). Como mínimo: expansión de URL final y personalización de texto apagadas | La expansión de URL mandaría tráfico al home; la personalización escribe textos con afirmaciones no aprobadas |
+| AI Max para Search | **Apagado.** Viene activado por defecto en campañas nuevas ([ayuda de Google](https://support.google.com/google-ads/answer/15910187)). Como mínimo: expansión de URL final y personalización de texto apagadas | La expansión de URL mandaría tráfico al home; la personalización escribe textos con afirmaciones no aprobadas. Además, desde septiembre de 2026 Google pasa solas a AI Max las campañas con recursos de texto automáticos o con concordancia amplia a nivel campaña ([Google](https://blog.google/products/ads-commerce/dsa-upgrade-to-ai-max-2026/)): por eso esos dos ajustes también van apagados |
 | Concordancia amplia a nivel campaña | Apagada | §4 |
-| Ubicación — opción | **Presencia:** "personas que están o suelen estar en" (no "interés") | Afuera quedan estudiantes y curiosos de otros países |
-| Idiomas | ES: español + inglés · BR: portugués + inglés | Ingenieros con el navegador en inglés |
-| Horario | §0 (hora de la cuenta) | Se revisa en la semana 4 |
-| Dispositivos | Todos, sin ajustes | Se revisa en la semana 4 |
+| Ubicación | País entero con **Presencia** ("personas que están o suelen estar en", no "interés") + recargos por clúster (§3.6) | Afuera quedan estudiantes y curiosos de otros países; la prioridad la marcan los recargos |
+| Idioma | No se configura: Google lo quitó de Search a fines de septiembre de 2026 | Decide el idioma del anuncio, de la landing y de la consulta. Cada campaña tiene todo en un solo idioma y BR no comparte países con las de español |
+| Horario | §0 (hora de la cuenta) | Se revisa a las 8–12 semanas, con datos |
+| Dispositivos | Todos, sin ajustes | Se revisa a las 8–12 semanas |
 | Rotación de anuncios | Optimizar | |
 | Objetivos de conversión | De campaña: solo "Lead – Formulario" y "Lead – WhatsApp" | Que no puje por conversiones secundarias |
 | Anuncios políticos de la UE | "No" (si lo pide) | |
@@ -545,9 +659,14 @@ baratos, que en este nicho suelen ser los irrelevantes. (El CPC avanzado ya
 no existe.) Si no hay tiempo para mantener pujas manuales: Maximizar clics
 con límite de CPC máximo = puja base.
 
-**Después:** con ~15–30 conversiones primarias en 30 días en una campaña,
-pasarla a **Maximizar conversiones**. Con el volumen esperado puede que no
-pase en AR; si no pasa, se queda en manual.
+**Sostener el CPC manual.** Es la única modalidad en la que rigen los
+recargos por clúster (§3.6) y por horario. Pasar una campaña a
+**Maximizar conversiones** recién con **~30 conversiones primarias en 30
+días**, sabiendo que apaga la prioridad geográfica; mientras tanto, cargar
+"Lead calificado" por importación offline (§2.3). Si después se fija un CPA
+objetivo: desde el 17 de agosto de 2026, las campañas limitadas por
+presupuesto acercan el costo real al objetivo, así que un objetivo holgado
+encarece el lead.
 
 Pujas por grupo, como índice (100 = puja base). Puja base = CPC "parte
 superior de la página (rango alto)" que da el Planificador para las
@@ -565,8 +684,12 @@ keywords del grupo 02 en ese mercado.
 
 Presupuesto diario = **clics por día buscados × CPC estimado**. Punto de
 partida, **a validar en el Planificador antes de lanzar** (no tuvimos
-acceso): AR USD 10/día, LATAM USD 8/día, BR USD 12/día — unos USD 900/mes
-entre las tres.
+acceso): AR USD 6/día, MX USD 9/día, LATAM USD 6/día, BR USD 9/día — USD
+30/día, unos USD 900/mes entre las cuatro. México y Brasil, los dos
+mercados grandes, llevan la mayor parte; Argentina baja porque buena parte
+de su capacidad grande ya es cliente y la campaña apunta a pymes, y es la
+primera en recibir más si aparece "limitada por presupuesto" con términos
+limpios.
 
 - Si la cuenta factura en ARS, convertí al cargar: los CSV no traen
   montos a propósito.
@@ -603,7 +726,10 @@ utm_source=google&utm_medium=cpc&utm_campaign=conformado_search_ar_es&utm_conten
 - [ ] Etiquetado automático activado.
 - [ ] CSV importados en Editor en orden ([README](./conformado-search/README.md)),
       vista previa revisada.
+- [ ] Planificador de palabras clave: volumen y CPC por mercado (puja base,
+      §9) y léxico de México (§4.1).
 - [ ] Presupuestos y Max CPC por grupo cargados (§9). Publicar desde Editor.
+- [ ] Ubicaciones de clúster cargadas con su ajuste en cada campaña (§3.6).
 - [ ] En la web de Google Ads, en cada campaña: AI Max apagado,
       concordancia amplia apagada, ubicación "Presencia", Display y socios
       apagados, recursos de texto automáticos apagados.
@@ -624,9 +750,10 @@ utm_source=google&utm_medium=cpc&utm_campaign=conformado_search_ar_es&utm_conten
 | Semana | Qué hacer |
 |---|---|
 | 1–2 | Informe de términos de búsqueda **dos veces por semana** (lunes y jueves). Lo irrelevante va a negativas: de campaña si es un tema, de grupo si es un cruce entre grupos. Lo bueno que no es keyword entra como exacta. Confirmar que los mails llegan con `utm_term` y que las conversiones registran. |
-| 3–4 | Términos de búsqueda una vez por semana. Pausar keywords sin impresiones o marcadas "Volumen de búsqueda bajo". Si un término cae en el grupo equivocado: exacta en el correcto + negativa exacta en el otro. Revisar el Nivel de calidad por componente (CTR esperado, relevancia del anuncio, experiencia en la página de destino). Ajustar pujas con el índice; revisar horario y dispositivos. |
-| 5–6 | Grupo 07: si trae clics y no leads, pausarlo. Revisar el rendimiento de los recursos de cada RSA y reemplazar los títulos "Bajos". Con 15–30 conversiones / 30 días, pasar a Maximizar conversiones. Probar socios de búsqueda si falta volumen. |
-| 7–8 | Leads calificados (§2.3) por keyword y por mercado: mover presupuesto al mercado con mejor costo por lead calificado. Fijar el CPL objetivo. Si el volumen se agotó: landing propia para mecanizado / rectificado, o la campaña EN. |
+| 3–4 | Términos de búsqueda una vez por semana. Pausar keywords sin impresiones o marcadas "Volumen de búsqueda bajo". Si un término cae en el grupo equivocado: exacta en el correcto + negativa exacta en el otro. Revisar el Nivel de calidad por componente (CTR esperado, relevancia del anuncio, experiencia en la página de destino). Ajustar pujas con el índice. |
+| 5–6 | Grupo 07: si trae clics y no leads, pausarlo. Revisar el rendimiento de los recursos de cada RSA y reemplazar los títulos "Bajos". Con ~30 conversiones / 30 días en una campaña, evaluar Maximizar conversiones (apaga los recargos geográficos). Probar socios de búsqueda si falta volumen. |
+| 7–8 | Leads calificados (§2.3) por keyword y por mercado: mover presupuesto al mercado con mejor costo por lead calificado. Fijar el CPL objetivo. Si el volumen se agotó: landing propia para mecanizado / rectificado, o la campaña EN. Si MX no gasta su presupuesto: probar Guatemala, El Salvador y Costa Rica dentro de MX. |
+| 9–12 | Informe de ubicaciones coincidentes, por estado y con 60–90 días acumulados: lo que trae clics y nunca leads baja a base o se excluye; un estado en base que trae leads sube a secundario. Revisar horario y dispositivos con datos. |
 
 Regla: **un cambio grande por semana** (puja, presupuesto o estructura).
 Con poco volumen, si se cambia todo junto no se sabe qué funcionó.
@@ -637,8 +764,10 @@ Con poco volumen, si se cambia todo junto no se sabe qué funcionó.
 
 | Tema | Supuesto en este plan | Confirmar |
 |---|---|---|
-| Presupuesto y moneda | USD 10 / 8 / 12 por día; montos fuera de los CSV | Monto real y moneda de la cuenta (ARS o USD) |
-| Mercados | AR + LATAM (8 países) + BR; EN y España en fase 2 | ¿Sumar RD, Puerto Rico, EE. UU. o España? |
+| Presupuesto y moneda | USD 6 (AR) / 9 (MX) / 6 (LATAM) / 9 (BR) por día; montos fuera de los CSV | Monto real y moneda de la cuenta (ARS o USD); la moneda no se puede cambiar después |
+| Mercados | AR + MX + LATAM (8 países, con República Dominicana) + BR; Centroamérica por contacto directo; EN y España en fase 2 | ¿Algún país más? |
+| Ubicaciones de clúster | Nombres de estados, provincias y ciudades sin ID verificado | Confirmar cada coincidencia al cargarlas (§3.6) |
+| Idioma | Google quitó el idioma de Search (sep-2026) | — |
 | Llamada | Recurso de llamada solo en AR | ¿Se quiere que entren llamadas al +54 9 351 382-0321? |
 | Valores de conversión | Relativos (formulario 1, WhatsApp 0,5) | Valor real de un lead y de un lead calificado |
 | Zona horaria de la cuenta | Argentina (UTC−3) | Que la cuenta esté en esa zona |

@@ -1,22 +1,23 @@
 # Importación en Google Ads Editor — Search `/conformado`
 
-CSV para cargar las tres campañas del plan
+CSV para cargar las cuatro campañas del plan
 [`../conformado-search.md`](../conformado-search.md) en Google Ads Editor.
 Salen de los mismos datos que las tablas del plan. UTF-8, separados por
 coma.
 
 | Archivo | Filas | Qué carga |
 |---|---|---|
-| 01-campanas.csv | 3 | Las 3 campañas, en pausa: tipo, red, estrategia, idiomas, horario, sufijo de URL |
-| 02-ubicaciones.csv | 10 | Países por campaña |
-| 03-grupos.csv | 21 | Grupos de anuncios con su sufijo de URL (UTM) |
-| 04-keywords.csv | 285 | Palabras clave (frase y exacta) |
-| 05-negativas-campana.csv | 524 | Negativas a nivel campaña |
-| 06-negativas-grupo.csv | 169 | Negativas a nivel grupo |
-| 07-anuncios.csv | 21 | Un RSA por grupo (15 títulos, 4 descripciones, fijaciones) |
-| 08-sitelinks.csv | 18 | Sitelinks a las anclas de la landing |
-| 09-textos-destacados.csv | 28 | Textos destacados |
-| 10-fragmentos.csv | 6 | Fragmentos estructurados |
+| 01-campanas.csv | 4 | Las 4 campañas, en pausa: tipo, red, estrategia, horario, sufijo de URL |
+| 02-ubicaciones.csv | 11 | Países por campaña |
+| 03-grupos.csv | 28 | Grupos de anuncios con su sufijo de URL (UTM) |
+| 04-keywords.csv | 388 | Palabras clave (frase y exacta) |
+| 05-negativas-campana.csv | 694 | Negativas a nivel campaña |
+| 06-negativas-grupo.csv | 226 | Negativas a nivel grupo |
+| 07-anuncios.csv | 28 | Un RSA por grupo (15 títulos, 4 descripciones, fijaciones) |
+| 08-sitelinks.csv | 24 | Sitelinks a las anclas de la landing |
+| 09-textos-destacados.csv | 37 | Textos destacados |
+| 10-fragmentos.csv | 8 | Fragmentos estructurados |
+| 11-ubicaciones-clusters.csv | 48 | Estados, provincias y ciudades con su ajuste de puja (no es para Editor: se cargan con "Ubicaciones masivas", §3.6 del plan) |
 
 ## Cómo importar
 
@@ -49,15 +50,20 @@ coma.
 - **Negativas de campaña** (`05`): `Criterion Type = Campaign Negative
   Phrase`, sin columna de grupo. Si Editor no reconoce ese valor, usá
   *Palabras clave negativas de campaña → Hacer varios cambios*, pegá la
-  columna `Keyword` y elegí las campañas de destino (AR y LATAM comparten la
-  misma lista).
+  columna `Keyword` y elegí las campañas de destino (AR, MX y LATAM
+  comparten la misma lista).
 - **Negativas de grupo** (`06`): `Criterion Type = Negative Phrase`, con
   grupo.
 - **Fijaciones** (`07`): `Headline N position = 1` en los títulos fijados;
   vacío = libre.
 - **Horario** (`01`): `(Monday[07:00-20:00]);…`, en la zona horaria de la
   cuenta.
-- **Idiomas** (`01`): códigos separados por `;` (`es;en`, `pt;en`).
+- **Sin idioma** (`01`): Google quitó el idioma de las campañas de Search
+  en septiembre de 2026; el idioma lo deciden el anuncio, la landing y la
+  consulta.
+- **Clústeres** (`11`): no es para Editor. Son los estados, provincias y
+  ciudades con recargo de puja; se cargan en la web con *Ubicaciones
+  masivas* (§3.6 del plan).
 - **Ubicaciones** (`02`): nombre en inglés + ID de criterio de Google, por
   si el nombre resulta ambiguo.
 - **Fragmentos** (`10`): encabezado en inglés (`Types`, `Service catalog`)
