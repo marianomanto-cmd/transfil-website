@@ -1,0 +1,286 @@
+Campaign,Ad group,Keyword,Criterion Type,Status
+TF | Search | Conformado | AR | ES,01 | Conformado tubos,filtración para línea de tubos,Phrase,Enabled
+TF | Search | Conformado | AR | ES,01 | Conformado tubos,filtrado para línea de tubos,Phrase,Enabled
+TF | Search | Conformado | AR | ES,01 | Conformado tubos,filtración formadora de tubos,Phrase,Enabled
+TF | Search | Conformado | AR | ES,01 | Conformado tubos,filtro para formadora de tubos,Phrase,Enabled
+TF | Search | Conformado | AR | ES,01 | Conformado tubos,soluble formadora de tubos,Phrase,Enabled
+TF | Search | Conformado | AR | ES,01 | Conformado tubos,refrigerante formadora de tubos,Phrase,Enabled
+TF | Search | Conformado | AR | ES,01 | Conformado tubos,emulsión formadora de tubos,Phrase,Enabled
+TF | Search | Conformado | AR | ES,01 | Conformado tubos,filtración línea erw,Phrase,Enabled
+TF | Search | Conformado | AR | ES,01 | Conformado tubos,filtración tubos con costura,Phrase,Enabled
+TF | Search | Conformado | AR | ES,01 | Conformado tubos,refrigerante tubos con costura,Phrase,Enabled
+TF | Search | Conformado | AR | ES,01 | Conformado tubos,filtración conformado de tubos,Phrase,Enabled
+TF | Search | Conformado | AR | ES,01 | Conformado tubos,filtración perfiladora,Phrase,Enabled
+TF | Search | Conformado | AR | ES,01 | Conformado tubos,soluble perfiladora,Phrase,Enabled
+TF | Search | Conformado | AR | ES,01 | Conformado tubos,filtración trefilado,Phrase,Enabled
+TF | Search | Conformado | AR | ES,01 | Conformado tubos,filtrado emulsión trefilado,Phrase,Enabled
+TF | Search | Conformado | AR | ES,01 | Conformado tubos,filtración formadora de tubos,Exact,Enabled
+TF | Search | Conformado | AR | ES,01 | Conformado tubos,filtración línea de tubos,Exact,Enabled
+TF | Search | Conformado | AR | ES,01 | Conformado tubos,filtración conformado de tubos,Exact,Enabled
+TF | Search | Conformado | AR | ES,01 | Conformado tubos,filtro para formadora de tubos,Exact,Enabled
+TF | Search | Conformado | AR | ES,02 | Filtración soluble,filtración de refrigerante,Phrase,Enabled
+TF | Search | Conformado | AR | ES,02 | Filtración soluble,filtrado de refrigerante,Phrase,Enabled
+TF | Search | Conformado | AR | ES,02 | Filtración soluble,filtro de refrigerante industrial,Phrase,Enabled
+TF | Search | Conformado | AR | ES,02 | Filtración soluble,filtración de soluble,Phrase,Enabled
+TF | Search | Conformado | AR | ES,02 | Filtración soluble,filtrado de soluble,Phrase,Enabled
+TF | Search | Conformado | AR | ES,02 | Filtración soluble,filtro para soluble,Phrase,Enabled
+TF | Search | Conformado | AR | ES,02 | Filtración soluble,filtro de aceite soluble,Phrase,Enabled
+TF | Search | Conformado | AR | ES,02 | Filtración soluble,filtrado de aceite soluble,Phrase,Enabled
+TF | Search | Conformado | AR | ES,02 | Filtración soluble,filtración de emulsión,Phrase,Enabled
+TF | Search | Conformado | AR | ES,02 | Filtración soluble,filtración de fluido de corte,Phrase,Enabled
+TF | Search | Conformado | AR | ES,02 | Filtración soluble,filtro para fluido de corte,Phrase,Enabled
+TF | Search | Conformado | AR | ES,02 | Filtración soluble,sistema de filtrado de refrigerante,Phrase,Enabled
+TF | Search | Conformado | AR | ES,02 | Filtración soluble,tratamiento de soluble,Phrase,Enabled
+TF | Search | Conformado | AR | ES,02 | Filtración soluble,tratamiento de refrigerante industrial,Phrase,Enabled
+TF | Search | Conformado | AR | ES,02 | Filtración soluble,recuperación de soluble,Phrase,Enabled
+TF | Search | Conformado | AR | ES,02 | Filtración soluble,reciclado de soluble,Phrase,Enabled
+TF | Search | Conformado | AR | ES,02 | Filtración soluble,filtración de refrigerante,Exact,Enabled
+TF | Search | Conformado | AR | ES,02 | Filtración soluble,filtración de soluble,Exact,Enabled
+TF | Search | Conformado | AR | ES,02 | Filtración soluble,filtro para soluble,Exact,Enabled
+TF | Search | Conformado | AR | ES,02 | Filtración soluble,filtro de aceite soluble,Exact,Enabled
+TF | Search | Conformado | AR | ES,03 | Central de filtrado,central de filtrado,Phrase,Enabled
+TF | Search | Conformado | AR | ES,03 | Central de filtrado,central de filtración,Phrase,Enabled
+TF | Search | Conformado | AR | ES,03 | Central de filtrado,filtración centralizada,Phrase,Enabled
+TF | Search | Conformado | AR | ES,03 | Central de filtrado,filtrado centralizado,Phrase,Enabled
+TF | Search | Conformado | AR | ES,03 | Central de filtrado,sistema de filtrado centralizado,Phrase,Enabled
+TF | Search | Conformado | AR | ES,03 | Central de filtrado,filtración centralizada de refrigerante,Phrase,Enabled
+TF | Search | Conformado | AR | ES,03 | Central de filtrado,central de filtrado de soluble,Phrase,Enabled
+TF | Search | Conformado | AR | ES,03 | Central de filtrado,sistema centralizado de refrigerante,Phrase,Enabled
+TF | Search | Conformado | AR | ES,03 | Central de filtrado,central de refrigerante,Phrase,Enabled
+TF | Search | Conformado | AR | ES,03 | Central de filtrado,planta de filtrado de soluble,Phrase,Enabled
+TF | Search | Conformado | AR | ES,03 | Central de filtrado,central de filtrado,Exact,Enabled
+TF | Search | Conformado | AR | ES,03 | Central de filtrado,central de filtración,Exact,Enabled
+TF | Search | Conformado | AR | ES,03 | Central de filtrado,filtración centralizada,Exact,Enabled
+TF | Search | Conformado | AR | ES,04 | Separador magnético,separador magnético para refrigerante,Phrase,Enabled
+TF | Search | Conformado | AR | ES,04 | Separador magnético,separador magnético para soluble,Phrase,Enabled
+TF | Search | Conformado | AR | ES,04 | Separador magnético,separador magnético de tambor,Phrase,Enabled
+TF | Search | Conformado | AR | ES,04 | Separador magnético,separador magnético de finos,Phrase,Enabled
+TF | Search | Conformado | AR | ES,04 | Separador magnético,separador magnético industrial,Phrase,Enabled
+TF | Search | Conformado | AR | ES,04 | Separador magnético,filtro magnético para refrigerante,Phrase,Enabled
+TF | Search | Conformado | AR | ES,04 | Separador magnético,filtro magnético para soluble,Phrase,Enabled
+TF | Search | Conformado | AR | ES,04 | Separador magnético,separación magnética de refrigerante,Phrase,Enabled
+TF | Search | Conformado | AR | ES,04 | Separador magnético,separación magnética de soluble,Phrase,Enabled
+TF | Search | Conformado | AR | ES,04 | Separador magnético,separador magnético para refrigerante,Exact,Enabled
+TF | Search | Conformado | AR | ES,04 | Separador magnético,separador magnético de tambor,Exact,Enabled
+TF | Search | Conformado | AR | ES,04 | Separador magnético,separador magnético para soluble,Exact,Enabled
+TF | Search | Conformado | AR | ES,05 | Filtro de banda,filtro de banda para refrigerante,Phrase,Enabled
+TF | Search | Conformado | AR | ES,05 | Filtro de banda,filtro de banda para soluble,Phrase,Enabled
+TF | Search | Conformado | AR | ES,05 | Filtro de banda,filtro de banda por gravedad,Phrase,Enabled
+TF | Search | Conformado | AR | ES,05 | Filtro de banda,filtro de banda de papel,Phrase,Enabled
+TF | Search | Conformado | AR | ES,05 | Filtro de banda,filtro de papel para refrigerante,Phrase,Enabled
+TF | Search | Conformado | AR | ES,05 | Filtro de banda,filtro de papel para soluble,Phrase,Enabled
+TF | Search | Conformado | AR | ES,05 | Filtro de banda,filtro de lecho de papel,Phrase,Enabled
+TF | Search | Conformado | AR | ES,05 | Filtro de banda,filtro de gravedad para soluble,Phrase,Enabled
+TF | Search | Conformado | AR | ES,05 | Filtro de banda,filtro de tela para soluble,Phrase,Enabled
+TF | Search | Conformado | AR | ES,05 | Filtro de banda,filtro de papel para emulsión,Phrase,Enabled
+TF | Search | Conformado | AR | ES,05 | Filtro de banda,filtro de banda para refrigerante,Exact,Enabled
+TF | Search | Conformado | AR | ES,05 | Filtro de banda,filtro de papel para soluble,Exact,Enabled
+TF | Search | Conformado | AR | ES,05 | Filtro de banda,filtro de banda por gravedad,Exact,Enabled
+TF | Search | Conformado | AR | ES,06 | Skimmer aceite,skimmer de aceite,Phrase,Enabled
+TF | Search | Conformado | AR | ES,06 | Skimmer aceite,skimmer industrial,Phrase,Enabled
+TF | Search | Conformado | AR | ES,06 | Skimmer aceite,skimmer de banda,Phrase,Enabled
+TF | Search | Conformado | AR | ES,06 | Skimmer aceite,skimmer para soluble,Phrase,Enabled
+TF | Search | Conformado | AR | ES,06 | Skimmer aceite,skimmer para refrigerante,Phrase,Enabled
+TF | Search | Conformado | AR | ES,06 | Skimmer aceite,oil skimmer,Phrase,Enabled
+TF | Search | Conformado | AR | ES,06 | Skimmer aceite,separador de aceite atrapado,Phrase,Enabled
+TF | Search | Conformado | AR | ES,06 | Skimmer aceite,separador coalescente de aceite,Phrase,Enabled
+TF | Search | Conformado | AR | ES,06 | Skimmer aceite,desnatador de aceite,Phrase,Enabled
+TF | Search | Conformado | AR | ES,06 | Skimmer aceite,recuperador de aceite industrial,Phrase,Enabled
+TF | Search | Conformado | AR | ES,06 | Skimmer aceite,separador de aceite para soluble,Phrase,Enabled
+TF | Search | Conformado | AR | ES,06 | Skimmer aceite,skimmer de aceite,Exact,Enabled
+TF | Search | Conformado | AR | ES,06 | Skimmer aceite,skimmer industrial,Exact,Enabled
+TF | Search | Conformado | AR | ES,06 | Skimmer aceite,separador de aceite atrapado,Exact,Enabled
+TF | Search | Conformado | AR | ES,06 | Skimmer aceite,oil skimmer,Exact,Enabled
+TF | Search | Conformado | AR | ES,07 | Síntoma (test),soluble con olor,Phrase,Enabled
+TF | Search | Conformado | AR | ES,07 | Síntoma (test),olor del soluble,Phrase,Enabled
+TF | Search | Conformado | AR | ES,07 | Síntoma (test),olor en el soluble,Phrase,Enabled
+TF | Search | Conformado | AR | ES,07 | Síntoma (test),soluble huele mal,Phrase,Enabled
+TF | Search | Conformado | AR | ES,07 | Síntoma (test),bacterias en el soluble,Phrase,Enabled
+TF | Search | Conformado | AR | ES,07 | Síntoma (test),vida útil del soluble,Phrase,Enabled
+TF | Search | Conformado | AR | ES,07 | Síntoma (test),vida útil del aceite soluble,Phrase,Enabled
+TF | Search | Conformado | AR | ES,07 | Síntoma (test),cambio de soluble,Phrase,Enabled
+TF | Search | Conformado | AR | ES,07 | Síntoma (test),soluble contaminado,Phrase,Enabled
+TF | Search | Conformado | AR | ES,07 | Síntoma (test),aceite en el soluble,Phrase,Enabled
+TF | Search | Conformado | AR | ES,07 | Síntoma (test),mantenimiento del soluble,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,01 | Conformado tubos,filtración para línea de tubos,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,01 | Conformado tubos,filtrado para línea de tubos,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,01 | Conformado tubos,filtración formadora de tubos,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,01 | Conformado tubos,filtro para formadora de tubos,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,01 | Conformado tubos,soluble formadora de tubos,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,01 | Conformado tubos,refrigerante formadora de tubos,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,01 | Conformado tubos,emulsión formadora de tubos,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,01 | Conformado tubos,filtración línea erw,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,01 | Conformado tubos,filtración tubos con costura,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,01 | Conformado tubos,refrigerante tubos con costura,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,01 | Conformado tubos,filtración conformado de tubos,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,01 | Conformado tubos,filtración perfiladora,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,01 | Conformado tubos,soluble perfiladora,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,01 | Conformado tubos,filtración trefilado,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,01 | Conformado tubos,filtrado emulsión trefilado,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,01 | Conformado tubos,filtración formadora de tubos,Exact,Enabled
+TF | Search | Conformado | LATAM | ES,01 | Conformado tubos,filtración línea de tubos,Exact,Enabled
+TF | Search | Conformado | LATAM | ES,01 | Conformado tubos,filtración conformado de tubos,Exact,Enabled
+TF | Search | Conformado | LATAM | ES,01 | Conformado tubos,filtro para formadora de tubos,Exact,Enabled
+TF | Search | Conformado | LATAM | ES,02 | Filtración soluble,filtración de refrigerante,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,02 | Filtración soluble,filtrado de refrigerante,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,02 | Filtración soluble,filtro de refrigerante industrial,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,02 | Filtración soluble,filtración de soluble,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,02 | Filtración soluble,filtrado de soluble,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,02 | Filtración soluble,filtro para soluble,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,02 | Filtración soluble,filtro de aceite soluble,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,02 | Filtración soluble,filtrado de aceite soluble,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,02 | Filtración soluble,filtración de emulsión,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,02 | Filtración soluble,filtración de fluido de corte,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,02 | Filtración soluble,filtro para fluido de corte,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,02 | Filtración soluble,sistema de filtrado de refrigerante,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,02 | Filtración soluble,tratamiento de soluble,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,02 | Filtración soluble,tratamiento de refrigerante industrial,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,02 | Filtración soluble,recuperación de soluble,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,02 | Filtración soluble,reciclado de soluble,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,02 | Filtración soluble,filtración de refrigerante,Exact,Enabled
+TF | Search | Conformado | LATAM | ES,02 | Filtración soluble,filtración de soluble,Exact,Enabled
+TF | Search | Conformado | LATAM | ES,02 | Filtración soluble,filtro para soluble,Exact,Enabled
+TF | Search | Conformado | LATAM | ES,02 | Filtración soluble,filtro de aceite soluble,Exact,Enabled
+TF | Search | Conformado | LATAM | ES,03 | Central de filtrado,central de filtrado,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,03 | Central de filtrado,central de filtración,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,03 | Central de filtrado,filtración centralizada,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,03 | Central de filtrado,filtrado centralizado,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,03 | Central de filtrado,sistema de filtrado centralizado,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,03 | Central de filtrado,filtración centralizada de refrigerante,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,03 | Central de filtrado,central de filtrado de soluble,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,03 | Central de filtrado,sistema centralizado de refrigerante,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,03 | Central de filtrado,central de refrigerante,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,03 | Central de filtrado,planta de filtrado de soluble,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,03 | Central de filtrado,central de filtrado,Exact,Enabled
+TF | Search | Conformado | LATAM | ES,03 | Central de filtrado,central de filtración,Exact,Enabled
+TF | Search | Conformado | LATAM | ES,03 | Central de filtrado,filtración centralizada,Exact,Enabled
+TF | Search | Conformado | LATAM | ES,04 | Separador magnético,separador magnético para refrigerante,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,04 | Separador magnético,separador magnético para soluble,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,04 | Separador magnético,separador magnético de tambor,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,04 | Separador magnético,separador magnético de finos,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,04 | Separador magnético,separador magnético industrial,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,04 | Separador magnético,filtro magnético para refrigerante,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,04 | Separador magnético,filtro magnético para soluble,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,04 | Separador magnético,separación magnética de refrigerante,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,04 | Separador magnético,separación magnética de soluble,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,04 | Separador magnético,separador magnético para refrigerante,Exact,Enabled
+TF | Search | Conformado | LATAM | ES,04 | Separador magnético,separador magnético de tambor,Exact,Enabled
+TF | Search | Conformado | LATAM | ES,04 | Separador magnético,separador magnético para soluble,Exact,Enabled
+TF | Search | Conformado | LATAM | ES,05 | Filtro de banda,filtro de banda para refrigerante,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,05 | Filtro de banda,filtro de banda para soluble,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,05 | Filtro de banda,filtro de banda por gravedad,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,05 | Filtro de banda,filtro de banda de papel,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,05 | Filtro de banda,filtro de papel para refrigerante,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,05 | Filtro de banda,filtro de papel para soluble,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,05 | Filtro de banda,filtro de lecho de papel,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,05 | Filtro de banda,filtro de gravedad para soluble,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,05 | Filtro de banda,filtro de tela para soluble,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,05 | Filtro de banda,filtro de papel para emulsión,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,05 | Filtro de banda,filtro de banda para refrigerante,Exact,Enabled
+TF | Search | Conformado | LATAM | ES,05 | Filtro de banda,filtro de papel para soluble,Exact,Enabled
+TF | Search | Conformado | LATAM | ES,05 | Filtro de banda,filtro de banda por gravedad,Exact,Enabled
+TF | Search | Conformado | LATAM | ES,06 | Skimmer aceite,skimmer de aceite,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,06 | Skimmer aceite,skimmer industrial,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,06 | Skimmer aceite,skimmer de banda,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,06 | Skimmer aceite,skimmer para soluble,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,06 | Skimmer aceite,skimmer para refrigerante,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,06 | Skimmer aceite,oil skimmer,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,06 | Skimmer aceite,separador de aceite atrapado,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,06 | Skimmer aceite,separador coalescente de aceite,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,06 | Skimmer aceite,desnatador de aceite,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,06 | Skimmer aceite,recuperador de aceite industrial,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,06 | Skimmer aceite,separador de aceite para soluble,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,06 | Skimmer aceite,skimmer de aceite,Exact,Enabled
+TF | Search | Conformado | LATAM | ES,06 | Skimmer aceite,skimmer industrial,Exact,Enabled
+TF | Search | Conformado | LATAM | ES,06 | Skimmer aceite,separador de aceite atrapado,Exact,Enabled
+TF | Search | Conformado | LATAM | ES,06 | Skimmer aceite,oil skimmer,Exact,Enabled
+TF | Search | Conformado | LATAM | ES,07 | Síntoma (test),soluble con olor,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,07 | Síntoma (test),olor del soluble,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,07 | Síntoma (test),olor en el soluble,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,07 | Síntoma (test),soluble huele mal,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,07 | Síntoma (test),bacterias en el soluble,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,07 | Síntoma (test),vida útil del soluble,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,07 | Síntoma (test),vida útil del aceite soluble,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,07 | Síntoma (test),cambio de soluble,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,07 | Síntoma (test),soluble contaminado,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,07 | Síntoma (test),aceite en el soluble,Phrase,Enabled
+TF | Search | Conformado | LATAM | ES,07 | Síntoma (test),mantenimiento del soluble,Phrase,Enabled
+TF | Search | Conformado | BR | PT,01 | Conformação tubos,filtragem para linha de tubos,Phrase,Enabled
+TF | Search | Conformado | BR | PT,01 | Conformação tubos,filtragem conformação de tubos,Phrase,Enabled
+TF | Search | Conformado | BR | PT,01 | Conformação tubos,filtragem formadora de tubos,Phrase,Enabled
+TF | Search | Conformado | BR | PT,01 | Conformação tubos,filtro para formadora de tubos,Phrase,Enabled
+TF | Search | Conformado | BR | PT,01 | Conformação tubos,fluido de corte formadora de tubos,Phrase,Enabled
+TF | Search | Conformado | BR | PT,01 | Conformação tubos,emulsão formadora de tubos,Phrase,Enabled
+TF | Search | Conformado | BR | PT,01 | Conformação tubos,filtragem tubos com costura,Phrase,Enabled
+TF | Search | Conformado | BR | PT,01 | Conformação tubos,filtragem linha erw,Phrase,Enabled
+TF | Search | Conformado | BR | PT,01 | Conformação tubos,filtragem perfiladeira,Phrase,Enabled
+TF | Search | Conformado | BR | PT,01 | Conformação tubos,fluido de corte perfiladeira,Phrase,Enabled
+TF | Search | Conformado | BR | PT,01 | Conformação tubos,filtragem trefilação,Phrase,Enabled
+TF | Search | Conformado | BR | PT,01 | Conformação tubos,filtragem emulsão trefilação,Phrase,Enabled
+TF | Search | Conformado | BR | PT,01 | Conformação tubos,filtragem para linha de tubos,Exact,Enabled
+TF | Search | Conformado | BR | PT,01 | Conformação tubos,filtragem conformação de tubos,Exact,Enabled
+TF | Search | Conformado | BR | PT,01 | Conformação tubos,filtragem formadora de tubos,Exact,Enabled
+TF | Search | Conformado | BR | PT,02 | Fluido de corte,filtragem de fluido de corte,Phrase,Enabled
+TF | Search | Conformado | BR | PT,02 | Fluido de corte,filtro de fluido de corte,Phrase,Enabled
+TF | Search | Conformado | BR | PT,02 | Fluido de corte,filtro para fluido de corte,Phrase,Enabled
+TF | Search | Conformado | BR | PT,02 | Fluido de corte,filtragem de óleo solúvel,Phrase,Enabled
+TF | Search | Conformado | BR | PT,02 | Fluido de corte,filtro de óleo solúvel,Phrase,Enabled
+TF | Search | Conformado | BR | PT,02 | Fluido de corte,filtragem de emulsão,Phrase,Enabled
+TF | Search | Conformado | BR | PT,02 | Fluido de corte,tratamento de fluido de corte,Phrase,Enabled
+TF | Search | Conformado | BR | PT,02 | Fluido de corte,recuperação de fluido de corte,Phrase,Enabled
+TF | Search | Conformado | BR | PT,02 | Fluido de corte,reciclagem de fluido de corte,Phrase,Enabled
+TF | Search | Conformado | BR | PT,02 | Fluido de corte,sistema de filtragem de fluido de corte,Phrase,Enabled
+TF | Search | Conformado | BR | PT,02 | Fluido de corte,filtragem de fluido de corte,Exact,Enabled
+TF | Search | Conformado | BR | PT,02 | Fluido de corte,filtro para fluido de corte,Exact,Enabled
+TF | Search | Conformado | BR | PT,02 | Fluido de corte,filtro de fluido de corte,Exact,Enabled
+TF | Search | Conformado | BR | PT,02 | Fluido de corte,filtragem de óleo solúvel,Exact,Enabled
+TF | Search | Conformado | BR | PT,03 | Central de filtragem,central de filtragem,Phrase,Enabled
+TF | Search | Conformado | BR | PT,03 | Central de filtragem,filtragem centralizada,Phrase,Enabled
+TF | Search | Conformado | BR | PT,03 | Central de filtragem,sistema de filtragem centralizado,Phrase,Enabled
+TF | Search | Conformado | BR | PT,03 | Central de filtragem,sistema centralizado de fluido de corte,Phrase,Enabled
+TF | Search | Conformado | BR | PT,03 | Central de filtragem,central de fluido de corte,Phrase,Enabled
+TF | Search | Conformado | BR | PT,03 | Central de filtragem,central de filtragem de fluido de corte,Phrase,Enabled
+TF | Search | Conformado | BR | PT,03 | Central de filtragem,central de filtragem,Exact,Enabled
+TF | Search | Conformado | BR | PT,03 | Central de filtragem,filtragem centralizada,Exact,Enabled
+TF | Search | Conformado | BR | PT,04 | Separador magnético,separador magnético para fluido de corte,Phrase,Enabled
+TF | Search | Conformado | BR | PT,04 | Separador magnético,separador magnético para óleo solúvel,Phrase,Enabled
+TF | Search | Conformado | BR | PT,04 | Separador magnético,separador magnético de tambor,Phrase,Enabled
+TF | Search | Conformado | BR | PT,04 | Separador magnético,separador magnético industrial,Phrase,Enabled
+TF | Search | Conformado | BR | PT,04 | Separador magnético,filtro magnético para fluido de corte,Phrase,Enabled
+TF | Search | Conformado | BR | PT,04 | Separador magnético,separação magnética de fluido de corte,Phrase,Enabled
+TF | Search | Conformado | BR | PT,04 | Separador magnético,separador magnético para fluido de corte,Exact,Enabled
+TF | Search | Conformado | BR | PT,04 | Separador magnético,separador magnético de tambor,Exact,Enabled
+TF | Search | Conformado | BR | PT,05 | Filtro de papel,filtro de papel para fluido de corte,Phrase,Enabled
+TF | Search | Conformado | BR | PT,05 | Filtro de papel,filtro de papel para óleo solúvel,Phrase,Enabled
+TF | Search | Conformado | BR | PT,05 | Filtro de papel,filtro de manta para fluido de corte,Phrase,Enabled
+TF | Search | Conformado | BR | PT,05 | Filtro de papel,filtro de esteira para fluido de corte,Phrase,Enabled
+TF | Search | Conformado | BR | PT,05 | Filtro de papel,filtro por gravidade para fluido de corte,Phrase,Enabled
+TF | Search | Conformado | BR | PT,05 | Filtro de papel,depurador a tecido,Phrase,Enabled
+TF | Search | Conformado | BR | PT,05 | Filtro de papel,filtro de papel para emulsão,Phrase,Enabled
+TF | Search | Conformado | BR | PT,05 | Filtro de papel,filtro de papel para fluido de corte,Exact,Enabled
+TF | Search | Conformado | BR | PT,05 | Filtro de papel,depurador a tecido,Exact,Enabled
+TF | Search | Conformado | BR | PT,05 | Filtro de papel,filtro de esteira para fluido de corte,Exact,Enabled
+TF | Search | Conformado | BR | PT,06 | Skimmer óleo,skimmer de óleo,Phrase,Enabled
+TF | Search | Conformado | BR | PT,06 | Skimmer óleo,skimmer industrial,Phrase,Enabled
+TF | Search | Conformado | BR | PT,06 | Skimmer óleo,skimmer para fluido de corte,Phrase,Enabled
+TF | Search | Conformado | BR | PT,06 | Skimmer óleo,skimmer de esteira,Phrase,Enabled
+TF | Search | Conformado | BR | PT,06 | Skimmer óleo,skimmer de cinta,Phrase,Enabled
+TF | Search | Conformado | BR | PT,06 | Skimmer óleo,oil skimmer,Phrase,Enabled
+TF | Search | Conformado | BR | PT,06 | Skimmer óleo,remoção de óleo tramp,Phrase,Enabled
+TF | Search | Conformado | BR | PT,06 | Skimmer óleo,separador de óleo tramp,Phrase,Enabled
+TF | Search | Conformado | BR | PT,06 | Skimmer óleo,óleo tramp,Phrase,Enabled
+TF | Search | Conformado | BR | PT,06 | Skimmer óleo,separador coalescente de óleo,Phrase,Enabled
+TF | Search | Conformado | BR | PT,06 | Skimmer óleo,remoção de óleo do fluido de corte,Phrase,Enabled
+TF | Search | Conformado | BR | PT,06 | Skimmer óleo,skimmer de óleo,Exact,Enabled
+TF | Search | Conformado | BR | PT,06 | Skimmer óleo,skimmer industrial,Exact,Enabled
+TF | Search | Conformado | BR | PT,06 | Skimmer óleo,oil skimmer,Exact,Enabled
+TF | Search | Conformado | BR | PT,07 | Sintoma (teste),fluido de corte com cheiro,Phrase,Enabled
+TF | Search | Conformado | BR | PT,07 | Sintoma (teste),fluido de corte cheirando mal,Phrase,Enabled
+TF | Search | Conformado | BR | PT,07 | Sintoma (teste),fluido de corte com mau cheiro,Phrase,Enabled
+TF | Search | Conformado | BR | PT,07 | Sintoma (teste),bactéria no fluido de corte,Phrase,Enabled
+TF | Search | Conformado | BR | PT,07 | Sintoma (teste),bactérias no fluido de corte,Phrase,Enabled
+TF | Search | Conformado | BR | PT,07 | Sintoma (teste),vida útil do fluido de corte,Phrase,Enabled
+TF | Search | Conformado | BR | PT,07 | Sintoma (teste),troca de fluido de corte,Phrase,Enabled
+TF | Search | Conformado | BR | PT,07 | Sintoma (teste),óleo solúvel com cheiro,Phrase,Enabled
+TF | Search | Conformado | BR | PT,07 | Sintoma (teste),fluido de corte contaminado,Phrase,Enabled
+TF | Search | Conformado | BR | PT,07 | Sintoma (teste),óleo no fluido de corte,Phrase,Enabled

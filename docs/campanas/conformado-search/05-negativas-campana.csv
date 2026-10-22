@@ -1,0 +1,525 @@
+Campaign,Keyword,Criterion Type
+TF | Search | Conformado | AR | ES,trabajo,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,trabajos,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,empleo,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,empleos,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,cv,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,curriculum,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,currículum,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,sueldo,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,sueldos,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,salario,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,vacante,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,vacantes,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,pasantía,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,pasantia,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,pasantías,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,computrabajo,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,bumeran,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,zonajobs,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,linkedin,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,job,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,jobs,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,pdf,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,tesis,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,monografía,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,monografia,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,qué es,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,que es,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,definición,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,definicion,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,significado,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,curso,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,cursos,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,tutorial,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,wikipedia,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,apunte,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,apuntes,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,ppt,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,diapositivas,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,casero,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,casera,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,cómo hacer,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,como hacer,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,diy,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,mercadolibre,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,mercado libre,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,usado,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,usados,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,usada,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,segunda mano,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,alquiler,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,gratis,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,olx,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,amazon,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,aliexpress,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,alibaba,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,temu,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,auto,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,autos,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,coche,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,carro,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,car,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,camioneta,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,moto,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,motos,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,motor,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,radiador,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,anticongelante,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,líquido refrigerante,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,liquido refrigerante,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,paraflu,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,prestone,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,heladera,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,aire acondicionado,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,gas refrigerante,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,r134a,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,r410,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,r22,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,freezer,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,fram,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,mann,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,wega,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,bosch,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,piscina,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,piscinas,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,pileta de natación,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,pelopincho,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,intex,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,bestway,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,vulcano,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,acuario,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,pecera,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,spa,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,jacuzzi,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,tarjeta,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,tarjetas,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,cajero,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,clonar,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,clonador,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,trading,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,forex,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,lectura,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,hamburguesa,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,hamburguesas,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,empanada,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,empanadas,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,milanesa,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,milanesas,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,ladrillo,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,ladrillos,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,bloque,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,bloques,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,adoquín,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,adoquines,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,pasta,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,pastas,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,led,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,fluorescente,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,ensayo,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,oxígeno,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,oxigeno,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,neón,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,neon,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,cartón,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,carton,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,pvc,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,café,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,cafe,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,nescafé,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,nescafe,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,fibra,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,vitamina,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,cacao,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,leche,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,asfáltica,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,asfaltica,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,asfalto,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,crema,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,piel,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,cosmética,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,cosmetica,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,fotográfica,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,fotografica,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,serigrafía,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,serigrafia,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,cocina,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,restaurante,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,trampa de grasa,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,aceite usado,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,freidora,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,hidrocarburos,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,lavadero,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,estación de servicio,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,estacion de servicio,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,pluvial,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,caldera,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,calefacción,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,calefaccion,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,combustible,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,aire comprimido,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,gasoil,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,diésel,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,diesel,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,agua potable,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,agua de pozo,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,tratamiento de agua,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,ósmosis,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,osmosis,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,purificador,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,ablandador,Campaign Negative Phrase
+TF | Search | Conformado | AR | ES,cloro,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,trabajo,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,trabajos,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,empleo,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,empleos,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,cv,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,curriculum,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,currículum,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,sueldo,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,sueldos,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,salario,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,vacante,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,vacantes,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,pasantía,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,pasantia,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,pasantías,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,computrabajo,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,bumeran,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,zonajobs,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,linkedin,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,job,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,jobs,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,pdf,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,tesis,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,monografía,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,monografia,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,qué es,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,que es,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,definición,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,definicion,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,significado,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,curso,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,cursos,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,tutorial,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,wikipedia,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,apunte,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,apuntes,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,ppt,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,diapositivas,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,casero,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,casera,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,cómo hacer,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,como hacer,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,diy,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,mercadolibre,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,mercado libre,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,usado,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,usados,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,usada,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,segunda mano,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,alquiler,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,gratis,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,olx,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,amazon,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,aliexpress,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,alibaba,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,temu,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,auto,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,autos,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,coche,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,carro,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,car,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,camioneta,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,moto,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,motos,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,motor,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,radiador,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,anticongelante,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,líquido refrigerante,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,liquido refrigerante,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,paraflu,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,prestone,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,heladera,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,aire acondicionado,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,gas refrigerante,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,r134a,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,r410,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,r22,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,freezer,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,fram,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,mann,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,wega,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,bosch,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,piscina,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,piscinas,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,pileta de natación,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,pelopincho,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,intex,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,bestway,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,vulcano,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,acuario,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,pecera,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,spa,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,jacuzzi,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,tarjeta,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,tarjetas,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,cajero,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,clonar,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,clonador,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,trading,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,forex,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,lectura,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,hamburguesa,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,hamburguesas,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,empanada,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,empanadas,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,milanesa,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,milanesas,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,ladrillo,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,ladrillos,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,bloque,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,bloques,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,adoquín,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,adoquines,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,pasta,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,pastas,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,led,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,fluorescente,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,ensayo,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,oxígeno,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,oxigeno,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,neón,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,neon,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,cartón,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,carton,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,pvc,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,café,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,cafe,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,nescafé,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,nescafe,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,fibra,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,vitamina,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,cacao,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,leche,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,asfáltica,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,asfaltica,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,asfalto,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,crema,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,piel,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,cosmética,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,cosmetica,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,fotográfica,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,fotografica,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,serigrafía,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,serigrafia,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,cocina,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,restaurante,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,trampa de grasa,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,aceite usado,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,freidora,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,hidrocarburos,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,lavadero,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,estación de servicio,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,estacion de servicio,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,pluvial,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,caldera,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,calefacción,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,calefaccion,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,combustible,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,aire comprimido,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,gasoil,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,diésel,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,diesel,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,agua potable,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,agua de pozo,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,tratamiento de agua,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,ósmosis,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,osmosis,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,purificador,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,ablandador,Campaign Negative Phrase
+TF | Search | Conformado | LATAM | ES,cloro,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,emprego,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,empregos,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,vaga,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,vagas,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,salário,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,salario,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,trabalhe conosco,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,currículo,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,curriculo,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,estágio,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,estagio,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,catho,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,indeed,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,infojobs,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,linkedin,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,job,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,jobs,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,pdf,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,tcc,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,monografia,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,apostila,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,o que é,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,o que e,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,definição,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,definicao,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,significado,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,curso,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,cursos,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,tutorial,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,wikipedia,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,senai,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,ppt,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,slides,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,caseiro,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,caseira,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,como fazer,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,faça você mesmo,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,faca voce mesmo,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,diy,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,mercado livre,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,mercadolivre,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,usado,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,usados,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,usada,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,seminovo,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,aluguel,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,locação,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,locacao,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,grátis,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,gratis,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,olx,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,amazon,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,aliexpress,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,shopee,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,temu,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,coca,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,coca-cola,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,guaraná,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,guarana,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,lata,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,pet,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,zero,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,bebida,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,bebidas,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,refri,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,carro,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,carros,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,car,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,moto,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,motos,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,motor,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,radiador,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,aditivo para radiador,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,anticongelante,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,automotivo,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,ar condicionado,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,ar-condicionado,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,geladeira,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,freezer,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,gás refrigerante,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,gas refrigerante,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,r410a,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,r22,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,r134a,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,split,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,fram,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,mann,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,wega,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,tecfil,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,bosch,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,piscina,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,piscinas,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,aquário,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,aquario,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,lago,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,spa,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,hidromassagem,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,sodramar,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,nautilus,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,pool,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,cartão,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,cartao,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,caixa eletrônico,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,caixa eletronico,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,clonagem,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,clonar,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,chupa-cabra,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,chupa cabra,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,trading,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,forex,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,hambúrguer,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,hamburguer,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,salgado,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,salgados,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,coxinha,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,nhoque,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,tijolo,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,tijolos,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,bloco de concreto,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,paver,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,pavers,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,led,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,fluorescente,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,ensaio,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,oxigênio,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,oxigenio,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,neon,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,papelão,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,papelao,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,pvc,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,café,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,cafe,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,coador,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,cafeteira,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,nescafé,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,nescafe,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,fibra,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,vitamina,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,cacau,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,leite,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,asfáltica,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,asfaltica,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,asfalto,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,cosmético,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,cosmetico,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,creme,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,pele,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,fotográfica,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,fotografica,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,serigrafia,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,cozinha,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,restaurante,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,caixa de gordura,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,óleo de cozinha,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,oleo de cozinha,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,fritadeira,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,caixa separadora,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,caixa sao,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,separador de água e óleo,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,separador agua e oleo,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,lava jato,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,lava-jato,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,lava rápido,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,lava rapido,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,posto de combustível,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,posto de gasolina,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,combustível,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,combustivel,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,diesel,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,gasolina,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,ar comprimido,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,compressor,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,caldeira,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,aquecimento,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,aquecedor,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,água potável,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,agua potavel,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,poço,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,poco,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,osmose,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,purificador,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,filtro de água,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,filtro de agua,Campaign Negative Phrase
+TF | Search | Conformado | BR | PT,cloro,Campaign Negative Phrase

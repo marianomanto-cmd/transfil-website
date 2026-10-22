@@ -77,6 +77,9 @@ campaña. El home es institucional: contesta "quiénes son", no "por qué me
 está subiendo el scrap". Mandar tráfico pago al home tira la conversión y
 mezcla la atribución.
 
+Campaña de Search de `/conformado` (plan + archivos para Google Ads Editor):
+[`campanas/conformado-search.md`](./campanas/conformado-search.md).
+
 Redirects 301 ya configurados en `astro.config.mjs` para las URLs viejas
 de campaña:
 
