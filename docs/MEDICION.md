@@ -98,9 +98,11 @@ Todos llevan **`page`** y **`locale`**.
    sitio*: 13 etiquetas, 12 activadores (`TR - ev …`) y 24 variables. Está
    hecho a medida: reusa `CONST - GA4 ID` y `DLV - linea` y no toca ninguna
    etiqueta existente.
-2. **Completar las constantes** de Google Ads: `CONST - ADS ID` (el número
-   de la cuenta, **sin** `AW-`) y `CONST - ADS Label Formulario` /
-   `WhatsApp` / `Teléfono` (la etiqueta de cada acción de conversión, §5).
+2. **Completar las constantes** de Google Ads: `CONST - ADS ID` (el ID de
+   conversión: el número de `AW-…`, **sin** `AW-`) y
+   `CONST - ADS Label Formulario` / `WhatsApp` / `Teléfono` (la etiqueta de
+   cada acción). Los dos datos están en cada acción de conversión, en
+   *Configuración de la etiqueta → Usar Google Tag Manager* (§5).
 3. **Ajustar a mano las tres etiquetas de GA4 que ya existen.** Se
    conserva el nombre de evento que ya usan en GA4, así los informes no se
    cortan:
@@ -159,6 +161,8 @@ opción encendida, cada vista se cuenta dos veces.
   historial del navegador* tiene que estar **encendido** (cuenta las
   navegaciones internas). *Descargas de archivos* puede quedar, pero los
   catálogos ya salen como `catalog_open` / `catalog_download`.
+  *Interacciones con formularios* conviene **apagarlo**: el sitio ya manda
+  `form_start`, y el envío real es `generate_lead`.
 - Si vinculás GA4 con Google Ads, **no importes** `generate_lead` de GA4
   como conversión primaria: las etiquetas de Ads ya la cuentan.
 
@@ -168,14 +172,15 @@ opción encendida, cada vista se cuenta dos veces.
 
 | Acción de conversión | Origen | Tipo | Conteo |
 |---|---|---|---|
-| Lead – Formulario | Sitio web, etiqueta "Ads - Conversión Formulario" | Primaria | Una |
-| Lead – WhatsApp | Sitio web, etiqueta "Ads - Conversión WhatsApp" | Primaria | Una |
-| Clic en teléfono | Sitio web, etiqueta "Ads - Conversión Teléfono" | Secundaria | Una |
+| Lead – Formulario | Sitio web, etiqueta `ADS - Lead Formulario` | Primaria | Una |
+| Lead – WhatsApp | Sitio web, etiqueta `ADS - Lead WhatsApp` | Primaria | Una |
+| Clic en teléfono | Sitio web, etiqueta `ADS - Teléfono (secundaria)` | Secundaria | Una |
 | Lead calificado | Importación offline con el `gclid` del mail a ventas | Secundaria al inicio | Una |
 
 - **Etiquetado automático** activado (Configuración de la cuenta).
-- **Conversiones avanzadas para leads:** activalas en cada acción del
-  sitio; el dato ya sale hasheado en `user_data`.
+- **Conversiones avanzadas:** Objetivos → Configuración → activalas para
+  clientes potenciales (y para la Web), método Google Tag Manager; el
+  dato ya sale hasheado en `user_data`.
 - El detalle de la campaña está en
   [`campanas/conformado-search.md`](./campanas/conformado-search.md) §2.
 
@@ -187,9 +192,9 @@ Con **Vista previa** de GTM y Tag Assistant, en el home y en una landing:
 
 - [ ] Al cargar: el dataLayer tiene `{ page, locale }` antes de `gtm.js`.
 - [ ] Formulario enviado: `generate_lead` una vez, con `user_data`;
-      disparan "Ads - Conversión Formulario" y "GA4 - generate_lead".
+      disparan `ADS - Lead Formulario` y `GA4 - Lead`.
 - [ ] Clic en WhatsApp (FAB y otro): `whatsapp_click` una vez por clic, con
-      `cta_location`; dispara "Ads - Conversión WhatsApp".
+      `cta_location`; disparan `ADS - Lead WhatsApp` y `GA4 - WhatsApp`.
 - [ ] Navegar home → landing con "Ver solución": `cta_click` y después un
       `page_view` con `page: conformado`.
 - [ ] Cambiar de idioma: `language_switch` y el `page_view` siguiente con el
