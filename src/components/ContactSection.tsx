@@ -2,12 +2,7 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { cx } from '../lib/cx';
 import { useReveal } from '../lib/hooks';
 import type { Content } from '../i18n/content';
-
-declare global {
-  interface Window {
-    dataLayer?: Record<string, unknown>[];
-  }
-}
+import { hashedUserData, track } from '../lib/track';
 
 function Field({
   label, children, err, req, full, htmlFor,
@@ -42,8 +37,36 @@ const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 /** UTM / click-id params worth forwarding to the sales inbox. */
 const TRACKED_PARAMS = [
   'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content',
-  'gclid', 'gbraid', 'wbraid', 'fbclid', 'li_fat_id',
+  'gclid', 'gbraid', 'wbraid', 'fbclid', 'li_fat_id', 'msclkid',
 ];
+
+/**
+ * Click IDs that survive in cookies when the URL no longer has them — the
+ * visitor came in from an ad on one page and wrote from another, or came
+ * back days later. Without them the sales email loses the gclid that the
+ * offline "Lead calificado" import needs. Checked in order: a cookie with
+ * the parameter's own name (what GTM's "UTIL - Capturar click IDs" may set),
+ * then the vendors' own cookies — Google's Conversion Linker (`_gcl_aw` /
+ * `_gcl_gb`: `GCL.<ts>.<id>`), Meta (`_fbc`: `fb.1.<ts>.<id>`) and
+ * Microsoft UET (`_uetmsclkid`: `_uet<id>`).
+ */
+const CLICK_ID_COOKIES: Record<string, [string, (v: string) => string][]> = {
+  gclid: [['gclid', (v) => v], ['_gcl_aw', (v) => v.split('.').slice(2).join('.')]],
+  gbraid: [['gbraid', (v) => v], ['_gcl_gb', (v) => v.split('.').slice(2).join('.')]],
+  fbclid: [['fbclid', (v) => v], ['_fbc', (v) => v.split('.').slice(3).join('.')]],
+  msclkid: [['msclkid', (v) => v], ['_uetmsclkid', (v) => v.replace(/^_uet/, '')]],
+  li_fat_id: [['li_fat_id', (v) => v]],
+};
+
+const readCookie = (name: string): string => {
+  const hit = document.cookie.split('; ').find((c) => c.startsWith(name + '='));
+  if (!hit) return '';
+  try {
+    return decodeURIComponent(hit.slice(name.length + 1));
+  } catch {
+    return hit.slice(name.length + 1);
+  }
+};
 
 const readTrackedParams = (): Record<string, string> => {
   if (typeof window === 'undefined') return {};
@@ -52,6 +75,16 @@ const readTrackedParams = (): Record<string, string> => {
   for (const k of TRACKED_PARAMS) {
     const v = q.get(k);
     if (v) out[k] = v.slice(0, 200);
+  }
+  for (const [param, sources] of Object.entries(CLICK_ID_COOKIES)) {
+    if (out[param]) continue;
+    for (const [cookie, extract] of sources) {
+      const v = extract(readCookie(cookie));
+      if (v) {
+        out[param] = v.slice(0, 200);
+        break;
+      }
+    }
   }
   return out;
 };
@@ -155,12 +188,19 @@ export function ContactSection({
     const refMap = { name: nameRef, email: emailRef, message: messageRef };
     const firstInvalid = (['name', 'email', 'message'] as const).find((k) => errs[k]);
     if (firstInvalid) {
+      track('form_error', {
+        error_type: 'validation',
+        error_fields: Object.keys(errs).filter((k) => errs[k]).join(','),
+      });
       refMap[firstInvalid].current?.focus();
       return;
     }
 
     setSendErr(false);
     setSending(true);
+    // Hash de los datos de contacto para las conversiones avanzadas. Se
+    // calcula en paralelo con el envío, antes de que se limpien los campos.
+    const userData = hashedUserData(data.email, data.phone).catch(() => undefined);
     try {
       const res = await fetch('/api/contact', {
         method: 'POST',
@@ -183,18 +223,20 @@ export function ContactSection({
       });
       const payload = res.ok ? await res.json().catch(() => null) : null;
       if (!payload?.ok) {
+        track('form_error', { error_type: 'send', status: res.status });
         setSendErr(true);
         return;
       }
 
-      // Conversion event for GTM/GA4 — fired only on a confirmed send, before
-      // the fields are cleared.
-      window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push(
-        page
-          ? { event: 'generate_lead', page, locale: lang, lead_type: 'form' }
-          : { event: 'generate_lead', linea: data.linea || 'general' },
-      );
+      // Conversión — solo con el envío confirmado y antes de limpiar los
+      // campos. Página e idioma los suma tfTrack (docs/MEDICION.md).
+      track('generate_lead', {
+        lead_type: 'form',
+        linea: data.linea || 'general',
+        industria: data.industry,
+        tipo_linea: data.lineType || undefined,
+        user_data: await userData,
+      });
 
       setSent(true);
       // The landing keeps its success panel up (it replaces the form CTA);
@@ -207,10 +249,19 @@ export function ContactSection({
         website: '',
       });
     } catch {
+      track('form_error', { error_type: 'network' });
       setSendErr(true);
     } finally {
       setSending(false);
     }
+  };
+
+  // Primer contacto con el formulario: una vez por montaje.
+  const started = useRef(false);
+  const onFormFocus = () => {
+    if (started.current) return;
+    started.current = true;
+    track('form_start');
   };
 
   const errIds = {
@@ -232,7 +283,7 @@ export function ContactSection({
         <p className="tf-section-sub">{heading?.sub ?? c.sub}</p>
       </header>
       <div className="tf-contact">
-        <form className="tf-form" onSubmit={submit} noValidate>
+        <form className="tf-form" onSubmit={submit} onFocusCapture={onFormFocus} noValidate>
           {/* Honeypot: kept off-screen (not display:none) so bots fill it but
               users never see it. A filled value is rejected server-side. */}
           <div

@@ -76,6 +76,13 @@ Reglas:
 
 ### 2.2 GTM (`GTM-PV9STD3`)
 
+La configuración completa del sitio (eventos, etiquetas de GA4 y de Google
+Ads, conversiones avanzadas) está en [`MEDICION.md`](../MEDICION.md), con
+un contenedor para importar en [`gtm/transfil-medicion.json`](../gtm/transfil-medicion.json).
+`whatsapp_click` sale en **todas** las páginas, no solo en la landing: si
+alguien entra por el anuncio y escribe desde el home, también cuenta.
+Lo mínimo para esta campaña:
+
 1. Tag **Vinculador de conversiones** → activador *Todas las páginas*.
 2. Tag **Seguimiento de conversiones de Google Ads** "Lead – Formulario" →
    activador *Evento personalizado* `generate_lead`.
@@ -109,12 +116,12 @@ leads valieron la pena:
 Primero sirve para reportes (qué keyword trae leads buenos). Pujar por
 "Lead calificado" recién cuando haya volumen.
 
-### 2.4 Mejora futura: conversiones avanzadas para leads
+### 2.4 Conversiones avanzadas para leads
 
-Mandar el email / teléfono del lead (hasheados) mejora la atribución.
-Requiere que el formulario empuje `user_data` junto con `generate_lead` —
-**hoy no lo hace** — y activarlo en la acción de conversión. No es
-requisito para lanzar.
+El formulario ya empuja `user_data` (mail y teléfono hasheados con
+SHA-256) junto con `generate_lead`. Falta activarlo en la acción de
+conversión y en la etiqueta de GTM ([`MEDICION.md`](../MEDICION.md) §3,
+paso 4). Mejora la atribución; no es requisito para lanzar.
 
 ---
 

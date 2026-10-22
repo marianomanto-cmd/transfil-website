@@ -176,13 +176,122 @@ const faqJsonLd = {
 };
 ---
 <!doctype html>
-<html lang={content.htmlLang}>
+<html lang={content.htmlLang} data-page={page ?? '404'} data-locale={lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     {/* Primero de todo: tiene que preceder a cualquier <script type="module">. */}
     <ThreeImportMap />
+
+    {/* Medición — ver docs/MEDICION.md. Va ANTES de GTM: deja página e idioma
+        en el dataLayer para que la configuración de GA4 ya los tenga al
+        cargar, y define window.tfTrack, el único punto por donde sale cada
+        evento del sitio.
+        · Contexto: data-page / data-locale del <html>. Con View Transitions
+          Astro copia los atributos del <html> nuevo al navegar, así que
+          siempre describe la página que se ve.
+        · Un listener delegado en document (captura) cubre todo link actual
+          y futuro: WhatsApp (whatsapp_click es la conversión; click_whatsapp
+          queda por compatibilidad con GTM y no se marca como conversión),
+          teléfono, mail, idioma y CTAs con data-cta.
+        · cta_location: zona marcada con data-track-zone, el FAB, header,
+          footer o la sección con id que contiene el link.
+        · section_view: una vez por sección y por página, cuando su parte de
+          arriba entra al 60 % superior de la pantalla (con un umbral de
+          visibilidad, una sección más alta que la pantalla no dispararía).
+        · page_view: la carga inicial la manda la configuración de GA4; cada
+          navegación con View Transitions empuja su contexto y su page_view.
+        Los comentarios van acá y no en el script: lo inline se publica tal
+        cual en cada página. */}
+    <script is:inline>
+      (function () {
+        if (window.tfTrack) return;
+        var w = window, d = document;
+        w.dataLayer = w.dataLayer || [];
+        function ctx() {
+          var r = d.documentElement;
+          return {
+            page: r.getAttribute('data-page') || 'other',
+            locale: r.getAttribute('data-locale') || 'es',
+          };
+        }
+        w.tfTrack = function (event, params) {
+          var o = ctx();
+          o.event = event;
+          if (params) for (var k in params) if (params[k] !== undefined) o[k] = params[k];
+          w.dataLayer.push(o);
+        };
+        w.dataLayer.push(ctx());
+
+        function zone(el) {
+          var z = el.closest('[data-track-zone]');
+          if (z) return z.getAttribute('data-track-zone');
+          if (el.closest('.tf-wa-fab')) return 'fab';
+          if (el.closest('header')) return 'header';
+          if (el.closest('footer')) return 'footer';
+          var s = el.closest('section[id]');
+          return s ? s.id : 'other';
+        }
+
+        d.addEventListener('click', function (e) {
+          var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+          if (!a) return;
+          var href = (a.getAttribute('href') || '').toLowerCase();
+          var where = zone(a);
+          var url = a.href;
+          if (href.indexOf('wa.me') !== -1 || href.indexOf('whatsapp.com') !== -1) {
+            w.tfTrack('whatsapp_click', { lead_type: 'whatsapp', cta_location: where, link_url: url });
+            w.tfTrack('click_whatsapp', { link_url: url });
+            return;
+          }
+          if (href.indexOf('tel:') === 0) {
+            w.tfTrack('click_phone', { cta_location: where, link_url: url });
+            return;
+          }
+          if (href.indexOf('mailto:') === 0) {
+            w.tfTrack('email_click', { cta_location: where, link_url: url });
+            return;
+          }
+          var hl = a.getAttribute('hreflang');
+          if (hl && a.closest('header')) {
+            var from = ctx().locale;
+            var to = hl.slice(0, 2).toLowerCase();
+            if (to !== from) w.tfTrack('language_switch', { from_locale: from, to_locale: to });
+            return;
+          }
+          var cta = a.getAttribute('data-cta');
+          if (cta) w.tfTrack('cta_click', { cta: cta, cta_location: where, link_url: url });
+        }, true);
+
+        var io = null;
+        function watchSections() {
+          if (io) io.disconnect();
+          if (!('IntersectionObserver' in w)) return;
+          io = new IntersectionObserver(function (entries) {
+            for (var i = 0; i < entries.length; i++) {
+              if (!entries[i].isIntersecting) continue;
+              io.unobserve(entries[i].target);
+              w.tfTrack('section_view', { section: entries[i].target.id });
+            }
+          }, { rootMargin: '0px 0px -40% 0px' });
+          var ss = d.querySelectorAll('main section[id]');
+          for (var j = 0; j < ss.length; j++) io.observe(ss[j]);
+        }
+
+        var first = true;
+        d.addEventListener('astro:page-load', function () {
+          watchSections();
+          if (first) { first = false; return; }
+          w.dataLayer.push(ctx());
+          w.tfTrack('page_view', {
+            page_path: location.pathname + location.search,
+            page_title: d.title,
+            page_location: location.href,
+          });
+        });
+      })();
+    </script>
 
     <!-- Google Tag Manager -->
     <script is:inline>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -240,48 +349,6 @@ const faqJsonLd = {
     {extraJsonLd.map((node) => (
       <script type="application/ld+json" set:html={JSON.stringify(node)} />
     ))}
-
-    <!-- GA4 now lives inside the GTM container (GTM-PV9STD3); the initial
-         page_view is sent by the GA4 config tag when GTM loads. This pushes a
-         page_view to the dataLayer on every astro:page-load except the first,
-         so client-side view transitions are tracked too. -->
-    <script is:inline>
-      (function () {
-        var first = true;
-        document.addEventListener('astro:page-load', function () {
-          if (first) { first = false; return; }
-          window.dataLayer = window.dataLayer || [];
-          window.dataLayer.push({
-            event: 'page_view',
-            page_path: location.pathname + location.search,
-            page_title: document.title,
-            page_location: location.href,
-          });
-        });
-      })();
-    </script>
-
-    <!-- Key events for GTM/GA4: WhatsApp and phone link clicks. One delegated
-         listener on document (capture phase) catches every current and future
-         wa.me / tel: link — FAB, footer and contact section alike. -->
-    <script is:inline>
-      (function () {
-        if (window.__tfLinkEvents) return;
-        window.__tfLinkEvents = true;
-        document.addEventListener('click', function (e) {
-          var t = e.target;
-          var a = t && t.closest ? t.closest('a[href]') : null;
-          if (!a) return;
-          var href = (a.getAttribute('href') || '').toLowerCase();
-          var ev = null;
-          if (href.indexOf('wa.me') !== -1 || href.indexOf('whatsapp.com') !== -1) ev = 'click_whatsapp';
-          else if (href.indexOf('tel:') === 0) ev = 'click_phone';
-          if (!ev) return;
-          window.dataLayer = window.dataLayer || [];
-          window.dataLayer.push({ event: ev, link_url: a.href });
-        }, true);
-      })();
-    </script>
 
     <link rel="preload" as="font" type="font/woff2" href={interLatin} crossorigin />
     <link rel="preload" as="font" type="font/woff2" href={groteskLatin} crossorigin />

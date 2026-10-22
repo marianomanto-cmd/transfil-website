@@ -28,7 +28,8 @@ type Props = {
    */
   navItems?: NavItem[];
   /** Header CTA. Defaults to the contact section of the home. */
-  cta?: { href: string; label: string };
+  /** `track` es el data-cta del botón para la medición (docs/MEDICION.md). */
+  cta?: { href: string; label: string; track?: string };
 };
 
 function LangSwitch({ lang, labels, page, className }: {
@@ -135,7 +136,7 @@ export function Header({ lang, nav, langSwitch, page = 'home', navItems, cta }: 
       { href: '#history', label: nav.history },
       { href: '#contact', label: nav.contact },
     ];
-  const headerCta = cta ?? { href: '#contact', label: nav.contact };
+  const headerCta = cta ?? { href: '#contact', label: nav.contact, track: 'contacto' };
 
   const onNav = (e: React.MouseEvent, href: string) => {
     e.preventDefault();
@@ -172,7 +173,7 @@ export function Header({ lang, nav, langSwitch, page = 'home', navItems, cta }: 
         </nav>
         <div className="tf-header-aside">
           <LangSwitch lang={lang} labels={langSwitch} page={page} />
-          <a href={headerCta.href} className="tf-cta-mini" onClick={(e) => onNav(e, headerCta.href)}>
+          <a href={headerCta.href} className="tf-cta-mini" data-cta={headerCta.track ?? 'contacto'} onClick={(e) => onNav(e, headerCta.href)}>
             <span>{headerCta.label}</span>
             <svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true">
               <path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="square" />
@@ -208,7 +209,7 @@ export function Header({ lang, nav, langSwitch, page = 'home', navItems, cta }: 
         ))}
         <div className="tf-mobile-nav-foot">
           <LangSwitch lang={lang} labels={langSwitch} page={page} className="tf-mobile-lang" />
-          <a href={headerCta.href} className="tf-mobile-cta" onClick={(e) => onNav(e, headerCta.href)}>
+          <a href={headerCta.href} className="tf-mobile-cta" data-cta={headerCta.track ?? 'contacto'} onClick={(e) => onNav(e, headerCta.href)}>
             <span>{headerCta.label}</span>
             <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
               <path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="square" />

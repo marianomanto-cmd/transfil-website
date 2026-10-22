@@ -128,7 +128,7 @@ const DEMO_HITS = [1, 4];
               </div>
 
               {card.link && (
-                <a class="tf-app-link" style="--seq: 6" href={pathFor(card.link.page, content.lang)}>
+                <a class="tf-app-link" style="--seq: 6" href={pathFor(card.link.page, content.lang)} data-cta="ver_solucion">
                   <span>{card.link.label}</span>
                   <svg viewBox="0 0 16 16" width="13" height="13" aria-hidden="true">
                     <path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" />
@@ -186,7 +186,7 @@ const DEMO_HITS = [1, 4];
     <!-- 6. CTA banner -->
     <aside class="tf-apps-cta">
       <p class="tf-apps-cta-text">{c.cta.text}</p>
-      <a href="#contact" class="tf-btn tf-btn-primary tf-btn-lg">
+      <a href="#contact" class="tf-btn tf-btn-primary tf-btn-lg" data-cta="contacto">
         <span>{c.cta.button}</span>
         <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
           <path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" />

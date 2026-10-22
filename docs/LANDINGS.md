@@ -179,21 +179,23 @@ falta tocar `LandingLayout.astro`.
 12. **Verificá:** `npm run check && npm run build`, y que las tres URLs
     salgan con canonical propio, hreflang recíproco y una sola `<h1>`.
 
-### Eventos que empuja una landing
+### Eventos de una landing
+
+Una landing no necesita código de medición propio: los eventos salen para
+todo el sitio desde `Base.astro` y llevan `page` (el `PageKey` de la
+landing) y `locale`. El catálogo completo está en
+[`MEDICION.md`](./MEDICION.md). Los dos que usa la campaña:
 
 ```js
-// solo en submit exitoso del formulario
-dataLayer.push({ event: 'generate_lead', page: 'conformado', locale: 'es', lead_type: 'form' });
+// solo con el envío del formulario confirmado por el servidor
+{ event: 'generate_lead', page: 'conformado', locale: 'es', lead_type: 'form', linea, industria, tipo_linea, user_data }
 
-// en cualquier click sobre [data-cta="whatsapp"] de la landing
-dataLayer.push({ event: 'whatsapp_click', page: 'conformado', locale: 'es', lead_type: 'whatsapp' });
+// en cualquier link de WhatsApp de cualquier página
+{ event: 'whatsapp_click', page: 'conformado', locale: 'es', lead_type: 'whatsapp', cta_location: 'hero' }
 ```
 
-Ojo en GTM: el listener global de `src/layouts/Base.astro` sigue empujando
-`click_whatsapp` (con `link_url`) en **todo** link `wa.me` del sitio. En
-una landing conviven los dos eventos. Usá `whatsapp_click` para la
-conversión de campaña y `click_whatsapp` para el volumen general; si
-configurás los dos como key event vas a contar la misma sesión dos veces.
+`click_whatsapp` sigue saliendo en el mismo clic por compatibilidad: no lo
+marques como conversión o se cuenta dos veces.
 
 Los CTAs llevan `data-cta="relevamiento"` y `data-cta="whatsapp"`, y la
 sección de contacto de la landing es `id="contacto"` (la del home sigue

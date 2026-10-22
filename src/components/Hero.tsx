@@ -35,6 +35,7 @@ function HeroCTAs({ ctaPrimary, ctaSecondary }: { ctaPrimary: string; ctaSeconda
       <a
         href="#tech"
         className="tf-btn tf-btn-primary tf-btn-magnetic"
+        data-cta="tecnologias"
         onClick={(e) => scrollTo(e, '#tech')}
       >
         <span>{ctaPrimary}</span>
@@ -42,7 +43,7 @@ function HeroCTAs({ ctaPrimary, ctaSecondary }: { ctaPrimary: string; ctaSeconda
           <path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.6" />
         </svg>
       </a>
-      <a href="#contact" className="tf-btn tf-btn-ghost" onClick={(e) => scrollTo(e, '#contact')}>
+      <a href="#contact" className="tf-btn tf-btn-ghost" data-cta="contacto" onClick={(e) => scrollTo(e, '#contact')}>
         {ctaSecondary}
       </a>
     </div>
@@ -118,7 +119,7 @@ export function Hero({ hero: c, chips, workshopActive }: Props) {
   const stats = [c.stat1, c.stat2, c.stat3, c.stat4];
 
   return (
-    <section id="top" className="tf-hero" data-variant="type" data-screen-label="01 Hero">
+    <section id="top" data-track-zone="hero" className="tf-hero" data-variant="type" data-screen-label="01 Hero">
       <div
         className="tf-hero-bg"
         aria-hidden="true"
