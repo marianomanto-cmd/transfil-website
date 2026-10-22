@@ -569,11 +569,12 @@ PT:
 | Dúvidas frequentes | Adaptação do tanque existente | Resultados e prazos típicos | `/pt/conformado#faq` |
 | O problema do fluido | Finos e óleo tramp | desgastam o ferramental | `/pt/conformado#problema` |
 
-Antes de lanzar, hacé un clic de prueba en un sitelink y fijate que el
-`gclid` y las UTM queden **antes** del `#`
-(`/conformado?utm_source=…#sistema`). Si quedan después, el formulario no
-las lee (las toma de `location.search`) y el mail a ventas llega sin
-origen: en ese caso se resuelve en la landing, no en la campaña.
+Apenas salgan los anuncios (antes de activar no hay anuncio que
+clickear), hacé un clic de prueba en un sitelink y fijate que el `gclid`
+y las UTM queden **antes** del `#` (`/conformado?utm_source=…#sistema`).
+Si quedan después, el formulario no las lee (las toma de
+`location.search`) y el mail a ventas llega sin origen: en ese caso se
+resuelve en la landing, no en la campaña.
 
 ### 7.2 Textos destacados
 
@@ -737,11 +738,11 @@ utm_source=google&utm_medium=cpc&utm_campaign=conformado_search_ar_es&utm_conten
 - [ ] Recursos: sitelinks, textos destacados, fragmentos, nombre del
       negocio, logo, imágenes; llamada en AR si se confirma.
 - [ ] Anuncios y recursos aprobados (estado de políticas).
-- [ ] Verificador de URL de Google Ads OK; clic de prueba en un sitelink
-      (§7.1).
+- [ ] Verificador de URL de Google Ads OK.
 - [ ] Avisarle a ventas: los mails de la campaña llegan con asunto
       `[Conformado][es] …` o `[Conformado][pt] …` y traen la keyword.
 - [ ] Activar las campañas.
+- [ ] Apenas salgan los anuncios: clic de prueba en un sitelink (§7.1).
 
 ---
 
