@@ -1,0 +1,22 @@
+Campaign,Ad group,Ad group status,Final URL suffix
+TF | Search | Conformado | AR | ES,01 | Conformado tubos,Enabled,utm_source=google&utm_medium=cpc&utm_campaign=conformado_search_ar_es&utm_content=01-conformado-tubos&utm_term={keyword}
+TF | Search | Conformado | AR | ES,02 | Filtración soluble,Enabled,utm_source=google&utm_medium=cpc&utm_campaign=conformado_search_ar_es&utm_content=02-filtracion-soluble&utm_term={keyword}
+TF | Search | Conformado | AR | ES,03 | Central de filtrado,Enabled,utm_source=google&utm_medium=cpc&utm_campaign=conformado_search_ar_es&utm_content=03-central-filtrado&utm_term={keyword}
+TF | Search | Conformado | AR | ES,04 | Separador magnético,Enabled,utm_source=google&utm_medium=cpc&utm_campaign=conformado_search_ar_es&utm_content=04-separador-magnetico&utm_term={keyword}
+TF | Search | Conformado | AR | ES,05 | Filtro de banda,Enabled,utm_source=google&utm_medium=cpc&utm_campaign=conformado_search_ar_es&utm_content=05-filtro-banda&utm_term={keyword}
+TF | Search | Conformado | AR | ES,06 | Skimmer aceite,Enabled,utm_source=google&utm_medium=cpc&utm_campaign=conformado_search_ar_es&utm_content=06-skimmer-aceite&utm_term={keyword}
+TF | Search | Conformado | AR | ES,07 | Síntoma (test),Enabled,utm_source=google&utm_medium=cpc&utm_campaign=conformado_search_ar_es&utm_content=07-sintoma-test&utm_term={keyword}
+TF | Search | Conformado | LATAM | ES,01 | Conformado tubos,Enabled,utm_source=google&utm_medium=cpc&utm_campaign=conformado_search_latam_es&utm_content=01-conformado-tubos&utm_term={keyword}
+TF | Search | Conformado | LATAM | ES,02 | Filtración soluble,Enabled,utm_source=google&utm_medium=cpc&utm_campaign=conformado_search_latam_es&utm_content=02-filtracion-soluble&utm_term={keyword}
+TF | Search | Conformado | LATAM | ES,03 | Central de filtrado,Enabled,utm_source=google&utm_medium=cpc&utm_campaign=conformado_search_latam_es&utm_content=03-central-filtrado&utm_term={keyword}
+TF | Search | Conformado | LATAM | ES,04 | Separador magnético,Enabled,utm_source=google&utm_medium=cpc&utm_campaign=conformado_search_latam_es&utm_content=04-separador-magnetico&utm_term={keyword}
+TF | Search | Conformado | LATAM | ES,05 | Filtro de banda,Enabled,utm_source=google&utm_medium=cpc&utm_campaign=conformado_search_latam_es&utm_content=05-filtro-banda&utm_term={keyword}
+TF | Search | Conformado | LATAM | ES,06 | Skimmer aceite,Enabled,utm_source=google&utm_medium=cpc&utm_campaign=conformado_search_latam_es&utm_content=06-skimmer-aceite&utm_term={keyword}
+TF | Search | Conformado | LATAM | ES,07 | Síntoma (test),Enabled,utm_source=google&utm_medium=cpc&utm_campaign=conformado_search_latam_es&utm_content=07-sintoma-test&utm_term={keyword}
+TF | Search | Conformado | BR | PT,01 | Conformação tubos,Enabled,utm_source=google&utm_medium=cpc&utm_campaign=conformado_search_br_pt&utm_content=01-conformacao-tubos&utm_term={keyword}
+TF | Search | Conformado | BR | PT,02 | Fluido de corte,Enabled,utm_source=google&utm_medium=cpc&utm_campaign=conformado_search_br_pt&utm_content=02-fluido-de-corte&utm_term={keyword}
+TF | Search | Conformado | BR | PT,03 | Central de filtragem,Enabled,utm_source=google&utm_medium=cpc&utm_campaign=conformado_search_br_pt&utm_content=03-central-filtragem&utm_term={keyword}
+TF | Search | Conformado | BR | PT,04 | Separador magnético,Enabled,utm_source=google&utm_medium=cpc&utm_campaign=conformado_search_br_pt&utm_content=04-separador-magnetico&utm_term={keyword}
+TF | Search | Conformado | BR | PT,05 | Filtro de papel,Enabled,utm_source=google&utm_medium=cpc&utm_campaign=conformado_search_br_pt&utm_content=05-filtro-papel&utm_term={keyword}
+TF | Search | Conformado | BR | PT,06 | Skimmer óleo,Enabled,utm_source=google&utm_medium=cpc&utm_campaign=conformado_search_br_pt&utm_content=06-skimmer-oleo&utm_term={keyword}
+TF | Search | Conformado | BR | PT,07 | Sintoma (teste),Enabled,utm_source=google&utm_medium=cpc&utm_campaign=conformado_search_br_pt&utm_content=07-sintoma-teste&utm_term={keyword}
