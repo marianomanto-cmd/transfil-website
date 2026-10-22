@@ -545,6 +545,14 @@ function paintEq(i) {
    atrás: la etapa que el visitante miró último es la que queda. */
 const rail = root.querySelector('.tf-c3d-rail');
 const HOVER_DELAY = 130;
+// Medición (docs/MEDICION.md): qué etapas miró el visitante, una vez cada
+// una por página. Solo gestos: los setStage del arranque no cuentan.
+const seenStages = new Set();
+function trackStage(i) {
+  if (seenStages.has(i) || !window.tfTrack) return;
+  seenStages.add(i);
+  window.tfTrack('diagram_interaction', { diagram: 'central', item: T.codes[i] });
+}
 let hoverTimer = 0;
 const buttons = T.stages.map((name, i) => {
   const b = document.createElement('button');
@@ -552,7 +560,7 @@ const buttons = T.stages.map((name, i) => {
   b.innerHTML = '<span class="sw"></span><span class="bd"><span class="cd"></span><span class="nm"></span></span>';
   b.querySelector('.cd').textContent = T.codes[i];
   b.querySelector('.nm').textContent = name;
-  const go = () => { clearTimeout(hoverTimer); setStage(i); };
+  const go = () => { clearTimeout(hoverTimer); setStage(i); trackStage(i); };
   b.addEventListener('click', go);
   b.addEventListener('focus', go);
   b.addEventListener('pointerenter', (e) => {
@@ -562,7 +570,7 @@ const buttons = T.stages.map((name, i) => {
     // acaba de mover, no es un gesto: se ignora.
     if (pageScrolling()) return;
     clearTimeout(hoverTimer);
-    hoverTimer = setTimeout(() => setStage(i), HOVER_DELAY);
+    hoverTimer = setTimeout(() => { setStage(i); trackStage(i); }, HOVER_DELAY);
   });
   b.addEventListener('pointerleave', () => clearTimeout(hoverTimer));
   rail.appendChild(b);

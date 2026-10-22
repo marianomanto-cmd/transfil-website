@@ -495,7 +495,18 @@ const buttons = T.circuits.map((c, i) => {
   b.querySelector('.sb').textContent = c.sub;
   b.addEventListener('mouseenter', () => { hov = i; paint(); });
   b.addEventListener('mouseleave', () => { hov = null; paint(); });
-  b.addEventListener('click', () => { iso = iso === i ? null : i; paint(); });
+  b.addEventListener('click', () => {
+    iso = iso === i ? null : i;
+    paint();
+    // Medición (docs/MEDICION.md): qué circuito aisló o soltó el visitante.
+    if (window.tfTrack) {
+      window.tfTrack('diagram_interaction', {
+        diagram: 'maquinas',
+        item: 'circuito-' + (i + 1),
+        state: iso === i ? 'aislado' : 'todos',
+      });
+    }
+  });
   legend.appendChild(b);
   return b;
 });

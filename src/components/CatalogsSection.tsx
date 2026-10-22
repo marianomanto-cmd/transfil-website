@@ -3,6 +3,7 @@ import { cx } from '../lib/cx';
 import { useReveal } from '../lib/hooks';
 import { srcSet } from '../lib/img';
 import type { CatalogItem, Content } from '../i18n/content';
+import { track } from '../lib/track';
 
 const LOGO_PATH =
   'M1341 2247 l-18 -43 -8 -33 -7 -32 -14 -27 -14 -27 0 -17 0 -17 -14 -33 -14 -33 -57 -180 -57 -180 -8 -20 -9 -20 -6 -25 -6 -25 -13 -35 -13 -35 -38 -120 -37 -120 -14 -33 -14 -33 0 -15 0 -16 -14 -31 -14 -32 -28 -88 -27 -89 -24 -9 -24 -9 -340 0 -339 0 2 -247 3 -248 565 0 565 0 17 37 18 37 9 38 10 38 15 50 15 50 10 30 10 30 22 75 21 75 13 35 12 35 16 55 16 55 22 75 21 75 13 35 13 35 22 75 22 75 13 35 12 35 7 38 7 38 15 6 15 6 10 -10 9 -9 9 -44 9 -45 12 -50 13 -50 17 -65 17 -65 13 -50 12 -50 8 -35 8 -35 22 -88 23 -89 24 -9 24 -9 252 0 252 0 14 9 14 9 -17 59 -17 58 -10 30 -10 30 -14 45 -13 45 -16 55 -17 55 -13 50 -14 50 -9 25 -10 25 -16 55 -16 55 -22 75 -21 75 -13 35 -13 35 -21 75 -22 75 -16 55 -15 55 -14 33 -14 33 0 12 0 12 -21 70 -22 70 -15 43 -15 42 -329 0 -329 0 -18 -43z';
@@ -52,7 +53,13 @@ export function CatalogsSection({ catalogs: c, ui }: Props) {
             className="tf-catalog-card"
             style={{ ['--cat-c' as never]: it.color }}
             onClick={() => {
-              if (viewInline()) setActive(it);
+              const inline = viewInline();
+              track('catalog_open', {
+                catalog: it.id,
+                file_name: it.file.split('/').pop(),
+                view: inline ? 'visor' : 'pestana',
+              });
+              if (inline) setActive(it);
               else window.open(it.file, '_blank', 'noopener');
             }}
             aria-label={`${c.cta} — ${it.title}`}
@@ -182,6 +189,12 @@ function CatalogViewer({
               download
               aria-label={downloadLabel}
               title={downloadLabel}
+              onClick={() =>
+                track('catalog_download', {
+                  catalog: catalog.id,
+                  file_name: catalog.file.split('/').pop(),
+                })
+              }
             >
               <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
                 <path

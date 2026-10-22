@@ -35,7 +35,7 @@ const landingCards = content.applications.cards.filter((c) => c.link);
       <div class="tf-footer-h">{content.nav.tech}</div>
       {content.tech.map((t) => <a href={anchor(`#tech-${t.id}`)}>{t.title}</a>)}
       {landingCards.map((c) => (
-        <a href={pathFor(c.link!.page, lang)} class="tf-footer-highlight">{c.title}</a>
+        <a href={pathFor(c.link!.page, lang)} class="tf-footer-highlight" data-cta="ver_solucion">{c.title}</a>
       ))}
     </div>
     <div class="tf-footer-col">
