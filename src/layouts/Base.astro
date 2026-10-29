@@ -4,7 +4,7 @@
 // extra DNS + TLS to two Google hosts, and no visitor IP sent to Google
 // before consent. Each family ships per-script subsets behind unicode-range,
 // so a page only downloads the ones its text uses.
-import '@fontsource-variable/space-grotesk';
+import '@fontsource-variable/inter-tight';
 import '@fontsource-variable/inter';
 import '@fontsource-variable/jetbrains-mono';
 import '../styles/global.css';
@@ -12,7 +12,7 @@ import '../styles/global.css';
 // headline), preloaded so first text paints in the right face. `?url`
 // resolves to the same hashed file the @font-face rules point at.
 import interLatin from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
-import groteskLatin from '@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2?url';
+import groteskLatin from '@fontsource-variable/inter-tight/files/inter-tight-latin-wght-normal.woff2?url';
 import { ClientRouter } from 'astro:transitions';
 import ThreeImportMap from '../components/ThreeImportMap.astro';
 import type { Content, Lang } from '../i18n/content';
@@ -304,7 +304,7 @@ const faqJsonLd = {
     <title>{meta.title}</title>
     <meta name="description" content={meta.description} />
     {noindex && <meta name="robots" content="noindex, follow" />}
-    <meta name="theme-color" content="#0e0e10" />
+    <meta name="theme-color" content="#ffffff" />
     <link rel="canonical" href={canonical} />
     {alternates.map((a) => (
       <link rel="alternate" hreflang={a.hreflang} href={a.href} />

@@ -262,13 +262,11 @@ const DEMO_HITS = [1, 4];
     border: 1px solid var(--line-strong);
     padding: clamp(28px, 3.2vw, 44px);
     background:
-      radial-gradient(120% 140% at 8% 0%, rgba(58, 134, 255, 0.09), transparent 58%),
-      repeating-linear-gradient(to right, rgba(255, 255, 255, 0.022) 0 1px, transparent 1px 32px),
-      repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.022) 0 1px, transparent 1px 32px),
-      linear-gradient(180deg, #17171e 0%, #101015 100%);
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.05),
-      0 24px 48px -32px rgba(0, 0, 0, 0.9);
+      radial-gradient(120% 140% at 8% 0%, rgba(11, 95, 211, 0.09), transparent 58%),
+      repeating-linear-gradient(to right, rgba(16, 20, 24, 0.035) 0 1px, transparent 1px 32px),
+      repeating-linear-gradient(to bottom, rgba(16, 20, 24, 0.035) 0 1px, transparent 1px 32px),
+      #ffffff;
+    box-shadow: 0 24px 48px -36px rgba(16, 20, 24, 0.35);
   }
   /* Corner ticks — the same frame the diagram viewports use. */
   .tf-apps-symptoms::before,
@@ -299,9 +297,9 @@ const DEMO_HITS = [1, 4];
     inset: 0 auto 0 0;
     width: 38%;
     pointer-events: none;
-    background: linear-gradient(90deg, transparent 0%, rgba(58, 134, 255, 0.13) 62%, rgba(58, 134, 255, 0.04) 100%);
-    border-right: 1px solid rgba(88, 154, 255, 0.75);
-    box-shadow: 0 0 22px rgba(58, 134, 255, 0.22);
+    background: linear-gradient(90deg, transparent 0%, rgba(11, 95, 211, 0.13) 62%, rgba(11, 95, 211, 0.04) 100%);
+    border-right: 1px solid rgba(11, 95, 211, 0.75);
+    box-shadow: 0 0 22px rgba(11, 95, 211, 0.22);
     transform: translateX(-105%);
     opacity: 0;
   }
@@ -339,8 +337,7 @@ const DEMO_HITS = [1, 4];
     flex-shrink: 0;
     padding: 7px 12px;
     border: 1px solid var(--line-strong);
-    background: rgba(8, 10, 16, 0.6);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    background: var(--bg-2);
     opacity: 0;
     transform: translateY(-4px);
     transition: opacity 0.5s var(--ap-ease) 0.85s, transform 0.5s var(--ap-ease) 0.85s;
@@ -354,12 +351,11 @@ const DEMO_HITS = [1, 4];
   .tf-apps-segs i {
     width: 7px;
     height: 12px;
-    background: #23232b;
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+    background: var(--line);
   }
   .tf-apps-segs i[data-on] {
     background: var(--accent);
-    box-shadow: 0 0 8px rgba(58, 134, 255, 0.55);
+    box-shadow: 0 0 8px rgba(11, 95, 211, 0.55);
     opacity: 0;
   }
   .tf-apps-symptoms.is-active .tf-apps-segs i[data-on] {
@@ -448,7 +444,7 @@ const DEMO_HITS = [1, 4];
   /* The two demonstration hits: the row lights up, the tick draws itself. */
   .tf-apps-symptoms-list li[data-hit] {
     color: var(--fg);
-    background: linear-gradient(90deg, rgba(58, 134, 255, 0.11), rgba(58, 134, 255, 0.02) 62%, transparent);
+    background: linear-gradient(90deg, rgba(11, 95, 211, 0.11), rgba(11, 95, 211, 0.02) 62%, transparent);
   }
   .tf-apps-symptoms-list li[data-hit]::before {
     content: "";
@@ -462,12 +458,12 @@ const DEMO_HITS = [1, 4];
   .tf-apps-symptoms.is-active li[data-hit]::before { transform: scaleY(1); }
   .tf-apps-symptoms-list li[data-hit] .tf-apps-symptoms-mark { color: var(--accent); }
   .tf-apps-symptoms-list li[data-hit] .tf-apps-symptoms-n { color: var(--accent); }
-  .tf-apps-symptoms-list li[data-hit] .tf-chk-bed { fill: rgba(58, 134, 255, 0.16); }
+  .tf-apps-symptoms-list li[data-hit] .tf-chk-bed { fill: rgba(11, 95, 211, 0.16); }
   .tf-apps-symptoms.is-active li[data-hit] .tf-chk-tick {
     animation: tf-chk 0.42s var(--ap-ease) calc(0.75s + var(--i) * 0.12s) forwards;
   }
   .tf-apps-symptoms.is-active li[data-hit] .tf-apps-symptoms-mark {
-    filter: drop-shadow(0 0 6px rgba(58, 134, 255, 0.6));
+    filter: drop-shadow(0 0 6px rgba(11, 95, 211, 0.6));
   }
   @keyframes tf-chk {
     to { stroke-dashoffset: 0; }
@@ -519,7 +515,7 @@ const DEMO_HITS = [1, 4];
     transition: opacity 0.45s var(--ap-ease);
     background: radial-gradient(
       340px circle at var(--mx, 50%) var(--my, 50%),
-      rgba(58, 134, 255, 0.055),
+      rgba(11, 95, 211, 0.055),
       transparent 68%
     );
     mix-blend-mode: plus-lighter;
@@ -542,7 +538,7 @@ const DEMO_HITS = [1, 4];
     position: absolute;
     inset: 0 0 auto 0;
     height: 1px;
-    background: linear-gradient(90deg, rgba(58, 134, 255, 0.35), transparent 45%);
+    background: linear-gradient(90deg, rgba(11, 95, 211, 0.35), transparent 45%);
     opacity: 0;
     transition: opacity 0.35s var(--ap-ease);
   }
@@ -658,9 +654,8 @@ const DEMO_HITS = [1, 4];
     padding: 14px 16px;
     border-left: 2px solid var(--accent);
     background:
-      linear-gradient(135deg, rgba(58, 134, 255, 0.14) 0%, rgba(58, 134, 255, 0.05) 42%, rgba(58, 134, 255, 0.09) 100%),
-      #101827;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+      linear-gradient(135deg, rgba(11, 95, 211, 0.14) 0%, rgba(11, 95, 211, 0.05) 42%, rgba(11, 95, 211, 0.09) 100%),
+      #f3f7fd;
   }
   .tf-app-block.is-benefit .tf-app-text { color: var(--fg); }
   .tf-app-sweep {

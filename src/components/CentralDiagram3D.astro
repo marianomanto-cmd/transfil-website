@@ -66,7 +66,7 @@ const { copy, stages, codes } = Astro.props;
   <div class="tf-c3d-frame">
     <three-d-stage
       name="transfil-central-filtracion"
-      background="#0b0b0e"
+      background="#eef1f4"
       role="img"
       aria-label={copy.alt}
     ></three-d-stage>
@@ -197,8 +197,8 @@ const { copy, stages, codes } = Astro.props;
     position: relative;
     border: 1px solid var(--line);
     background:
-      radial-gradient(120% 90% at 50% 118%, rgba(58, 134, 255, 0.08), transparent 62%),
-      linear-gradient(180deg, #121217 0%, #0b0b0e 100%);
+      radial-gradient(120% 90% at 50% 118%, rgba(11, 95, 211, 0.08), transparent 62%),
+      linear-gradient(180deg, #f6f8fa 0%, #eef1f4 100%);
     aspect-ratio: 16 / 9;
     min-height: 320px;
   }
@@ -230,13 +230,13 @@ const { copy, stages, codes } = Astro.props;
     letter-spacing: 0.05em;
     white-space: nowrap;
     color: var(--fg-3);
-    background: rgba(11, 11, 14, 0.72);
+    background: rgba(255, 255, 255, 0.92);
     border: 1px solid var(--line);
     padding: 3px 8px;
     opacity: 0;
     transition: opacity 0.3s ease, color 0.45s ease, border-color 0.45s ease;
   }
-  .tf-c3d-labels b.is-on { color: var(--fg); border-color: #3a3a42; }
+  .tf-c3d-labels b.is-on { color: var(--fg); border-color: var(--line-strong); }
   .tf-c3d-labels b::before {
     content: '';
     width: 5px;
@@ -274,7 +274,7 @@ const { copy, stages, codes } = Astro.props;
     gap: 4px 20px;
     padding: 8px 12px;
     border-top: 1px solid var(--line);
-    background: linear-gradient(180deg, rgba(11, 11, 14, 0.4), rgba(11, 11, 14, 0.88));
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.94));
     pointer-events: none;
   }
   .tf-c3d-key div {
@@ -362,10 +362,10 @@ const { copy, stages, codes } = Astro.props;
     .tf-c3d-rail button {
       flex-direction: row;
       gap: 0;
-      background: rgba(11, 11, 14, 0.84);
+      background: rgba(255, 255, 255, 0.94);
     }
     .tf-c3d-rail button:hover,
-    .tf-c3d-rail button:focus-visible { background: rgba(28, 28, 34, 0.94); }
+    .tf-c3d-rail button:focus-visible { background: #ffffff; }
     .tf-c3d-rail .sw { width: 3px; height: auto; flex: 0 0 auto; }
     .tf-c3d-rail .bd {
       flex-direction: row;

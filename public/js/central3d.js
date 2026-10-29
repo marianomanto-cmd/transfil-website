@@ -46,6 +46,7 @@ const MAT = {
   estructura: new THREE.MeshStandardMaterial({ name: 'estructura', color: 0x4d4d56, roughness: 0.66, metalness: 0.2 }),
   maquina: new THREE.MeshStandardMaterial({ name: 'maquina', color: 0x73737e, roughness: 0.58, metalness: 0.26 }),
   oscuro: new THREE.MeshStandardMaterial({ name: 'oscuro', color: 0x1c1c22, roughness: 0.85, metalness: 0.1 }),
+  piso: new THREE.MeshStandardMaterial({ name: 'piso', color: 0xdfe4ea, roughness: 0.9, metalness: 0.05 }),
   acero: new THREE.MeshStandardMaterial({ name: 'acero', color: 0x8d8d97, roughness: 0.35, metalness: 0.4 }),
   sucio: new THREE.MeshStandardMaterial({ name: 'soluble-sucio', color: 0x8f5c2d, roughness: 0.22, metalness: 0.12 }),
   limpio: new THREE.MeshStandardMaterial({ name: 'soluble-limpio', color: 0x2f7fb8, roughness: 0.18, metalness: 0.15 }),
@@ -120,13 +121,13 @@ function arrowsOn(curve, m, group, us, name, sc) {
 }
 
 /* ── Piso y grilla ───────────────────────────────────────────────────── */
-unit.add(box('piso', 16, 0.08, 9, 0.6, -0.04, 0.2, MAT.oscuro));
+unit.add(box('piso', 16, 0.08, 9, 0.6, -0.04, 0.2, MAT.piso));
 const gpts = [];
 for (let x = -7; x <= 8.4; x += 0.8) gpts.push(x, 0, -4.3, x, 0, 4.7);
 for (let z = -4; z <= 4.7; z += 0.8) gpts.push(-7.4, 0, z, 8.6, 0, z);
 const gGeo = new THREE.BufferGeometry();
 gGeo.setAttribute('position', new THREE.Float32BufferAttribute(gpts, 3));
-const grid = new THREE.LineSegments(gGeo, new THREE.LineBasicMaterial({ color: 0x3a86ff, transparent: true, opacity: 0.11 }));
+const grid = new THREE.LineSegments(gGeo, new THREE.LineBasicMaterial({ color: 0x0b5fd3, transparent: true, opacity: 0.11 }));
 grid.name = 'grilla';
 grid.position.y = 0.002;
 unit.add(grid);
@@ -438,7 +439,7 @@ unit.add(flow);
 /* ── Marco de foco: el equivalente 3D de los ticks del esquema 2D ────── */
 const FOCUS = new THREE.LineSegments(
   new THREE.EdgesGeometry(new THREE.BoxGeometry(1, 1, 1)),
-  new THREE.LineBasicMaterial({ color: 0x3a86ff, transparent: true, opacity: 0.34 })
+  new THREE.LineBasicMaterial({ color: 0x0b5fd3, transparent: true, opacity: 0.34 })
 );
 FOCUS.name = 'foco-etapa';
 unit.add(FOCUS);
