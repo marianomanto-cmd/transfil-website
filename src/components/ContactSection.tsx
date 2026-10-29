@@ -429,7 +429,7 @@ export function ContactSection({
             </div>
           )}
         </form>
-        <aside className="tf-contact-side">
+        <div className="tf-contact-side">
           <div className="tf-contact-block">
             <div className="tf-mono tf-contact-h">{c.direct}</div>
             <a href="mailto:ventas@transfil.com.ar" className="tf-contact-link">
@@ -466,7 +466,7 @@ export function ContactSection({
               referrerPolicy="no-referrer-when-downgrade"
             />
           </div>
-        </aside>
+        </div>
       </div>
     </section>
   );

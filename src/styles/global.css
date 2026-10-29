@@ -4423,12 +4423,7 @@ body::after { display: none !important; }
 }
 .tf-apps-custom-bg::after {
   background:
-    linear-gradient(90deg, var(--bg-2) 0%, rgba(242, 244, 247, 0.55) 10%, rgba(242, 244, 247, 0) 32%);
-}
-/* La foto arranca después del texto: sin velo pesado y sin texto encima. */
-@media (min-width: 721px) {
-  .tf-apps-custom-bg { width: 52%; }
-  .tf-apps-custom-body-wrap { max-width: 44%; }
+    linear-gradient(100deg, var(--bg-2) 0%, rgba(242, 244, 247, 0.82) 22%, rgba(242, 244, 247, 0.22) 55%, rgba(242, 244, 247, 0) 85%);
 }
 @media (max-width: 720px) {
   .tf-apps-custom-bg img { opacity: 0.35; }
@@ -4561,3 +4556,45 @@ main section[id] { scroll-margin-top: var(--header-h); }
 
 /* Acento de los H2 recto, igual que el del hero. */
 .tf-h2-accent { font-style: normal; }
+
+/* El H2 recorta (overflow: hidden) para la entrada palabra por palabra; con
+   Inter Tight los descendentes (g, j, p, q, y) de la última línea quedaban
+   cortados. Aire abajo para la tinta, compensado en el margen. */
+.tf-section .tf-h2 {
+  padding-bottom: 0.16em;
+  margin-bottom: calc(12px - 0.16em);
+}
+
+/* ── Contraste (auditoría axe) ───────────────────────────────────── */
+/* Número de catálogo: el color de cada catálogo, oscurecido para que se
+   lea sobre gris claro (≥ 4.5:1). */
+.tf-catalog-num { color: color-mix(in oklab, var(--cat-c) 50%, #000); }
+/* WhatsApp: el verde de marca no llega a 2:1 con texto blanco. */
+.tf-wa-fab { background: #15803d; box-shadow: 0 12px 32px -8px rgba(21, 128, 61, 0.45), 0 4px 12px rgba(16, 20, 24, 0.2); }
+.tf-wa-fab:hover { background: #116d33; }
+/* Hero: más cuerpo detrás de las etiquetas y del texto inferior, para
+   los cuadros claros del video (chispas, refrigerante). */
+.tf-hero-meta-line,
+.tf-hero-status { background: rgba(16, 20, 24, 0.58); }
+.tf-hero .tf-hero-meta-num { color: #fff; }
+.tf-hero-bg::after {
+  background:
+    linear-gradient(0deg, rgba(10, 14, 20, 0.8) 0%, rgba(10, 14, 20, 0.4) 38%, rgba(10, 14, 20, 0) 62%),
+    linear-gradient(90deg, rgba(10, 14, 20, 0.55) 0%, rgba(10, 14, 20, 0.15) 50%, rgba(10, 14, 20, 0) 75%),
+    linear-gradient(180deg, rgba(10, 14, 20, 0.35) 0%, rgba(10, 14, 20, 0) 22%);
+}
+
+/* ── Segunda ronda de bugs ───────────────────────────────────────── */
+/* Catálogos en tablet: dos columnas dejaban la tercera tarjeta sola. */
+@media (min-width: 641px) and (max-width: 1080px) {
+  .tf-catalogs { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+}
+/* Tira superior de la tapa (código + páginas): sobre la parte clara de la
+   foto el texto blanco no se leía. */
+.tf-catalog-cover-tag { padding: 12px; }
+.tf-catalog-cover-tag > span {
+  padding: 3px 7px;
+  background: rgba(16, 20, 24, 0.72);
+  color: #fff;
+}
+.tf-catalog-cover-tag > span:first-child { color: #fff; }

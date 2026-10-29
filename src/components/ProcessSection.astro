@@ -219,6 +219,12 @@ const c = content.process;
   .section-proceso.is-visible .node:nth-child(4)::before { opacity: 0.85; transition-delay: 900ms; }
   .section-proceso.is-visible .node:nth-child(5)::before { opacity: 0.85; transition-delay: 1000ms; }
 
+  /* Tablet: cinco columnas de ~150px dejaban cada paso en 9-10 líneas. */
+  @media (min-width: 881px) and (max-width: 1180px) {
+    .section-proceso .flow { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+    .section-proceso .node + .node::before { display: none; }
+  }
+
   /* Mobile: stack vertically with vertical timeline line + dots */
   @media (max-width: 880px) {
     .section-proceso { padding: 64px 6vw 56px; }

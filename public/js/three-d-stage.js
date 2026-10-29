@@ -229,7 +229,7 @@
       });
       // Pixel ratio: set by fit() below, and kept in step with the screen.
       renderer.shadowMap.enabled = true;
-      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      renderer.shadowMap.type = THREE.PCFShadowMap; // PCFSoft está deprecado en r184
       this._renderer = renderer;
       this.shadowRoot.insertBefore(renderer.domElement, this._err);
 

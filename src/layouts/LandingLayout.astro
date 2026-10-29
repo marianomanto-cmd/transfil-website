@@ -545,6 +545,9 @@ const navItems = [
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 24px;
+    /* Separación del visor 3D de arriba y del diagrama de máquinas de
+       abajo: sin esto las tarjetas quedaban pegadas a ambos. */
+    margin-block: clamp(24px, 3vw, 40px) clamp(48px, 6vw, 80px);
   }
   .tf-lp-stage {
     border: 1px solid var(--line);

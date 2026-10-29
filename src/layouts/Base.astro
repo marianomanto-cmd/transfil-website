@@ -385,7 +385,12 @@ const faqJsonLd = {
 
       function init() {
         // Reveal-on-scroll
-        const sections = document.querySelectorAll('.tf-section');
+        // Las secciones que son islas de React (Tecnologías, Catálogos,
+        // Industrias, Contacto) manejan su propio `is-visible`; tocarlas
+        // desde acá antes de hidratar desajusta el className.
+        const sections = [...document.querySelectorAll('.tf-section')].filter(
+          (s) => !s.closest('astro-island')
+        );
         const io = new IntersectionObserver(
           (entries) => {
             for (const entry of entries) {
@@ -404,6 +409,9 @@ const faqJsonLd = {
         // children (e.g. Industries title which has a two-tone split).
         document.querySelectorAll('.tf-h2').forEach((h) => {
           if (h.querySelector('span, em')) return;
+          // Los H2 dentro de una isla de React los maneja React: partirlos
+          // antes de hidratar provoca un desajuste de hidratación.
+          if (h.closest('astro-island')) return;
           if ((h as HTMLElement).dataset.split === '1') return;
           (h as HTMLElement).dataset.split = '1';
           const text = h.textContent || '';
@@ -445,10 +453,14 @@ const faqJsonLd = {
             });
             btn.addEventListener('mouseleave', reset);
           };
+          // Marca en un WeakSet, no en un data-attribute: el botón vive en
+          // una isla de React y un atributo agregado antes de hidratar
+          // dispara el aviso "Extra attributes from the server".
+          const bound: WeakSet<Element> = ((window as any).__tfMagBound ??= new WeakSet());
           const scan = () =>
             document.querySelectorAll('.tf-btn-magnetic').forEach((b) => {
-              if (!(b as HTMLElement).dataset.magnetic) {
-                (b as HTMLElement).dataset.magnetic = '1';
+              if (!bound.has(b)) {
+                bound.add(b);
                 bind(b as HTMLElement);
               }
             });
