@@ -4607,9 +4607,25 @@ main section[id] { scroll-margin-top: var(--header-h); }
   .tf-apps-custom-bg img { object-position: right center; }
   .tf-apps-custom-bg::after {
     background: linear-gradient(31deg,
-      var(--bg-2) 0%, var(--bg-2) 44%,
-      rgba(242, 244, 247, 0.75) 48%,
-      rgba(242, 244, 247, 0.25) 53%,
-      rgba(242, 244, 247, 0) 58%);
+      var(--bg-2) 0%, var(--bg-2) 38%,
+      rgba(242, 244, 247, 0.9) 43%,
+      rgba(242, 244, 247, 0.7) 48%,
+      rgba(242, 244, 247, 0.45) 54%,
+      rgba(242, 244, 247, 0.2) 61%,
+      rgba(242, 244, 247, 0.06) 68%,
+      rgba(242, 244, 247, 0) 74%);
   }
 }
+
+/* ── Tercera ronda ───────────────────────────────────────────────── */
+/* Zonas táctiles de al menos 40px en celular (footer, contacto, idioma,
+   logo). */
+@media (max-width: 640px) {
+  .tf-footer-col a,
+  .tf-contact-link { display: inline-flex; align-items: center; min-height: 40px; }
+  .tf-lang a { display: inline-flex; align-items: center; justify-content: center; min-width: 32px; min-height: 40px; }
+  .tf-logo { min-height: 44px; }
+}
+/* Mapa: la ficha "14 · países alcanzados" tapaba España (arriba a la
+   derecha). Abajo a la derecha, sobre el Atlántico Sur, no tapa nada. */
+.tf-radar-meta { top: auto; bottom: 44px; }

@@ -545,7 +545,10 @@ const DEMO_HITS = [1, 4];
   .tf-app:hover { background: var(--bg-3); }
   .tf-app:hover::before { opacity: 1; }
 
-  .tf-app-ghost {
+  /* Número fantasma gigante: en el tema claro se leía como un "01" cortado
+     por el borde de la tarjeta. Fuera. */
+  .tf-app-ghost { display: none; }
+  .tf-app-ghost-off {
     position: absolute;
     right: -4px;
     bottom: -26px;

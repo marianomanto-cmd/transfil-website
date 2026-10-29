@@ -29,7 +29,7 @@ const COUNTRIES: Country[] = [
   { code: 'EC', label: 'ECUADOR',                                   labelPt: 'EQUADOR',         x: 52, y: 50, lx: -3.2, ly: 0.4, anchor: 'end' },
   { code: 'MX', label: 'MÉXICO',          labelEn: 'MEXICO',        x: 31, y: 31, lx: -3.2, ly: 0.4, anchor: 'end' },
   { code: 'US', label: 'ESTADOS UNIDOS',  labelEn: 'UNITED STATES', x: 53, y: 11, lx: 3.2, ly: 0.4, anchor: 'start' },
-  { code: 'DO', label: 'R. DOMINICANA',   labelEn: 'DOMINICAN REP.', labelPt: 'REP. DOMINICANA', x: 60, y: 32, lx: -3.2, ly: 0.4, anchor: 'end' },
+  { code: 'DO', label: 'R. DOMINICANA',   labelEn: 'DOMINICAN REP.', labelPt: 'REP. DOMINICANA', x: 60, y: 32, lx: 0, ly: 4.4, anchor: 'middle' },
   { code: 'PR', label: 'PUERTO RICO',                               labelPt: 'PORTO RICO',      x: 66, y: 31, lx: 3.2, ly: 0.4, anchor: 'start' },
   { code: 'ES', label: 'ESPAÑA',          labelEn: 'SPAIN',         labelPt: 'ESPANHA',         x: 125, y: 10, lx: -3.2, ly: 0.4, anchor: 'end' },
 ];

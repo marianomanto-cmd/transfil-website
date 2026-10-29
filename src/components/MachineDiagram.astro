@@ -230,11 +230,13 @@ const grid = `md-grid-${k.toLowerCase()}`;
   }
 
   /* Caption sits above the frame — never over the drawing. */
+  /* Rótulo en dos renglones siempre: si "Muela + refrigeración" no entraba
+     en uno, ese diagrama quedaba más abajo que los otros tres. */
   .tf-md-cap {
     display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 2px 8px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
     min-width: 0;
   }
   .tf-md-chip {
@@ -253,7 +255,7 @@ const grid = `md-grid-${k.toLowerCase()}`;
     min-width: 0;
   }
   .tf-md-desc::before {
-    content: "/ ";
+    content: "";
     color: var(--line-strong);
   }
 
