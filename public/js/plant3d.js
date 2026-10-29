@@ -42,6 +42,7 @@ const MAT = {
   estructura: new THREE.MeshStandardMaterial({ name: 'estructura', color: 0x4d4d56, roughness: 0.66, metalness: 0.2 }),
   transfil: new THREE.MeshStandardMaterial({ name: 'transfil-azul', color: 0x3579de, roughness: 0.46, metalness: 0.28 }),
   oscuro: new THREE.MeshStandardMaterial({ name: 'oscuro', color: 0x1c1c22, roughness: 0.85, metalness: 0.1 }),
+  piso: new THREE.MeshStandardMaterial({ name: 'piso', color: 0xdfe4ea, roughness: 0.9, metalness: 0.05 }),
   tubo: new THREE.MeshStandardMaterial({ name: 'tubo-acero', color: 0x8d8d97, roughness: 0.35, metalness: 0.4 }),
   soluble: new THREE.MeshStandardMaterial({ name: 'soluble-sucio', color: 0x8f5c2d, roughness: 0.22, metalness: 0.12 }),
 };
@@ -104,10 +105,10 @@ function arrowsOn(curve, m, group, us, name) {
 // El piso se arma en cuatro paños para dejar el hueco del pozo
 // (x −9.6…−7.2, z −1.6…0.8): el back de transferencia está hundido y
 // separado de la línea, no alineado con ella.
-plant.add(box('piso-oeste', 8.4, 0.08, 14, -10.0, -0.04, 0.75, MAT.oscuro));
-plant.add(box('piso-este', 13.2, 0.08, 14, 3.2, -0.04, 0.75, MAT.oscuro));
-plant.add(box('piso-sur', 2.4, 0.08, 5.95, -4.6, -0.04, -3.275, MAT.oscuro));
-plant.add(box('piso-norte', 2.4, 0.08, 5.65, -4.6, -0.04, 4.925, MAT.oscuro));
+plant.add(box('piso-oeste', 8.4, 0.08, 14, -10.0, -0.04, 0.75, MAT.piso));
+plant.add(box('piso-este', 13.2, 0.08, 14, 3.2, -0.04, 0.75, MAT.piso));
+plant.add(box('piso-sur', 2.4, 0.08, 5.95, -4.6, -0.04, -3.275, MAT.piso));
+plant.add(box('piso-norte', 2.4, 0.08, 5.65, -4.6, -0.04, 4.925, MAT.piso));
 
 // Huella de cada elemento — leen como cinco estaciones distintas.
 function pad(name, w, d, x, z) {
@@ -157,7 +158,7 @@ for (let x = -14; x <= 9.8; x += 1) gpts.push(x, 0, -6.25, x, 0, 7.75);
 for (let z = -6; z <= 7.75; z += 1) gpts.push(-14.2, 0, z, 9.8, 0, z);
 const gGeo = new THREE.BufferGeometry();
 gGeo.setAttribute('position', new THREE.Float32BufferAttribute(gpts, 3));
-const grid = new THREE.LineSegments(gGeo, new THREE.LineBasicMaterial({ color: 0x3a86ff, transparent: true, opacity: 0.12 }));
+const grid = new THREE.LineSegments(gGeo, new THREE.LineBasicMaterial({ color: 0x0b5fd3, transparent: true, opacity: 0.12 }));
 grid.name = 'grilla';
 grid.position.y = 0.002;
 plant.add(grid);
@@ -520,7 +521,7 @@ function paint() {
     c.flow.forEach((f) => { f.mesh.visible = on; });
   });
   buttons.forEach((b, i) => {
-    b.style.background = iso === i ? '#15151a' : '#0e0e10';
+    b.style.background = iso === i ? '#e9edf1' : '#ffffff';
     b.style.opacity = iso === null || iso === i ? '1' : '0.45';
     b.setAttribute('aria-pressed', iso === i ? 'true' : 'false');
   });
