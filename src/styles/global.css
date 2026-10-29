@@ -4423,7 +4423,7 @@ body::after { display: none !important; }
 }
 .tf-apps-custom-bg::after {
   background:
-    linear-gradient(100deg, var(--bg-2) 0%, rgba(242, 244, 247, 0.82) 22%, rgba(242, 244, 247, 0.22) 55%, rgba(242, 244, 247, 0) 85%);
+    linear-gradient(100deg, var(--bg-2) 0%, rgba(242, 244, 247, 0.55) 18%, rgba(242, 244, 247, 0.12) 45%, rgba(242, 244, 247, 0) 70%);
 }
 @media (max-width: 720px) {
   .tf-apps-custom-bg img { opacity: 0.35; }
