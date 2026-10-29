@@ -4423,7 +4423,12 @@ body::after { display: none !important; }
 }
 .tf-apps-custom-bg::after {
   background:
-    linear-gradient(100deg, var(--bg-2) 0%, rgba(242, 244, 247, 0.92) 24%, rgba(242, 244, 247, 0.35) 58%, rgba(242, 244, 247, 0) 100%);
+    linear-gradient(90deg, var(--bg-2) 0%, rgba(242, 244, 247, 0.55) 10%, rgba(242, 244, 247, 0) 32%);
+}
+/* La foto arranca después del texto: sin velo pesado y sin texto encima. */
+@media (min-width: 721px) {
+  .tf-apps-custom-bg { width: 52%; }
+  .tf-apps-custom-body-wrap { max-width: 44%; }
 }
 @media (max-width: 720px) {
   .tf-apps-custom-bg img { opacity: 0.35; }
