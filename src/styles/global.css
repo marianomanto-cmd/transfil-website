@@ -1,40 +1,43 @@
 /* ─────────────────────────────────────────────────────────────────────
    Trans-Fil · Industrial machinery website
-   Aesthetic system:
-     · Background: graphite #0e0e10 / off-white #f4f1ec
-     · Lines: hairline at #2a2a2e (dark) / #d8d4cc (light)
-     · Accent: #3a86ff industrial blue (used sparingly — keylines, CTAs)
-     · Type: Space Grotesk (display), Inter (body), JetBrains Mono (data)
+   Aesthetic system (diseño D · "Industrial limpio", oct 2026):
+     · Background: blanco #ffffff / gris acero #f2f4f7
+     · Lines: hairline #dce1e7 / #c3cad3
+     · Accent: #0b5fd3 azul de marca (sobre video: #7db7ff)
+     · Type: Inter Tight (display), Inter (body), JetBrains Mono (data)
+     · Overrides del diseño D al final de este archivo
      · Grid: 12-col, 24px gutter, max content width ~1440
    ────────────────────────────────────────────────────────────────── */
 
 :root {
-  --bg: #0e0e10;
-  --bg-2: #15151a;
-  --bg-3: #1c1c22;
-  --fg: #f4f1ec;
-  --fg-2: #c9c6c0;
-  --fg-3: #8a8780;
-  /* --fg-4 is the dimmest TEXT tone: 4.8:1 on --bg, 4.55:1 on --bg-2, so
-     small mono labels still pass WCAG AA. --fg-dim keeps the old, darker
-     value for decoration only (leader lines, dots) — never for text. */
-  --fg-4: #827f78;
-  --fg-dim: #4d4a45;
-  --line: #2a2a2e;
-  --line-strong: #3a3a3f;
-  --accent: #3a86ff;
-  --accent-2: #1f4fb3;
-  --accent-soft: rgba(58, 134, 255, 0.12);
-  /* Fills that carry white text. --accent itself gives white only 3.5:1,
-     so primary buttons and the skip-link sit on a deeper blue of the
-     same hue (4.7:1), and darken further on hover (6.1:1). */
-  --accent-fill: #2b6cf0;
-  --accent-fill-hover: #2159d4;
-  --warn: #ff6b1a;
+  /* Diseño D · "Industrial limpio": fondo blanco, paneles gris acero claro,
+     azul de marca para la acción. Los bloques sobre foto/video (hero,
+     portadas) redefinen estos tokens localmente con valores claros. */
+  --bg: #ffffff;
+  --bg-2: #f2f4f7;
+  --bg-3: #e9edf1;
+  --fg: #101418;
+  --fg-2: #2e3640;
+  --fg-3: #47505c;
+  /* --fg-4 es el tono de texto más tenue: 6.1:1 sobre blanco y 5.6:1
+     sobre --bg-2. --fg-dim queda solo para decoración, nunca texto. */
+  --fg-4: #545d69;
+  --fg-dim: #b3bbc5;
+  --line: #dce1e7;
+  --line-strong: #c3cad3;
+  --accent: #0b5fd3;
+  --accent-2: #0a4ba8;
+  --accent-soft: rgba(11, 95, 211, 0.08);
+  /* Rellenos con texto blanco: 5.9:1 y 7.3:1 en hover. */
+  --accent-fill: #0b5fd3;
+  --accent-fill-hover: #0a4ba8;
+  /* Acento sobre foto o video oscuro (hero): el azul de marca no se lee ahí. */
+  --accent-on-media: #7db7ff;
+  --warn: #c2410c;
 
   /* Self-hosted variable faces (see Base.astro); the static names stay as
      a fallback for machines that have them installed. */
-  --font-display: 'Space Grotesk Variable', 'Space Grotesk', 'Inter Variable', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display: 'Inter Tight Variable', 'Inter Tight', 'Inter Variable', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-body: 'Inter Variable', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
 
@@ -72,15 +75,13 @@ body {
      /conformado schematic pins with it). `clip` crops the same way without
      creating a scrollport. `html` above already carries the same value. */
   overflow-x: clip;
-  background-image:
-    radial-gradient(1200px 800px at 80% -10%, rgba(58, 134, 255, 0.06), transparent 60%),
-    radial-gradient(1000px 600px at -10% 30%, rgba(255, 255, 255, 0.02), transparent 60%);
 }
 
 /* Very subtle grain texture overlay — keeps dark surfaces from looking
    flat-digital. Pure CSS via fractalNoise data URI; non-blocking, no req.
    Skipped on small viewports where its paint cost isn't worth it. */
 body::before {
+  display: none; /* el grano era para superficies oscuras */
   content: "";
   position: fixed;
   inset: 0;
@@ -4274,3 +4275,284 @@ button.tf-catalog-card {
   .tf-catalog-viewer-btn { width: 44px; padding: 0; }
   .tf-catalog-viewer-title { font-size: 14px; }
 }
+
+
+/* ╔══════════════════════════════════════════════════════════════════╗
+   ║  Diseño D · "Industrial limpio" (2026-10)                        ║
+   ║  Sitio claro. Lo que va sobre foto o video (hero, portadas,      ║
+   ║  tiles) redefine los tokens localmente con valores claros.       ║
+   ╚══════════════════════════════════════════════════════════════════╝ */
+
+/* Isla "sobre medio oscuro": cualquier bloque que pinta texto encima de
+   una foto o un video toma estos tokens. */
+.tf-hero,
+.tf-lp-hero,
+.tf-on-media,
+.tf-tech-tile,
+.tf-catalog-cover {
+  --fg: #ffffff;
+  --fg-2: rgba(255, 255, 255, 0.94);
+  --fg-3: rgba(255, 255, 255, 0.88);
+  --fg-4: rgba(255, 255, 255, 0.82);
+  --fg-dim: rgba(255, 255, 255, 0.45);
+  --line: rgba(255, 255, 255, 0.28);
+  --line-strong: rgba(255, 255, 255, 0.5);
+  --accent: var(--accent-on-media);
+  --accent-soft: rgba(255, 255, 255, 0.12);
+  --bg-2: rgba(16, 20, 24, 0.45);
+  --bg-3: rgba(16, 20, 24, 0.6);
+}
+
+body { background-image: none; }
+body::after { display: none !important; }
+
+/* ── Header blanco ───────────────────────────────────────────────── */
+.tf-header {
+  background: #fff;
+  border-bottom-color: var(--line);
+}
+.tf-header.is-scrolled {
+  background: rgba(255, 255, 255, 0.97);
+  box-shadow: 0 1px 0 var(--line), 0 6px 20px -12px rgba(16, 20, 24, 0.18);
+}
+.tf-nav a { color: var(--fg-3); }
+.tf-nav a:hover,
+.tf-nav a[data-active="true"] { color: var(--fg); }
+
+/* ── Botones ─────────────────────────────────────────────────────── */
+.tf-btn-primary,
+.tf-btn-primary:hover { color: #fff; }
+.tf-btn-primary:hover {
+  box-shadow: 0 10px 24px -12px rgba(11, 95, 211, 0.55);
+}
+
+/* ── Hero: video a sangre, elementos flotantes ───────────────────── */
+.tf-hero {
+  color: var(--fg);
+  border-bottom: 0;
+}
+.tf-hero::before { display: none; }           /* sin grilla CAD encima del video */
+.tf-hero-bg { background: #1a1f26; }
+.tf-hero-bg img,
+.tf-hero-bg video {
+  opacity: 1 !important;
+  filter: none !important;
+}
+/* Solo un degradado abajo (stats y textos) y una rampa suave a la izquierda
+   para el titular: el resto del video queda limpio. */
+.tf-hero-bg::after {
+  background:
+    linear-gradient(0deg, rgba(10, 14, 20, 0.72) 0%, rgba(10, 14, 20, 0.28) 38%, rgba(10, 14, 20, 0) 62%),
+    linear-gradient(90deg, rgba(10, 14, 20, 0.5) 0%, rgba(10, 14, 20, 0.12) 50%, rgba(10, 14, 20, 0) 75%),
+    linear-gradient(180deg, rgba(10, 14, 20, 0.35) 0%, rgba(10, 14, 20, 0) 22%);
+}
+@keyframes tf-fade-in-img { from { opacity: 0; } to { opacity: 1; } }
+
+/* Etiquetas translúcidas */
+.tf-hero-meta::after { display: none; }
+.tf-hero-meta-line,
+.tf-hero-status {
+  padding: 8px 12px;
+  background: rgba(16, 20, 24, 0.42);
+  border: 1px solid rgba(255, 255, 255, 0.26);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  color: #fff;
+}
+.tf-hero-meta-line .tf-mono,
+.tf-hero-meta-chip,
+.tf-hero-status { color: #fff; }
+
+.tf-hero .tf-display {
+  font-weight: 650;
+  letter-spacing: -0.028em;
+  font-size: clamp(48px, 8.4vw, 132px);
+  text-shadow: 0 2px 28px rgba(0, 0, 0, 0.35);
+}
+.tf-hero .tf-display-mid { color: #fff; }
+.tf-hero .tf-display-accent {
+  color: var(--accent-on-media);
+  font-style: normal;
+  font-weight: 650;
+}
+.tf-hero-sub {
+  color: #fff;
+  text-shadow: 0 1px 14px rgba(0, 0, 0, 0.55);
+}
+.tf-hero .tf-btn-ghost {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.1);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+.tf-hero .tf-btn-ghost::before { background: rgba(255, 255, 255, 0.16); }
+.tf-hero-stats { border-top-color: rgba(255, 255, 255, 0.35); }
+.tf-hero .tf-stat { border-right-color: rgba(255, 255, 255, 0.22); }
+.tf-hero .tf-stat:hover { background: rgba(255, 255, 255, 0.06); }
+.tf-hero .tf-stat-v { text-shadow: 0 1px 16px rgba(0, 0, 0, 0.4); }
+.tf-hero .tf-stat:hover .tf-stat-v { color: var(--accent-on-media); }
+
+/* ── Tecnologías: banda con etiqueta blanca a la izquierda ──────── */
+.tf-tech-bento-cover { background: #fff; }
+.tf-tech-bento-cover-overlay { background: none; }
+.tf-tech-bento-cover-title {
+  color: var(--fg);
+  text-shadow: none;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+}
+.tf-tech-bento-cover-chev {
+  border-radius: 0;
+  background: #fff;
+  border-color: var(--line-strong);
+  color: var(--fg);
+  width: 44px;
+  height: 44px;
+}
+.tf-tech-bento-cover[data-open="true"] .tf-tech-bento-cover-media > * { filter: none; }
+
+/* ── Aplicaciones ────────────────────────────────────────────────── */
+.tf-apps-sec .tf-h2 { color: var(--fg); text-shadow: none; }
+
+/* Bloque "Cada equipo se dimensiona…": foto a la derecha, velo blanco a
+   la izquierda donde va el texto. */
+.tf-apps-custom-bg img {
+  filter: none;
+  opacity: 1;
+}
+.tf-apps-custom-bg::after {
+  background:
+    linear-gradient(100deg, var(--bg-2) 0%, rgba(242, 244, 247, 0.92) 24%, rgba(242, 244, 247, 0.35) 58%, rgba(242, 244, 247, 0) 100%);
+}
+@media (max-width: 720px) {
+  .tf-apps-custom-bg img { opacity: 0.35; }
+  .tf-apps-custom-bg::after {
+    background: linear-gradient(180deg, rgba(242, 244, 247, 0.85) 0%, rgba(242, 244, 247, 0.92) 100%);
+  }
+}
+
+/* ── Catálogos: la tapa sigue siendo foto (isla clara) ───────────── */
+.tf-catalog-card:hover { box-shadow: 0 18px 40px -22px rgba(16, 20, 24, 0.35); }
+
+/* ── Servicios ───────────────────────────────────────────────────── */
+.tf-svc-thumb::after {
+  background: linear-gradient(to bottom, transparent 60%, rgba(16, 20, 24, 0.18) 100%);
+}
+.tf-service[data-has-bg]::before {
+  background:
+    linear-gradient(to right, var(--bg-2) 0%, rgba(242, 244, 247, 0.8) 45%, rgba(242, 244, 247, 0.45) 100%);
+}
+
+/* ── Formulario ──────────────────────────────────────────────────── */
+.tf-field input,
+.tf-field select,
+.tf-field textarea {
+  background: #fff;
+  border-color: var(--line-strong);
+  box-shadow: none;
+}
+.tf-field input:focus,
+.tf-field select:focus,
+.tf-field textarea:focus { background: #fff; }
+.tf-field select { color-scheme: light; }
+.tf-field select option { background-color: #fff; color: var(--fg); }
+.tf-form-sent { color: #15803d; }
+
+/* Mapa sin invertir: Google Maps tal cual, apenas desaturado. */
+.tf-contact-map iframe { filter: saturate(0.6) contrast(0.98); }
+.tf-contact-map::after { background: none; }
+
+/* ── Footer claro ────────────────────────────────────────────────── */
+.tf-footer {
+  background: var(--bg-2);
+  border-top: 1px solid var(--line);
+}
+
+/* Secciones "oscuras" ahora son gris acero claro, sin halo azul. */
+.tf-section.is-dark::after { display: none; }
+
+/* ── Industrias: mapa de cobertura sobre gris claro ──────────────── */
+.tf-radar { background: var(--bg-2); }
+.tf-radar-dots circle { fill: #8a94a0; fill-opacity: 0.55; }
+.tf-radar-pulse { fill: var(--accent); }
+/* Halo del color del fondo detrás de cada etiqueta: los arcos pasan por
+   detrás del texto sin cortarlo. */
+.tf-radar-label,
+.tf-radar-scale text,
+.tf-radar-compass text {
+  paint-order: stroke;
+  stroke: var(--bg-2);
+  stroke-width: 0.9px;
+  stroke-linejoin: round;
+}
+.tf-radar-meta,
+.tf-radar-stamp {
+  background: rgba(255, 255, 255, 0.88);
+  border-color: var(--line);
+  color: var(--fg-3);
+}
+.tf-radar-meta { color: var(--fg-2); }
+
+/* Marcas de agua gigantes fuera: en claro se superponían al contenido. */
+.tf-history-watermark,
+.tf-industries-watermark { display: none; }
+
+/* ── Contacto: WhatsApp con verde legible sobre claro ────────────── */
+.tf-contact-wa { border-color: #15803d; color: #15803d; }
+.tf-contact-wa:hover { background: #15803d; color: #fff; }
+
+.tf-backtop {
+  background: rgba(255, 255, 255, 0.94);
+  border-color: var(--line-strong);
+  color: var(--fg);
+  box-shadow: 0 6px 18px -10px rgba(16, 20, 24, 0.35);
+}
+
+/* Tapas de catálogo: la foto de la tapa ya trae su marca y su título;
+   el rombo y el título superpuestos chocaban con ella. Tapa limpia, solo
+   la tira superior (código + páginas) sobre un velo suave. */
+.tf-catalog-cover-img { filter: none; }
+.tf-catalog-card:hover .tf-catalog-cover-img { filter: none; }
+.tf-catalog-cover::before,
+.tf-catalog-card:hover .tf-catalog-cover::before {
+  background: linear-gradient(180deg, rgba(10, 14, 20, 0.5) 0%, rgba(10, 14, 20, 0) 24%);
+}
+.tf-catalog-cover-brand,
+.tf-catalog-cover-grid,
+.tf-catalog-cover-stripe { display: none; }
+
+/* Hero de las landings: misma isla que el de la home. */
+.tf-lp-hero { color: var(--fg); }
+.tf-lp-hero .tf-btn-ghost {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* "SCROLL" del hero: la regla de móvil perdía contra `.tf-hero .tf-hero-scroll`
+   y el indicador quedaba encima de la última cifra. */
+@media (max-width: 640px) {
+  .tf-hero .tf-hero-scroll { display: none; }
+  /* En el mapa chico la ficha tapaba Estados Unidos; el dato ya está en la
+     lista de países justo arriba. */
+  .tf-radar-meta { display: none; }
+}
+
+/* Al saltar desde el menú, la sección arranca debajo del header fijo
+   (antes el eyebrow quedaba tapado). */
+main section[id] { scroll-margin-top: var(--header-h); }
+
+/* Visor de catálogos: velo más liviano, panel blanco. */
+.tf-catalog-viewer { background: rgba(16, 20, 24, 0.55); }
+.tf-catalog-viewer-panel {
+  background: #fff;
+  box-shadow: 0 40px 80px -24px rgba(16, 20, 24, 0.45);
+}
+.tf-catalog-viewer-head { background: #fff; }
+.tf-catalog-viewer-close:hover,
+.tf-catalog-viewer-close:focus-visible,
+.tf-btn-ghost:hover { background: var(--accent-soft); }
+
+/* Acento de los H2 recto, igual que el del hero. */
+.tf-h2-accent { font-style: normal; }
