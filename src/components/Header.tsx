@@ -110,7 +110,9 @@ export function Header({ lang, nav, langSwitch, page = 'home', navItems, cta }: 
   }, [open]);
 
   useEffect(() => {
-    const ids = ['tech', 'applications', 'catalogs', 'process', 'services', 'industries', 'history', 'contact'];
+    // 'top' (el hero) también se observa: al volver arriba ningún ítem del
+    // menú queda marcado como activo.
+    const ids = ['top', 'tech', 'applications', 'catalogs', 'process', 'services', 'industries', 'history', 'contact'];
     const nodes = ids.map((id) => document.getElementById(id)).filter(Boolean) as HTMLElement[];
     if (!nodes.length) return;
     const io = new IntersectionObserver(
@@ -118,7 +120,7 @@ export function Header({ lang, nav, langSwitch, page = 'home', navItems, cta }: 
         const visible = entries
           .filter((e) => e.isIntersecting)
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-        if (visible[0]) setActiveId(visible[0].target.id);
+        if (visible[0]) setActiveId(visible[0].target.id === 'top' ? null : visible[0].target.id);
       },
       { rootMargin: '-40% 0px -50% 0px', threshold: [0, 0.25, 0.5, 1] }
     );
