@@ -4598,3 +4598,18 @@ main section[id] { scroll-margin-top: var(--header-h); }
   color: #fff;
 }
 .tf-catalog-cover-tag > span:first-child { color: #fff; }
+
+/* "Cada equipo se dimensiona…": la foto ocupa todo el bloque y el fondo
+   gris la corta en diagonal (de arriba a la izquierda hacia abajo a la
+   derecha), con un borde suave. Sin corte vertical. */
+@media (min-width: 721px) {
+  .tf-apps-custom-bg { width: 100%; }
+  .tf-apps-custom-bg img { object-position: right center; }
+  .tf-apps-custom-bg::after {
+    background: linear-gradient(31deg,
+      var(--bg-2) 0%, var(--bg-2) 44%,
+      rgba(242, 244, 247, 0.75) 48%,
+      rgba(242, 244, 247, 0.25) 53%,
+      rgba(242, 244, 247, 0) 58%);
+  }
+}
