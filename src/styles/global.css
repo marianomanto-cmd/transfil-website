@@ -4583,3 +4583,18 @@ main section[id] { scroll-margin-top: var(--header-h); }
     linear-gradient(90deg, rgba(10, 14, 20, 0.55) 0%, rgba(10, 14, 20, 0.15) 50%, rgba(10, 14, 20, 0) 75%),
     linear-gradient(180deg, rgba(10, 14, 20, 0.35) 0%, rgba(10, 14, 20, 0) 22%);
 }
+
+/* ── Segunda ronda de bugs ───────────────────────────────────────── */
+/* Catálogos en tablet: dos columnas dejaban la tercera tarjeta sola. */
+@media (min-width: 641px) and (max-width: 1080px) {
+  .tf-catalogs { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+}
+/* Tira superior de la tapa (código + páginas): sobre la parte clara de la
+   foto el texto blanco no se leía. */
+.tf-catalog-cover-tag { padding: 12px; }
+.tf-catalog-cover-tag > span {
+  padding: 3px 7px;
+  background: rgba(16, 20, 24, 0.72);
+  color: #fff;
+}
+.tf-catalog-cover-tag > span:first-child { color: #fff; }
