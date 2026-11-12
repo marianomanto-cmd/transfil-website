@@ -39,9 +39,9 @@ Todos llevan **`page`** y **`locale`**.
 | Evento | Cuándo sale | Parámetros propios | Uso |
 |---|---|---|---|
 | `page_view` | Navegación interna con View Transitions. Sin etiqueta: GA4 ya las cuenta con la medición mejorada (§3) | `page_path`, `page_title`, `page_location` | Respaldo |
-| `generate_lead` | Formulario enviado **y confirmado por el servidor** | `lead_type=form`, `linea`, `industria`, `tipo_linea` (landings), `user_data` | **Conversión principal** |
+| `generate_lead` | Formulario enviado **y confirmado por el servidor**. Nunca con el honeypot lleno (el servidor responde ok sin mandar el mail) | `lead_type=form`, `linea`, `industria`, `tipo_linea` (landings), `user_data` | **Conversión principal** |
 | `whatsapp_click` | Clic en cualquier link de WhatsApp (FAB, hero, formulario, footer…) | `lead_type=whatsapp`, `cta_location`, `link_url` | **Conversión principal** |
-| `click_whatsapp` | El mismo clic | `link_url` | Legado: **no** marcar como conversión |
+| `click_whatsapp` | El mismo clic | `link_url` | Legado en el dataLayer: ningún activador lo escucha. Ojo: en **GA4** el evento de WhatsApp se sigue llamando `click_whatsapp` (lo manda *GA4 - WhatsApp* al recibir `whatsapp_click`, §3 paso 3) |
 | `click_phone` | Clic en `tel:` | `cta_location`, `link_url` | Conversión secundaria |
 | `email_click` | Clic en `mailto:` | `cta_location`, `link_url` | Conversión secundaria |
 | `cta_click` | Clic en un CTA con `data-cta` | `cta`, `cta_location`, `link_url` | Micro-conversión |
@@ -150,8 +150,10 @@ opción encendida, cada vista se cuenta dos veces.
 
 ## 4. GA4
 
-- **Eventos clave:** `generate_lead` y `whatsapp_click`. Opcional:
-  `click_phone`, `email_click`. **No** `click_whatsapp`.
+- **Eventos clave:** `generate_lead` y `click_whatsapp` (es el nombre con
+  que *GA4 - WhatsApp* manda el evento `whatsapp_click` del sitio, §3 paso
+  3). Opcional: `click_phone`, `email_click`. **No** `purchase` (herencia
+  de Wix).
 - **Dimensiones personalizadas** (Administrar → Definiciones
   personalizadas, alcance *Evento*): `page`, `locale`, `lead_type`, `cta`,
   `cta_location`, `linea`, `industria`, `tipo_linea`, `catalog`, `section`,
