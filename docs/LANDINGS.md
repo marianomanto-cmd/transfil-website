@@ -81,6 +81,15 @@ Campaña de Search de `/conformado` (plan + archivos para Google Ads Editor):
 [`campanas/conformado-search.md`](./campanas/conformado-search.md). Mercados
 y ubicaciones salen de [`campanas/conformado-geo-latam.md`](./campanas/conformado-geo-latam.md).
 
+`/mecanizado` (`/en/machining`, `/pt/usinagem`) = transporte de viruta +
+filtración de refrigerante para tornos y centros de mecanizado CNC. Es el
+A02 del home, expandido. Vende las dos tecnologías juntas porque en
+mecanizado se compran juntas: el transportador saca la viruta y el
+refrigerante que escurre de ella va al filtro. No lleva los diagramas 3D de
+`/conformado` (`centralDiagram` y `machineDiagram` son opcionales en
+`LandingContent`). Es la landing de la campaña de Search de mecanizado
+(Brasil y Argentina primero).
+
 Redirects 301 ya configurados en `astro.config.mjs` para las URLs viejas
 de campaña:
 
@@ -124,7 +133,6 @@ Mismo patrón, un slug por categoría:
 | Slug | Aplicación |
 |---|---|
 | `/lavado` | Lavado industrial de piezas (pasante, rotativa, cabina) |
-| `/transporte` | Transporte y evacuación de viruta |
 | `/hornos` | Hornos y tratamiento térmico |
 
 Cuando toque, cada una entra como una entrada más de `LANDINGS` — no hace

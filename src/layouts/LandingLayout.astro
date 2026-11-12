@@ -219,11 +219,13 @@ const navItems = [
 
       {/* El riel del visor y las tarjetas de abajo nombran las mismas cuatro
           etapas, así que salen de la misma fuente: `blocks`. */}
-      <CentralDiagram3D
-        copy={l.centralDiagram}
-        stages={l.system.blocks.map((b) => b.title)}
-        codes={l.system.blocks.map((b) => b.code)}
-      />
+      {l.centralDiagram && (
+        <CentralDiagram3D
+          copy={l.centralDiagram}
+          stages={l.system.blocks.map((b) => b.title)}
+          codes={l.system.blocks.map((b) => b.code)}
+        />
+      )}
 
       <div class="tf-lp-stages">
         {l.system.blocks.map((b) => (
@@ -267,7 +269,7 @@ const navItems = [
         ))}
       </div>
 
-      <SystemDiagram3D copy={l.machineDiagram} />
+      {l.machineDiagram && <SystemDiagram3D copy={l.machineDiagram} />}
     </section>
 
     <!-- ── 03 Why here ───────────────────────────────────────────── -->

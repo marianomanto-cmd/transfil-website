@@ -15,6 +15,7 @@ const esc = (s: string) =>
 // can filter paid-traffic leads out of the general web inbox.
 const PAGE_TAG: Record<string, string> = {
   conformado: 'Conformado',
+  mecanizado: 'Mecanizado',
 };
 
 const json = (ok: boolean, status = 200) =>

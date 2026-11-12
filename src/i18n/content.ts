@@ -303,6 +303,7 @@ export const CONTENT: Record<Lang, Content> = {
           problem: 'La viruta se acumula y los finos recirculan en el refrigerante; el aceite de guías lo contamina. El resultado: desgaste de herramienta, daño en bombas y husillos, y paros para limpiar a mano.',
           install: 'Transporte de viruta centralizado + filtro de banda + separador magnético.',
           benefit: 'Más vida de herramienta · menos paros · refrigerante limpio.',
+          link: { page: 'mecanizado', label: 'Ver solución' },
         },
         {
           code: 'A03',
@@ -617,6 +618,7 @@ export const CONTENT: Record<Lang, Content> = {
           problem: 'Chips build up and the fines recirculate in the coolant; way-lube contaminates it further. The result: tool wear, damage to pumps and spindles, and stoppages to clean by hand.',
           install: 'Centralized chip transport + belt filter + magnetic separator.',
           benefit: 'Longer tool life · fewer stoppages · clean coolant.',
+          link: { page: 'mecanizado', label: 'See the solution' },
         },
         {
           code: 'A03',
@@ -931,6 +933,7 @@ export const CONTENT: Record<Lang, Content> = {
           problem: 'O cavaco se acumula e os finos recirculam no fluido de corte; o óleo de barramento o contamina. O resultado: desgaste de ferramenta, dano em bombas e eixos-árvore, e paradas para limpeza manual.',
           install: 'Transporte de cavaco centralizado + filtro de esteira + separador magnético.',
           benefit: 'Mais vida de ferramenta · menos paradas · fluido limpo.',
+          link: { page: 'mecanizado', label: 'Ver a solução' },
         },
         {
           code: 'A03',
