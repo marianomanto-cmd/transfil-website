@@ -6,9 +6,16 @@ type Props = {
   message: string;
   /** Set on campaign landings so the delegated `whatsapp_click` picks it up. */
   dataCta?: string;
+  /**
+   * Floating button that scrolls to the form instead of opening WhatsApp.
+   * Used on the English pages: a US buyer expects a form or an email, not a
+   * WhatsApp chat with an Argentine number, so there the form is the primary
+   * action and WhatsApp stays as a secondary link next to it.
+   */
+  form?: { href: string; label: string };
 };
 
-export function WhatsAppFAB({ phone = '5493513820321', message, dataCta }: Props) {
+export function WhatsAppFAB({ phone = '5493513820321', message, dataCta, form }: Props) {
   const [show, setShow] = useState(false);
   useEffect(() => {
     const onScroll = () => setShow(window.scrollY > 120);
@@ -16,6 +23,22 @@ export function WhatsAppFAB({ phone = '5493513820321', message, dataCta }: Props
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  if (form) {
+    return (
+      <a
+        className={cx('tf-wa-fab', 'is-form', show && 'is-visible')}
+        href={form.href}
+        data-cta={dataCta}
+      >
+        <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+          <path d="M2 3.5h12v9H2z M2 4l6 5 6-5" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" />
+        </svg>
+        <span>{form.label}</span>
+      </a>
+    );
+  }
+
   const href = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
   return (
     <a

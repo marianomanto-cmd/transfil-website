@@ -51,6 +51,12 @@ const content = CONTENT.en;
     />
   </main>
   <Footer content={content} lang="en" />
-  <WhatsAppFAB message={content.whatsappMessage} client:idle />
+  {/* Form first for US buyers; WhatsApp stays in the contact section. */}
+  <WhatsAppFAB
+    message={content.whatsappMessage}
+    dataCta="contacto"
+    form={{ href: '#contact', label: 'Contact our engineers' }}
+    client:idle
+  />
   <BackToTop label={content.backToTop} client:idle />
 </Base>

@@ -4629,3 +4629,17 @@ main section[id] { scroll-margin-top: var(--header-h); }
 /* Mapa: la ficha "14 · países alcanzados" tapaba España (arriba a la
    derecha). Abajo a la derecha, sobre el Atlántico Sur, no tapa nada. */
 .tf-radar-meta { top: auto; bottom: 44px; }
+
+/* Botón flotante de las páginas en inglés: lleva al formulario en lugar de
+   abrir WhatsApp. Color de acento, no verde, y con el texto visible también
+   en el teléfono: un sobre solo no dice adónde lleva. */
+.tf-wa-fab.is-form {
+  background: var(--accent-fill);
+  color: #fff;
+  box-shadow: 0 12px 32px -8px rgba(30, 64, 175, 0.45), 0 4px 12px rgba(16, 20, 24, 0.2);
+}
+.tf-wa-fab.is-form:hover { background: var(--accent-fill-hover); }
+@media (max-width: 640px) {
+  .tf-wa-fab.is-form { padding: 12px 16px; border-radius: 999px; }
+  .tf-wa-fab.is-form span { display: inline; }
+}
