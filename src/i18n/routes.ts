@@ -36,11 +36,13 @@ export const LOCALE_META: Record<Lang, LocaleMeta> = {
  * slash (`/en/`, `/pt/`); landings are slug URLs without one. Add a landing
  * here and the switcher, hreflang and sitemap pick it up automatically.
  */
-export type PageKey = 'home' | 'conformado';
+export type PageKey = 'home' | 'conformado' | 'mecanizado';
 
 export const PAGE_PATHS: Record<PageKey, Record<Lang, string>> = {
   home: { es: '/', en: '/en/', pt: '/pt/' },
   conformado: { es: '/conformado', en: '/en/conformado', pt: '/pt/conformado' },
+  // El slug va traducido: es lo que se lee en el anuncio y en la barra.
+  mecanizado: { es: '/mecanizado', en: '/en/machining', pt: '/pt/usinagem' },
 };
 
 /** Path of `page` in `lang`, e.g. `pathFor('conformado', 'pt') → '/pt/conformado'`. */

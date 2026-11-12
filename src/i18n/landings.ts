@@ -10,7 +10,7 @@
 
 import type { Lang, PageKey } from './routes';
 
-export type LandingSlug = 'conformado';
+export type LandingSlug = 'conformado' | 'mecanizado';
 
 export type LandingMedia = {
   src: string;
@@ -68,8 +68,9 @@ export type LandingContent = {
     blocks: { code: string; title: string; desc: string; media: LandingMedia }[];
   };
   /** Copy for the 3D filtration station that opens section 02. `fluids[].k`
-      are colour identifiers, not copy — only `t` is translated. */
-  centralDiagram: {
+      are colour identifiers, not copy — only `t` is translated. Optional:
+      only the landings whose process it depicts carry it. */
+  centralDiagram?: {
     caption: string;
     /** Interaction hint. The gestures are not the same with a mouse as with
         a finger, and promising one the device doesn't have is worse than
@@ -88,8 +89,9 @@ export type LandingContent = {
   };
   /** Copy for the 3D machine diagram that closes the section. Every string
       is on screen, so all three locales carry their own. The `\n` in `tags`
-      is the label's line break — keep it in every translation. */
-  machineDiagram: {
+      is the label's line break — keep it in every translation. Optional,
+      like `centralDiagram`: it draws a tube-forming plant. */
+  machineDiagram?: {
     caption: string;
     /** See `centralDiagram.hint`. */
     hint: { pointer: string; touch: string };
@@ -143,9 +145,13 @@ const MEDIA = {
   // tank and control cabinet. It used to sit behind the masthead, where the
   // detail was lost; it earns its place illustrating F04.
   central: { src: '/img/t03-fluids-cover.webp', kind: 'photo' },
+  // Mecanizado: transportador de viruta de bisagra y línea centralizada.
+  chips: { src: '/img/t01-chip-transport.webp', kind: 'photo' },
+  chipLine: { src: '/img/t01-conveyors.webp', kind: 'photo' },
 } as const;
 
-/** Masthead loop, shared by every locale of this landing. */
+/** Masthead loop (coolant on the tool), shared by both landings and every
+    locale: it reads as machining as much as forming. */
 const HERO_MEDIA = {
   video: '/video/hero-coolant.mp4',
   poster: '/img/hero-coolant-poster.webp',
@@ -735,6 +741,441 @@ export const LANDINGS: Record<LandingSlug, Record<Lang, LandingContent>> = {
         'Filtragem de processo para linhas que não podem parar. Projetada em planta, fabricada em Córdoba, serviço na região.',
       whatsapp:
         'Olá. Entro em contato pela página de conformação da Trans-Fil. Gostaria de solicitar um levantamento em planta para filtragem de uma linha de tubos.',
+    },
+  },  mecanizado: {
+    es: {
+      page: 'mecanizado',
+      event: 'mecanizado',
+      meta: {
+        title: 'Transporte de viruta y filtración de refrigerante para mecanizado CNC | Trans-Fil',
+        description:
+          'Transportadores de viruta y filtración de refrigerante para tornos y centros de mecanizado CNC: filtro de banda, separador magnético y skimmer. Relevamiento en planta.',
+        ogTitle: 'Transporte de viruta y filtración para mecanizado CNC',
+        ogDescription:
+          'Transportadores de viruta y filtración de refrigerante diseñados como un solo sistema para tornos y centros de mecanizado CNC. Relevamiento en planta previo a la propuesta técnica.',
+        ogImageAlt: 'Transportador de viruta Trans-Fil',
+        twitterDescription:
+          'Viruta afuera y refrigerante limpio: transporte de viruta y filtración para mecanizado CNC, con fabricación propia.',
+      },
+      breadcrumb: 'Mecanizado CNC',
+      service: {
+        name: 'Transporte de viruta y filtración de refrigerante para mecanizado',
+        description:
+          'Transportadores de viruta por máquina y líneas centralizadas, con filtración de refrigerante por filtro de banda, separación magnética y recuperación de aceite de guías, para tornos y centros de mecanizado CNC.',
+        serviceType: 'Manejo de viruta y filtración de refrigerante',
+      },
+      nav: { system: 'El sistema', why: 'Por qué Trans-Fil', faq: 'Consultas', contact: 'Relevamiento' },
+      hero: {
+        eyebrow: '[ Mecanizado CNC · Tornos · Centros de mecanizado · Rectificado ]',
+        h1: 'La viruta acumulada y el refrigerante contaminado detienen la máquina y desgastan la herramienta.',
+        sub: 'Transportadores de viruta y filtración de refrigerante para tornos y centros de mecanizado CNC, diseñados como un solo sistema: la viruta sale de la máquina y el refrigerante vuelve limpio. Fabricación propia. Realizamos un relevamiento en planta antes de presentar la propuesta técnica.',
+        ctaPrimary: 'Solicitar relevamiento en planta',
+        ctaSecondary: 'WhatsApp',
+        media: HERO_MEDIA,
+      },
+      numbers: {
+        items: [
+          { v: '2–4×', l: 'vida útil del refrigerante' },
+          { v: '+10/30%', l: 'vida útil de herramienta' },
+          { v: '24/7', l: 'evacuación continua de viruta, sin paros para limpiar' },
+        ],
+        note: 'Rangos típicos en instalaciones con tratamiento adecuado. Los valores de cada planta se determinan durante el relevamiento.',
+      },
+      problem: {
+        eyebrow: '[ 01 — El problema ]',
+        title: 'La viruta y el refrigerante se resuelven juntos.',
+        symptom:
+          'La viruta se acumula en la bandeja de la máquina y los finos recirculan con el refrigerante; el aceite de guías lo contamina. El resultado: paros para sacar viruta a mano, desgaste prematuro de herramienta, bombas y husillos dañados y recambios frecuentes de soluble.',
+        solution:
+          'Un transportador de viruta en cada máquina, o una línea centralizada para toda la nave, y la filtración del refrigerante con filtro de banda, separación magnética y skimmer. Se dimensionan juntos sobre el tipo de viruta, el refrigerante, el caudal y el layout.',
+        benefit:
+          'La máquina no se detiene por viruta, la herramienta dura más y el refrigerante se reutiliza varias veces antes de descartarlo.',
+      },
+      system: {
+        eyebrow: '[ 02 — El sistema ]',
+        title: 'Transporte de viruta y filtración, en un solo sistema.',
+        intro:
+          'El transportador saca la viruta de la máquina y el refrigerante que escurre de ella pasa al filtro antes de volver. Por eso se diseñan juntos: un transportador que arrastra finos satura el filtro, y un filtro sin transportador se llena de viruta.',
+        blocks: [
+          {
+            code: 'V01',
+            title: 'Viruta → transportador en la máquina',
+            desc: 'Transportadores de bisagra, raspador, magnéticos o de cinta, según el tipo de viruta y el caudal. Sacan la viruta de la bandeja de forma continua y la descargan en el contenedor, sin detener la máquina.',
+            media: { ...MEDIA.chips, alt: 'Transportador de viruta de bisagra Trans-Fil' },
+          },
+          {
+            code: 'V02',
+            title: 'Varias máquinas → línea centralizada',
+            desc: 'Una línea que evacúa la viruta de toda la nave hacia un único punto de descarga. Conecta decenas de máquinas-herramienta al mismo circuito y elimina el traslado manual entre estaciones.',
+            media: { ...MEDIA.chipLine, alt: 'Línea centralizada de transporte de viruta Trans-Fil' },
+          },
+          {
+            code: 'F01',
+            title: 'Finos y sólidos → separador magnético y filtro de banda',
+            desc: 'El separador magnético retira la partícula ferrosa fina y el filtro de banda retiene el resto, por gravedad, con tela de papel o textil. La tela avanza sola según el nivel del baño y descarga el residuo seco.',
+            media: { ...MEDIA.magnetic, alt: 'Separador magnético de tambor Trans-Fil en operación' },
+          },
+          {
+            code: 'F02',
+            title: 'Aceite de guías → skimmer y central de refrigerante',
+            desc: 'El skimmer retira el aceite de guías que sobrenada en el tanque, principal causa de olor y de descarte anticipado de la emulsión. Una central de refrigerante puede alimentar varias máquinas con caudal y temperatura estables.',
+            media: { ...MEDIA.oil, alt: 'Skimmer de recuperación de aceite Trans-Fil' },
+          },
+        ],
+      },
+      why: {
+        eyebrow: '[ 03 — Por qué Trans-Fil ]',
+        title: 'Un solo proveedor para la viruta y el refrigerante.',
+        items: [
+          { t: 'Diseñados juntos', d: 'El transportador y el filtro se dimensionan como un sistema: el mismo equipo de ingeniería resuelve por dónde sale la viruta y a dónde va el refrigerante.' },
+          { t: 'Según la viruta', d: 'Bisagra para viruta larga o enredada, raspador para viruta corta y finos, magnético para viruta ferrosa pequeña. Se elige sobre la viruta real de cada proceso.' },
+          { t: 'Sobre la máquina existente', d: 'Altura de descarga, bandeja y tanque se relevan en planta, y cada equipo se valida con diseño 3D antes de fabricarlo.' },
+          { t: 'Fabricación propia', d: 'Ingeniería, corte, plegado, montaje y tablero en nuestra planta de Córdoba: una sola empresa responde por el sistema completo.' },
+          { t: 'Para operar 24/7', d: 'Construcción robusta para operación continua, con repuestos y asistencia técnica. Equipos instalados en los años 90 siguen en marcha.' },
+          { t: '36 años · 14 países', d: 'Desde 1989, con más de 120 clientes industriales en 14 países, en automotriz, máquinas-herramienta y siderurgia.' },
+        ],
+      },
+      proof: {
+        eyebrow: '[ 04 — Antecedentes ]',
+        title: 'Plantas que operan con equipos Trans-Fil.',
+        sub: 'Automotriz, máquinas-herramienta, siderurgia y tubos, en 14 países.',
+      },
+      form: {
+        eyebrow: '[ 05 — Relevamiento ]',
+        title: 'El relevamiento en planta precede a la propuesta.',
+        sub: 'Indíquenos qué máquinas tiene, qué viruta generan y qué refrigerante usan. Un asesor técnico responde en menos de 24 horas hábiles con el siguiente paso concreto.',
+        lineTypeLabel: 'Proceso',
+        lineTypeOpts: ['Torneado', 'Centros de mecanizado', 'Rectificado', 'Línea transfer', 'Otro'],
+        defaultLinea: 'Transporte de viruta',
+        waPrompt: '¿Prefiere WhatsApp?',
+        waCta: 'Escribir por WhatsApp',
+        successTitle: 'Consulta recibida.',
+        successBody: 'Un asesor técnico se pondrá en contacto en menos de 24 horas hábiles. Si su consulta es urgente, puede escribirnos por WhatsApp.',
+        successWa: 'Abrir WhatsApp',
+      },
+      faq: {
+        eyebrow: '[ 06 — Consultas frecuentes ]',
+        title: 'Consultas habituales previas al relevamiento.',
+        items: [
+          {
+            q: '¿Sirve para tornos y centros de mecanizado de cualquier marca?',
+            a: 'Sí. El transportador y el filtro se dimensionan sobre la máquina, la viruta y el refrigerante, no sobre la marca. En el relevamiento se miden la altura de descarga, la bandeja y el tanque de cada máquina.',
+          },
+          {
+            q: '¿Qué transportador corresponde a mi viruta?',
+            a: 'Depende de la forma y del material: bisagra para viruta larga o enredada, raspador para viruta corta y finos, magnético para viruta ferrosa pequeña. En muchos casos se combina con un filtro para el refrigerante que escurre de la viruta.',
+          },
+          {
+            q: '¿Se pueden centralizar la viruta y el refrigerante de varias máquinas?',
+            a: 'Sí. Una línea centralizada lleva la viruta de toda la nave a un único punto de descarga, y una central de refrigerante alimenta varias máquinas con fluido filtrado, a caudal y temperatura estables.',
+          },
+          {
+            q: '¿Qué resultados es razonable esperar?',
+            a: 'Con tratamiento adecuado, la vida útil del refrigerante se multiplica entre 2 y 4 veces y la de la herramienta aumenta entre un 10% y un 30%; el transporte de viruta elimina los paros por limpieza manual. Son rangos típicos: los valores de cada planta se determinan durante el relevamiento.',
+          },
+          {
+            q: '¿Cuál es el plazo de respuesta?',
+            a: 'Menos de 24 horas hábiles. La respuesta la emite un asesor técnico e incluye el siguiente paso concreto: la información adicional requerida o la fecha propuesta para la visita a planta.',
+          },
+          {
+            q: '¿Conviene el formulario o WhatsApp?',
+            a: 'Ambos canales llegan al mismo equipo técnico y tienen el mismo plazo de respuesta. El formulario permite detallar las máquinas y el proceso; WhatsApp resulta más ágil para una consulta preliminar.',
+          },
+        ],
+      },
+      closing: 'Viruta afuera, refrigerante limpio. Diseñado en planta, fabricado por Trans-Fil.',
+      whatsapp:
+        'Hola. Los contacto desde la página de mecanizado de Trans-Fil. Quisiera solicitar un relevamiento en planta para transporte de viruta y filtración de refrigerante.',
+    },
+
+    en: {
+      page: 'mecanizado',
+      event: 'mecanizado',
+      meta: {
+        title: 'Chip conveyors and coolant filtration for CNC machining | Trans-Fil',
+        description:
+          'Chip conveyors and coolant filtration for CNC lathes and machining centers: belt filters, magnetic separators and skimmers, engineered as one system. Plant survey first.',
+        ogTitle: 'Chip conveyors and coolant filtration for CNC machining',
+        ogDescription:
+          'Chip conveyors and coolant filtration engineered as one system for CNC lathes and machining centers. A plant survey precedes the technical proposal.',
+        ogImageAlt: 'Trans-Fil chip conveyor',
+        twitterDescription:
+          'Chips out, clean coolant back: chip conveying and coolant filtration for CNC machining, built in-house by Trans-Fil.',
+      },
+      breadcrumb: 'CNC machining',
+      service: {
+        name: 'Chip conveying and coolant filtration for machining',
+        description:
+          'Per-machine chip conveyors and centralized chip lines, with coolant filtration by belt filter, magnetic separation and way-oil removal, for CNC lathes and machining centers.',
+        serviceType: 'Chip handling and coolant filtration',
+      },
+      nav: { system: 'The system', why: 'Why Trans-Fil', faq: 'FAQ', contact: 'Plant survey' },
+      hero: {
+        eyebrow: '[ CNC machining · Lathes · Machining centers · Grinding ]',
+        h1: 'Chip buildup and dirty coolant stop the machine and wear out the tooling.',
+        sub: 'Chip conveyors and coolant filtration for CNC lathes and machining centers, engineered as one system: chips leave the machine and coolant comes back clean. Designed and built in-house by Trans-Fil since 1989. A plant survey precedes every technical proposal.',
+        ctaPrimary: 'Request a plant survey',
+        ctaSecondary: 'WhatsApp',
+        media: HERO_MEDIA,
+      },
+      numbers: {
+        items: [
+          { v: '2–4×', l: 'coolant service life' },
+          { v: '+10/30%', l: 'tool service life' },
+          { v: '24/7', l: 'continuous chip removal, no stops to clean out' },
+        ],
+        note: 'Typical ranges in installations with adequate treatment. Figures for each plant are established during the survey.',
+      },
+      problem: {
+        eyebrow: '[ 01 — The problem ]',
+        title: 'Chips and coolant are solved together.',
+        symptom:
+          'Chips pile up in the machine pan and fines recirculate with the coolant, while way oil contaminates it. The result: stops to clear chips by hand, premature tool wear, damaged pumps and spindles, and frequent coolant changes.',
+        solution:
+          'A chip conveyor on each machine, or a centralized line for the whole shop, plus coolant filtration by belt filter, magnetic separation and skimmer. Both are sized together around the chip type, the coolant, the flow rate and the layout.',
+        benefit:
+          'The machine no longer stops for chips, tools last longer and the coolant is reused several times over before disposal.',
+      },
+      system: {
+        eyebrow: '[ 02 — The system ]',
+        title: 'Chip conveying and filtration, as one system.',
+        intro:
+          'The conveyor takes chips out of the machine, and the coolant that drains from them goes through the filter before it returns. That is why they are engineered together: a conveyor that carries fines overloads the filter, and a filter without a conveyor fills up with chips.',
+        blocks: [
+          {
+            code: 'V01',
+            title: 'Chips → conveyor at the machine',
+            desc: 'Hinged-belt, scraper, magnetic or belt conveyors, chosen by chip type and volume. They remove chips from the pan continuously and discharge them into the hopper without stopping the machine.',
+            media: { ...MEDIA.chips, alt: 'Trans-Fil hinged-belt chip conveyor' },
+          },
+          {
+            code: 'V02',
+            title: 'Several machines → centralized line',
+            desc: 'A line that carries chips from the whole shop floor to a single discharge point. It connects dozens of machine tools to one circuit and removes manual handling between stations.',
+            media: { ...MEDIA.chipLine, alt: 'Trans-Fil centralized chip conveying line' },
+          },
+          {
+            code: 'F01',
+            title: 'Fines and solids → magnetic separator and belt filter',
+            desc: 'The magnetic separator removes fine ferrous particles and the belt filter retains the rest by gravity, on paper or textile media. The media advances automatically with the bath level and discharges dry residue.',
+            media: { ...MEDIA.magnetic, alt: 'Trans-Fil magnetic drum separator in operation' },
+          },
+          {
+            code: 'F02',
+            title: 'Way oil → skimmer and central coolant system',
+            desc: 'The skimmer removes the way oil floating on the tank, the main cause of odor and early disposal of the emulsion. A central coolant system can feed several machines at stable flow and temperature.',
+            media: { ...MEDIA.oil, alt: 'Trans-Fil oil-recovery skimmer' },
+          },
+        ],
+      },
+      why: {
+        eyebrow: '[ 03 — Why Trans-Fil ]',
+        title: 'One supplier for chips and coolant.',
+        items: [
+          { t: 'Engineered together', d: 'Conveyor and filter are sized as one system: the same engineering team decides where the chips go and where the coolant goes.' },
+          { t: 'Matched to the chip', d: 'Hinged belt for long or stringy chips, scraper for short chips and fines, magnetic for small ferrous chips. The choice is made on the actual chips of each process.' },
+          { t: 'Fits existing machines', d: 'Discharge height, chip pan and tank are measured on site, and every unit is validated in 3D before it is built.' },
+          { t: 'Built to your electrical standard', d: 'Control panels are designed for 480 V / 60 Hz, or your plant’s own supply, and built to the electrical standard you specify.' },
+          { t: 'On-site commissioning', d: 'Trans-Fil technicians travel to your plant for installation and commissioning. After start-up, the same engineering team supports you remotely.' },
+          { t: '36 years · 14 countries', d: 'Since 1989, with over 120 industrial customers in 14 countries, including the United States. Units installed in the 1990s are still in operation.' },
+        ],
+      },
+      proof: {
+        eyebrow: '[ 04 — Track record ]',
+        title: 'Plants operating with Trans-Fil equipment.',
+        sub: 'Automotive, machine-tool, steel and tube plants in 14 countries.',
+      },
+      form: {
+        eyebrow: '[ 05 — Plant survey ]',
+        title: 'The plant survey precedes the proposal.',
+        sub: 'Tell us which machines you run, what chips they produce and which coolant you use. A technical advisor replies within 24 business hours with a defined next step.',
+        lineTypeLabel: 'Process',
+        lineTypeOpts: ['Turning', 'Machining centers', 'Grinding', 'Transfer line', 'Other'],
+        defaultLinea: 'Chip conveying',
+        waPrompt: 'Would you prefer WhatsApp?',
+        waCta: 'Message us on WhatsApp',
+        successTitle: 'Inquiry received.',
+        successBody: 'A technical advisor will be in touch within 24 business hours. If your inquiry is urgent, you can also reach us on WhatsApp.',
+        successWa: 'Open WhatsApp',
+      },
+      faq: {
+        eyebrow: '[ 06 — Frequently asked ]',
+        title: 'Questions we are commonly asked before the survey.',
+        items: [
+          {
+            q: 'Does it work with any brand of lathe or machining center?',
+            a: 'Yes. Conveyor and filter are sized around the machine, the chips and the coolant, not the brand. During the survey we measure the discharge height, the chip pan and the tank of each machine.',
+          },
+          {
+            q: 'Which conveyor suits my chips?',
+            a: 'It depends on chip shape and material: hinged belt for long or stringy chips, scraper for short chips and fines, magnetic for small ferrous chips. It is often combined with a filter for the coolant that drains from the chips.',
+          },
+          {
+            q: 'Can chips and coolant from several machines be centralized?',
+            a: 'Yes. A centralized line takes chips from the whole shop floor to a single discharge point, and a central coolant system feeds several machines with filtered coolant at stable flow and temperature.',
+          },
+          {
+            q: 'What results can reasonably be expected?',
+            a: 'With adequate treatment, coolant service life increases by a factor of 2 to 4 and tool life rises by 10% to 30%, while chip conveying removes stops for manual clean-out. These are typical ranges: figures for each plant are established during the survey.',
+          },
+          {
+            q: 'Is the control panel built for US plants?',
+            a: 'Yes. The panel is designed for 480 V / 60 Hz, or your plant’s own supply, and built to the electrical standard you specify.',
+          },
+          {
+            q: 'What are the lead time and shipping terms?',
+            a: 'Both are quoted per project, together with the technical proposal. They depend on the scope and on the destination.',
+          },
+        ],
+      },
+      closing: 'Chips out, clean coolant back. Engineered on the plant floor, built in-house by Trans-Fil.',
+      whatsapp:
+        'Hello. I am contacting you from the Trans-Fil machining page. I would like to request a plant survey for chip conveying and coolant filtration.',
+    },
+
+    pt: {
+      page: 'mecanizado',
+      event: 'mecanizado',
+      meta: {
+        title: 'Transportador de cavacos e filtragem de fluido de corte para usinagem CNC | Trans-Fil',
+        description:
+          'Transportadores de cavacos e filtragem de fluido de corte para tornos e centros de usinagem CNC: filtro de esteira, separador magnético e skimmer. Levantamento na planta.',
+        ogTitle: 'Transportador de cavacos e filtragem para usinagem CNC',
+        ogDescription:
+          'Transportadores de cavacos e filtragem de fluido de corte projetados como um único sistema para tornos e centros de usinagem CNC. Levantamento na planta antes da proposta técnica.',
+        ogImageAlt: 'Transportador de cavacos Trans-Fil',
+        twitterDescription:
+          'Cavaco fora e fluido de corte limpo: transporte de cavacos e filtragem para usinagem CNC, com fabricação própria.',
+      },
+      breadcrumb: 'Usinagem CNC',
+      service: {
+        name: 'Transporte de cavacos e filtragem de fluido de corte para usinagem',
+        description:
+          'Transportadores de cavacos por máquina e linhas centralizadas, com filtragem de fluido de corte por filtro de esteira, separação magnética e remoção de óleo de barramento, para tornos e centros de usinagem CNC.',
+        serviceType: 'Manuseio de cavacos e filtragem de fluido de corte',
+      },
+      nav: { system: 'O sistema', why: 'Por que a Trans-Fil', faq: 'Dúvidas', contact: 'Levantamento' },
+      hero: {
+        eyebrow: '[ Usinagem CNC · Tornos · Centros de usinagem · Retificação ]',
+        h1: 'Cavaco acumulado e fluido de corte contaminado param a máquina e desgastam a ferramenta.',
+        sub: 'Transportadores de cavacos e filtragem de fluido de corte para tornos e centros de usinagem CNC, projetados como um único sistema: o cavaco sai da máquina e o fluido volta limpo. Fabricação própria. Fazemos um levantamento na planta antes de apresentar a proposta técnica.',
+        ctaPrimary: 'Solicitar levantamento na planta',
+        ctaSecondary: 'WhatsApp',
+        media: HERO_MEDIA,
+      },
+      numbers: {
+        items: [
+          { v: '2–4×', l: 'vida útil do fluido de corte' },
+          { v: '+10/30%', l: 'vida útil da ferramenta' },
+          { v: '24/7', l: 'remoção contínua de cavaco, sem paradas para limpar' },
+        ],
+        note: 'Faixas típicas em instalações com tratamento adequado. Os valores de cada planta são definidos no levantamento.',
+      },
+      problem: {
+        eyebrow: '[ 01 — O problema ]',
+        title: 'Cavaco e fluido de corte se resolvem juntos.',
+        symptom:
+          'O cavaco se acumula na bandeja da máquina e os finos recirculam com o fluido de corte, que ainda é contaminado pelo óleo de barramento. O resultado: paradas para tirar cavaco à mão, desgaste prematuro da ferramenta, bombas e fusos danificados e trocas frequentes de fluido.',
+        solution:
+          'Um transportador de cavacos em cada máquina, ou uma linha centralizada para toda a fábrica, e a filtragem do fluido com filtro de esteira, separação magnética e skimmer. São dimensionados juntos a partir do tipo de cavaco, do fluido, da vazão e do layout.',
+        benefit:
+          'A máquina não para por causa do cavaco, a ferramenta dura mais e o fluido é reutilizado várias vezes antes do descarte.',
+      },
+      system: {
+        eyebrow: '[ 02 — O sistema ]',
+        title: 'Transporte de cavacos e filtragem, em um único sistema.',
+        intro:
+          'O transportador retira o cavaco da máquina e o fluido que escorre dele passa pelo filtro antes de voltar. Por isso são projetados juntos: um transportador que arrasta finos satura o filtro, e um filtro sem transportador se enche de cavaco.',
+        blocks: [
+          {
+            code: 'V01',
+            title: 'Cavaco → transportador na máquina',
+            desc: 'Transportadores de esteira articulada, raspador, magnéticos ou de correia, conforme o tipo de cavaco e o volume. Retiram o cavaco da bandeja de forma contínua e o descarregam na caçamba, sem parar a máquina.',
+            media: { ...MEDIA.chips, alt: 'Transportador de cavacos de esteira articulada Trans-Fil' },
+          },
+          {
+            code: 'V02',
+            title: 'Várias máquinas → linha centralizada',
+            desc: 'Uma linha que leva o cavaco de toda a fábrica até um único ponto de descarga. Conecta dezenas de máquinas-ferramenta ao mesmo circuito e elimina o transporte manual entre estações.',
+            media: { ...MEDIA.chipLine, alt: 'Linha centralizada de transporte de cavacos Trans-Fil' },
+          },
+          {
+            code: 'F01',
+            title: 'Finos e sólidos → separador magnético e filtro de esteira',
+            desc: 'O separador magnético retira a partícula ferrosa fina e o filtro de esteira retém o restante por gravidade, com manta de papel ou tecido. A manta avança sozinha conforme o nível do banho e descarrega o resíduo seco.',
+            media: { ...MEDIA.magnetic, alt: 'Separador magnético de tambor Trans-Fil em operação' },
+          },
+          {
+            code: 'F02',
+            title: 'Óleo de barramento → skimmer e central de fluido',
+            desc: 'O skimmer retira o óleo de barramento que flutua no tanque, principal causa de mau cheiro e de descarte antecipado da emulsão. Uma central de fluido pode alimentar várias máquinas com vazão e temperatura estáveis.',
+            media: { ...MEDIA.oil, alt: 'Skimmer de recuperação de óleo Trans-Fil' },
+          },
+        ],
+      },
+      why: {
+        eyebrow: '[ 03 — Por que a Trans-Fil ]',
+        title: 'Um único fornecedor para o cavaco e o fluido de corte.',
+        items: [
+          { t: 'Projetados juntos', d: 'Transportador e filtro são dimensionados como um sistema: a mesma equipe de engenharia define por onde sai o cavaco e para onde vai o fluido.' },
+          { t: 'De acordo com o cavaco', d: 'Esteira articulada para cavaco longo ou emaranhado, raspador para cavaco curto e finos, magnético para cavaco ferroso pequeno. A escolha é feita sobre o cavaco real de cada processo.' },
+          { t: 'Sobre a máquina existente', d: 'Altura de descarga, bandeja e tanque são medidos na planta, e cada equipamento é validado em 3D antes da fabricação.' },
+          { t: 'Fabricação própria', d: 'Engenharia, corte, dobra, montagem e painel na nossa planta de Córdoba, Argentina: uma única empresa responde pelo sistema completo.' },
+          { t: 'Para operar 24/7', d: 'Construção robusta para operação contínua, com peças de reposição e assistência técnica. Equipamentos instalados nos anos 90 seguem em operação.' },
+          { t: '36 anos · 14 países', d: 'Desde 1989, com mais de 120 clientes industriais em 14 países, incluindo projetos no Brasil.' },
+        ],
+      },
+      proof: {
+        eyebrow: '[ 04 — Referências ]',
+        title: 'Plantas que operam com equipamentos Trans-Fil.',
+        sub: 'Automotivo, máquinas-ferramenta, siderurgia e tubos, em 14 países.',
+      },
+      form: {
+        eyebrow: '[ 05 — Levantamento ]',
+        title: 'O levantamento na planta vem antes da proposta.',
+        sub: 'Conte quais máquinas você tem, que cavaco geram e qual fluido de corte usam. Um consultor técnico responde em até 24 horas úteis com o próximo passo definido.',
+        lineTypeLabel: 'Processo',
+        lineTypeOpts: ['Torneamento', 'Centros de usinagem', 'Retificação', 'Linha transfer', 'Outro'],
+        defaultLinea: 'Transporte de cavaco',
+        waPrompt: 'Prefere WhatsApp?',
+        waCta: 'Escrever pelo WhatsApp',
+        successTitle: 'Consulta recebida.',
+        successBody: 'Um consultor técnico entrará em contato em até 24 horas úteis. Se a sua consulta for urgente, você pode nos escrever pelo WhatsApp.',
+        successWa: 'Abrir WhatsApp',
+      },
+      faq: {
+        eyebrow: '[ 06 — Dúvidas frequentes ]',
+        title: 'Dúvidas comuns antes do levantamento.',
+        items: [
+          {
+            q: 'Serve para tornos e centros de usinagem de qualquer marca?',
+            a: 'Sim. Transportador e filtro são dimensionados a partir da máquina, do cavaco e do fluido, não da marca. No levantamento medimos a altura de descarga, a bandeja e o tanque de cada máquina.',
+          },
+          {
+            q: 'Qual transportador serve para o meu cavaco?',
+            a: 'Depende da forma e do material: esteira articulada para cavaco longo ou emaranhado, raspador para cavaco curto e finos, magnético para cavaco ferroso pequeno. Em muitos casos é combinado com um filtro para o fluido que escorre do cavaco.',
+          },
+          {
+            q: 'É possível centralizar o cavaco e o fluido de várias máquinas?',
+            a: 'Sim. Uma linha centralizada leva o cavaco de toda a fábrica a um único ponto de descarga, e uma central de fluido alimenta várias máquinas com fluido filtrado, com vazão e temperatura estáveis.',
+          },
+          {
+            q: 'Que resultados é razoável esperar?',
+            a: 'Com tratamento adequado, a vida útil do fluido de corte se multiplica de 2 a 4 vezes e a da ferramenta aumenta de 10% a 30%; o transporte de cavacos elimina as paradas para limpeza manual. São faixas típicas: os valores de cada planta são definidos no levantamento.',
+          },
+          {
+            q: 'Qual é o prazo de resposta?',
+            a: 'Até 24 horas úteis. A resposta vem de um consultor técnico e inclui o próximo passo definido: as informações adicionais necessárias ou a data proposta para a visita à planta.',
+          },
+          {
+            q: 'Quais são o prazo de entrega e o frete?',
+            a: 'Os dois são cotados por projeto, junto com a proposta técnica. Dependem do escopo e do destino.',
+          },
+        ],
+      },
+      closing: 'Cavaco fora, fluido de corte limpo. Projetado na planta, fabricado pela Trans-Fil.',
+      whatsapp:
+        'Olá. Entro em contato pela página de usinagem da Trans-Fil. Gostaria de solicitar um levantamento na planta para transporte de cavacos e filtragem de fluido de corte.',
     },
   },
 };
