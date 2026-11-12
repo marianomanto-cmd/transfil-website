@@ -506,7 +506,7 @@ export const CONTENT: Record<Lang, Content> = {
       description: 'Specialized industrial machinery in Córdoba since 1989: chip conveyors, industrial washing, fluid filtration and cutting machinery.',
       ogTitle: 'Trans-Fil — Specialized industrial machinery',
       ogDescription: 'We design, build and maintain industrial machinery since 1989: chip conveyors, washing, fluid filtration and cutting for metallurgy and automotive.',
-      ogImageAlt: 'TRANS-FIL chip conveyor station in industrial workshop',
+      ogImageAlt: 'TRANS-FIL chip conveyor station in an industrial plant',
       twitterDescription: '36 years designing industrial machinery in Córdoba, Argentina. Processes that don\'t stop.',
     },
     nav: { home: 'Home', tech: 'Technologies', applications: 'Applications', catalogs: 'Catalogs', services: 'Services', industries: 'Industries', history: 'History', contact: 'Contact' },
@@ -672,7 +672,7 @@ export const CONTENT: Record<Lang, Content> = {
       steps: [
         { n: '01', t: 'Process study', d: 'We assess your production process and specific needs to design a custom solution.' },
         { n: '02', t: 'Engineering', d: 'Custom structural, mechanical, electrical, hydraulic and safety engineering.' },
-        { n: '03', t: 'Manufacturing', d: 'Full build in our Córdoba workshop. Traceable materials and dry-run testing before dispatch.' },
+        { n: '03', t: 'Manufacturing', d: 'Built in-house at our plant in Córdoba, Argentina. Traceable materials and dry-run testing before shipment.' },
         { n: '04', t: 'Commissioning', d: 'On-site installation, parameter tuning and training for operations and maintenance staff.' },
         { n: '05', t: 'Support', d: 'Spare parts, technical assistance and continuous improvements. Trans-Fil machines from the \'90s are still running.' },
       ],
@@ -691,7 +691,7 @@ export const CONTENT: Record<Lang, Content> = {
     industries: {
       eyebrow: '[ 06 — Industries ]',
       title: 'Wherever metal is worked,', title2: 'we\'re there.',
-      sub: 'Three decades integrating equipment in steel mills, automotive plants, oil & gas facilities and machine-tool factories across Argentina and the region.',
+      sub: 'Three decades integrating equipment in steel mills, automotive plants, oil & gas facilities and machine-tool factories in 14 countries, from Argentina to the United States.',
       tabs: [
         { id: 'steel', label: 'Steel' },
         { id: 'auto', label: 'Automotive, Oil & Appliances' },
@@ -708,10 +708,10 @@ export const CONTENT: Record<Lang, Content> = {
     },
     history: {
       eyebrow: '[ 07 — History ]',
-      title: 'Since 1989, from the same workshop.',
-      body: 'Trans-Fil started in Córdoba as a workshop specialized in coolant filtration for the metalworking industry. Three generations later, we still design every machine as if it were the first.',
+      title: 'Since 1989, from the same plant.',
+      body: 'Trans-Fil started in Córdoba as a company specialized in coolant filtration for the metalworking industry. Three generations later, we still design every machine as if it were the first.',
       milestones: [
-        { y: '1989', t: 'Founded', d: 'Workshop opens in Córdoba focused on industrial filtration.' },
+        { y: '1989', t: 'Founded', d: 'Trans-Fil is founded in Córdoba, focused on industrial filtration.' },
         { y: '1998', t: 'First automotive line', d: 'Integration into Renault Argentina plant.' },
         { y: '2007', t: 'Tenaris line', d: 'Conveyor design for seamless tube line.' },
         { y: '2015', t: 'Regional expansion', d: 'Projects in Brazil, Chile, Peru and Mexico.' },
@@ -741,7 +741,7 @@ export const CONTENT: Record<Lang, Content> = {
     },
     footer: { tag: 'Specialized industrial machinery', rights: 'All rights reserved.', built: 'Trans-Fil S.R.L.' },
     chips: { established: 'EST. 1989', argentina: 'CÓRDOBA · ARGENTINA', iso: 'ISO 9001' },
-    workshopActive: 'Workshop · Active',
+    workshopActive: 'Plant · Active',
     whatsappMessage: 'Hi, I\'m contacting you from the Trans-Fil website.',
     langSwitch: { es: 'ES', en: 'EN', pt: 'PT' },
     backToTop: 'Back to top',
@@ -759,7 +759,7 @@ export const CONTENT: Record<Lang, Content> = {
       coverage: 'COVERAGE',
       countriesReached: 'Countries reached',
     },
-    about: 'Trans-Fil S.R.L. is an Argentine manufacturer of specialized industrial machinery, founded in 1989 in Córdoba. It designs, builds and maintains chip conveyors, industrial washing systems, coolant filtration and fluid treatment equipment, and laser and plasma cutting machinery. Its workshop is located at Francisco de Arteaga 2895, Córdoba, Argentina. Trans-Fil serves over 120 industrial customers across 14 countries —Argentina, Brazil, Chile, Peru, Bolivia, Paraguay, Uruguay, Colombia, Ecuador, Mexico, United States, Dominican Republic, Puerto Rico and Spain— primarily in the steel, automotive, oil & gas and machine-tool sectors. The company also provides repairs, retrofitting, scheduled maintenance and custom engineering services.',
+    about: 'Trans-Fil S.R.L. is an Argentine manufacturer of specialized industrial machinery, founded in 1989 in Córdoba. It designs, builds and maintains chip conveyors, industrial washing systems, coolant filtration and fluid treatment equipment, and laser and plasma cutting machinery. Its plant is located at Francisco de Arteaga 2895, Córdoba, Argentina. Trans-Fil serves over 120 industrial customers across 14 countries —Argentina, Brazil, Chile, Peru, Bolivia, Paraguay, Uruguay, Colombia, Ecuador, Mexico, United States, Dominican Republic, Puerto Rico and Spain— primarily in the steel, automotive, oil & gas and machine-tool sectors. The company also provides repairs, retrofitting, scheduled maintenance and custom engineering services.',
     faq: [
       {
         q: 'What is Trans-Fil?',
@@ -767,11 +767,11 @@ export const CONTENT: Record<Lang, Content> = {
       },
       {
         q: 'Where is Trans-Fil located?',
-        a: 'The Trans-Fil workshop is at Francisco de Arteaga 2895, Córdoba, Argentina (31°24′17″S · 64°11′31″W).',
+        a: 'The Trans-Fil plant is at Francisco de Arteaga 2895, Córdoba, Argentina (31°24′17″S · 64°11′31″W).',
       },
       {
         q: 'How long has Trans-Fil been operating?',
-        a: 'Trans-Fil has been operating since 1989 — over 36 years designing and building industrial machinery from the same Córdoba workshop.',
+        a: 'Trans-Fil has been operating since 1989 — over 36 years designing and building industrial machinery from its plant in Córdoba.',
       },
       {
         q: 'What products does Trans-Fil manufacture?',
@@ -807,7 +807,7 @@ export const CONTENT: Record<Lang, Content> = {
       },
       {
         q: 'How can I contact Trans-Fil?',
-        a: 'Email ventas@transfil.com.ar, phone or WhatsApp +54 9 3513 82-0321, or visit the workshop at Francisco de Arteaga 2895, Córdoba, Argentina. The company replies to technical enquiries within 24 business hours.',
+        a: 'Email ventas@transfil.com.ar, phone or WhatsApp +54 9 3513 82-0321, or visit the plant at Francisco de Arteaga 2895, Córdoba, Argentina. The company replies to technical inquiries within 24 business hours.',
       },
     ],
   },

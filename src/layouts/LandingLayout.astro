@@ -350,7 +350,19 @@ const navItems = [
   </main>
 
   <Footer content={content} lang={lang} page={l.page} />
-  <WhatsAppFAB message={l.whatsapp} dataCta="whatsapp" client:idle />
+  {/* En inglés el botón flotante lleva al formulario: el comprador de EE. UU.
+      no escribe por WhatsApp a un número argentino. WhatsApp sigue en el
+      hero y debajo del formulario, como opción secundaria. */}
+  {lang === 'en' ? (
+    <WhatsAppFAB
+      message={l.whatsapp}
+      dataCta="relevamiento"
+      form={{ href: '#contacto', label: l.hero.ctaPrimary }}
+      client:idle
+    />
+  ) : (
+    <WhatsAppFAB message={l.whatsapp} dataCta="whatsapp" client:idle />
+  )}
   <BackToTop label={content.backToTop} client:idle />
 </Base>
 

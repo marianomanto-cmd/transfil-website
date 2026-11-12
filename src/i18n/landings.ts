@@ -351,7 +351,7 @@ export const LANDINGS: Record<LandingSlug, Record<Lang, LandingContent>> = {
       meta: {
         title: 'Filtration for tube-forming lines | Trans-Fil',
         description:
-          'Centralized coolant filtration, magnetic separation and tramp-oil recovery for ERW / tube mills. Plant survey before we quote. Built in Córdoba, Argentina.',
+          'Centralized coolant filtration, magnetic separation and tramp-oil recovery for ERW and HFW tube mills. Engineered for each line, installed and commissioned at your plant.',
         ogTitle: 'Filtration for tube-forming lines',
         ogDescription:
           'Centralized filtration, magnetic separation and tramp-oil recovery for ERW / HFW tube mills. A plant survey precedes the technical proposal.',
@@ -370,7 +370,7 @@ export const LANDINGS: Record<LandingSlug, Record<Lang, LandingContent>> = {
       hero: {
         eyebrow: '[ Process filtration · Tube forming · ERW / HFW / Roll forming / Drawing ]',
         h1: 'Contaminated fluid shortens tooling life and drives up scrap.',
-        sub: 'Centralized filtration for tube-forming lines: magnetic separation, solids filtration and tramp-oil recovery. Built in our own workshop in Córdoba. A plant survey precedes every technical proposal.',
+        sub: 'Centralized filtration for tube-forming lines: magnetic separation, solids filtration and tramp-oil recovery. Engineered and manufactured in-house by Trans-Fil since 1989. A plant survey precedes every technical proposal.',
         ctaPrimary: 'Request a plant survey',
         ctaSecondary: 'WhatsApp',
         media: HERO_MEDIA,
@@ -414,7 +414,7 @@ export const LANDINGS: Record<LandingSlug, Record<Lang, LandingContent>> = {
           {
             code: 'F03',
             title: 'Tramp oil → skimmer',
-            desc: 'Belt skimmers and coalescing separators that remove tramp oil, the main cause of falling pH, odour and premature disposal of the emulsion. Its removal is the single variable with the greatest impact on fluid service life.',
+            desc: 'Belt skimmers and coalescing separators that remove tramp oil, the main cause of falling pH, odor and premature disposal of the emulsion. Its removal is the single variable with the greatest impact on fluid service life.',
             media: { ...MEDIA.oil, alt: 'Trans-Fil oil-recovery skimmer' },
           },
           {
@@ -473,20 +473,20 @@ export const LANDINGS: Record<LandingSlug, Record<Lang, LandingContent>> = {
       },
       why: {
         eyebrow: '[ 03 — Why Trans-Fil ]',
-        title: 'Manufactured in our own Córdoba workshop, serviced across the region.',
+        title: 'Engineered and built in-house. Installed and commissioned at your plant.',
         items: [
-          { t: 'In-house manufacturing', d: 'Own workshop in Córdoba: engineering, cutting, bending, assembly and control cabinet are all carried out in the same plant.' },
-          { t: 'Spare parts available', d: 'Consumables and spare parts held regionally, without import lead times.' },
+          { t: 'In-house manufacturing', d: 'Engineering, cutting, bending, assembly and control panels are all done at our own plant in Córdoba, Argentina. One company is responsible for the complete system.' },
+          { t: 'Built to your electrical standard', d: 'Control panels are designed for 480 V / 60 Hz, or your plant’s own supply, and built to the electrical standard you specify.' },
           { t: 'Sized to the installation', d: 'The station is sized around the existing tank, the flow rate and the floor space available at each site.' },
+          { t: 'On-site commissioning', d: 'Trans-Fil technicians travel to your plant for installation and commissioning. After start-up, the same engineering team supports you remotely.' },
           { t: 'Integration with the process', d: 'The same engineering team that supplies chip conveying and parts washing: a single technical point of contact.' },
-          { t: 'Continuity of service', d: 'Units installed in the 1990s remain in operation, with support and spare parts still available.' },
-          { t: '36 years · 14 countries', d: 'Operating from the same workshop since 1989, with over 120 industrial customers across 14 countries.' },
+          { t: '36 years · 14 countries', d: 'Since 1989, with over 120 industrial customers in 14 countries, including the United States. Units installed in the 1990s are still in operation.' },
         ],
       },
       proof: {
         eyebrow: '[ 04 — Track record ]',
         title: 'Plants operating with Trans-Fil equipment.',
-        sub: 'Steel, tube, automotive and machine-tool plants across Argentina and the region.',
+        sub: 'Steel, tube, automotive and machine-tool plants in 14 countries.',
       },
       form: {
         eyebrow: '[ 05 — Plant survey ]',
@@ -497,8 +497,8 @@ export const LANDINGS: Record<LandingSlug, Record<Lang, LandingContent>> = {
         defaultLinea: 'Filtration',
         waPrompt: 'Would you prefer WhatsApp?',
         waCta: 'Message us on WhatsApp',
-        successTitle: 'Enquiry received.',
-        successBody: 'A technical advisor will be in touch within 24 business hours. If your enquiry is urgent, you can reach us on WhatsApp.',
+        successTitle: 'Inquiry received.',
+        successBody: 'A technical advisor will be in touch within 24 business hours. If your inquiry is urgent, you can also reach us on WhatsApp.',
         successWa: 'Open WhatsApp',
       },
       faq: {
@@ -522,17 +522,25 @@ export const LANDINGS: Record<LandingSlug, Record<Lang, LandingContent>> = {
             a: 'In installations with adequate treatment, coolant service life increases by a factor of 2 to 4, coolant changes fall by 50% to 70% and tool service life rises by 10% to 30%. These are typical ranges: figures for each line are established during the survey.',
           },
           {
-            q: 'What is the response time?',
-            a: 'Under 24 business hours. The reply is issued by a technical advisor and includes a defined next step: the additional information required, or a proposed date for the plant visit.',
+            q: 'Who installs and supports the system?',
+            a: 'Trans-Fil technicians travel to your plant for installation and commissioning. After start-up, support continues remotely with the same engineering team that designed the station.',
           },
           {
-            q: 'Form or WhatsApp?',
-            a: 'Both channels reach the same technical team and carry the same response time. The form allows the line conditions to be described in detail; WhatsApp is quicker for a preliminary enquiry.',
+            q: 'Is the control panel built for US plants?',
+            a: 'Yes. The panel is designed for 480 V / 60 Hz, or your plant’s own supply, and built to the electrical standard you specify.',
+          },
+          {
+            q: 'What are the lead time and shipping terms?',
+            a: 'Both are quoted per project, together with the technical proposal. They depend on the scope (a new station or an adaptation of the existing tank) and on the destination.',
+          },
+          {
+            q: 'What is the response time?',
+            a: 'Under 24 business hours. A technical advisor replies with a defined next step: the additional information required, or a proposed date for the plant visit.',
           },
         ],
       },
       closing:
-        'Process filtration for lines that cannot stop. Engineered on the plant floor, built in Córdoba, serviced across the region.',
+        'Process filtration for lines that cannot stop. Engineered on the plant floor, built in-house, commissioned at your plant.',
       whatsapp:
         'Hello. I am contacting you from the Trans-Fil tube-forming page. I would like to request a plant survey for mill coolant filtration.',
     },
