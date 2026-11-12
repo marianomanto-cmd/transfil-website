@@ -1,0 +1,13 @@
+{
+  "name": "central-tour",
+  "private": true,
+  "description": "Recorrido en video de la central de filtración (sección 02 de /conformado).",
+  "scripts": {
+    "prepare-assets": "./prepare.sh",
+    "render": "node render.cjs 25",
+    "encode": "./encode.sh 25"
+  },
+  "devDependencies": {
+    "playwright": "1.63.0"
+  }
+}

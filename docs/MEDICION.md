@@ -53,7 +53,7 @@ Todos llevan **`page`** y **`locale`**.
 | `catalog_download` | Descarga desde el visor | `catalog`, `file_name` | Interés |
 | `language_switch` | Cambio de idioma en el header | `from_locale`, `to_locale` | Navegación |
 | `section_view` | Una sección con `id` entra al 60 % superior de la pantalla (una vez por página) | `section` | Lectura |
-| `diagram_interaction` | Etapa de la central 3D (una vez por etapa) o circuito del diagrama de máquinas | `diagram` (`central` / `maquinas`), `item`, `state` | Interés técnico |
+| `diagram_interaction` | Video de la central en /conformado (`item`: `play`, capítulo `F01`…`F04` o `inicio`, `50%`, `complete`; una vez cada uno) o circuito del diagrama de máquinas | `diagram` (`central` / `maquinas`), `item`, `state` | Interés técnico |
 
 ### Valores que conviene conocer
 

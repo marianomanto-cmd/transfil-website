@@ -67,33 +67,29 @@ export type LandingContent = {
         rail of the 3D viewer above and the cards below it. */
     blocks: { code: string; title: string; desc: string; media: LandingMedia }[];
   };
-  /** Copy for the 3D filtration station that opens section 02. `fluids[].k`
-      are colour identifiers, not copy — only `t` is translated. Optional:
-      only the landings whose process it depicts carry it. */
-  centralDiagram?: {
-    caption: string;
-    /** Interaction hint. The gestures are not the same with a mouse as with
-        a finger, and promising one the device doesn't have is worse than
-        saying nothing — the component shows one or the other by pointer
-        type. Both are on screen, so all three locales carry their own. */
+  /** Rendered walkthrough of the filtration station that opens section 02
+      (tools/central-tour/). One file per locale: the labels are burned into
+      the picture. `chapters[].t` are seconds into the video. Optional: only
+      the landings whose station it shows carry it. */
+  centralTour?: {
+    eyebrow: string;
+    /** Different advice with a mouse than with a finger: the component
+        shows one or the other by pointer type. */
     hint: { pointer: string; touch: string };
-    /** Screen-reader description of the whole station. */
+    /** Screen-reader description of what the video shows. */
     alt: string;
-    labels: {
-      dirty: string; centrifuge: string; magnetic: string; waste: string;
-      gravity: string; skimmer: string; level: string; tank: string;
-      exchanger: string; bag: string; cabinet: string;
-      lowOut: string; highOut: string;
-    };
-    fluids: { k: string; t: string }[];
+    goTo: string;
+    src: string;
+    poster: string;
+    chapters: { t: number; code: string; label: string }[];
   };
   /** Copy for the 3D machine diagram that closes the section. Every string
       is on screen, so all three locales carry their own. The `\n` in `tags`
       is the label's line break — keep it in every translation. Optional,
-      like `centralDiagram`: it draws a tube-forming plant. */
+      like `centralTour`: it draws a tube-forming plant. */
   machineDiagram?: {
     caption: string;
-    /** See `centralDiagram.hint`. */
+    /** Same idea as `centralTour.hint`: one variant per pointer type. */
     hint: { pointer: string; touch: string };
     /** Screen-reader description of the whole installation. */
     alt: string;
@@ -239,27 +235,23 @@ export const LANDINGS: Record<LandingSlug, Record<Lang, LandingContent>> = {
           },
         ],
       },
-      centralDiagram: {
-        caption: 'Central de filtración / Recorrido del fluido',
+      centralTour: {
+        eyebrow: 'Recorrido 3D · 1 min 21 s',
         hint: {
-          pointer: 'Pase el mouse o haga clic en una etapa',
-          touch: 'Toque una etapa',
+          pointer: 'Elija un capítulo para ir directo a esa etapa',
+          touch: 'Pantalla completa para leer los rótulos',
         },
-        alt: 'Vista tridimensional de la central de filtración Trans-Fil, recorrida en cuatro etapas: entrada de soluble contaminado, centrífuga sobre el separador magnético y depósito de residuos; filtro de gravedad con su banda y rollo de tela; skimmer y sensor de nivel sobre el depósito de líquido; e integración con intercambiador de calor, filtros bolsa, gabinete eléctrico y las salidas de soluble limpio de baja y alta presión.',
-        labels: {
-          dirty: 'Soluble contaminado', centrifuge: 'Centrífuga', magnetic: 'Separador magnético',
-          waste: 'Depósito de residuos', gravity: 'Filtro de gravedad', skimmer: 'Skimmer',
-          level: 'Sensor de nivel', tank: 'Depósito de líquido', exchanger: 'Intercambiador de calor',
-          bag: 'Filtro bolsa', cabinet: 'Gabinete eléctrico',
-          lowOut: 'Salida baja presión', highOut: 'Salida alta presión',
-        },
-        fluids: [
-          { k: 'dirty', t: 'Soluble contaminado' },
-          { k: 'semi', t: 'Sin finos ferrosos' },
-          { k: 'clean', t: 'Soluble limpio' },
-          { k: 'oil', t: 'Aceite sobrenadante' },
-          { k: 'ferrous', t: 'Finos ferrosos' },
-          { k: 'cloth', t: 'Tela filtrante' },
+        alt: 'Video: recorrido tridimensional de la central de filtración Trans-Fil. El soluble contaminado entra a la centrífuga y al tambor magnético, que retira los finos ferrosos; atraviesa la tela del filtro de banda, que avanza sola cuando sube el nivel; el skimmer retira el aceite atrapado de la cuba; y la bomba, el intercambiador de placas y los filtros bolsa entregan soluble limpio a baja y a alta presión. Un panel muestra el estado del PLC en cada etapa.',
+        goTo: 'Ir a',
+        src: '/video/central-tour-es.mp4',
+        poster: '/img/central-tour-es.webp',
+        chapters: [
+          { t: 0, code: '', label: 'La central completa' },
+          { t: 8, code: 'F01', label: 'Separación magnética' },
+          { t: 24, code: 'F02', label: 'Filtro de banda' },
+          { t: 41, code: 'F03', label: 'Skimmer' },
+          { t: 55, code: 'F04', label: 'Bombeo y temperatura' },
+          { t: 71, code: '', label: 'Salidas de soluble limpio' },
         ],
       },
       machineDiagram: {
@@ -431,27 +423,23 @@ export const LANDINGS: Record<LandingSlug, Record<Lang, LandingContent>> = {
           },
         ],
       },
-      centralDiagram: {
-        caption: 'Central filtration station / Fluid path',
+      centralTour: {
+        eyebrow: '3D walkthrough · 1 min 21 s',
         hint: {
-          pointer: 'Hover or click a stage',
-          touch: 'Tap a stage',
+          pointer: 'Pick a chapter to jump to that stage',
+          touch: 'Go full screen to read the labels',
         },
-        alt: 'Three-dimensional view of the Trans-Fil central filtration station, walked through in four stages: contaminated coolant inlet, centrifuge above the magnetic separator and waste tank; gravity filter with its belt and cloth roll; skimmer and level sensor over the liquid tank; and integration with the heat exchanger, bag filters, electrical cabinet and the low- and high-pressure clean-coolant outlets.',
-        labels: {
-          dirty: 'Contaminated coolant', centrifuge: 'Centrifuge', magnetic: 'Magnetic separator',
-          waste: 'Waste tank', gravity: 'Gravity filter', skimmer: 'Skimmer',
-          level: 'Level sensor', tank: 'Liquid tank', exchanger: 'Heat exchanger',
-          bag: 'Bag filter', cabinet: 'Electrical cabinet',
-          lowOut: 'Low-pressure outlet', highOut: 'High-pressure outlet',
-        },
-        fluids: [
-          { k: 'dirty', t: 'Contaminated coolant' },
-          { k: 'semi', t: 'Ferrous fines removed' },
-          { k: 'clean', t: 'Clean coolant' },
-          { k: 'oil', t: 'Tramp oil' },
-          { k: 'ferrous', t: 'Ferrous fines' },
-          { k: 'cloth', t: 'Filter cloth' },
+        alt: 'Video: three-dimensional walkthrough of the Trans-Fil central filtration station. Contaminated coolant enters the centrifuge and the magnetic drum, which removes ferrous fines; it passes through the belt filter media, which advances automatically when the level rises; the skimmer removes tramp oil from the tank; and the pump, the plate heat exchanger and the bag filters deliver clean coolant at low and high pressure. A panel shows the PLC status at each stage.',
+        goTo: 'Go to',
+        src: '/video/central-tour-en.mp4',
+        poster: '/img/central-tour-en.webp',
+        chapters: [
+          { t: 0, code: '', label: 'The complete station' },
+          { t: 8, code: 'F01', label: 'Magnetic separation' },
+          { t: 24, code: 'F02', label: 'Belt filter' },
+          { t: 41, code: 'F03', label: 'Skimmer' },
+          { t: 55, code: 'F04', label: 'Pumping and temperature' },
+          { t: 71, code: '', label: 'Clean-coolant outlets' },
         ],
       },
       machineDiagram: {
@@ -631,27 +619,23 @@ export const LANDINGS: Record<LandingSlug, Record<Lang, LandingContent>> = {
           },
         ],
       },
-      centralDiagram: {
-        caption: 'Central de filtragem / Percurso do fluido',
+      centralTour: {
+        eyebrow: 'Percurso 3D · 1 min 21 s',
         hint: {
-          pointer: 'Passe o mouse ou clique em uma etapa',
-          touch: 'Toque em uma etapa',
+          pointer: 'Escolha um capítulo para ir direto à etapa',
+          touch: 'Tela cheia para ler os rótulos',
         },
-        alt: 'Vista tridimensional da central de filtragem Trans-Fil, percorrida em quatro etapas: entrada de fluido contaminado, centrífuga sobre o separador magnético e depósito de resíduos; filtro de gravidade com sua esteira e rolo de manta; skimmer e sensor de nível sobre o depósito de líquido; e integração com trocador de calor, filtros de saco, painel elétrico e as saídas de fluido limpo de baixa e alta pressão.',
-        labels: {
-          dirty: 'Fluido contaminado', centrifuge: 'Centrífuga', magnetic: 'Separador magnético',
-          waste: 'Depósito de resíduos', gravity: 'Filtro de gravidade', skimmer: 'Skimmer',
-          level: 'Sensor de nível', tank: 'Depósito de líquido', exchanger: 'Trocador de calor',
-          bag: 'Filtro de saco', cabinet: 'Painel elétrico',
-          lowOut: 'Saída de baixa pressão', highOut: 'Saída de alta pressão',
-        },
-        fluids: [
-          { k: 'dirty', t: 'Fluido contaminado' },
-          { k: 'semi', t: 'Sem finos ferrosos' },
-          { k: 'clean', t: 'Fluido limpo' },
-          { k: 'oil', t: 'Óleo sobrenadante' },
-          { k: 'ferrous', t: 'Finos ferrosos' },
-          { k: 'cloth', t: 'Manta filtrante' },
+        alt: 'Vídeo: percurso tridimensional da central de filtragem Trans-Fil. O fluido contaminado entra na centrífuga e no tambor magnético, que retira os finos ferrosos; atravessa a manta do filtro de esteira, que avança sozinha quando o nível sobe; o skimmer retira o óleo tramp do tanque; e a bomba, o trocador de placas e os filtros de saco entregam fluido limpo em baixa e alta pressão. Um painel mostra o status do CLP em cada etapa.',
+        goTo: 'Ir para',
+        src: '/video/central-tour-pt.mp4',
+        poster: '/img/central-tour-pt.webp',
+        chapters: [
+          { t: 0, code: '', label: 'A central completa' },
+          { t: 8, code: 'F01', label: 'Separação magnética' },
+          { t: 24, code: 'F02', label: 'Filtro de esteira' },
+          { t: 41, code: 'F03', label: 'Skimmer' },
+          { t: 55, code: 'F04', label: 'Bombeamento e temperatura' },
+          { t: 71, code: '', label: 'Saídas de fluido limpo' },
         ],
       },
       machineDiagram: {

@@ -77,7 +77,7 @@ src/
     AplicacionesSection.astro diagnostic panel + A01–A04 cards + metrics + CTA
     FlowDiagram.astro         dirty fluid → filtration cassette → stable flow
     MachineDiagram.astro      the four A01–A04 process microdiagrams
-    CentralDiagram3D.astro    fixed-view 3D filtration station, walked F01→F04
+    CentralTour.astro         rendered video walkthrough of the filtration station, by chapter
     SystemDiagram3D.astro     orbitable 3D machine diagram of the whole plant
     ThreeImportMap.astro      the three.js import map, emitted once in <head>
     ProcessSection.astro      5 step cards over darkened workshop bg
@@ -101,6 +101,9 @@ src/
     conformado.astro     ES tube-forming landing
     en/conformado.astro  EN tube-forming landing
     pt/conformado.astro  PT tube-forming landing
+    mecanizado.astro     ES machining landing (chip conveying + coolant filtration)
+    en/machining.astro   EN machining landing
+    pt/usinagem.astro    PT machining landing
     api/contact.ts       Resend endpoint (prerender=false → serverless)
     404.astro            custom 404 (path-aware locale, noindex)
   lib/
@@ -115,7 +118,6 @@ scripts/
 public/
   js/
     three-d-stage.js     <three-d-stage>: renderer, lights, orbit, OBJ/GLB export
-    central3d.js         the filtration station: geometry, flow, cutaway, rail
     plant3d.js           the machine diagram: plant, circuits, flow, labels
     stage-scroll.js      scroll policy of the machine diagram (page first)
   vendor/three/          pinned three.js 0.184 + OrbitControls + exporters
@@ -160,29 +162,29 @@ To change wording, image paths, country lists, milestones, contact info or FAQ e
 - Pages: `src/pages/conformado.astro`, `src/pages/en/conformado.astro`, `src/pages/pt/conformado.astro` — six lines each.
 - Own SEO: canonical, reciprocal hreflang, page-specific OG, and `WebPage` + `Service` + `FAQPage` + `BreadcrumbList` JSON-LD. The home's FAQ is *not* emitted here.
 - Deep-linked from the home: the `A01` card carries `link: { page: 'conformado', … }`, which renders both the card's "Ver solución" button and the footer link.
-- Section `02 — El sistema` opens with `CentralDiagram3D.astro`, then the four `F01–F04` cards, and closes with `SystemDiagram3D.astro` (both below).
+- Section `02 — El sistema` opens with `CentralTour.astro` (the rendered walkthrough of the station), then the four `F01–F04` cards, and closes with `SystemDiagram3D.astro` (both below).
 - 301s from the legacy campaign URLs (`/filtracion-conformado-tubos`, `/filtracao-conformacao-tubos`) in `astro.config.mjs`.
 
 The full pattern, the roadmap (`/lavado`, `/transporte`, `/hornos` — not implemented) and the step-by-step recipe for a new landing are in [`docs/LANDINGS.md`](docs/LANDINGS.md).
 
-## The two 3D viewers: what they share
+## The 3D viewer: its base pieces
 
-Both diagrams on the landing (`CentralDiagram3D.astro` and `SystemDiagram3D.astro`) sit on the same base pieces, shared on purpose:
+The machine diagram (`SystemDiagram3D.astro`) is the one live three.js viewer left on the landing (the filtration station became a video, see below). It sits on base pieces kept generic on purpose:
 
 - **`<three-d-stage>`** (`public/js/three-d-stage.js`) — the web component: renderer, lights, ground shadow, orbit, OBJ/GLB export. Its `toolbar` and `note` parts are hidden by both components (the export bar is a modeller's tool, and the starter's own interaction note is fixed English next to our translated one). **Render resolution follows the screen**: the pixel ratio is `devicePixelRatio` × pinch-zoom scale, re-evaluated on every resize, on a `matchMedia` resolution change (browser zoom, moving the window to another display) and on visual-viewport resize (pinch), capped at 3× and 4096² canvas pixels. It used to be read once at boot: zoom in after the page loaded, or load it on a 1× screen and move it to a retina one, and the canvas stayed stretched — blurry 3D under crisp HTML labels.
-- **Width cap** — both components stop at `max-width: 1760px`, centred. Sections are full-bleed, so on a 27" display the 16/9 frame was ~2,700 px wide: taller than the window and a 16-megapixel canvas per viewer. 1760 leaves 1920 screens untouched.
+- **Width cap** — the viewer and the station video both stop at `max-width: 1760px`, centred. Sections are full-bleed, so on a 27" display the 16/9 frame was ~2,700 px wide: taller than the window and a 16-megapixel canvas per viewer. 1760 leaves 1920 screens untouched.
 - **`ThreeImportMap.astro`** — the import map, emitted **once, in `<head>`, from `Base.astro`**. See below; this is not a detail.
-- **`stage-scroll.js`** — the scroll policy for the orbitable machine diagram. See "The page owns the scroll". The filtration station doesn't use it: its camera is fixed and its canvas takes no gesture at all.
+- **`stage-scroll.js`** — the scroll policy for the orbitable machine diagram. See "The page owns the scroll".
 
 **The import map lives in `<head>`, not next to the component.** A browser only honours an import map that it parses *before the first module script starts loading*, and Astro injects its own module scripts (React islands, `ClientRouter`) into the head. An import map emitted from the component's markup lands in the `<body>`, hundreds of lines too late, and the browser silently ignores it: `import 'three'` then dies with *Failed to resolve module specifier 'three'*. In dev the injection order differs and it appears to work — this only shows up on the deployed build. The map is also the reason both viewers can share a page at all: browsers without multiple-import-map support keep the first and reject the second, so one map per document is the rule. It carries `data-astro-transition-persist` so the View Transitions swap keeps the parsed node instead of re-inserting a duplicate.
 
 **three.js is served from `/vendor/three/`, not a CDN.** The handoffs pinned unpkg with integrity hashes; this landing is opened by industrial plants, and a corporate firewall blocking unpkg would leave both diagrams blank with no warning. The files come from `npm i three@0.184.0` (a devDependency, kept for provenance), and the site serves the **minified** builds: `three.module.min.js` + `three.core.min.js` copied as-is from `node_modules/three/build/`, and `OrbitControls.js` minified with `esbuild --minify --format=esm` from `examples/jsm/controls/`. The import map points `three` at `three.module.min.js`. The two exporters stay unminified — they're only fetched if someone uses the (hidden) export toolbar. To update: bump the version, re-copy the two `.min.js` files, re-run esbuild on OrbitControls and re-copy the exporters. `public/vendor` is excluded from `tsconfig` so third-party code doesn't pollute `astro check`.
 
-**Both viewers boot lazily and survive view transitions.** An IntersectionObserver starts the scene only when the frame is within 500px of the viewport, so a visitor who never scrolls that far pays nothing for the ~190 KB (gzipped) of three.js. Because the modules are ES modules they are not re-evaluated when `ClientRouter` swaps the DOM, so a navigation re-imports them with a cache-busting suffix; three.js resolves to the same URL and stays cached. And because injected scripts are async, the boot waits on `customElements.whenDefined('three-d-stage')` before importing the scene — without it the scene can start before the viewer and fail destructuring `THREE`, which happens in the production build and not in dev.
+**The viewer boots lazily and survives view transitions.** An IntersectionObserver starts the scene only when the frame is within 500px of the viewport, so a visitor who never scrolls that far pays nothing for the ~190 KB (gzipped) of three.js. Because the modules are ES modules they are not re-evaluated when `ClientRouter` swaps the DOM, so a navigation re-imports them with a cache-busting suffix; three.js resolves to the same URL and stays cached. And because injected scripts are async, the boot waits on `customElements.whenDefined('three-d-stage')` before importing the scene — without it the scene can start before the viewer and fail destructuring `THREE`, which happens in the production build and not in dev.
 
 ## The page owns the scroll (`stage-scroll.js`)
 
-OrbitControls, as shipped, takes the gesture: it sets `touch-action: none` on the canvas (one finger orbits, the page does not move) and calls `preventDefault` on every `wheel` (the wheel over the canvas never scrolls). On a long landing that is a trap — the visitor reaches the diagram and the page stops responding. `letPageScroll()` inverts the priority for the machine diagram (the filtration station sidesteps the problem entirely: `controls.enabled = false` and `touch-action: auto`, so it never takes the gesture):
+OrbitControls, as shipped, takes the gesture: it sets `touch-action: none` on the canvas (one finger orbits, the page does not move) and calls `preventDefault` on every `wheel` (the wheel over the canvas never scrolls). On a long landing that is a trap — the visitor reaches the diagram and the page stops responding. `letPageScroll()` inverts the priority for the machine diagram:
 
 - **Touch** — one finger scrolls the page (`touch-action: pan-y`, `touches.ONE = null`), two fingers orbit. The stage walk is on the rail, which needs no gesture at all.
 - **Wheel** — if a page scroll is in flight (the page moved less than 420ms ago) the wheel is not captured, so scrolling *through* the section never catches. With the page at rest and the pointer over the canvas, the wheel zooms.
@@ -190,29 +192,15 @@ OrbitControls, as shipped, takes the gesture: it sets `touch-action: none` on th
 
 All of it works by flipping `controls.enableZoom` in a **capture-phase** listener on the host (the canvas lives in the shadow root), before OrbitControls' own handler runs: with zoom off, OrbitControls returns without `preventDefault` and the browser scrolls normally. `onEngage` tells the scene that the visitor took the camera, so whatever was animating it lets go — otherwise the next frame would undo the zoom.
 
-## Filtration station in 3D (`CentralDiagram3D.astro`)
+## Filtration station walkthrough (`CentralTour.astro`)
 
-Opens section `02 — El sistema` on every application landing: the whole station as geometry — contaminated-coolant inlet, centrifuge over the magnetic separator, waste tank, gravity belt filter with its cloth roll, liquid tank, skimmer, level sensor, plate heat exchanger, bag filters, electrical cabinet and the two clean-coolant outlets. It replaces the SVG schematic that used to open the section: same content, in three dimensions, and without the pinned scroll that came with it.
+Opens section `02 — El sistema` on `/conformado`: a rendered video tour of the whole station — contaminated-coolant inlet, centrifuge over the magnetic drum, waste bin, belt filter with its media roll, clean-coolant tank, skimmer, level sensor, pump, plate heat exchanger, bag filters, PLC panel and the low- and high-pressure outlets. It replaced the fixed-view interactive viewer (`CentralDiagram3D.astro` + `central3d.js`, removed): a sales page reads better as a guided tour than as a model the visitor has to figure out.
 
-Nothing is a 3D asset: metres, y-up, resting on `y = 0`, every mesh and material named in Spanish, so the exported OBJ/GLB opens in Blender at real scale with its hierarchy intact.
-
-**The fluid is the subject.** Six states, each its own colour and its own run of pipe with emissive drops moving along it: contaminated coolant, ferrous fines removed, clean coolant, tramp oil, ferrous fines, filter cloth. The state changes exactly where the equipment does its work. The colour key sits inside the frame, next to the lines it names.
-
-**Fixed view, by explicit request.** The station used to fly the camera to each stage and let the visitor orbit and zoom; on a sales page that was more awkward than useful (the camera ended up at odd angles, half the frame empty). Now one camera frames the whole unit, front-on and slightly from the right so the process reads left to right — dirty inlet to clean outlets — with a short 30° FOV so it reads almost axonometric, like the machine diagram. OrbitControls is switched off (`controls.enabled = false`, which also makes it skip `preventDefault` on the wheel) and the canvas gets `touch-action: auto` back, so the page scrolls over it like over an image.
-
-**The rail is the whole navigation.** From 1200px up it sits *inside* the frame, bottom-left, as a compact one-row-per-stage panel over the empty floor; the framing keeps every piece of equipment clear of it (anything left of its right edge must stay above its top — an extra constraint in the fit passes) and the labels treat it as an obstacle, like the colour key. Below 1200px the frame is too small to give up a corner, so it goes back under the frame. Four buttons, `F01 → F04`, with `aria-current="step"`, naming the same four stages as the cards below — both read from `system.blocks`, so they cannot drift apart. **Hover, focus or click** moves the focus box to that stage's zone, opens the matching housing in cutaway (centrifuge and drum, filter cloth, tank and level sensor, bag filters) and brings that stage's references to full ink. The camera never moves. Hover waits 130ms so crossing the rail doesn't flicker four cutaways, and is ignored while the page is scrolling — otherwise dragging the rail under a motionless cursor would switch stages nobody asked for.
-
-**No pinned scroll, by explicit request.** The handoff shipped a `pinned` mode driven by a sticky block over `postMessage`; it is gone, not disabled. The page scrolls freely past the diagram at all times.
-
-**Framing is computed, not hard-coded.** The direction is fixed (`VIEW` in `central3d.js`); distance and aim are measured on the real frame. The equipment — floor, grid and focus box excluded — is reduced to the corners of each mesh's bounding box, projected, and corrected in four passes: distance for size, aim for centring, inside a window that keeps a small margin, 30px of headroom for the topmost labels (dropped where CSS hides the labels) and the height of the colour-key strip at the bottom. three.js' FOV is vertical, so a fixed distance would crop the station sideways in a narrow frame; measuring on the frame itself avoids that. It re-runs whenever the camera's aspect or the key's height changes, checked per frame: the stage updates the aspect in its own ResizeObserver, which runs *after* window `resize`, so listening to `resize` would frame with the stale aspect.
-
-**Labels.** Thirteen equipment names as HTML projected from the scene each frame — translated through `landings.ts`. Placement is resolved, not just projected: sorted by depth, pushed apart on collision, clamped inside the frame, and any that still cannot be placed is faded rather than left overlapping. The colour key is fed into the same collision set, so no label ever lands on it. Verified with the fixed view at zero overlaps, zero labels on the key and zero outside the frame across 3 locales × 4 widths (1440, 1100, 900, 700) × 4 stages.
-
-**Colour key.** A strip along the bottom of the frame at every width, over the floor where there is no equipment. It used to be a column in the bottom-left corner; with the camera fixed edge to edge, that box covered the inlet or the tank depending on the width.
-
-**Narrow screens.** Below 860px the frame goes to `3 / 2` with `min-height` released, which would otherwise override the aspect ratio — not taller: the view is fixed and the unit is long, so extra height would only be empty floor. Between 560 and 860px the labels stay but only for the active stage. Below 560px they are switched off — six 145px text boxes over a 350px canvas hide the station they are naming — and the active stage's equipment moves to a two-column list **under the rail** (under, not over: stage F04 names six items and F02 names one, and with the list above, the rail would jump out from under the finger).
-
-**`prefers-reduced-motion`** stops the flow and the rotating parts, and the focus box jumps to each stage instead of sliding. The cutaway, the focus frame and the arrowheads still say everything the motion said.
+- **Six chapters, 1 min 21 s:** the complete station, F01 magnetic separation, F02 belt filter (with the level rising and the media advancing on its own), F03 skimmer, F04 pumping/temperature/final polishing, and the two outlets. The camera flies to each stage, the housing of that stage opens in cutaway, labels with leader lines name the equipment, a PLC status panel highlights what is working, and rings run along every pipe in the colour of the fluid's state (contaminated → ferrous fines removed → clean).
+- **One MP4 per locale** (`/video/central-tour-{es,en,pt}.mp4`, poster `/img/central-tour-{lang}.webp`): every label is burned into the picture. Copy, chapter times and the alt text live in `landings.ts` → `centralTour`.
+- **Loads nothing until asked:** `preload="none"` and a poster. Native controls, plus a chapter rail under the video that seeks and plays (it waits for `loadedmetadata` first, since with `preload="none"` there is no duration yet). `aria-current="step"` follows playback.
+- **Measurement:** `diagram_interaction` with `diagram: 'central'` and `item` = `play`, the chapter code (`F01`…) or `inicio`, `50%` and `complete` — once each per page.
+- **Source:** `tools/central-tour/` — the scene (same geometry as the old viewer, metres, y-up), the timeline, the overlay and the renderer. It renders every frame headless with Playwright and encodes with ffmpeg; see its README to change the copy or the shots and re-render.
 
 ## Machine diagram in 3D (`SystemDiagram3D.astro`)
 

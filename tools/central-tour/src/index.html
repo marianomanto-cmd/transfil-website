@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Central Trans-Fil · recorrido</title>
+<script type="importmap">
+{ "imports": { "three": "./three.module.js", "three/addons/": "./addons/" } }
+</script>
+<style>
+@font-face { font-family: 'Inter Tight'; src: url(fonts/inter-tight-latin-wght-normal.woff2) format('woff2'); font-weight: 100 900; }
+@font-face { font-family: 'Inter'; src: url(fonts/inter-latin-wght-normal.woff2) format('woff2'); font-weight: 100 900; }
+@font-face { font-family: 'JetBrains Mono'; src: url(fonts/jetbrains-mono-latin-wght-normal.woff2) format('woff2'); font-weight: 100 900; }
+:root { --ink: #10141a; --muted: #5b6573; --blue: #0b5fd3; --line: rgba(16, 20, 26, 0.14); }
+html, body { margin: 0; padding: 0; background: #000; }
+#stage { position: relative; width: 1600px; height: 900px; overflow: hidden; font-family: 'Inter', sans-serif; color: var(--ink);
+  background: linear-gradient(180deg, #d9e0e8 0%, #e4e9ee 42%, #e4e9ee 100%); }
+#gl { position: absolute; inset: 0; width: 1600px; height: 900px; display: block; }
+#ov, #leaders { position: absolute; inset: 0; width: 1600px; height: 900px; pointer-events: none; }
+#leaders line { stroke: #10141a; stroke-width: 1.6; }
+#leaders circle { fill: #fff; stroke: #10141a; stroke-width: 2; }
+.lbl {
+  position: absolute; left: 0; top: 0; white-space: nowrap;
+  background: rgba(255, 255, 255, 0.96); border: 1px solid rgba(16, 20, 26, 0.18);
+  border-radius: 6px; padding: 7px 12px; font: 600 19px/1.15 'Inter', sans-serif; color: var(--ink);
+  box-shadow: 0 6px 18px -8px rgba(16, 20, 26, 0.35);
+}
+
+/* Marca */
+#brand { position: absolute; left: 28px; top: 26px; display: flex; align-items: center; gap: 14px;
+  background: rgba(255, 255, 255, 0.94); border-radius: 8px; padding: 10px 18px 10px 12px;
+  box-shadow: 0 8px 22px -10px rgba(16, 20, 26, 0.4); border-left: 4px solid var(--blue); }
+#brand img { height: 30px; }
+#brand .n { font: 700 21px/1 'Inter Tight', sans-serif; letter-spacing: 0.06em; }
+#brand .s { font: 500 16px/1 'Inter', sans-serif; color: var(--muted); }
+
+/* PLC */
+#plc { position: absolute; right: 28px; top: 26px; width: 318px; background: rgba(255, 255, 255, 0.95);
+  border-radius: 10px; padding: 13px 16px 12px; box-shadow: 0 10px 28px -12px rgba(16, 20, 26, 0.45);
+  font-size: 15px; }
+#plc .hd { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+#plc-title { font: 600 14px/1 'JetBrains Mono', monospace; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+#plc-mode { font: 600 14px/1 'Inter', sans-serif; color: var(--blue); }
+#plc .row { display: flex; justify-content: space-between; align-items: center; padding: 4px 8px; margin: 0 -8px; border-radius: 6px; }
+#plc .row .n { font-weight: 500; color: #2a313b; }
+#plc .row.on { background: #e8f0fd; }
+#plc .row.on .n { font-weight: 700; color: var(--ink); }
+#plc .s { display: inline-flex; align-items: center; gap: 7px; font-size: 14px; color: #2a313b; }
+#plc .s i { width: 10px; height: 10px; border-radius: 50%; background: #16a34a; box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.18); }
+#plc .s.warn i { background: #f59e0b; box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.25); }
+#plc .s.warn b { color: #b45309; }
+#plc .s b { font-weight: 600; }
+#plc .meter { margin: 6px -8px 0; padding: 5px 8px; border-radius: 6px; }
+#plc .meter.on { background: #e8f0fd; }
+#plc .meter .top { display: flex; justify-content: space-between; font-weight: 500; color: #2a313b; }
+#plc .meter.on .top { font-weight: 700; color: var(--ink); }
+#plc .meter .bar { height: 8px; background: #e3e7ec; border-radius: 4px; margin-top: 6px; overflow: hidden; }
+#plc .meter .bar i { display: block; height: 100%; background: #4ec3f0; border-radius: 4px; }
+#plc-dp .bar i { background: #16a34a; width: 24%; }
+#plc-level-v, #plc-dp-v { font-family: 'JetBrains Mono', monospace; font-size: 15px; }
+
+/* Capítulo */
+#card { position: absolute; left: 28px; bottom: 30px; width: 690px; background: rgba(255, 255, 255, 0.96);
+  border-radius: 10px; padding: 18px 22px 16px; border-left: 5px solid var(--blue);
+  box-shadow: 0 10px 30px -12px rgba(16, 20, 26, 0.45); }
+#card .hd { display: flex; align-items: center; gap: 12px; }
+#card-code { font: 600 16px/1 'JetBrains Mono', monospace; color: #fff; background: var(--blue); padding: 6px 9px; border-radius: 5px; }
+#card-title { font: 700 28px/1.1 'Inter Tight', sans-serif; letter-spacing: -0.01em; }
+#card-desc { font: 400 18px/1.42 'Inter', sans-serif; color: #2f3742; margin-top: 8px; }
+#steps { display: flex; gap: 6px; margin-top: 14px; }
+#steps span { flex: 1; height: 4px; background: #dde3ea; border-radius: 2px; overflow: hidden; }
+#steps span i { display: block; height: 100%; width: 0; background: var(--blue); }
+
+/* Clave */
+#legend { position: absolute; right: 28px; bottom: 30px; background: rgba(255, 255, 255, 0.94); border-radius: 10px;
+  padding: 11px 15px; display: grid; grid-template-columns: auto auto; gap: 6px 16px; font-size: 14px; color: #2a313b;
+  box-shadow: 0 10px 28px -14px rgba(16, 20, 26, 0.45); }
+#legend div { display: flex; align-items: center; gap: 8px; }
+#legend i { width: 22px; height: 8px; border-radius: 4px; display: inline-block; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <canvas id="gl" width="1600" height="900"></canvas>
+  <svg id="leaders" viewBox="0 0 1600 900"></svg>
+  <div id="ov">
+    <div id="brand"><img src="logo-mark.png" alt=""><div><div class="n">TRANS-FIL</div><div class="s" id="brand-sub"></div></div></div>
+    <div id="plc">
+      <div class="hd"><span id="plc-title"></span><span id="plc-mode"></span></div>
+      <div id="plc-rows"></div>
+      <div class="meter" id="plc-level"><div class="top"><span id="plc-level-l"></span><span id="plc-level-v"></span></div><div class="bar"><i id="plc-level-bar"></i></div></div>
+      <div class="meter" id="plc-dp"><div class="top"><span id="plc-dp-l"></span><span id="plc-dp-v"></span></div><div class="bar"><i></i></div></div>
+    </div>
+    <div id="card">
+      <div class="hd"><span id="card-code"></span><span id="card-title"></span></div>
+      <div id="card-desc"></div>
+      <div id="steps"><span><i></i></span><span><i></i></span><span><i></i></span><span><i></i></span><span><i></i></span><span><i></i></span></div>
+    </div>
+    <div id="legend"></div>
+  </div>
+</div>
+<script type="module" src="./tour.js"></script>
+</body>
+</html>
