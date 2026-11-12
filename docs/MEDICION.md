@@ -9,7 +9,9 @@ landings y 404), no solo para `/conformado`.
 ## 1. Cómo está armado
 
 - **GTM `GTM-PV9STD3`** en todas las páginas (`src/layouts/Base.astro`). GA4
-  vive adentro del contenedor.
+  vive adentro del contenedor. Solo carga en `www.transfil.com.ar` o con
+  `gtm_debug` en la URL (la vista previa de GTM lo agrega): los previews de
+  Vercel y el entorno local no mandan nada a GA4.
 - **`window.tfTrack(evento, parámetros)`** es el único punto por donde sale
   un evento. Lo define un script en el `<head>` de `Base.astro`, **antes de
   GTM**, y le suma a cada evento la página y el idioma.
