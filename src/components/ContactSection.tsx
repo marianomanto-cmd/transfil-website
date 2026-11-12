@@ -230,13 +230,18 @@ export function ContactSection({
 
       // Conversión — solo con el envío confirmado y antes de limpiar los
       // campos. Página e idioma los suma tfTrack (docs/MEDICION.md).
-      track('generate_lead', {
-        lead_type: 'form',
-        linea: data.linea || 'general',
-        industria: data.industry,
-        tipo_linea: data.lineType || undefined,
-        user_data: await userData,
-      });
+      // Con el honeypot lleno el servidor responde ok sin mandar el mail
+      // (para no darle pistas al bot), así que acá tampoco cuenta como lead:
+      // si no, cada bot sería una conversión en GA4 y en Google Ads.
+      if (!data.website) {
+        track('generate_lead', {
+          lead_type: 'form',
+          linea: data.linea || 'general',
+          industria: data.industry,
+          tipo_linea: data.lineType || undefined,
+          user_data: await userData,
+        });
+      }
 
       setSent(true);
       // The landing keeps its success panel up (it replaces the form CTA);

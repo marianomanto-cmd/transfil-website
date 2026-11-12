@@ -293,8 +293,13 @@ const faqJsonLd = {
       })();
     </script>
 
+    {/* GTM solo en el dominio real (o con la vista previa de GTM, que agrega
+        gtm_debug a la URL). Los previews de Vercel (*.vercel.app) y el
+        entorno local no cargan GTM: si no, mandan visitas de prueba a la
+        propiedad de GA4 de producción. */}
     <!-- Google Tag Manager -->
-    <script is:inline>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    <script is:inline>if(location.hostname==='www.transfil.com.ar'||/[?&]gtm_debug=/.test(location.search))
+    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
     j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
