@@ -1,0 +1,186 @@
+---
+/**
+ * Recorrido en video de la central de filtración — apertura de la sección
+ * 02 (El sistema) en /conformado.
+ *
+ * Reemplaza al visor 3D interactivo: un recorrido renderizado de la misma
+ * central, con capítulos por etapa, rótulos con línea guía, el estado del
+ * PLC y el fluido que cambia de color de sucio a limpio. Se lee solo, sin
+ * tener que descubrir gestos. El video sale de tools/central-tour/ (un
+ * archivo por idioma, porque los rótulos están en la imagen).
+ *
+ * Carga: preload="none" y póster. Hasta que alguien aprieta play (o un
+ * capítulo) no se baja un byte del video.
+ *
+ * Medición (docs/MEDICION.md): `diagram_interaction` con diagram=central e
+ * item = play / capítulo (F01…) / 50% / complete, una vez cada uno.
+ */
+interface Props {
+  copy: {
+    eyebrow: string;
+    hint: { pointer: string; touch: string };
+    alt: string;
+    goTo: string;
+    src: string;
+    poster: string;
+    chapters: { t: number; code: string; label: string }[];
+  };
+}
+const { copy } = Astro.props;
+---
+
+<figure class="tf-tour">
+  <figcaption class="tf-tour-cap">
+    <span>{copy.eyebrow}</span>
+    <span class="tf-tour-hint" data-when="pointer">{copy.hint.pointer}</span>
+    <span class="tf-tour-hint" data-when="touch">{copy.hint.touch}</span>
+  </figcaption>
+
+  <div class="tf-tour-frame">
+    <video
+      class="tf-tour-video"
+      controls
+      playsinline
+      preload="none"
+      poster={copy.poster}
+      width="1600"
+      height="900"
+      aria-label={copy.alt}
+    >
+      <source src={copy.src} type="video/mp4" />
+    </video>
+  </div>
+
+  <div class="tf-tour-rail" role="group" aria-label={copy.goTo}>
+    <span class="tf-tour-go">{copy.goTo}</span>
+    {copy.chapters.map((c) => (
+      <button type="button" data-t={c.t} data-code={c.code}>
+        {c.code && <span class="cd">{c.code}</span>}
+        <span class="nm">{c.label}</span>
+      </button>
+    ))}
+  </div>
+</figure>
+
+<script is:inline>
+  (() => {
+    const boot = () => {
+      const root = document.querySelector('.tf-tour');
+      if (!root || root.dataset.booted === '1') return;
+      root.dataset.booted = '1';
+      const video = root.querySelector('video');
+      const buttons = [...root.querySelectorAll('.tf-tour-rail button')];
+      const sent = new Set();
+      const track = (item) => {
+        if (sent.has(item) || !window.tfTrack) return;
+        sent.add(item);
+        window.tfTrack('diagram_interaction', { diagram: 'central', item });
+      };
+      const times = buttons.map((b) => Number(b.dataset.t));
+      const mark = () => {
+        let cur = 0;
+        times.forEach((t, i) => { if (video.currentTime + 0.05 >= t) cur = i; });
+        buttons.forEach((b, i) => b.setAttribute('aria-current', i === cur ? 'step' : 'false'));
+      };
+      buttons.forEach((b) => {
+        b.addEventListener('click', () => {
+          const t = Number(b.dataset.t);
+          const go = () => { video.currentTime = t; video.play().catch(() => {}); mark(); };
+          // Con preload="none" el video todavía no tiene duración: hay que
+          // esperar la metadata para poder saltar al capítulo.
+          if (video.readyState >= 1) go();
+          else { video.addEventListener('loadedmetadata', go, { once: true }); video.load(); }
+          track(b.dataset.code || 'inicio');
+        });
+      });
+      video.addEventListener('play', () => track('play'));
+      video.addEventListener('timeupdate', () => {
+        mark();
+        if (video.duration && video.currentTime / video.duration >= 0.5) track('50%');
+      });
+      video.addEventListener('ended', () => track('complete'));
+      mark();
+    };
+    document.addEventListener('astro:page-load', boot);
+  })();
+</script>
+
+<style is:global>
+  .tf-tour {
+    margin: 0 auto;
+    max-width: 1760px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .tf-tour-cap {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--fg-3);
+  }
+  .tf-tour-hint { color: var(--fg-4); text-transform: none; letter-spacing: 0.06em; }
+  .tf-tour-hint[data-when='touch'] { display: none; }
+  @media (hover: none) {
+    .tf-tour-hint[data-when='pointer'] { display: none; }
+    .tf-tour-hint[data-when='touch'] { display: inline; }
+  }
+  .tf-tour-frame {
+    border: 1px solid var(--line);
+    background: #e4e9ee;
+    aspect-ratio: 16 / 9;
+  }
+  .tf-tour-video { display: block; width: 100%; height: 100%; object-fit: contain; background: #e4e9ee; }
+
+  .tf-tour-rail {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .tf-tour-go {
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+    background: var(--bg);
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--fg-4);
+  }
+  .tf-tour-rail button {
+    appearance: none;
+    flex: 1 1 140px;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    min-height: 44px;
+    padding: 12px 14px;
+    background: var(--bg);
+    border: 0;
+    border-top: 3px solid transparent;
+    font: inherit;
+    font-size: 13.5px;
+    color: var(--fg-2);
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.25s, border-color 0.25s;
+  }
+  .tf-tour-rail button:hover { background: var(--bg-2); }
+  .tf-tour-rail button:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+  .tf-tour-rail button[aria-current='step'] { border-top-color: var(--accent); color: var(--fg); }
+  .tf-tour-rail .cd { font-family: var(--font-mono); font-size: 11px; color: var(--accent); letter-spacing: 0.06em; }
+  @media (max-width: 640px) {
+    .tf-tour-go { width: 100%; padding: 10px 14px; }
+    .tf-tour-rail button { flex-basis: 45%; }
+  }
+</style>

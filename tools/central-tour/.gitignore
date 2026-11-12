@@ -1,0 +1,8 @@
+# Lo copia prepare.sh; lo genera render.cjs.
+src/three.module.js
+src/three.core.js
+src/addons/
+src/fonts/
+src/logo-mark.png
+frames/
+node_modules/

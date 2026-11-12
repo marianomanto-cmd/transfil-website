@@ -14,7 +14,7 @@ import { SITE, pathFor, urlFor } from '../i18n/routes';
 import { Header } from '../components/Header';
 import { ContactSection } from '../components/ContactSection';
 import Footer from '../components/Footer.astro';
-import CentralDiagram3D from '../components/CentralDiagram3D.astro';
+import CentralTour from '../components/CentralTour.astro';
 import SystemDiagram3D from '../components/SystemDiagram3D.astro';
 import { WhatsAppFAB } from '../components/WhatsAppFAB';
 import { BackToTop } from '../components/BackToTop';
@@ -219,13 +219,7 @@ const navItems = [
 
       {/* El riel del visor y las tarjetas de abajo nombran las mismas cuatro
           etapas, así que salen de la misma fuente: `blocks`. */}
-      {l.centralDiagram && (
-        <CentralDiagram3D
-          copy={l.centralDiagram}
-          stages={l.system.blocks.map((b) => b.title)}
-          codes={l.system.blocks.map((b) => b.code)}
-        />
-      )}
+      {l.centralTour && <CentralTour copy={l.centralTour} />}
 
       <div class="tf-lp-stages">
         {l.system.blocks.map((b) => (
