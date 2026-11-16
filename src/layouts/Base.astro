@@ -406,9 +406,14 @@ const faqJsonLd = {
     {/* GTM solo en el dominio real (o con la vista previa de GTM, que agrega
         gtm_debug a la URL). Los previews de Vercel (*.vercel.app) y el
         entorno local no cargan GTM: si no, mandan visitas de prueba a la
-        propiedad de GA4 de producción. */}
+        propiedad de GA4 de producción.
+        Tampoco carga en navegadores automatizados (navigator.webdriver) ni
+        headless o rastreadores conocidos: los escáneres de links de los
+        mails de prospección y los robots de verificación de Google Ads
+        entraban como visitas de 3 segundos y como si vinieran de la campaña
+        (docs/MEDICION.md §1). */}
     <!-- Google Tag Manager -->
-    <script is:inline>if(location.hostname==='www.transfil.com.ar'||/[?&]gtm_debug=/.test(location.search))
+    <script is:inline>if((location.hostname==='www.transfil.com.ar'||/[?&]gtm_debug=/.test(location.search))&&!navigator.webdriver&&!/HeadlessChrome|Lighthouse|PTST|AdsBot|Google-InspectionTool|Googlebot|bingbot|YandexBot|facebookexternalhit|bot\/|crawler|spider/i.test(navigator.userAgent))
     (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
     j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
