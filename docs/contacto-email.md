@@ -11,28 +11,28 @@ Vercel, `src/pages/api/contact.ts`) → envía el mail con **Resend** a
 - **to:** `ventas@transfil.com.ar`
 - **reply-to:** el email del visitante (se responde directo desde la casilla)
 - **honeypot:** campo oculto `website`; si llega con valor, se descarta (bot)
-- **dataLayer:** al envío exitoso dispara `{ event: 'generate_lead', linea }` para GTM/GA4
+- **dataLayer:** al envío exitoso dispara `generate_lead` con un `lead_id` (UUID)
+- **ID de lead:** el mismo `lead_id` va en el mail (fila *ID de lead*) y en el log de
+  Vercel (`[contact] sent <lead_id> <página>`), para cruzar la conversión con el mail
+- **Atribución:** UTM, click IDs, página de entrada y primer contacto, aunque la persona
+  haya navegado o vuelto otro día (ver [`MEDICION.md`](./MEDICION.md) §8)
 
-## Key events (GTM / GA4)
+## Eventos (GTM / GA4)
 
-El código empuja estos eventos al `dataLayer`; en GTM se capturan con triggers de
-*Custom Event* (mismo nombre) y se envían a GA4 como key events.
-
-| Evento | Cuándo se dispara | Params |
-|---|---|---|
-| `generate_lead` | Envío exitoso del formulario de contacto | `linea` |
-| `click_whatsapp` | Clic en cualquier link de WhatsApp (FAB, footer, contacto) | `link_url` |
-| `click_phone` | Clic en cualquier link `tel:` (footer, contacto) | `link_url` |
-
-Los clics se capturan con un listener delegado en `document` (en `src/layouts/Base.astro`),
-así que cubren todos los links actuales y futuros. Para **dispararlos a mano** y verificarlos
-en GTM Preview / GA4 DebugView, pegá en la consola del navegador (en producción):
+El catálogo completo de eventos, parámetros y la configuración de GTM / GA4 / Google
+Ads está en [`MEDICION.md`](./MEDICION.md). Todos salen por `window.tfTrack`
+(`src/layouts/Base.astro`). Para **dispararlos a mano** y verificarlos en GTM Preview /
+GA4 DebugView, pegá en la consola del navegador (en producción, o con `?gtm_debug=x`):
 
 ```js
-dataLayer.push({ event: 'generate_lead', linea: 'test' });
-dataLayer.push({ event: 'click_whatsapp', link_url: 'test' });
-dataLayer.push({ event: 'click_phone', link_url: 'test' });
+tfTrack('generate_lead', { lead_id: crypto.randomUUID(), lead_type: 'form', linea: 'test' });
+tfTrack('whatsapp_click', { lead_type: 'whatsapp', cta_location: 'test', link_url: 'test' });
+tfTrack('click_phone', { cta_location: 'test', link_url: 'test' });
 ```
+
+> Ojo: `generate_lead` y `whatsapp_click` disparan también las conversiones de Google Ads
+> y LinkedIn. Probalos con `?interno=1` (marca el tráfico como interno en GA4) y, para
+> Google Ads, mejor con la vista previa de Tag Assistant sin publicar.
 
 ## Variable de entorno — el secreto NO va en el repo
 

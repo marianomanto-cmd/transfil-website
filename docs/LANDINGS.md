@@ -197,14 +197,15 @@ landing) y `locale`. El catálogo completo está en
 
 ```js
 // solo con el envío del formulario confirmado por el servidor
-{ event: 'generate_lead', page: 'conformado', locale: 'es', lead_type: 'form', linea, industria, tipo_linea, user_data }
+{ event: 'generate_lead', page: 'conformado', locale: 'es', lead_id, lead_type: 'form', linea, industria, tipo_linea, user_data }
 
 // en cualquier link de WhatsApp de cualquier página
 { event: 'whatsapp_click', page: 'conformado', locale: 'es', lead_type: 'whatsapp', cta_location: 'hero' }
 ```
 
-`click_whatsapp` sigue saliendo en el mismo clic por compatibilidad: no lo
-marques como conversión o se cuenta dos veces.
+Cada clic en WhatsApp sale una sola vez, como `whatsapp_click` (el
+`click_whatsapp` legado ya no se empuja). Las preguntas frecuentes de la
+landing salen solas como `content_open` (`component: 'faq'`).
 
 Los CTAs llevan `data-cta="relevamiento"` y `data-cta="whatsapp"`, y la
 sección de contacto de la landing es `id="contacto"` (la del home sigue

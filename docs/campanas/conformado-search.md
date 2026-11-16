@@ -68,8 +68,10 @@ en Google Ads y los tags en GTM (`GTM-PV9STD3`).
 
 Reglas:
 
-- **`whatsapp_click`, no `click_whatsapp`.** En la landing salen los dos en
-  el mismo clic; si los dos son conversión, cada WhatsApp cuenta doble.
+- **`whatsapp_click`, no `click_whatsapp`.** El sitio solo empuja
+  `whatsapp_click` (desde la medición v2); `click_whatsapp` es el nombre
+  con que GA4 lo registra. Un activador de GTM con el evento
+  `click_whatsapp` no dispararía nunca.
 - **`generate_lead` sin filtrar por `page`.** Si alguien entra por el
   anuncio, pasa al home y deja el formulario ahí, el lead igual es de la
   campaña. Google Ads solo atribuye a quien hizo clic en un anuncio, así que
