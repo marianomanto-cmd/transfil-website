@@ -218,6 +218,11 @@ opción encendida, cada vista se cuenta dos veces.
 
 ### Medición v2 (nov 2026)
 
+**Estado (16/11/2026): hecho y publicado en la versión 18** ("Medición v2:
+eventos nuevos, lead_id y errores de JS"), probado en la vista previa sin
+disparar conversiones. Los pasos quedan como referencia por si hay que
+rehacerlo. La versión 19 suma Microsoft Clarity (§10).
+
 Lo que hace falta para los eventos y parámetros nuevos del §2. El
 contenedor publicado (v17) ya tiene lo de arriba.
 
@@ -264,6 +269,25 @@ contenedor publicado (v17) ya tiene lo de arriba.
 ---
 
 ## 4. GA4
+
+**Estado de la propiedad *Trans Fil - GA4* (311977639), al 16/11/2026:**
+
+| Ajuste | Valor |
+|---|---|
+| Retención de datos de eventos | 14 meses (antes 2: las Exploraciones perdían la historia) |
+| Search Console | Vinculada con `sc-domain:transfil.com.ar` |
+| Google Ads | Vinculada con *Transfil* 607-988-5280 (y una cuenta vieja 182-210-7233 de 2022) |
+| Eventos clave | `generate_lead` (cada evento), `click_whatsapp` y `click_phone` (una vez por sesión). `purchase` figura porque GA4 no deja desmarcarlo, pero no recibe datos |
+| Filtro *Internal Traffic* | **Activo**: excluye `traffic_type = internal` (cookie `tf_internal`, se marca con `?interno=1`) |
+| Públicos *More than 2 minutes* / *Visited more than 2 pages* | Sin activador de público: los eventos `more_than_2_minutes` y `visited_more_than_2_pages` creaban sesiones fantasma sin página ni hostname |
+| Medición mejorada | Vistas de página (con cambios del historial), desplazamientos, clics salientes, búsqueda, video y descargas: encendidos. Interacciones con formularios: apagado |
+| Dimensiones personalizadas | 26, todas las del sitio más `error_message` (*Mensaje de error JS*) |
+| Señales de Google | Encendidas |
+| Clarity | Vinculado (§10) |
+
+Para que el filtro de tráfico interno funcione, **cada navegador del
+equipo** tiene que abrir una vez `https://www.transfil.com.ar/?interno=1`
+(dura 2 años; `?interno=0` lo borra). GA4 no tiene reglas por IP cargadas.
 
 - **Eventos clave:** `generate_lead` y `click_whatsapp` (es el nombre con
   que *GA4 - WhatsApp* manda el evento `whatsapp_click` del sitio, §3 paso
@@ -442,3 +466,28 @@ de la fila del mail. El `lead_id` solo pasa si es un UUID.
 - **El mapa de Google** del formulario es un iframe de otro dominio: los
   clics adentro no se pueden medir.
 
+
+
+---
+
+## 10. Microsoft Clarity
+
+- Proyecto **Trans-Fil**, ID `zeosru5fyc`, en la misma cuenta de Clarity
+  que el proyecto de Plasmart: son proyectos separados, cada uno con sus
+  datos. Enmascarado: *Balanced* (no graba lo que se escribe en el
+  formulario).
+- Se carga desde GTM (versión 19), con la etiqueta *Clarity - Etiqueta*
+  (*Initialization - All Pages*), y hereda los filtros de la carga de GTM:
+  solo en `www.transfil.com.ar`, no en bots ni navegadores automatizados.
+  Además lo bloquea el activador *EX - Tráfico interno (inicialización)*
+  (cookie `tf_internal = 1`): el equipo no queda grabado.
+- Cada sesión lleva las etiquetas personalizadas `page` y `locale`.
+- *Clarity - Conversiones* marca en Clarity los eventos `generate_lead`,
+  `whatsapp_click` y `click_phone` (`clarity('event')` y
+  `clarity('upgrade')`): en *Grabaciones* se filtra por *Eventos
+  personalizados* para ver solo las sesiones que terminaron en contacto, y
+  esas sesiones se graban completas aunque Clarity muestree.
+- Vinculado con GA4 *Trans Fil - GA4* (desde el panel de Clarity, con
+  permiso de Google sobre esa propiedad sola).
+- Las navegaciones con View Transitions las sigue solo: no hace falta nada
+  en el código.
