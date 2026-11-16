@@ -48,13 +48,22 @@ export const POST: APIRoute = async ({ request }) => {
   const page = /^[a-z0-9-]{1,32}$/.test(get('page')) ? get('page') : '';
   const locale = /^[a-z]{2}$/.test(get('locale')) ? get('locale') : '';
   const tipoLinea = get('tipoLinea');
+  // Atribución (docs/MEDICION.md §8): UTM, click IDs y la página donde
+  // entró. Las claves van tal cual como rótulo de la fila, así que solo
+  // pasan las que tienen forma de parámetro; los valores se escapan abajo.
   const utm =
     body.utm && typeof body.utm === 'object' && !Array.isArray(body.utm)
       ? Object.entries(body.utm as Record<string, unknown>)
-          .filter((e): e is [string, string] => typeof e[1] === 'string' && e[1] !== '')
-          .slice(0, 12)
+          .filter((e): e is [string, string] => /^[a-z0-9_]{1,32}$/.test(e[0]) && typeof e[1] === 'string' && e[1] !== '')
+          .slice(0, 16)
           .map(([k, v]) => [k, v.slice(0, 200)] as [string, string])
       : [];
+  const firstTouch = get('first_touch').slice(0, 500);
+  // El mismo ID que lleva el evento generate_lead: cruza la conversión de
+  // GA4 / Google Ads con este mail. Solo un UUID pasa.
+  const leadId = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(get('lead_id'))
+    ? get('lead_id').toLowerCase()
+    : '';
 
   // Honeypot: a real visitor never sees or fills this field. If it has a
   // value the request is a bot — pretend success and send nothing.
@@ -84,6 +93,8 @@ export const POST: APIRoute = async ({ request }) => {
     ['Tipo de línea', tipoLinea],
     ['Origen', page ? `${page}${locale ? ` · ${locale}` : ''}` : ''],
     ...utm,
+    ['Primer contacto', firstTouch],
+    ['ID de lead', leadId],
   ];
   const detail = rows
     .filter(([, v]) => v)
@@ -112,9 +123,11 @@ export const POST: APIRoute = async ({ request }) => {
       html,
     });
     if (error) {
-      console.error('[contact] Resend error:', error);
+      console.error('[contact] Resend error:', error, leadId ? `lead ${leadId}` : '');
       return json(false, 500);
     }
+    // Sin datos personales: alcanza para cruzar el log con el mail.
+    console.log('[contact] sent', leadId || '(sin lead_id)', page || 'home');
     return json(true);
   } catch (err) {
     console.error('[contact] send failed:', err);

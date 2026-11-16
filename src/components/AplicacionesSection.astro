@@ -850,6 +850,8 @@ const DEMO_HITS = [1, 4];
    * · The cursor light only binds on fine pointers when the visitor
    *   hasn't asked for reduced motion.
    */
+  import { track } from '../lib/track';
+
   type AppsWin = typeof window & {
     __tfAppsObs?: IntersectionObserver[];
     __tfAppsTimers?: number[];
@@ -968,6 +970,16 @@ const DEMO_HITS = [1, 4];
         const setOpen = (open: boolean) => {
           article.dataset.open = String(open);
           toggle.setAttribute('aria-expanded', String(open));
+          // Medición (docs/MEDICION.md): qué aplicación abre, una vez por
+          // tarjeta y por página.
+          if (open && !article.dataset.tfSeen) {
+            article.dataset.tfSeen = '1';
+            track('content_open', {
+              component: 'aplicacion',
+              item: article.id,
+              label: (article.querySelector('.tf-app-title')?.textContent ?? '').trim().slice(0, 100),
+            });
+          }
         };
         toggle.addEventListener('click', () => {
           setOpen(article.dataset.open !== 'true');

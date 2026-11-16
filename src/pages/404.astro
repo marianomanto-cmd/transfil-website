@@ -16,20 +16,23 @@ const OTHER_LABEL: Record<Lang, string> = {
   pt: 'Versão em português',
 };
 
-const COPY: Record<Lang, { tag: string; title: string; sub: string; cta: string }> = {
+const COPY: Record<Lang, { tag: string; title: string; sub: string; cta: string; doc: string }> = {
   es: {
+    doc: 'Página no encontrada (404) · Trans-Fil',
     tag: '[ 404 — Página no encontrada ]',
     title: 'No encontramos esa ruta.',
     sub: 'Es posible que la página haya sido movida o que la dirección esté mal escrita. Volvé al inicio para seguir explorando Trans-Fil.',
     cta: 'Volver al inicio',
   },
   en: {
+    doc: 'Page not found (404) · Trans-Fil',
     tag: '[ 404 — Page not found ]',
     title: "We couldn't find that page.",
     sub: 'The page may have moved or the URL may be mistyped. Head back to the home page to keep exploring Trans-Fil.',
     cta: 'Back to home',
   },
   pt: {
+    doc: 'Página não encontrada (404) · Trans-Fil',
     tag: '[ 404 — Página não encontrada ]',
     title: 'Não encontramos essa página.',
     sub: 'A página pode ter sido movida ou o endereço pode estar errado. Volte ao início para continuar explorando a Trans-Fil.',
@@ -39,21 +42,26 @@ const COPY: Record<Lang, { tag: string; title: string; sub: string; cta: string 
 
 const copy = COPY[lang];
 const others = (Object.keys(COPY) as Lang[]).filter((l) => l !== lang);
+
+// Medición (docs/MEDICION.md): título propio, porque con el del home GA4
+// sumaba cada 404 al home en el informe por título. El evento
+// page_not_found (ruta pedida y origen) sale de Base.astro. Los links de
+// salida llevan data-cta para ver cuántos siguen en el sitio.
 ---
-<Base lang={lang} content={content} pathname="/404" noindex>
-  <main id="main" class="tf-404">
+<Base lang={lang} content={content} pathname="/404" noindex meta={{ title: copy.doc }}>
+  <main id="main" class="tf-404" data-track-zone="404">
     <span class="tf-mono tf-404-code">{copy.tag}</span>
     <h1 class="tf-404-title">{copy.title}</h1>
     <p class="tf-404-sub">{copy.sub}</p>
     <div class="tf-404-actions">
-      <a href={pathFor('home', lang)} class="tf-btn tf-btn-primary">
+      <a href={pathFor('home', lang)} class="tf-btn tf-btn-primary" data-cta="volver_inicio">
         <span>{copy.cta}</span>
         <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
           <path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" />
         </svg>
       </a>
       {others.map((l) => (
-        <a href={pathFor('home', l)} class="tf-btn tf-btn-ghost" hreflang={l}>{OTHER_LABEL[l]}</a>
+        <a href={pathFor('home', l)} class="tf-btn tf-btn-ghost" hreflang={l} data-cta="volver_inicio">{OTHER_LABEL[l]}</a>
       ))}
     </div>
   </main>
