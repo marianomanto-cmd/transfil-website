@@ -129,15 +129,20 @@ const orgJsonLd = {
     },
   ],
   industry: 'Industrial Machinery Manufacturing',
+  // Cada línea va como Service y no como Product: Google exige precio,
+  // reseñas o calificación en un Product y marcaba cada uno como fragmento
+  // de producto no válido en Search Console. Trans-Fil no publica precios:
+  // cada equipo se dimensiona y cotiza por proyecto.
   makesOffer: content.tech.map((t) => ({
     '@type': 'Offer',
     itemOffered: {
-      '@type': 'Product',
-      '@id': `${site}/#product-${t.id}`,
+      '@type': 'Service',
+      '@id': `${site}/#tech-${t.id}`,
       name: t.title,
       description: t.desc,
+      serviceType: t.title,
       category: 'Industrial Machinery',
-      manufacturer: { '@id': `${site}/#organization` },
+      provider: { '@id': `${site}/#organization` },
     },
   })),
 };

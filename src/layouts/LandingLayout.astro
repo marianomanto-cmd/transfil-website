@@ -71,13 +71,15 @@ const serviceJsonLd = {
   hasOfferCatalog: {
     '@type': 'OfferCatalog',
     name: l.system.title,
+    // Service y no Product: un Product sin precio, reseñas ni calificación
+    // es un fragmento de producto no válido para Google (ver Base.astro).
     itemListElement: l.system.blocks.map((b) => ({
       '@type': 'Offer',
       itemOffered: {
-        '@type': 'Product',
+        '@type': 'Service',
         name: b.title,
         description: b.desc,
-        manufacturer: { '@id': `${SITE}/#organization` },
+        provider: { '@id': `${SITE}/#organization` },
       },
     })),
   },
