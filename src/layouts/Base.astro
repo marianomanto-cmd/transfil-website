@@ -191,17 +191,38 @@ const faqJsonLd = {
         · Contexto: data-page / data-locale del <html>. Con View Transitions
           Astro copia los atributos del <html> nuevo al navegar, así que
           siempre describe la página que se ve.
+        · Cada evento lleva solo sus parámetros: tfTrack pone en undefined
+          los del evento anterior que este no trae. GTM guarda todo lo que
+          entra al dataLayer en un modelo de datos que se fusiona push a push;
+          sin esto, un parámetro de un evento (el `state` de un circuito, el
+          `status` de un error) aparecería en el siguiente que no lo manda.
         · Un listener delegado en document (captura) cubre todo link actual
-          y futuro: WhatsApp (whatsapp_click es la conversión; click_whatsapp
-          queda por compatibilidad con GTM y no se marca como conversión),
-          teléfono, mail, idioma y CTAs con data-cta.
+          y futuro: WhatsApp (whatsapp_click), teléfono, mail, redes sociales
+          (social_click), idioma y CTAs con data-cta.
         · cta_location: zona marcada con data-track-zone, el FAB, header,
           footer o la sección con id que contiene el link.
+        · contact_copy: alguien copia el mail o el teléfono de ventas en vez
+          de hacer clic (pasa mucho en desktop, donde mailto: no abre nada).
+          No se manda el texto copiado, solo qué dato y dónde.
+        · content_open: se abre una pregunta frecuente (<details>), una vez
+          por pregunta y por página. Las aperturas de tecnologías, tarjetas
+          de aplicación e industrias salen de sus componentes con el mismo
+          evento.
         · section_view: una vez por sección y por página, cuando su parte de
           arriba entra al 60 % superior de la pantalla (con un umbral de
           visibilidad, una sección más alta que la pantalla no dispararía).
         · page_view: la carga inicial la manda la configuración de GA4; cada
           navegación con View Transitions empuja su contexto y su page_view.
+        · page_not_found: en el 404, con la ruta pedida y de dónde vino (ruta
+          si es del sitio, dominio si es externo; nunca la query, que puede
+          traer datos). Con View Transitions el origen es la página anterior,
+          porque document.referrer no cambia al navegar sin recargar.
+        · Atribución: si la URL trae UTM o click IDs, se guardan en
+          localStorage (`tf_attr`) como último contacto, y como primero si no
+          había uno. Duran 90 días, lo mismo que la ventana de clic de Google
+          Ads. window.tfAttribution() los devuelve y el formulario los manda
+          al mail de ventas aunque la persona haya navegado o vuelva otro
+          día (§8 de MEDICION.md).
         Los comentarios van acá y no en el script: lo inline se publica tal
         cual en cada página. */}
     <script is:inline>
@@ -216,13 +237,42 @@ const faqJsonLd = {
             locale: r.getAttribute('data-locale') || 'es',
           };
         }
+        var prev = [];
         w.tfTrack = function (event, params) {
-          var o = ctx();
+          var o = ctx(), keys = [], i, k;
           o.event = event;
-          if (params) for (var k in params) if (params[k] !== undefined) o[k] = params[k];
+          for (i = 0; i < prev.length; i++) o[prev[i]] = undefined;
+          if (params) for (k in params) if (params[k] !== undefined) { o[k] = params[k]; keys.push(k); }
+          prev = keys;
           w.dataLayer.push(o);
         };
         w.dataLayer.push(ctx());
+
+        var AP = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content',
+          'gclid', 'gbraid', 'wbraid', 'fbclid', 'li_fat_id', 'msclkid'];
+        var AK = 'tf_attr', TTL = 7776e6;
+        function readAttr() {
+          var a = null, now = Date.now();
+          try { a = JSON.parse(w.localStorage.getItem(AK) || 'null'); } catch (e) { return null; }
+          if (!a || typeof a !== 'object') return null;
+          if (!a.first || now - a.first.t > TTL) a.first = null;
+          if (!a.last || now - a.last.t > TTL) a.last = null;
+          return a.first || a.last ? a : null;
+        }
+        function captureAttr() {
+          var q, p = {}, n = 0, i, v, touch, a;
+          try { q = new URLSearchParams(location.search); } catch (e) { return; }
+          for (i = 0; i < AP.length; i++) {
+            v = q.get(AP[i]);
+            if (v) { p[AP[i]] = v.slice(0, 200); n++; }
+          }
+          if (!n) return;
+          touch = { p: p, t: Date.now(), l: location.pathname.slice(0, 100) };
+          a = readAttr() || {};
+          try { w.localStorage.setItem(AK, JSON.stringify({ first: a.first || touch, last: touch })); } catch (e) {}
+        }
+        w.tfAttribution = readAttr;
+        captureAttr();
 
         function zone(el) {
           var z = el.closest('[data-track-zone]');
@@ -253,6 +303,11 @@ const faqJsonLd = {
             w.tfTrack('email_click', { cta_location: where, link_url: url });
             return;
           }
+          var net = (a.hostname || '').match(/(?:^|\.)(linkedin|instagram|facebook|youtube|tiktok|twitter|x)\.com$/i);
+          if (net) {
+            w.tfTrack('social_click', { network: net[1].toLowerCase(), cta_location: where, link_url: url });
+            return;
+          }
           var hl = a.getAttribute('hreflang');
           if (hl && a.closest('header')) {
             var from = ctx().locale;
@@ -263,6 +318,52 @@ const faqJsonLd = {
           var cta = a.getAttribute('data-cta');
           if (cta) w.tfTrack('cta_click', { cta: cta, cta_location: where, link_url: url });
         }, true);
+
+        d.addEventListener('copy', function () {
+          var s = w.getSelection ? w.getSelection() : null;
+          var t = s ? String(s) : '';
+          if (!t || t.length > 200) return;
+          var method = /ventas@transfil\.com\.ar/i.test(t) ? 'email'
+            : t.replace(/\D/g, '').indexOf('3513820321') !== -1 ? 'phone' : '';
+          if (!method) return;
+          var n = s.anchorNode;
+          var el = n ? (n.nodeType === 1 ? n : n.parentElement) : null;
+          w.tfTrack('contact_copy', { method: method, cta_location: el ? zone(el) : 'other' });
+        }, true);
+
+        d.addEventListener('toggle', function (e) {
+          var el = e.target;
+          if (!el || el.tagName !== 'DETAILS' || !el.open || el.hasAttribute('data-tf-seen')) return;
+          el.setAttribute('data-tf-seen', '');
+          var sib = el.parentNode ? el.parentNode.children : [], i = 0, j;
+          for (j = 0; j < sib.length; j++) {
+            if (sib[j].tagName === 'DETAILS') i++;
+            if (sib[j] === el) break;
+          }
+          var sm = el.querySelector('summary');
+          w.tfTrack('content_open', {
+            component: 'faq',
+            item: 'q' + (i < 10 ? '0' : '') + i,
+            label: (sm ? sm.textContent || '' : '').replace(/\s+/g, ' ').trim().slice(0, 100),
+          });
+        }, true);
+
+        function notFound(from) {
+          var ref, type = 'directo', u;
+          if (from) { ref = from; type = 'interno'; }
+          else if (d.referrer) {
+            try {
+              u = new URL(d.referrer);
+              if (u.host === location.host) { ref = u.pathname; type = 'interno'; }
+              else { ref = u.hostname; type = 'externo'; }
+            } catch (e) {}
+          }
+          w.tfTrack('page_not_found', {
+            missing_path: location.pathname.slice(0, 100),
+            referrer: ref ? ref.slice(0, 100) : undefined,
+            referrer_type: type,
+          });
+        }
 
         var io = null;
         function watchSections() {
@@ -279,16 +380,23 @@ const faqJsonLd = {
           for (var j = 0; j < ss.length; j++) io.observe(ss[j]);
         }
 
-        var first = true;
+        var first = true, lastPath = location.pathname;
         d.addEventListener('astro:page-load', function () {
+          var from = null;
           watchSections();
-          if (first) { first = false; return; }
-          w.dataLayer.push(ctx());
-          w.tfTrack('page_view', {
-            page_path: location.pathname + location.search,
-            page_title: d.title,
-            page_location: location.href,
-          });
+          if (first) first = false;
+          else {
+            from = lastPath;
+            captureAttr();
+            w.dataLayer.push(ctx());
+            w.tfTrack('page_view', {
+              page_path: location.pathname + location.search,
+              page_title: d.title,
+              page_location: location.href,
+            });
+          }
+          lastPath = location.pathname;
+          if (ctx().page === '404') notFound(from);
         });
       })();
     </script>

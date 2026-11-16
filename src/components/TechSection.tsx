@@ -3,6 +3,7 @@ import { cx } from '../lib/cx';
 import { useReveal } from '../lib/hooks';
 import { srcSet } from '../lib/img';
 import type { Content } from '../i18n/content';
+import { track } from '../lib/track';
 
 const TILE_POS = ['hero', 'a', 'b', 'c'] as const;
 const VIDEO_EXT_RE = /\.(mp4|webm|mov)(\?|$)/i;
@@ -81,7 +82,16 @@ export function TechSection({ capabilities: c, tech: items }: Props) {
     return () => window.removeEventListener('hashchange', openFromHash);
   }, [items]);
 
+  // Medición (docs/MEDICION.md): qué tecnología abre el visitante, una vez
+  // por tecnología y por página. El deep-link del footer no cuenta: no es
+  // un clic acá.
+  const opened = useRef(new Set<string>());
   const toggleTech = (ti: number) => {
+    const t = items[ti];
+    if (expandedTech !== ti && t && !opened.current.has(t.id)) {
+      opened.current.add(t.id);
+      track('content_open', { component: 'tecnologia', item: t.id, label: t.title });
+    }
     setExpandedTech((prev) => (prev === ti ? null : ti));
   };
 

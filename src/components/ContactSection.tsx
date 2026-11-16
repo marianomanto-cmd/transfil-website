@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { cx } from '../lib/cx';
 import { useReveal } from '../lib/hooks';
 import type { Content } from '../i18n/content';
-import { hashedUserData, track } from '../lib/track';
+import { hashedUserData, newLeadId, track, type Touch } from '../lib/track';
 
 function Field({
   label, children, err, req, full, htmlFor,
@@ -34,7 +34,11 @@ type FormState = {
 
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
-/** UTM / click-id params worth forwarding to the sales inbox. */
+/**
+ * UTM / click-id params worth forwarding to the sales inbox. La misma lista
+ * (`AP`) está en el script de medición de Base.astro, que los guarda al
+ * llegar: si se suma uno, va en los dos lados.
+ */
 const TRACKED_PARAMS = [
   'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content',
   'gclid', 'gbraid', 'wbraid', 'fbclid', 'li_fat_id', 'msclkid',
@@ -68,13 +72,39 @@ const readCookie = (name: string): string => {
   }
 };
 
-const readTrackedParams = (): Record<string, string> => {
-  if (typeof window === 'undefined') return {};
+const day = (t: number) => new Date(t).toISOString().slice(0, 10);
+
+/** `utm_source=google · gclid=… · /conformado · 2026-11-03`, para el mail. */
+const describeTouch = (touch: Touch): string =>
+  [...Object.entries(touch.p).map(([k, v]) => `${k}=${v}`), touch.l, day(touch.t)].join(' · ').slice(0, 500);
+
+/**
+ * Atribución que va al mail de ventas. El último contacto sale de la URL o,
+ * si ya no la trae (navegó por el sitio o volvió otro día), del que guardó
+ * Base.astro en `tf_attr` (90 días): las UTM llegan igual. Va con la página
+ * donde entró (`landing_page`) y, si no es de hoy, la fecha. El primer
+ * contacto se manda aparte, solo si es otro.
+ */
+const readTrackedParams = (): { utm: Record<string, string>; firstTouch?: string } => {
+  if (typeof window === 'undefined') return { utm: {} };
   const q = new URLSearchParams(window.location.search);
-  const out: Record<string, string> = {};
+  let out: Record<string, string> = {};
   for (const k of TRACKED_PARAMS) {
     const v = q.get(k);
     if (v) out[k] = v.slice(0, 200);
+  }
+  let attr: ReturnType<NonNullable<Window['tfAttribution']>> = null;
+  try {
+    attr = window.tfAttribution?.() ?? null;
+  } catch {
+    attr = null;
+  }
+  const last = attr?.last ?? null;
+  if (Object.keys(out).length) {
+    out.landing_page = window.location.pathname.slice(0, 100);
+  } else if (last) {
+    out = { ...last.p, landing_page: last.l };
+    if (day(last.t) !== day(Date.now())) out.landing_date = day(last.t);
   }
   for (const [param, sources] of Object.entries(CLICK_ID_COOKIES)) {
     if (out[param]) continue;
@@ -86,7 +116,9 @@ const readTrackedParams = (): Record<string, string> => {
       }
     }
   }
-  return out;
+  const first = attr?.first ?? null;
+  const firstTouch = first && (!last || first.t !== last.t) ? describeTouch(first) : undefined;
+  return { utm: out, firstTouch };
 };
 
 type Props = {
@@ -153,6 +185,15 @@ export function ContactSection({
   const emailRef = useRef<HTMLInputElement>(null);
   const messageRef = useRef<HTMLTextAreaElement>(null);
 
+  // Medición del embudo (form_start / form_abandon, más abajo).
+  const formRef = useRef<HTMLFormElement>(null);
+  const started = useRef(false);
+  const lastField = useRef('');
+  /** Hubo un envío confirmado: después de eso irse no es abandonar. */
+  const done = useRef(false);
+  const dataRef = useRef(data);
+  dataRef.current = data;
+
   useEffect(() => {
     setData((d) => ({
       ...d,
@@ -201,6 +242,9 @@ export function ContactSection({
     // Hash de los datos de contacto para las conversiones avanzadas. Se
     // calcula en paralelo con el envío, antes de que se limpien los campos.
     const userData = hashedUserData(data.email, data.phone).catch(() => undefined);
+    // El mismo ID va al mail de ventas y a generate_lead (docs/MEDICION.md).
+    const leadId = newLeadId();
+    const attribution = readTrackedParams();
     try {
       const res = await fetch('/api/contact', {
         method: 'POST',
@@ -218,7 +262,9 @@ export function ContactSection({
           // keeps its original subject and body.
           ...(page ? { page, locale: lang } : {}),
           ...(data.lineType ? { tipoLinea: data.lineType } : {}),
-          utm: readTrackedParams(),
+          lead_id: leadId,
+          utm: attribution.utm,
+          ...(attribution.firstTouch ? { first_touch: attribution.firstTouch } : {}),
         }),
       });
       const payload = res.ok ? await res.json().catch(() => null) : null;
@@ -234,7 +280,9 @@ export function ContactSection({
       // (para no darle pistas al bot), así que acá tampoco cuenta como lead:
       // si no, cada bot sería una conversión en GA4 y en Google Ads.
       if (!data.website) {
+        done.current = true;
         track('generate_lead', {
+          lead_id: leadId,
           lead_type: 'form',
           linea: data.linea || 'general',
           industria: data.industry,
@@ -261,13 +309,44 @@ export function ContactSection({
     }
   };
 
-  // Primer contacto con el formulario: una vez por montaje.
-  const started = useRef(false);
-  const onFormFocus = () => {
+  // Primer contacto con el formulario: una vez por montaje. También anota
+  // el último campo que tocó, para form_abandon.
+  const onFormFocus = (e: React.FocusEvent<HTMLFormElement>) => {
+    const fid = (e.target as HTMLElement).id;
+    if (fid && fid !== 'tf-website') lastField.current = fid.replace(/^tf-/, '');
     if (started.current) return;
     started.current = true;
     track('form_start');
   };
+
+  // Abandono: empezó el formulario y se va (cierra, recarga o navega con
+  // View Transitions) sin un envío confirmado. Una vez por montaje, con el
+  // último campo que tocó y cuáles completó; nunca los valores. pagehide y
+  // no visibilitychange: cambiar de pestaña y volver no es abandonar. Es un
+  // piso: algún navegador móvil puede cerrar la pestaña sin avisar.
+  // Con View Transitions la isla vieja no se desmonta, así que el listener
+  // se suelta solo cuando el formulario ya no está en el documento.
+  useEffect(() => {
+    const off = () => {
+      window.removeEventListener('pagehide', onLeave);
+      document.removeEventListener('astro:before-swap', onLeave);
+    };
+    function onLeave() {
+      if (!formRef.current?.isConnected) return off();
+      if (!started.current || done.current) return;
+      done.current = true;
+      off();
+      const d = dataRef.current;
+      const filled = (['name', 'company', 'email', 'phone', 'message'] as const).filter((k) => d[k].trim());
+      track('form_abandon', {
+        last_field: lastField.current || 'ninguno',
+        fields_filled: filled.join(',') || 'ninguno',
+      });
+    }
+    window.addEventListener('pagehide', onLeave);
+    document.addEventListener('astro:before-swap', onLeave);
+    return off;
+  }, []);
 
   const errIds = {
     name: errors.name ? 'tf-err-name' : undefined,
@@ -288,7 +367,7 @@ export function ContactSection({
         <p className="tf-section-sub">{heading?.sub ?? c.sub}</p>
       </header>
       <div className="tf-contact">
-        <form className="tf-form" onSubmit={submit} onFocusCapture={onFormFocus} noValidate>
+        <form ref={formRef} className="tf-form" onSubmit={submit} onFocusCapture={onFormFocus} noValidate>
           {/* Honeypot: kept off-screen (not display:none) so bots fill it but
               users never see it. A filled value is rejected server-side. */}
           <div

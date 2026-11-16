@@ -3,16 +3,28 @@
  *
  * Todo evento del sitio sale por `window.tfTrack`, que define Base.astro en
  * el <head> antes de GTM y le suma página e idioma a cada uno. Acá solo hay
- * un envoltorio tipado para React, más el hash de los datos de contacto que
- * usan las conversiones avanzadas de Google Ads.
+ * un envoltorio tipado para React, el ID de cada lead y el hash de los datos
+ * de contacto que usan las conversiones avanzadas de Google Ads.
  */
 
 type Params = Record<string, unknown>;
+
+/** Una llegada con UTM o click IDs, como la guarda Base.astro en `tf_attr`. */
+export type Touch = {
+  /** Los parámetros tal como venían en la URL. */
+  p: Record<string, string>;
+  /** Cuándo (ms). */
+  t: number;
+  /** Ruta en la que entró. */
+  l: string;
+};
 
 declare global {
   interface Window {
     dataLayer?: Record<string, unknown>[];
     tfTrack?: (event: string, params?: Params) => void;
+    /** Primer y último contacto con UTM o click IDs (90 días), o null. */
+    tfAttribution?: () => { first: Touch | null; last: Touch | null } | null;
   }
 }
 
@@ -24,6 +36,26 @@ export function track(event: string, params: Params = {}): void {
   }
   // Base.astro no cargó (no debería pasar): el evento sale igual, sin contexto.
   (window.dataLayer = window.dataLayer || []).push({ event, ...params });
+}
+
+/**
+ * ID único de cada lead del formulario. Sale en `generate_lead` (`lead_id`)
+ * y en el mail a ventas, así una conversión de GA4 / Google Ads se puede
+ * cruzar con el mail que la originó: sirve de ID de transacción para que
+ * Google Ads no cuente dos veces el mismo lead y de ID de pedido en la
+ * importación offline de "Lead calificado". `randomUUID` solo existe en
+ * contextos seguros (https, localhost); si no está, se arma un UUID v4 igual.
+ */
+export function newLeadId(): string {
+  const c = typeof crypto !== 'undefined' ? crypto : undefined;
+  if (c?.randomUUID) return c.randomUUID();
+  const b = new Uint8Array(16);
+  if (c?.getRandomValues) c.getRandomValues(b);
+  else for (let i = 0; i < b.length; i++) b[i] = Math.floor(Math.random() * 256);
+  b[6] = (b[6] & 0x0f) | 0x40;
+  b[8] = (b[8] & 0x3f) | 0x80;
+  const h = Array.from(b, (x) => x.toString(16).padStart(2, '0')).join('');
+  return `${h.slice(0, 8)}-${h.slice(8, 12)}-${h.slice(12, 16)}-${h.slice(16, 20)}-${h.slice(20)}`;
 }
 
 /* ── Conversiones avanzadas ──────────────────────────────────────────────

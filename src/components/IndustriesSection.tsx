@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { cx } from '../lib/cx';
 import { useReveal } from '../lib/hooks';
 import { TF_CLIENTS, type Content, type Lang } from '../i18n/content';
 import { CoverageRadar } from './CoverageRadar';
+import { track } from '../lib/track';
 
 function Marquee({ items, speed = 60, paused }: { items: readonly string[]; speed?: number; paused: boolean }) {
   // The track runs the list twice so the loop is seamless; the second copy
@@ -40,6 +41,16 @@ export function IndustriesSection({ industries: c, lang, ui }: Props) {
   const items = TF_CLIENTS[tab];
   const [sectionRef, vis] = useReveal(0.1);
   const [paused, setPaused] = useState(false);
+  // Medición (docs/MEDICION.md): qué industria mira, una vez por pestaña y
+  // por página. La que está abierta al cargar no cuenta.
+  const opened = useRef(new Set<string>());
+  const pickTab = (t: Content['industries']['tabs'][number]) => {
+    if (t.id !== tab && !opened.current.has(t.id)) {
+      opened.current.add(t.id);
+      track('content_open', { component: 'industria', item: t.id, label: t.label });
+    }
+    setTab(t.id);
+  };
 
   return (
     <section
@@ -81,7 +92,7 @@ export function IndustriesSection({ industries: c, lang, ui }: Props) {
               aria-selected={on}
               data-on={on}
               className="tf-tab"
-              onClick={() => setTab(t.id)}
+              onClick={() => pickTab(t)}
             >
               <span>{t.label}</span>
               <span className="tf-tab-count tf-mono">{String(count).padStart(2, '0')}</span>
