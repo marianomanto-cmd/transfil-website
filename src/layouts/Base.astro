@@ -198,7 +198,10 @@ const faqJsonLd = {
           `status` de un error) aparecería en el siguiente que no lo manda.
         · Un listener delegado en document (captura) cubre todo link actual
           y futuro: WhatsApp (whatsapp_click), teléfono, mail, redes sociales
-          (social_click), idioma y CTAs con data-cta.
+          (social_click), idioma y CTAs con data-cta. WhatsApp sale una sola
+          vez por clic: el click_whatsapp legado ya no se empuja (en GA4 el
+          evento se sigue llamando click_whatsapp porque así lo manda la
+          etiqueta GA4 - WhatsApp al recibir whatsapp_click).
         · cta_location: zona marcada con data-track-zone, el FAB, header,
           footer o la sección con id que contiene el link.
         · contact_copy: alguien copia el mail o el teléfono de ventas en vez
@@ -292,7 +295,6 @@ const faqJsonLd = {
           var url = a.href;
           if (href.indexOf('wa.me') !== -1 || href.indexOf('whatsapp.com') !== -1) {
             w.tfTrack('whatsapp_click', { lead_type: 'whatsapp', cta_location: where, link_url: url });
-            w.tfTrack('click_whatsapp', { link_url: url });
             return;
           }
           if (href.indexOf('tel:') === 0) {
